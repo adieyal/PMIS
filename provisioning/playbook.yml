@@ -22,7 +22,7 @@
       - virtualenvwrapper
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
-  - local_action: command rsync -rlpgoD templates/home/ pmis@$inventory_hostname:.
+  - command: chmod g-w /home/pmis
 
 - hosts: vagrant
   gather_facts: no
@@ -32,6 +32,10 @@
   sudo_user: pmis
 
   tasks:
-  - pip: name=django virtualenv=/home/pmis/.virtualenvs/pmis
+  - local_action: command rsync -rlpgoD templates/home/ pmis@$inventory_hostname:.
+    sudo: no
+  - pip: name=django virtualenv=/home/pmis/.virtualenvs/develop
+  - pip: name=django virtualenv=/home/pmis/.virtualenvs/master
+
   - git: repo=git://github.com/adieyal/PMIS.git dest=/home/pmis/deploy/develop version=develop
   - git: repo=git://github.com/adieyal/PMIS.git dest=/home/pmis/deploy/master version=master
