@@ -2,3 +2,32 @@ PMIS
 ====
 
 Codebase for the DPWRT PMIS application (how's that for a mouthful?)
+
+Installation
+------------
+
+This recipe will get a django website up and running in a single server
+deployment with 4 processes with 2 threads each.
+
+More information on this recipe can be found at provy's docs website
+(http://provy.me).
+
+Requirements
+------------
+
+You are required to have provy (and all its dependencies) and vagrant both
+installed.
+
+The first time around it might take some time, as vagrant might have to
+download the VM image. Be patient!
+
+Running the Recipe
+------------------
+
+You can create the VM with:
+
+    make vm
+
+For provisioning the server:
+
+    make provision

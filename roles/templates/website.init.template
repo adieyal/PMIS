@@ -1,0 +1,43 @@
+#!/bin/bash
+#
+# Django WebSite {{ name }} auto-start
+#
+# description: Auto-starts {{ name }}-{{ port }}
+# processname: {{ name }}-{{ port }}
+
+GUNICORN_DJANGO="python manage.py run_gunicorn"
+DJANGO_SETTINGS_MODULE={{ settings_module }}
+PIDFILE={{ pid_file_path }}/{{ name }}_{{ port }}.pid
+
+case $1 in
+start)
+        echo -n "Starting {{ name }}-{{ port }}: "
+        export PYTHONPATH=$PYTHONPATH:{{ settings_directory }}
+        $GUNICORN_DJANGO --settings=$DJANGO_SETTINGS_MODULE
+        echo
+        ;;
+stop)
+        echo -n "Stopping {{ name }}-{{ port }}: "
+        if [ -f $PIDFILE ]
+        then
+            read PID < "$PIDFILE"
+
+            if [ -d "/proc/$PID" ]
+            then
+                echo "{{ name }}-{{ port }} process running..."
+                kill "$PID" && echo "{{ name }}-{{ port }} killed!" || echo "Couldn't kill $PID"
+            else
+                echo "{{ name }}-{{ port }} process is not running! Nothing to do!"
+            fi
+        else
+            echo "{{ name }}-{{ port }} process is not running! Nothing to do!"
+        fi
+        echo
+        ;;
+restart)
+        echo -n "Restarting {{ name }}-{{ port }}: "
+        /etc/init.d/{{ name }}-{{ port }} stop
+        /etc/init.d/{{ name }}-{{ port }} start
+        echo
+        ;;
+esac
