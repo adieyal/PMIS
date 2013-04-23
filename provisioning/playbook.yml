@@ -1,10 +1,13 @@
 ---
+# Comment this out once you've installed required eggs, it'll be faster
+# Also the eggs in this file must be installed on your own machine as well.
+- include: fireball.yml
+
 - hosts: vagrant
   gather_facts: no
   connection: ssh
   user: vagrant
   sudo: yes
-
   tasks:
   - action: fireball
 
@@ -13,7 +16,6 @@
   connection: fireball
   vars:
     password: $1$SomeSalt$xg7BaTdMtPm8RHKM70Veb0
-
   tasks:
   - apt: pkg=$item
     with_items:
@@ -22,6 +24,11 @@
       - virtualenvwrapper
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
+
+  # Add your public key here, both accounts are accessed
+  - authorized_key: user=pmis key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
+  - authorized_key: user=vagrant key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
+
   - command: chmod g-w /home/pmis
 
 - hosts: vagrant
@@ -30,7 +37,12 @@
   user: vagrant
   sudo: yes
   sudo_user: pmis
+  tasks:
+  - action: fireball
 
+- hosts: vagrant
+  gather_facts: no
+  connection: fireball
   tasks:
   - local_action: command rsync -rlpgoD templates/home/ pmis@$inventory_hostname:.
     sudo: no
