@@ -1,2 +1,1 @@
 ansible==1.1
-provy==0.6.1

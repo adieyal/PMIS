@@ -15,10 +15,17 @@ More information on this recipe can be found at provy's docs website
 Requirements
 ------------
 
-You are required to have provy (and all its dependencies) and vagrant both
+You are required to have ansible (and all its dependencies) and vagrant both
 installed.
 
-The first time around it might take some time, as vagrant might have to
+If you run bin/install.sh from the root folder, good things should happen.
+It sets up ansible and vagrant.
+
+Verify this is the base box you want before running install.sh:
+
+    vagrant box add base http://files.vagrantup.com/precise64.box
+
+The first time around it might take some time, as vagrant will have to
 download the VM image. Be patient!
 
 Running the Recipe
@@ -26,8 +33,10 @@ Running the Recipe
 
 You can create the VM with:
 
-    make vm
+    vagrant up
 
-For provisioning the server:
+Once the VM is created, it will automatically provision the application.
 
-    make provision
+Should you want to repeat the provision:
+
+    vagrant provision

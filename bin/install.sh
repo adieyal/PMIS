@@ -1,5 +1,5 @@
 # Install provisioning required packages
-pip install -r etc/provisioning-requirements.pip
+pip install -r requirements/provisioning.txt
 
 # Download and install vagrant
 wget -O /tmp/vagrant_1.2.1_x86_64.deb http://files.vagrantup.com/packages/a7853fe7b7f08dbedbc934eb9230d33be6bf746f/vagrant_1.2.1_x86_64.deb
