@@ -11,8 +11,8 @@
   connection: fireball
   port: 5100
   tasks:
-  # - git: repo=git@github.com:adieyal/PMIS.git dest=/home/pmis/deploy
-  - command: /home/pmis/.virtualenvs/pmis/bin/python manage.py collectstatic --helpZZ
+  - git: repo=git@github.com:adieyal/PMIS.git dest=/home/pmis/deploy
+  - command: /home/pmis/deploy/bin/collectstatic.sh
   - file: dest=/home/pmis/deploy/logs state=directory
   - command: bash -c 'source /etc/bash_completion.d/virtualenvwrapper; mkvirtualenv pmis'
   - command: /home/pmis/.virtualenvs/pmis/bin/easy_install -U distribute
