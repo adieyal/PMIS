@@ -40,3 +40,5 @@ Once the VM is created, it will automatically provision the application.
 Should you want to repeat the provision:
 
     vagrant provision
+
+Should the machine install completely without error, browse to [http://localhost:8080/]
