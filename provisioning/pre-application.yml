@@ -28,19 +28,24 @@
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
 
-  # Add your public key here, both accounts are accessed
-  - authorized_key: user=pmis key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
-  - authorized_key: user=vagrant key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
+  # Copy across prepared .ssh folder, which includes my public key.
+  # Add yours to templates/ssh/authorized_keys before provisioning.
+  - local_action: command rsync -r templates/ssh/ pmis@$inventory_hostname:.ssh
 
   # Needed otherise SSH won't recognize authorized_keys
   - command: chmod g-w /home/pmis
 
+  # Required for mysql_* modules
+  - command: easy_install -U distribute
+  - pip: name=MySQL-python
+
   # Secure root login for mysql
-  - mysql_user: name=root password=pass login_unix_socket=/var/run/mysqld/mysqld.sock
+  - mysql_user: name=root password=pass
 
   # Create a .my.cnf file for user to be able to login automatically
-  - local_action: command rsync templates/my.cnf vagrant@$inventory_hostname:.my.cnf
+  - copy: src=templates/my.cnf dest=/home/vagrant/.my.cnf owner=vagrant group=vagrant mode=0600
+  - copy: src=templates/my.cnf dest=/root/.my.cnf owner=root group=root mode=0600
 
   # Now create the PMIS user and DB since we know the root password
-  - mysql_db: db=pmis_production login_unix_socket=/var/run/mysqld/mysqld.sock
-  - mysql_user: name=pmis password=pass priv=pmis_production.*:ALL login_unix_socket=/var/run/mysqld/mysqld.sock
+  - mysql_db: name=pmis_production
+  - mysql_user: name=pmis password=pass priv=pmis_production.*:ALL
