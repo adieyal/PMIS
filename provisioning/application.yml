@@ -11,10 +11,10 @@
   connection: fireball
   port: 5100
   tasks:
+  - command: bash -c 'source /etc/bash_completion.d/virtualenvwrapper; mkvirtualenv pmis || exit 0'
   - git: repo=git@github.com:adieyal/PMIS.git dest=/home/pmis/deploy
   - command: /home/pmis/deploy/bin/collectstatic.sh
   - file: dest=/home/pmis/deploy/logs state=directory
-  - command: bash -c 'source /etc/bash_completion.d/virtualenvwrapper; mkvirtualenv pmis || exit 0'
   - command: /home/pmis/.virtualenvs/pmis/bin/easy_install -U distribute
   - pip: requirements=/home/pmis/deploy/requirements.txt virtualenv=/home/pmis/.virtualenvs/pmis
   - django_manage: >
