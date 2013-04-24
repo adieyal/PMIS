@@ -11,8 +11,8 @@
   connection: fireball
   port: 5100
   tasks:
-  - command: whoami
   - git: repo=git@github.com:adieyal/PMIS.git dest=/home/pmis/deploy
+  - file: dest=/home/pmis/deploy/logs state=directory
   - command: /home/pmis/.virtualenvs/pmis/bin/easy_install -U distribute
   - pip: requirements=/home/pmis/deploy/requirements.txt virtualenv=/home/pmis/.virtualenvs/pmis
   - django_manage: >
