@@ -51,9 +51,9 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'pmis_development',
+            'NAME': 'pmis_production',
             'USER': 'pmis',
-            'PASSWORD': 'Ohf7gang',
+            'PASSWORD': 'pass',
             'HOST': '/var/run/mysqld/mysqld.sock',
         }
 }

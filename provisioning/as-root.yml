@@ -32,3 +32,13 @@
 
   # Needed otherise SSH won't recognize authorized_keys
   - command: chmod g-w /home/pmis
+
+  # Secure root login for mysql
+  - mysql_user: name=root password=pass login_unix_socket=/var/run/mysqld/mysqld.sock
+
+  # Create a .my.cnf file for user to be able to login automatically
+  - local_action: command rsync templates/my.cnf vagrant@$inventory_hostname:.my.cnf
+
+  # Now create the PMIS user and DB since we know the root password
+  - mysql_db: db=pmis_production login_unix_socket=/var/run/mysqld/mysqld.sock
+  - mysql_user: name=pmis password=pass priv=pmis_production.*:ALL login_unix_socket=/var/run/mysqld/mysqld.sock
