@@ -79,4 +79,5 @@ SECRET_KEY = get_env_setting('SECRET_KEY')
 ALLOWED_HOSTS = (
         'localhost',
         '127.0.0.1',
+        '33.33.33.33',
 )
