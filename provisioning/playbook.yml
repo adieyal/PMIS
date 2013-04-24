@@ -44,8 +44,9 @@
   gather_facts: no
   connection: fireball
   tasks:
-  - local_action: command rsync -rlpgoD templates/home/ pmis@$inventory_hostname:.
+  - local_action: command rsync -rlgoD templates/home/ pmis@$inventory_hostname:.
     sudo: no
+
   - pip: name=django virtualenv=/home/pmis/.virtualenvs/develop
   - pip: name=django virtualenv=/home/pmis/.virtualenvs/master
 
