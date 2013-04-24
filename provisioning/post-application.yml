@@ -13,6 +13,8 @@
   vars:
       connections: 1024
   tasks:
+  - command: /home/pmis/deploy/bin/collectstatic.sh
+
   # Copy the supervisor config file across, and ensure the service is started
   # and the application is running
   - copy: src=templates/supervisor.conf dest=/etc/supervisor/conf.d/pmis.conf
