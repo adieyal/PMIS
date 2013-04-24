@@ -6,6 +6,8 @@ Vagrant.configure("1") do |config|
   # Fix dns resolution - see http://lyte.id.au/tag/virtualbox/
   config.vm.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
   config.vm.customize ["modifyvm", :id, "--memory", "2048"]
+
+  config.vm.share_folder 'pmis', '/home/pmis/deploy', '.', :create => true
 end
 
 Vagrant.configure("2") do |config|

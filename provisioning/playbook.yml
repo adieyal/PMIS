@@ -30,13 +30,13 @@
   - authorized_key: user=vagrant key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
 
   - command: chmod g-w /home/pmis
+  - command: chown -R pmis:pmis /home/pmis/deploy
 
 - hosts: vagrant
   gather_facts: no
   connection: ssh
   user: vagrant
   sudo: yes
-  sudo_user: pmis
   tasks:
   - action: fireball
 
@@ -46,9 +46,4 @@
   tasks:
   - local_action: command rsync -rlgoD templates/home/ pmis@$inventory_hostname:.
     sudo: no
-
-  - pip: name=django virtualenv=/home/pmis/.virtualenvs/develop
-  - pip: name=django virtualenv=/home/pmis/.virtualenvs/master
-
-  - git: repo=git://github.com/adieyal/PMIS.git dest=/home/pmis/deploy/develop version=develop
-  - git: repo=git://github.com/adieyal/PMIS.git dest=/home/pmis/deploy/master version=master
+  - pip: name=django virtualenv=/home/pmis/.virtualenvs/pmis
