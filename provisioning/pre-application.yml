@@ -23,6 +23,8 @@
       - memcached
       - mysql-server
       - libmysqlclient-dev
+      - supervisor
+      - nginx
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
 
@@ -42,6 +44,3 @@
   # Now create the PMIS user and DB since we know the root password
   - mysql_db: db=pmis_production login_unix_socket=/var/run/mysqld/mysqld.sock
   - mysql_user: name=pmis password=pass priv=pmis_production.*:ALL login_unix_socket=/var/run/mysqld/mysqld.sock
-
-  # Copy the supervisor config file across
-  - copy: src=templates/supervisor.conf dest=/etc/supervisor/conf.d/pmis.conf:w

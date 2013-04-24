@@ -1,0 +1,19 @@
+---
+- hosts: vagrant
+  gather_facts: no
+  connection: paramiko
+  user: vagrant
+  sudo: yes
+  tasks:
+  - action: fireball
+
+- hosts: vagrant
+  gather_facts: no
+  connection: fireball
+  tasks:
+  # Copy the supervisor config file across
+  - copy: src=templates/supervisor.conf dest=/etc/supervisor/conf.d/pmis.conf
+  - service: name=supervisor state=started
+  - command: supervisorctl reread
+  - command: supervisorctl update
+  - supervisorctl: name=pmis state=started

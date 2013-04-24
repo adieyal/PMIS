@@ -22,4 +22,4 @@
         settings=project.settings.production
         virtualenv=/home/pmis/.virtualenvs/pmis
     environment:
-        SECRET_KEY: some-secret-key
+        SECRET_KEY: pmis-production-key
