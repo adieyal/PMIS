@@ -13,10 +13,13 @@
   tasks:
   - command: whoami
   - git: repo=git@github.com:adieyal/PMIS.git dest=/home/pmis/deploy
-  - easy_install: name=distribute virtualenv=/home/pmis/.virtualenvs/pmis
+  - command: /home/pmis/.virtualenvs/pmis/bin/easy_install -U distribute
   - pip: requirements=/home/pmis/deploy/requirements.txt virtualenv=/home/pmis/.virtualenvs/pmis
   - django_manage: >
         app_path=/home/pmis/deploy
         command=syncdb
         database=default
         settings=project.settings.production
+        virtualenv=/home/pmis/.virtualenvs/pmis
+    environment:
+        SECRET_KEY: some-secret-key
