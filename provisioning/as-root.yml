@@ -13,6 +13,7 @@
   vars:
     password: $1$SomeSalt$xg7BaTdMtPm8RHKM70Veb0
   tasks:
+  - apt: update_cache=yes
   - apt: pkg=$item
     with_items:
       - git
@@ -20,6 +21,8 @@
       - ack-grep
       - virtualenvwrapper
       - memcached
+      - mysql-server
+      - libmysqlclient-dev
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
 
