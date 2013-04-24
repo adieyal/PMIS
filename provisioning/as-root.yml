@@ -1,0 +1,29 @@
+---
+- hosts: vagrant
+  gather_facts: no
+  connection: paramiko
+  user: vagrant
+  sudo: yes
+  tasks:
+  - action: fireball
+
+- hosts: vagrant
+  gather_facts: no
+  connection: fireball
+  vars:
+    password: $1$SomeSalt$xg7BaTdMtPm8RHKM70Veb0
+  tasks:
+  - apt: pkg=$item
+    with_items:
+      - git
+      - rsync
+      - virtualenvwrapper
+
+  - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
+
+  # Add your public key here, both accounts are accessed
+  - authorized_key: user=pmis key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
+  - authorized_key: user=vagrant key="ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDC6L+rwTV2guyUi3vqrlJteLVlDTUXSvjSv57Jay7VU9C6pGShYJsP1vWHCoLbO+d76h+8iviMvQgVRiFWJ3RVbFokC7MhkOk9EQZbKbXejCLqhbZ2/xkxUCSCV6byHLJoaI5JFRMMWoLGkHqAM+Xr8gAe9TPq5iw17sEe3h+EFhmJ9iMz3rjfNLz09qe7jSzdkMpmV13j/ockb5Zi5hxZq3PsLBD+c69SUBMlIYdh1UVgIIUtjKxnfnIkZb/5kYKKK5BA9E/thZk+bfESNPJSSJG74MCw5jWzyBycsRYucNXkuGTsTLuAtjo9rIPGIFsWm4COkopWRG965moOOh4b marlinf@datashaman-home"
+
+  # Needed otherise SSH won't recognize authorized_keys
+  - command: chmod g-w /home/pmis
