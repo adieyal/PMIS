@@ -1,7 +1,7 @@
 ---
 # Comment fireball include once you've installed required eggs, it'll be faster
 # Also the eggs in fireball must be installed on your own machine as well.
-# - include: fireball.yml
+- include: fireball.yml
 - include: pre-application.yml
 - include: application.yml
 - include: post-application.yml
