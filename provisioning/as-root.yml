@@ -17,7 +17,9 @@
     with_items:
       - git
       - rsync
+      - ack-grep
       - virtualenvwrapper
+      - memcached
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
 
