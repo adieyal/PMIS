@@ -30,6 +30,7 @@
 
   # Copy across prepared .ssh folder, which includes my public key.
   # Add yours to templates/ssh/authorized_keys before provisioning.
+  - copy: src=templates/ssh/authorized_keys dest=/home/pmis/.ssh/authorized_keys owner=pmis group=pmis mode=0600
   - local_action: command rsync -r templates/ssh/ pmis@$inventory_hostname:.ssh
 
   # Needed otherise SSH won't recognize authorized_keys
