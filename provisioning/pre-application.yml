@@ -5,7 +5,7 @@
   user: vagrant
   sudo: yes
   tasks:
-  - action: fireball
+  - fireball: port=5099
 
 - hosts: vagrant
   gather_facts: no
