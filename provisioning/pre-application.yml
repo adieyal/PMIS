@@ -5,7 +5,7 @@
   user: vagrant
   sudo: yes
   tasks:
-  - action: fireball
+  - fireball: port=5099
 
 - hosts: vagrant
   gather_facts: no
@@ -25,16 +25,19 @@
       - libmysqlclient-dev
       - supervisor
       - nginx
+      - tmux
 
   - user: name=pmis password=$password groups=admin append=yes comment="PMIS Pseudouser" generate_ssh_key=yes shell=/bin/bash
 
-  # Copy across prepared .ssh folder, which includes my public key.
-  # Add yours to templates/ssh/authorized_keys before provisioning.
+  # Add your public key to templates/ssh/authorized_keys before provisioning.
+  # This step is necessary so that we are not asked for a password on the SSH folder copy
   - copy: src=templates/ssh/authorized_keys dest=/home/pmis/.ssh/authorized_keys owner=pmis group=pmis mode=0600
-  - local_action: command rsync -r templates/ssh/ pmis@$inventory_hostname:.ssh
 
-  # Needed otherise SSH won't recognize authorized_keys
+  # Needed otherwise SSH won't recognize authorized_keys
   - command: chmod g-w /home/pmis
+
+  # Copy across prepared .ssh folder, which includes the public keys
+  - local_action: command rsync -r templates/ssh/ pmis@$inventory_hostname:.ssh
 
   # Required for mysql_* modules
   - command: easy_install -U distribute

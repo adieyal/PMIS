@@ -4,7 +4,7 @@
   connection: paramiko
   user: pmis
   tasks:
-  - action: fireball port=5100
+  - fireball: port=5100
 
 - hosts: vagrant
   gather_facts: no
@@ -13,10 +13,10 @@
   tasks:
   - command: bash -c 'source /etc/bash_completion.d/virtualenvwrapper; mkvirtualenv pmis || exit 0'
   - git: repo=git@github.com:datashaman/PMIS.git dest=/home/pmis/deploy
-  - command: /home/pmis/deploy/bin/collectstatic.sh
   - file: dest=/home/pmis/deploy/logs state=directory
   - command: /home/pmis/.virtualenvs/pmis/bin/easy_install -U distribute
   - pip: requirements=/home/pmis/deploy/requirements.txt virtualenv=/home/pmis/.virtualenvs/pmis
+  - command: /home/pmis/deploy/bin/collectstatic.sh
   - django_manage: >
         app_path=/home/pmis/deploy
         command=syncdb
