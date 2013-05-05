@@ -41,3 +41,5 @@ Once you are happy with the state of the machine, you can package it:
 leaving you with package.box, which captures the state of the machine for use later:
 
     vagrant box add project project.box
+    vagrant init project
+    vagrant up
