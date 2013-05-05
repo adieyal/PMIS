@@ -38,8 +38,8 @@ Once you are happy with the state of the machine, you can package it:
 
     vagrant package --vagrantfile Vagrantfile.pkg
 
-leaving you with package.box, which captures the state of the machine for use later:
+This leaves you with package.box, which captures the state of the machine for use later:
 
-    vagrant box add project project.box
+    vagrant box add project package.box
     vagrant init project
     vagrant up
