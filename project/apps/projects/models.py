@@ -74,7 +74,6 @@ class Project(Versioned):
     description = models.TextField()
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
     municipality = models.ForeignKey(Municipality, related_name='projects')
-    district = models.ManyToManyField(District, related_name='projects')
 
     def __unicode__(self):
         return self.name

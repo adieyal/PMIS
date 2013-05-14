@@ -13,7 +13,7 @@ class ProgrammeAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(VersionedAdmin):
     fields = (
-        'name', 'description', 'programme', 'municipality', 'district', 'update_date', 'update_comment', 'update_user')
+        'name', 'programme', 'municipality', 'district', 'update_date', 'update_comment', 'update_user')
 
 
 class MunicipalityAdmin(admin.ModelAdmin):
