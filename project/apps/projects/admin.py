@@ -1,6 +1,6 @@
 from django.contrib import admin
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, ProjectPeople, PeopleType
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -23,17 +23,28 @@ class DistrictAdmin(admin.ModelAdmin):
     fields = ('name', 'description', 'municipality')
 
 
-class ProjectPeopleAdmin(admin.ModelAdmin):
-    fields = ('name', 'project', 'people_type')
+class EntityAdmin(admin.ModelAdmin):
+    fields = ('name', )
 
 
-class PeopleTypeAdmin(admin.ModelAdmin):
+class RoleAdmin(admin.ModelAdmin):
     fields = ('name',)
+
+
+class ProjectRoleAdmin(admin.ModelAdmin):
+    fields = ('project', 'role', 'entity')
+
+
+class PlanningAdmin(admin.ModelAdmin):
+    fields = ('month', 'year', 'planned_expenses', 'planned_progress', 'project')
+
 
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(Municipality, MunicipalityAdmin)
 admin.site.register(District, DistrictAdmin)
-admin.site.register(ProjectPeople, ProjectPeopleAdmin)
-admin.site.register(PeopleType, PeopleTypeAdmin)
+admin.site.register(Entity, EntityAdmin)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(ProjectRole, ProjectRoleAdmin)
+admin.site.register(Planning, PlanningAdmin)

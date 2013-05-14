@@ -4,6 +4,25 @@ from django.db import models
 from revisions.models import VersionedModel
 
 
+MONTHS = (
+    (1, 'January'),
+    (2, 'February'),
+    (3, 'March'),
+    (4, 'April'),
+    (5, 'May'),
+    (6, 'June'),
+    (7, 'July'),
+    (8, 'July'),
+    (9, 'August'),
+    (10, 'September'),
+    (11, 'October'),
+    (12, 'November'),
+    (13, 'December'),
+)
+
+YEARS = tuple(map(lambda x: (x, x), range(1960, 2060)))
+
+
 class Versioned(VersionedModel):
     update_date = models.DateTimeField(default=datetime.datetime.now())
     update_comment = models.TextField()
@@ -79,7 +98,7 @@ class ProjectFinancial(Versioned):
 
 
 class Budget(Versioned):
-    year = models.DateField()
+    year = models.CharField(max_length=255, choices=YEARS)
     allocated_budget = models.DecimalField(max_digits=20, decimal_places=2)
     project_financial = models.ForeignKey(ProjectFinancial, related_name='budgets')
 
@@ -103,9 +122,10 @@ class ScopeOfWork(Versioned):
 
 
 class Planning(Versioned):
-    month = models.CharField(max_length=255)
-    planned_expanses = models.PositiveIntegerField()
-    planned_progress = models.PositiveIntegerField()
+    month = models.CharField(max_length=255, choices=MONTHS)
+    year = models.CharField(max_length=255, choices=YEARS, default=datetime.datetime.now().year)
+    planned_expenses = models.FloatField()
+    planned_progress = models.FloatField()
     project = models.ForeignKey(Project, related_name='plannings')
 
     def __unicode__(self):
@@ -135,10 +155,10 @@ class CommentType(models.Model):
 
 
 class MonthlySubmission(Versioned):
-    month = models.DateField()
+    month = models.CharField(max_length=255, choices=MONTHS, default=datetime.datetime.now().month)
     current_milestone = models.ForeignKey(Milestone, related_name='monthly_submissions')
     actual_expenditure = models.PositiveIntegerField()
     actual_progress = models.PositiveIntegerField()
     comment = models.TextField()
-    comment_type = models.ForeignKey(CommentType, related_name='coment_types')
+    comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions')
     remedial_action = models.CharField(max_length=255)
