@@ -155,8 +155,9 @@ class Milestone(models.Model):
     phase = models.CharField(choices=PHASE, max_length=255)
     name = models.CharField(max_length=255)
     order = models.PositiveSmallIntegerField()
-    weeks_after_previous = models.PositiveSmallIntegerField()
-    project = models.ForeignKey(Project, related_name='milestones')
+
+    def __unicode__(self):
+        return self.name
 
 
 class ProjectMilestone(Versioned):

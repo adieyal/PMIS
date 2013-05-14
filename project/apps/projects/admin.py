@@ -1,6 +1,6 @@
 from django.contrib import admin
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -74,6 +74,9 @@ class ProjectMilestoneAdmin(VersionedAdmin):
     )
 
 
+class MilestoneAdmin(admin.ModelAdmin):
+    fields = ('phase', 'name', 'order')
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
@@ -87,3 +90,4 @@ admin.site.register(MonthlySubmission, MonthlySubmissionAdmin)
 admin.site.register(CommentType, CommentTypeAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(VarianceOrder, VarianceOrderAdmin)
+admin.site.register(Milestone, MilestoneAdmin)
