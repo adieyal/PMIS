@@ -46,7 +46,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_project', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -91,7 +91,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_projectfinancial', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('total_anticipated_cost', self.gf('django.db.models.fields.DecimalField')(max_digits=20, decimal_places=2)),
@@ -104,7 +104,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_budget', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('year', self.gf('django.db.models.fields.DateField')()),
@@ -115,9 +115,10 @@ class Migration(SchemaMigration):
 
         # Adding model 'ScopeCode'
         db.create_table(u'pmis_scopecode', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255, primary_key=True)),
+            ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
         db.send_create_signal(u'pmis', ['ScopeCode'])
 
@@ -125,7 +126,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_scopeofwork', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('quantity', self.gf('django.db.models.fields.PositiveIntegerField')()),
@@ -138,7 +139,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_planning', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('month', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -163,10 +164,10 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_projectmilestone', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
-            ('completion_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('completion_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('milestone', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_milestone', to=orm['pmis.Milestone'])),
         ))
         db.send_create_signal(u'pmis', ['ProjectMilestone'])
@@ -182,7 +183,7 @@ class Migration(SchemaMigration):
         db.create_table(u'pmis_monthlysubmission', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 13, 0, 0))),
+            ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('month', self.gf('django.db.models.fields.DateField')()),
@@ -295,7 +296,7 @@ class Migration(SchemaMigration):
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
             'project_financial': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'budgets'", 'to': u"orm['pmis.ProjectFinancial']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'year': ('django.db.models.fields.DateField', [], {})
@@ -338,7 +339,7 @@ class Migration(SchemaMigration):
             'month': ('django.db.models.fields.DateField', [], {}),
             'remedial_action': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -361,7 +362,7 @@ class Migration(SchemaMigration):
             'planned_progress': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'plannings'", 'to': u"orm['pmis.Project']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -381,7 +382,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'programme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'null': 'True', 'to': u"orm['pmis.Programme']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -392,17 +393,17 @@ class Migration(SchemaMigration):
             'project_planning_budget': ('django.db.models.fields.DecimalField', [], {'max_digits': '20', 'decimal_places': '2'}),
             'total_anticipated_cost': ('django.db.models.fields.DecimalField', [], {'max_digits': '20', 'decimal_places': '2'}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'pmis.projectmilestone': {
             'Meta': {'object_name': 'ProjectMilestone'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
-            'completion_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'completion_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'milestone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_milestone'", 'to': u"orm['pmis.Milestone']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
@@ -415,8 +416,9 @@ class Migration(SchemaMigration):
         },
         u'pmis.scopecode': {
             'Meta': {'object_name': 'ScopeCode'},
-            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255', 'primary_key': 'True'}),
+            'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'description': ('django.db.models.fields.TextField', [], {}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         u'pmis.scopeofwork': {
@@ -426,7 +428,7 @@ class Migration(SchemaMigration):
             'quantity': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'scope_code': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'scope_of_works'", 'to': u"orm['pmis.ScopeCode']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
-            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 13, 0, 0)'}),
+            'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         }
