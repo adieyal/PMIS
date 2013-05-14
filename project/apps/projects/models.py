@@ -161,7 +161,7 @@ class Milestone(models.Model):
 
 class ProjectMilestone(Versioned):
     completion_date = models.DateTimeField(default=datetime.datetime.now())
-    milestone = models.ForeignKey(Milestone, related_name='project_milestone')
+    project = models.ForeignKey(Project, related_name='project_milestone')
 
 
 class CommentType(models.Model):

@@ -67,6 +67,13 @@ class VarianceOrderAdmin(VersionedAdmin):
     )
 
 
+class ProjectMilestoneAdmin(VersionedAdmin):
+    fieldsets = (
+        (None, {'fields': ('project', 'completion_date')}),
+        ('Description versioned', {'fields': ('update_date', 'update_comment', 'update_user')}),
+    )
+
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
