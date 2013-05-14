@@ -43,15 +43,21 @@ class Client(models.Model):
         return self.name
 
 
-class Municipality(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-
-
 class District(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    municipality = models.ForeignKey(Municipality, related_name='districts')
+    description = models.TextField(blank=True)
+
+    def __unicode__(self):
+        return self.name
+
+
+class Municipality(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    district = models.ForeignKey(District, related_name='municipalities')
+
+    def __unicode__(self):
+        return self.name
 
 
 class Programme(models.Model):

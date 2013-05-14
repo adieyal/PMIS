@@ -17,11 +17,11 @@ class ProjectAdmin(VersionedAdmin):
 
 
 class MunicipalityAdmin(admin.ModelAdmin):
-    fields = ('name', 'description')
+    fields = ('name', 'description', 'district')
 
 
 class DistrictAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'municipality')
+    fields = ('name', 'description',)
 
 
 class EntityAdmin(admin.ModelAdmin):
