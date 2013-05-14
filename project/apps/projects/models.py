@@ -37,7 +37,7 @@ class Versioned(VersionedModel):
 
 class Client(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
 
     def __unicode__(self):
         return self.name

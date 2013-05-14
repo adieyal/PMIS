@@ -1,0 +1,50 @@
+[
+{
+  "pk": 1, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DCSR", 
+    "description": ""
+  }
+},
+{
+  "pk": 2, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DEDET", 
+    "description": ""
+  }
+},
+{
+  "pk": 3, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DoE", 
+    "description": ""
+  }
+},
+{
+  "pk": 4, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DoH", 
+    "description": ""
+  }
+},
+{
+  "pk": 5, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DSD", 
+    "description": ""
+  }
+},
+{
+  "pk": 6, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DSSL", 
+    "description": ""
+  }
+}
+]
