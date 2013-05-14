@@ -111,6 +111,9 @@ class ScopeCode(models.Model):
     description = models.TextField()
     code = models.CharField(max_length=255, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
 
 class ScopeOfWork(Versioned):
     quantity = models.PositiveIntegerField()
@@ -152,6 +155,9 @@ class ProjectMilestone(Versioned):
 
 class CommentType(models.Model):
     name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
 
 
 class MonthlySubmission(Versioned):
