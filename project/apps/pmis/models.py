@@ -55,14 +55,18 @@ class Project(Versioned):
         return self.name
 
 
-class PeopleType(models.Model):
+class Entity(models.Model):
     name = models.CharField(max_length=255)
 
 
-class ProjectPeople(models.Model):
+class Role(models.Model):
     name = models.CharField(max_length=255)
-    project = models.ForeignKey(Project, related_name='project_peoples')
-    people_type = models.ManyToManyField(PeopleType, related_name='project_peoples')
+
+
+class ProjectRole(models.Model):
+    project = models.ForeignKey(Project, related_name='project_roles')
+    role = models.ForeignKey(Role, related_name='project_roles')
+    entity = models.ForeignKey(Entity, related_name='project_roles')
 
 
 class ProjectFinancial(Versioned):
