@@ -43,6 +43,7 @@ class PlanningAdmin(admin.ModelAdmin):
 class MonthlySubmissionAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Date', {'fields': ('month', 'year')}),
+        ('Project', {'fields': ('project',)}),
         (None, {'fields': ('actual_expenditure', 'actual_progress')}),
         ('Comment', {'fields': ('comment', 'comment_type', 'remedial_action')}),
     )
