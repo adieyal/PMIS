@@ -1,6 +1,6 @@
 from django.contrib import admin
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -12,7 +12,8 @@ class ProgrammeAdmin(admin.ModelAdmin):
 
 
 class ProjectAdmin(VersionedAdmin):
-    fields = ('name', 'description', 'programme', 'municipality', 'district', 'update_date', 'update_comment', 'update_user')
+    fields = (
+        'name', 'description', 'programme', 'municipality', 'district', 'update_date', 'update_comment', 'update_user')
 
 
 class MunicipalityAdmin(admin.ModelAdmin):
@@ -39,6 +40,18 @@ class PlanningAdmin(admin.ModelAdmin):
     fields = ('month', 'year', 'planned_expenses', 'planned_progress', 'project')
 
 
+class MonthlySubmissionAdmin(admin.ModelAdmin):
+    fieldsets = (
+        ('Date', {'fields': ('month', 'year')}),
+        (None, {'fields': ('actual_expenditure', 'actual_progress')}),
+        ('Comment', {'fields': ('comment', 'comment_type', 'remedial_action')}),
+    )
+
+
+class CommentTypeAdmin(admin.ModelAdmin):
+    fields = ('name',)
+
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
@@ -48,3 +61,5 @@ admin.site.register(Entity, EntityAdmin)
 admin.site.register(Role, RoleAdmin)
 admin.site.register(ProjectRole, ProjectRoleAdmin)
 admin.site.register(Planning, PlanningAdmin)
+admin.site.register(MonthlySubmission, MonthlySubmissionAdmin)
+admin.site.register(CommentType, CommentTypeAdmin)

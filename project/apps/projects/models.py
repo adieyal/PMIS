@@ -156,9 +156,10 @@ class CommentType(models.Model):
 
 class MonthlySubmission(Versioned):
     month = models.CharField(max_length=255, choices=MONTHS, default=datetime.datetime.now().month)
+    year = models.CharField(max_length=255, choices=YEARS, default=datetime.datetime.now().year)
     current_milestone = models.ForeignKey(Milestone, related_name='monthly_submissions')
-    actual_expenditure = models.PositiveIntegerField()
-    actual_progress = models.PositiveIntegerField()
+    actual_expenditure = models.FloatField()
+    actual_progress = models.FloatField()
     comment = models.TextField()
     comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions')
     remedial_action = models.CharField(max_length=255)
