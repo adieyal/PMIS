@@ -77,9 +77,15 @@ class Project(Versioned):
 class Entity(models.Model):
     name = models.CharField(max_length=255)
 
+    def __unicode__(self):
+        return self.name
+
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
+
+    def __unicode__(self):
+        return self.name
 
 
 class ProjectRole(models.Model):
