@@ -182,7 +182,7 @@ class ProjectStatus(Versioned):
         (0, 'Running'),
         (1, 'Terminated')
     )
-    project = models.ForeignKey(Project, related_name='project_status')
+    project = models.OneToOneField(Project)
     status = models.CharField(max_length=255, choices=STATUS)
 
 
