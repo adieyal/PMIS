@@ -163,3 +163,12 @@ class MonthlySubmission(Versioned):
     comment = models.TextField()
     comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions')
     remedial_action = models.CharField(max_length=255)
+
+
+class ProjectStatus(Versioned):
+    STATUS = (
+        (0, 'Running'),
+        (1, 'Terminated')
+    )
+    project = models.ForeignKey(Project, related_name='project_status')
+    status = models.CharField(max_length=255, choices=STATUS)
