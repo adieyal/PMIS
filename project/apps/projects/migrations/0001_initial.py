@@ -9,41 +9,41 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Client'
-        db.create_table(u'pmis_client', (
+        db.create_table(u'projects_client', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
         ))
-        db.send_create_signal(u'pmis', ['Client'])
+        db.send_create_signal(u'projects', ['Client'])
 
         # Adding model 'Municipality'
-        db.create_table(u'pmis_municipality', (
+        db.create_table(u'projects_municipality', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
         ))
-        db.send_create_signal(u'pmis', ['Municipality'])
+        db.send_create_signal(u'projects', ['Municipality'])
 
         # Adding model 'District'
-        db.create_table(u'pmis_district', (
+        db.create_table(u'projects_district', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('municipality', self.gf('django.db.models.fields.related.ForeignKey')(related_name='districts', to=orm['pmis.Municipality'])),
+            ('municipality', self.gf('django.db.models.fields.related.ForeignKey')(related_name='districts', to=orm['projects.Municipality'])),
         ))
-        db.send_create_signal(u'pmis', ['District'])
+        db.send_create_signal(u'projects', ['District'])
 
         # Adding model 'Programme'
-        db.create_table(u'pmis_programme', (
+        db.create_table(u'projects_programme', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('client', self.gf('django.db.models.fields.related.ForeignKey')(related_name='programmes', to=orm['pmis.Client'])),
+            ('client', self.gf('django.db.models.fields.related.ForeignKey')(related_name='programmes', to=orm['projects.Client'])),
         ))
-        db.send_create_signal(u'pmis', ['Programme'])
+        db.send_create_signal(u'projects', ['Programme'])
 
         # Adding model 'Project'
-        db.create_table(u'pmis_project', (
+        db.create_table(u'projects_project', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
@@ -51,44 +51,44 @@ class Migration(SchemaMigration):
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
-            ('programme', self.gf('django.db.models.fields.related.ForeignKey')(related_name='projects', null=True, to=orm['pmis.Programme'])),
-            ('municipality', self.gf('django.db.models.fields.related.ForeignKey')(related_name='projects', to=orm['pmis.Municipality'])),
+            ('programme', self.gf('django.db.models.fields.related.ForeignKey')(related_name='projects', null=True, to=orm['projects.Programme'])),
+            ('municipality', self.gf('django.db.models.fields.related.ForeignKey')(related_name='projects', to=orm['projects.Municipality'])),
         ))
-        db.send_create_signal(u'pmis', ['Project'])
+        db.send_create_signal(u'projects', ['Project'])
 
         # Adding M2M table for field district on 'Project'
-        db.create_table(u'pmis_project_district', (
+        db.create_table(u'projects_project_district', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('project', models.ForeignKey(orm[u'pmis.project'], null=False)),
-            ('district', models.ForeignKey(orm[u'pmis.district'], null=False))
+            ('project', models.ForeignKey(orm[u'projects.project'], null=False)),
+            ('district', models.ForeignKey(orm[u'projects.district'], null=False))
         ))
-        db.create_unique(u'pmis_project_district', ['project_id', 'district_id'])
+        db.create_unique(u'projects_project_district', ['project_id', 'district_id'])
 
-        # Adding model 'PeopleType'
-        db.create_table(u'pmis_peopletype', (
+        # Adding model 'Entity'
+        db.create_table(u'projects_entity', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
-        db.send_create_signal(u'pmis', ['PeopleType'])
+        db.send_create_signal(u'projects', ['Entity'])
 
-        # Adding model 'ProjectPeople'
-        db.create_table(u'pmis_projectpeople', (
+        # Adding model 'Role'
+        db.create_table(u'projects_role', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_peoples', to=orm['pmis.Project'])),
         ))
-        db.send_create_signal(u'pmis', ['ProjectPeople'])
+        db.send_create_signal(u'projects', ['Role'])
 
-        # Adding M2M table for field people_type on 'ProjectPeople'
-        db.create_table(u'pmis_projectpeople_people_type', (
-            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('projectpeople', models.ForeignKey(orm[u'pmis.projectpeople'], null=False)),
-            ('peopletype', models.ForeignKey(orm[u'pmis.peopletype'], null=False))
+        # Adding model 'ProjectRole'
+        db.create_table(u'projects_projectrole', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_roles', to=orm['projects.Project'])),
+            ('role', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_roles', to=orm['projects.Role'])),
+            ('entity', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_roles', to=orm['projects.Entity'])),
         ))
-        db.create_unique(u'pmis_projectpeople_people_type', ['projectpeople_id', 'peopletype_id'])
+        db.send_create_signal(u'projects', ['ProjectRole'])
 
         # Adding model 'ProjectFinancial'
-        db.create_table(u'pmis_projectfinancial', (
+        db.create_table(u'projects_projectfinancial', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
@@ -96,12 +96,12 @@ class Migration(SchemaMigration):
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('total_anticipated_cost', self.gf('django.db.models.fields.DecimalField')(max_digits=20, decimal_places=2)),
             ('project_planning_budget', self.gf('django.db.models.fields.DecimalField')(max_digits=20, decimal_places=2)),
-            ('project', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['pmis.Project'], unique=True)),
+            ('project', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['projects.Project'], unique=True)),
         ))
-        db.send_create_signal(u'pmis', ['ProjectFinancial'])
+        db.send_create_signal(u'projects', ['ProjectFinancial'])
 
         # Adding model 'Budget'
-        db.create_table(u'pmis_budget', (
+        db.create_table(u'projects_budget', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
@@ -109,34 +109,34 @@ class Migration(SchemaMigration):
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('year', self.gf('django.db.models.fields.DateField')()),
             ('allocated_budget', self.gf('django.db.models.fields.DecimalField')(max_digits=20, decimal_places=2)),
-            ('project_financial', self.gf('django.db.models.fields.related.ForeignKey')(related_name='budgets', to=orm['pmis.ProjectFinancial'])),
+            ('project_financial', self.gf('django.db.models.fields.related.ForeignKey')(related_name='budgets', to=orm['projects.ProjectFinancial'])),
         ))
-        db.send_create_signal(u'pmis', ['Budget'])
+        db.send_create_signal(u'projects', ['Budget'])
 
         # Adding model 'ScopeCode'
-        db.create_table(u'pmis_scopecode', (
+        db.create_table(u'projects_scopecode', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('description', self.gf('django.db.models.fields.TextField')()),
             ('code', self.gf('django.db.models.fields.CharField')(unique=True, max_length=255)),
         ))
-        db.send_create_signal(u'pmis', ['ScopeCode'])
+        db.send_create_signal(u'projects', ['ScopeCode'])
 
         # Adding model 'ScopeOfWork'
-        db.create_table(u'pmis_scopeofwork', (
+        db.create_table(u'projects_scopeofwork', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('quantity', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('scope_code', self.gf('django.db.models.fields.related.ForeignKey')(related_name='scope_of_works', to=orm['pmis.ScopeCode'])),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='scope_of_works', to=orm['pmis.Project'])),
+            ('scope_code', self.gf('django.db.models.fields.related.ForeignKey')(related_name='scope_of_works', to=orm['projects.ScopeCode'])),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='scope_of_works', to=orm['projects.Project'])),
         ))
-        db.send_create_signal(u'pmis', ['ScopeOfWork'])
+        db.send_create_signal(u'projects', ['ScopeOfWork'])
 
         # Adding model 'Planning'
-        db.create_table(u'pmis_planning', (
+        db.create_table(u'projects_planning', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
@@ -145,112 +145,112 @@ class Migration(SchemaMigration):
             ('month', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('planned_expanses', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('planned_progress', self.gf('django.db.models.fields.PositiveIntegerField')()),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='plannings', to=orm['pmis.Project'])),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='plannings', to=orm['projects.Project'])),
         ))
-        db.send_create_signal(u'pmis', ['Planning'])
+        db.send_create_signal(u'projects', ['Planning'])
 
         # Adding model 'Milestone'
-        db.create_table(u'pmis_milestone', (
+        db.create_table(u'projects_milestone', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('phase', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('order', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
             ('weeks_after_previous', self.gf('django.db.models.fields.PositiveSmallIntegerField')()),
-            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='milestones', to=orm['pmis.Project'])),
+            ('project', self.gf('django.db.models.fields.related.ForeignKey')(related_name='milestones', to=orm['projects.Project'])),
         ))
-        db.send_create_signal(u'pmis', ['Milestone'])
+        db.send_create_signal(u'projects', ['Milestone'])
 
         # Adding model 'ProjectMilestone'
-        db.create_table(u'pmis_projectmilestone', (
+        db.create_table(u'projects_projectmilestone', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('completion_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
-            ('milestone', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_milestone', to=orm['pmis.Milestone'])),
+            ('milestone', self.gf('django.db.models.fields.related.ForeignKey')(related_name='project_milestone', to=orm['projects.Milestone'])),
         ))
-        db.send_create_signal(u'pmis', ['ProjectMilestone'])
+        db.send_create_signal(u'projects', ['ProjectMilestone'])
 
         # Adding model 'CommentType'
-        db.create_table(u'pmis_commenttype', (
+        db.create_table(u'projects_commenttype', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
-        db.send_create_signal(u'pmis', ['CommentType'])
+        db.send_create_signal(u'projects', ['CommentType'])
 
         # Adding model 'MonthlySubmission'
-        db.create_table(u'pmis_monthlysubmission', (
+        db.create_table(u'projects_monthlysubmission', (
             ('cid', self.gf('django.db.models.fields.CharField')(max_length=36, null=True, db_index=True)),
             ('vid', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('update_date', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 5, 14, 0, 0))),
             ('update_comment', self.gf('django.db.models.fields.TextField')()),
             ('update_user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['auth.User'])),
             ('month', self.gf('django.db.models.fields.DateField')()),
-            ('current_milestone', self.gf('django.db.models.fields.related.ForeignKey')(related_name='monthly_submissions', to=orm['pmis.Milestone'])),
+            ('current_milestone', self.gf('django.db.models.fields.related.ForeignKey')(related_name='monthly_submissions', to=orm['projects.Milestone'])),
             ('actual_expenditure', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('actual_progress', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('comment', self.gf('django.db.models.fields.TextField')()),
-            ('comment_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coment_types', to=orm['pmis.CommentType'])),
+            ('comment_type', self.gf('django.db.models.fields.related.ForeignKey')(related_name='coment_types', to=orm['projects.CommentType'])),
             ('remedial_action', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
-        db.send_create_signal(u'pmis', ['MonthlySubmission'])
+        db.send_create_signal(u'projects', ['MonthlySubmission'])
 
 
     def backwards(self, orm):
         # Deleting model 'Client'
-        db.delete_table(u'pmis_client')
+        db.delete_table(u'projects_client')
 
         # Deleting model 'Municipality'
-        db.delete_table(u'pmis_municipality')
+        db.delete_table(u'projects_municipality')
 
         # Deleting model 'District'
-        db.delete_table(u'pmis_district')
+        db.delete_table(u'projects_district')
 
         # Deleting model 'Programme'
-        db.delete_table(u'pmis_programme')
+        db.delete_table(u'projects_programme')
 
         # Deleting model 'Project'
-        db.delete_table(u'pmis_project')
+        db.delete_table(u'projects_project')
 
         # Removing M2M table for field district on 'Project'
-        db.delete_table('pmis_project_district')
+        db.delete_table('projects_project_district')
 
-        # Deleting model 'PeopleType'
-        db.delete_table(u'pmis_peopletype')
+        # Deleting model 'Entity'
+        db.delete_table(u'projects_entity')
 
-        # Deleting model 'ProjectPeople'
-        db.delete_table(u'pmis_projectpeople')
+        # Deleting model 'Role'
+        db.delete_table(u'projects_role')
 
-        # Removing M2M table for field people_type on 'ProjectPeople'
-        db.delete_table('pmis_projectpeople_people_type')
+        # Deleting model 'ProjectRole'
+        db.delete_table(u'projects_projectrole')
 
         # Deleting model 'ProjectFinancial'
-        db.delete_table(u'pmis_projectfinancial')
+        db.delete_table(u'projects_projectfinancial')
 
         # Deleting model 'Budget'
-        db.delete_table(u'pmis_budget')
+        db.delete_table(u'projects_budget')
 
         # Deleting model 'ScopeCode'
-        db.delete_table(u'pmis_scopecode')
+        db.delete_table(u'projects_scopecode')
 
         # Deleting model 'ScopeOfWork'
-        db.delete_table(u'pmis_scopeofwork')
+        db.delete_table(u'projects_scopeofwork')
 
         # Deleting model 'Planning'
-        db.delete_table(u'pmis_planning')
+        db.delete_table(u'projects_planning')
 
         # Deleting model 'Milestone'
-        db.delete_table(u'pmis_milestone')
+        db.delete_table(u'projects_milestone')
 
         # Deleting model 'ProjectMilestone'
-        db.delete_table(u'pmis_projectmilestone')
+        db.delete_table(u'projects_projectmilestone')
 
         # Deleting model 'CommentType'
-        db.delete_table(u'pmis_commenttype')
+        db.delete_table(u'projects_commenttype')
 
         # Deleting model 'MonthlySubmission'
-        db.delete_table(u'pmis_monthlysubmission')
+        db.delete_table(u'projects_monthlysubmission')
 
 
     models = {
@@ -290,52 +290,57 @@ class Migration(SchemaMigration):
             'model': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'})
         },
-        u'pmis.budget': {
+        u'projects.budget': {
             'Meta': {'object_name': 'Budget'},
             'allocated_budget': ('django.db.models.fields.DecimalField', [], {'max_digits': '20', 'decimal_places': '2'}),
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
-            'project_financial': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'budgets'", 'to': u"orm['pmis.ProjectFinancial']"}),
+            'project_financial': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'budgets'", 'to': u"orm['projects.ProjectFinancial']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
             'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'year': ('django.db.models.fields.DateField', [], {})
         },
-        u'pmis.client': {
+        u'projects.client': {
             'Meta': {'object_name': 'Client'},
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.commenttype': {
+        u'projects.commenttype': {
             'Meta': {'object_name': 'CommentType'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.district': {
+        u'projects.district': {
             'Meta': {'object_name': 'District'},
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'municipality': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'districts'", 'to': u"orm['pmis.Municipality']"}),
+            'municipality': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'districts'", 'to': u"orm['projects.Municipality']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.milestone': {
+        u'projects.entity': {
+            'Meta': {'object_name': 'Entity'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        u'projects.milestone': {
             'Meta': {'object_name': 'Milestone'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'order': ('django.db.models.fields.PositiveSmallIntegerField', [], {}),
             'phase': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'milestones'", 'to': u"orm['pmis.Project']"}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'milestones'", 'to': u"orm['projects.Project']"}),
             'weeks_after_previous': ('django.db.models.fields.PositiveSmallIntegerField', [], {})
         },
-        u'pmis.monthlysubmission': {
+        u'projects.monthlysubmission': {
             'Meta': {'object_name': 'MonthlySubmission'},
             'actual_expenditure': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'actual_progress': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
             'comment': ('django.db.models.fields.TextField', [], {}),
-            'comment_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coment_types'", 'to': u"orm['pmis.CommentType']"}),
-            'current_milestone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'monthly_submissions'", 'to': u"orm['pmis.Milestone']"}),
+            'comment_type': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'coment_types'", 'to': u"orm['projects.CommentType']"}),
+            'current_milestone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'monthly_submissions'", 'to': u"orm['projects.Milestone']"}),
             'month': ('django.db.models.fields.DateField', [], {}),
             'remedial_action': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
@@ -343,53 +348,48 @@ class Migration(SchemaMigration):
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'pmis.municipality': {
+        u'projects.municipality': {
             'Meta': {'object_name': 'Municipality'},
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.peopletype': {
-            'Meta': {'object_name': 'PeopleType'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
-        u'pmis.planning': {
+        u'projects.planning': {
             'Meta': {'object_name': 'Planning'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
             'month': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'planned_expanses': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'planned_progress': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'plannings'", 'to': u"orm['pmis.Project']"}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'plannings'", 'to': u"orm['projects.Project']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
             'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'pmis.programme': {
+        u'projects.programme': {
             'Meta': {'object_name': 'Programme'},
-            'client': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'programmes'", 'to': u"orm['pmis.Client']"}),
+            'client': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'programmes'", 'to': u"orm['projects.Client']"}),
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.project': {
+        u'projects.project': {
             'Meta': {'object_name': 'Project'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
             'description': ('django.db.models.fields.TextField', [], {}),
-            'district': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'projects'", 'symmetrical': 'False', 'to': u"orm['pmis.District']"}),
-            'municipality': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'to': u"orm['pmis.Municipality']"}),
+            'district': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'projects'", 'symmetrical': 'False', 'to': u"orm['projects.District']"}),
+            'municipality': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'to': u"orm['projects.Municipality']"}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'programme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'null': 'True', 'to': u"orm['pmis.Programme']"}),
+            'programme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'projects'", 'null': 'True', 'to': u"orm['projects.Programme']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
             'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'pmis.projectfinancial': {
+        u'projects.projectfinancial': {
             'Meta': {'object_name': 'ProjectFinancial'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
-            'project': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['pmis.Project']", 'unique': 'True'}),
+            'project': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['projects.Project']", 'unique': 'True'}),
             'project_planning_budget': ('django.db.models.fields.DecimalField', [], {'max_digits': '20', 'decimal_places': '2'}),
             'total_anticipated_cost': ('django.db.models.fields.DecimalField', [], {'max_digits': '20', 'decimal_places': '2'}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
@@ -397,36 +397,41 @@ class Migration(SchemaMigration):
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'pmis.projectmilestone': {
+        u'projects.projectmilestone': {
             'Meta': {'object_name': 'ProjectMilestone'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
             'completion_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
-            'milestone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_milestone'", 'to': u"orm['pmis.Milestone']"}),
+            'milestone': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_milestone'", 'to': u"orm['projects.Milestone']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
             'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
             'vid': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
-        u'pmis.projectpeople': {
-            'Meta': {'object_name': 'ProjectPeople'},
+        u'projects.projectrole': {
+            'Meta': {'object_name': 'ProjectRole'},
+            'entity': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_roles'", 'to': u"orm['projects.Entity']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'people_type': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'project_peoples'", 'symmetrical': 'False', 'to': u"orm['pmis.PeopleType']"}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_peoples'", 'to': u"orm['pmis.Project']"})
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_roles'", 'to': u"orm['projects.Project']"}),
+            'role': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'project_roles'", 'to': u"orm['projects.Role']"})
         },
-        u'pmis.scopecode': {
+        u'projects.role': {
+            'Meta': {'object_name': 'Role'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
+        },
+        u'projects.scopecode': {
             'Meta': {'object_name': 'ScopeCode'},
             'code': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '255'}),
             'description': ('django.db.models.fields.TextField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        u'pmis.scopeofwork': {
+        u'projects.scopeofwork': {
             'Meta': {'object_name': 'ScopeOfWork'},
             'cid': ('django.db.models.fields.CharField', [], {'max_length': '36', 'null': 'True', 'db_index': 'True'}),
-            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'scope_of_works'", 'to': u"orm['pmis.Project']"}),
+            'project': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'scope_of_works'", 'to': u"orm['projects.Project']"}),
             'quantity': ('django.db.models.fields.PositiveIntegerField', [], {}),
-            'scope_code': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'scope_of_works'", 'to': u"orm['pmis.ScopeCode']"}),
+            'scope_code': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'scope_of_works'", 'to': u"orm['projects.ScopeCode']"}),
             'update_comment': ('django.db.models.fields.TextField', [], {}),
             'update_date': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 5, 14, 0, 0)'}),
             'update_user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['auth.User']"}),
@@ -434,4 +439,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['pmis']
+    complete_apps = ['projects']
