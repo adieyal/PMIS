@@ -172,3 +172,9 @@ class ProjectStatus(Versioned):
     )
     project = models.ForeignKey(Project, related_name='project_status')
     status = models.CharField(max_length=255, choices=STATUS)
+
+
+class VarianceOrder(Versioned):
+    project = models.ForeignKey(Project, related_name='variance_orders')
+    description = models.TextField()
+    amount = models.FloatField()
