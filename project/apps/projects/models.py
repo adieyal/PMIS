@@ -1,5 +1,5 @@
 import datetime
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.db import models
 from revisions.models import VersionedModel
 
@@ -42,6 +42,11 @@ class Client(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(Client, self).save(force_insert, force_update, using, update_fields)
+        group, create = Group.objects.get_or_create(name=self.name)
+        group.save()
+
 
 class District(models.Model):
     name = models.CharField(max_length=255)
@@ -49,6 +54,11 @@ class District(models.Model):
 
     def __unicode__(self):
         return self.name
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        super(District, self).save(force_insert, force_update, using, update_fields)
+        group, create = Group.objects.get_or_create(name=self.name)
+        group.save()
 
 
 class Municipality(models.Model):
@@ -73,7 +83,7 @@ class Project(Versioned):
     name = models.CharField(max_length=255)
     description = models.TextField()
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
-    municipality = models.ForeignKey(Municipality, related_name='projects')
+    municipality = models.ManyToManyField(Municipality, related_name='projects')
 
     def __unicode__(self):
         return self.name
