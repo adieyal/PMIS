@@ -188,6 +188,7 @@ DJANGO_APPS = (
 THIRD_PARTY_APPS = (
     # Database migration helpers:
     'south',
+    'registration',
 )
 
 # Apps specific for this project go here.
@@ -237,3 +238,10 @@ LOGGING = {
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
+
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_URL = '/'
+ABSOLUTE_URL_OVERRIDES = {
+    'auth.user': lambda o: "/",
+    }

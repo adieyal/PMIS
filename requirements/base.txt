@@ -6,3 +6,4 @@ logutils==0.3.3
 South==0.7.6
 yolk==0.4.3
 git+https://github.com/stdbrouw/django-revisions.git#eggs=django-revisions
+hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
