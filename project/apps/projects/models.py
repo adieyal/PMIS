@@ -5,26 +5,26 @@ from revisions.models import VersionedModel
 
 
 MONTHS = (
-    (1, 'January'),
-    (2, 'February'),
-    (3, 'March'),
-    (4, 'April'),
-    (5, 'May'),
-    (6, 'June'),
-    (7, 'July'),
-    (8, 'July'),
-    (9, 'August'),
-    (10, 'September'),
-    (11, 'October'),
-    (12, 'November'),
-    (13, 'December'),
+    ('1', 'January'),
+    ('2', 'February'),
+    ('3', 'March'),
+    ('4', 'April'),
+    ('5', 'May'),
+    ('6', 'June'),
+    ('7', 'July'),
+    ('8', 'July'),
+    ('9', 'August'),
+    ('10', 'September'),
+    ('11', 'October'),
+    ('12', 'November'),
+    ('13', 'December'),
 )
 
-YEARS = tuple(map(lambda x: (x, x), range(1960, 2060)))
+YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
 
 class Versioned(VersionedModel):
-    update_date = models.DateTimeField(default=datetime.datetime.now())
+    update_date = models.DateTimeField(auto_now=True)
     update_comment = models.TextField()
     update_user = models.ForeignKey(User)
 
@@ -32,7 +32,7 @@ class Versioned(VersionedModel):
         abstract = True
 
     class Versioning:
-        clear_each_revision = ['update_date', 'update_comment', 'update_user']
+        clear_each_revision = ['update_comment', 'update_user']
 
 
 class Client(models.Model):

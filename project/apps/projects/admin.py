@@ -13,7 +13,7 @@ class ProgrammeAdmin(admin.ModelAdmin):
 
 class ProjectAdmin(VersionedAdmin):
     fields = (
-        'name', 'programme', 'municipality', 'district', 'update_date', 'update_comment', 'update_user')
+        'name', 'programme', 'description', 'municipality',  'update_comment', 'update_user')
 
 
 class MunicipalityAdmin(admin.ModelAdmin):
@@ -40,12 +40,14 @@ class PlanningAdmin(admin.ModelAdmin):
     fields = ('month', 'year', 'planned_expenses', 'planned_progress', 'project')
 
 
-class MonthlySubmissionAdmin(admin.ModelAdmin):
+class MonthlySubmissionAdmin(VersionedAdmin):
     fieldsets = (
         ('Date', {'fields': ('month', 'year')}),
         ('Project', {'fields': ('project',)}),
         (None, {'fields': ('actual_expenditure', 'actual_progress')}),
         ('Comment', {'fields': ('comment', 'comment_type', 'remedial_action')}),
+        ('Description versioned', {'fields': ( 'update_comment', 'update_user')}),
+
     )
 
 
@@ -56,21 +58,21 @@ class CommentTypeAdmin(admin.ModelAdmin):
 class ProjectStatusAdmin(VersionedAdmin):
     fieldsets = (
         (None, {'fields': ('project', 'status')}),
-        ('Description versioned', {'fields': ('update_date', 'update_comment', 'update_user')}),
+        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
     )
 
 
 class VarianceOrderAdmin(VersionedAdmin):
     fieldsets = (
         (None, {'fields': ('project', 'description', 'amount')}),
-        ('Description versioned', {'fields': ('update_date', 'update_comment', 'update_user')}),
+        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
     )
 
 
 class ProjectMilestoneAdmin(VersionedAdmin):
     fieldsets = (
         (None, {'fields': ('project', 'completion_date')}),
-        ('Description versioned', {'fields': ('update_date', 'update_comment', 'update_user')}),
+        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
     )
 
 
