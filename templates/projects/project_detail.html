@@ -11,8 +11,7 @@
     </p>
     <p>
         Municipality:
-        {{ object.municipality }}
-        {{ object.municipality.all }}
+
         {% for object_item in object.municipality.all %}
             {{ object_item }}
         {% endfor %}
