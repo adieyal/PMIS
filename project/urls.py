@@ -7,6 +7,9 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='base.html')),
+    url(r'^api/', include('project.apps.api.urls', namespace='api')),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+
 
     # Examples:
     # url(r'^$', 'project.views.home', name='home'),
@@ -20,5 +23,5 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^projects/', include('project.apps.projects.urls'), name='projects'),
-
+    # url(r'^', include(router.urls)),
 )

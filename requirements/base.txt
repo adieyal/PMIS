@@ -7,3 +7,6 @@ South==0.7.6
 yolk==0.4.3
 git+https://github.com/stdbrouw/django-revisions.git#eggs=django-revisions
 hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
+djangorestframework==2.3.2
+markdown==2.3.1
+django-filter==0.6
