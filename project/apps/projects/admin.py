@@ -16,12 +16,12 @@ class ProjectAdmin(VersionedAdmin):
         'name', 'programme', 'description', 'municipality',  'update_comment', 'update_user')
 
 
-class MunicipalityAdmin(admin.ModelAdmin):
-    fields = ('name', 'description', 'district')
+class MunicipalityAdmin(admin.TabularInline):
+    model = Municipality
 
 
 class DistrictAdmin(admin.ModelAdmin):
-    fields = ('name', 'description',)
+    inlines = [MunicipalityAdmin, ]
 
 
 class EntityAdmin(admin.ModelAdmin):
@@ -82,7 +82,7 @@ class MilestoneAdmin(admin.ModelAdmin):
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(Municipality, MunicipalityAdmin)
+
 admin.site.register(District, DistrictAdmin)
 admin.site.register(Entity, EntityAdmin)
 admin.site.register(Role, RoleAdmin)
