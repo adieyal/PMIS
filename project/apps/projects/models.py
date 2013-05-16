@@ -137,7 +137,7 @@ class ScopeOfWork(Versioned):
 
 class Planning(Versioned):
     month = models.CharField(max_length=255, choices=MONTHS)
-    year = models.CharField(max_length=255, choices=YEARS, default=datetime.datetime.now().year)
+    year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
     planned_expenses = models.FloatField()
     planned_progress = models.FloatField()
     project = models.ForeignKey(Project, related_name='plannings')
@@ -173,8 +173,8 @@ class CommentType(models.Model):
 
 
 class MonthlySubmission(Versioned):
-    month = models.CharField(max_length=255, choices=MONTHS, default=datetime.datetime.now().month)
-    year = models.CharField(max_length=255, choices=YEARS, default=datetime.datetime.now().year)
+    month = models.CharField(max_length=255, choices=MONTHS, default=lambda: datetime.datetime.now().month)
+    year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
     project = models.ForeignKey(Project, related_name='monthly_submissions')
     actual_expenditure = models.FloatField()
     actual_progress = models.FloatField()
