@@ -102,7 +102,7 @@ class ProjectRole(models.Model):
 class ProjectFinancial(Versioned):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2)
     project_planning_budget = models.DecimalField(max_digits=20, decimal_places=2)
-    project = models.OneToOneField(Project)
+    project = models.OneToOneField(Project, related_name='project_financial')
 
     def __unicode__(self):
         return u'Financial for %s' % self.project.name
@@ -161,7 +161,7 @@ class Milestone(models.Model):
 
 
 class ProjectMilestone(Versioned):
-    completion_date = models.DateTimeField(default=datetime.datetime.now())
+    completion_date = models.DateTimeField(default=lambda: datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='project_milestone')
 
 

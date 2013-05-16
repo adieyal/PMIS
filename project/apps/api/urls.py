@@ -12,4 +12,6 @@ urlpatterns = patterns('',
                        url(r'^', include(router.urls)),
                        url(r'^districts/(?P<pk>\d+)/municipalities/', views.MunicipalityViewSet.as_view({'get': 'retrieve'})),
                        url(r'^clients/(?P<pk>\d+)/programmes/', views.ProgrammeViewSet.as_view({'get': 'retrieve'})),
+                       url(r'^clients/(?P<pk>\d+)/projects/', views.ProjectViewSet.as_view({'get': 'retrieve'})),
+                       # url(r'^districts/(?P<pk>\d+)/projects/', views.ProjectViewSet.as_view()),
 )

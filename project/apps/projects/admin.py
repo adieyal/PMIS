@@ -1,6 +1,6 @@
 from django.contrib import admin
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -79,6 +79,13 @@ class ProjectMilestoneAdmin(VersionedAdmin):
 class MilestoneAdmin(admin.ModelAdmin):
     fields = ('phase', 'name', 'order')
 
+
+class ProjectFinancialAdmin(VersionedAdmin):
+    fieldsets = (
+        (None, {'fields': ('total_anticipated_cost', 'project_planning_budget', 'project')}),
+        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
+    )
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
@@ -93,3 +100,4 @@ admin.site.register(CommentType, CommentTypeAdmin)
 admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(VarianceOrder, VarianceOrderAdmin)
 admin.site.register(Milestone, MilestoneAdmin)
+admin.site.register(ProjectFinancial, ProjectFinancialAdmin)
