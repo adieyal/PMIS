@@ -74,11 +74,6 @@ class Project(models.Model):
 
     def __unicode__(self):
         return self.name
-    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-    #     super(Project, self).save(force_insert, force_update, using, update_fields)
-    #     # update_comment = self.cleaned_data['update_comment']
-    #     # update_user = self.cleaned_data['update_user']
-    #     reversion.add_meta(Versioned, update_comment='asdf', update_user='asdf')
 
 
 class Entity(models.Model):
