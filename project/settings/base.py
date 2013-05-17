@@ -153,10 +153,10 @@ MIDDLEWARE_CLASSES = (
     # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    'revisions.middleware.VersionedModelRedirectMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'reversion.middleware.RevisionMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -190,6 +190,7 @@ THIRD_PARTY_APPS = (
     'south',
     'registration',
     'rest_framework',
+    'reversion',
 )
 
 # Apps specific for this project go here.

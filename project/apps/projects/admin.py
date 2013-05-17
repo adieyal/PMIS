@@ -1,6 +1,23 @@
 from django.contrib import admin
+import reversion
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned
+from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionVersionedForm, ProjectStatusVersionedForm, VarianceOrderVersionedForm, ProjectMilestoneVersionedForm, ProjectFinancialVersionedForm
+
+
+class CustomVersionAdmin(reversion.VersionAdmin):
+    def log_change(self, request, object, message):
+        super(reversion.VersionAdmin, self).log_change(request, object, message)
+        update_comment = request.POST['update_comment']
+        update_user_id = request.POST['update_user']
+        self.revision_manager.save_revision(
+            self.get_revision_data(request, object, reversion.models.VERSION_CHANGE),
+            user=request.user,
+            comment=message,
+            ignore_duplicates=self.ignore_duplicate_revisions,
+            meta=((Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            db = self.revision_context_manager.get_db(),
+            )
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -11,9 +28,8 @@ class ProgrammeAdmin(admin.ModelAdmin):
     fields = ('name', 'description', 'client')
 
 
-class ProjectAdmin(VersionedAdmin):
-    fields = (
-        'name', 'programme', 'description', 'municipality',  'update_comment', 'update_user')
+class ProjectAdmin(CustomVersionAdmin):
+    form = ProjectVersionedForm
 
 
 class MunicipalityAdmin(admin.TabularInline):
@@ -40,51 +56,33 @@ class PlanningAdmin(admin.ModelAdmin):
     fields = ('month', 'year', 'planned_expenses', 'planned_progress', 'project')
 
 
-class MonthlySubmissionAdmin(VersionedAdmin):
-    fieldsets = (
-        ('Date', {'fields': ('month', 'year')}),
-        ('Project', {'fields': ('project',)}),
-        (None, {'fields': ('actual_expenditure', 'actual_progress')}),
-        ('Comment', {'fields': ('comment', 'comment_type', 'remedial_action')}),
-        ('Description versioned', {'fields': ( 'update_comment', 'update_user')}),
-
-    )
+class MonthlySubmissionAdmin(CustomVersionAdmin):
+    form = MonthlySubmissionVersionedForm
 
 
 class CommentTypeAdmin(admin.ModelAdmin):
     fields = ('name',)
 
 
-class ProjectStatusAdmin(VersionedAdmin):
-    fieldsets = (
-        (None, {'fields': ('project', 'status')}),
-        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
-    )
+class ProjectStatusAdmin(CustomVersionAdmin):
+    form = ProjectStatusVersionedForm
 
 
-class VarianceOrderAdmin(VersionedAdmin):
-    fieldsets = (
-        (None, {'fields': ('project', 'description', 'amount')}),
-        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
-    )
+class VarianceOrderAdmin(CustomVersionAdmin):
+    form = VarianceOrderVersionedForm
 
 
-class ProjectMilestoneAdmin(VersionedAdmin):
-    fieldsets = (
-        (None, {'fields': ('project', 'completion_date')}),
-        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
-    )
+class ProjectMilestoneAdmin(CustomVersionAdmin):
+    form = ProjectMilestoneVersionedForm
 
 
 class MilestoneAdmin(admin.ModelAdmin):
     fields = ('phase', 'name', 'order')
 
 
-class ProjectFinancialAdmin(VersionedAdmin):
-    fieldsets = (
-        (None, {'fields': ('total_anticipated_cost', 'project_planning_budget', 'project')}),
-        ('Description versioned', {'fields': ('update_comment', 'update_user')}),
-    )
+class ProjectFinancialAdmin(CustomVersionAdmin):
+    form = ProjectFinancialVersionedForm
+
 
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)

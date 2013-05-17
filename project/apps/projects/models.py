@@ -1,6 +1,8 @@
 import datetime
 from django.contrib.auth.models import User, Group
 from django.db import models
+import reversion
+from reversion.models import Revision
 from revisions.models import VersionedModel
 
 
@@ -23,16 +25,11 @@ MONTHS = (
 YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
 
-class Versioned(VersionedModel):
+class Versioned(models.Model):
+    revision = models.OneToOneField(Revision)  # This is required
     update_date = models.DateTimeField(auto_now=True)
     update_comment = models.TextField()
     update_user = models.ForeignKey(User)
-
-    class Meta:
-        abstract = True
-
-    class Versioning:
-        clear_each_revision = ['update_comment', 'update_user']
 
 
 class Client(models.Model):
@@ -69,7 +66,7 @@ class Programme(models.Model):
         return self.name
 
 
-class Project(Versioned):
+class Project(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField()
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
@@ -77,6 +74,11 @@ class Project(Versioned):
 
     def __unicode__(self):
         return self.name
+    # def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+    #     super(Project, self).save(force_insert, force_update, using, update_fields)
+    #     # update_comment = self.cleaned_data['update_comment']
+    #     # update_user = self.cleaned_data['update_user']
+    #     reversion.add_meta(Versioned, update_comment='asdf', update_user='asdf')
 
 
 class Entity(models.Model):
@@ -99,7 +101,7 @@ class ProjectRole(models.Model):
     entity = models.ForeignKey(Entity, related_name='project_roles')
 
 
-class ProjectFinancial(Versioned):
+class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2)
     project_planning_budget = models.DecimalField(max_digits=20, decimal_places=2)
     project = models.OneToOneField(Project, related_name='project_financial')
@@ -108,7 +110,7 @@ class ProjectFinancial(Versioned):
         return u'Financial for %s' % self.project.name
 
 
-class Budget(Versioned):
+class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
     allocated_budget = models.DecimalField(max_digits=20, decimal_places=2)
     project_financial = models.ForeignKey(ProjectFinancial, related_name='budgets')
@@ -126,7 +128,7 @@ class ScopeCode(models.Model):
         return self.name
 
 
-class ScopeOfWork(Versioned):
+class ScopeOfWork(models.Model):
     quantity = models.PositiveIntegerField()
     scope_code = models.ForeignKey(ScopeCode, related_name='scope_of_works')
     project = models.ForeignKey(Project, related_name='scope_of_works')
@@ -135,7 +137,7 @@ class ScopeOfWork(Versioned):
         return u'Scope of work for %s' % self.project.name
 
 
-class Planning(Versioned):
+class Planning(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
     planned_expenses = models.FloatField()
@@ -160,7 +162,7 @@ class Milestone(models.Model):
         return self.name
 
 
-class ProjectMilestone(Versioned):
+class ProjectMilestone(models.Model):
     completion_date = models.DateTimeField(default=lambda: datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='project_milestone')
 
@@ -172,7 +174,7 @@ class CommentType(models.Model):
         return self.name
 
 
-class MonthlySubmission(Versioned):
+class MonthlySubmission(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS, default=lambda: datetime.datetime.now().month)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
     project = models.ForeignKey(Project, related_name='monthly_submissions')
@@ -183,7 +185,7 @@ class MonthlySubmission(Versioned):
     remedial_action = models.CharField(max_length=255)
 
 
-class ProjectStatus(Versioned):
+class ProjectStatus(models.Model):
     STATUS = (
         (0, 'Running'),
         (1, 'Terminated')
@@ -192,7 +194,7 @@ class ProjectStatus(Versioned):
     status = models.CharField(max_length=255, choices=STATUS)
 
 
-class VarianceOrder(Versioned):
+class VarianceOrder(models.Model):
     project = models.ForeignKey(Project, related_name='variance_orders')
     description = models.TextField()
     amount = models.FloatField()
