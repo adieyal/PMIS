@@ -11,4 +11,7 @@ sudo dpkg -i /tmp/virtualbox-4.2_4.2.12-84980~Ubuntu~quantal_amd64.deb
 
 # Use Ubuntu 12.04 base image and make vm
 vagrant box add base http://files.vagrantup.com/precise64.box
-make vm
+vagrant up
+
+# Install the correct virtualbox additions
+vagrant plugin install vagrant-vbguest

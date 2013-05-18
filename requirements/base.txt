@@ -5,3 +5,9 @@ django-model-utils==1.1.0
 logutils==0.3.3
 South==0.7.6
 yolk==0.4.3
+git+https://github.com/stdbrouw/django-revisions.git#eggs=django-revisions
+hg+https://bitbucket.org/ubernostrum/django-registration#egg=django-registration
+djangorestframework==2.3.2
+markdown==2.3.1
+django-filter==0.6
+django-reversion==1.7

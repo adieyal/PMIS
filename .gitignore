@@ -17,5 +17,9 @@ build
 # Logs:
 *.log
 
+*.box
 /.vagrant
 /assets
+
+#IDE
+.idea/

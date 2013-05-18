@@ -19,7 +19,7 @@ Verify this is the base box you want before running install.sh:
 The first time around it might take some time, as vagrant will have to
 download the VM image. Be patient!
 
-Running the Recipe
+Installation
 ------------------
 
 You can create the VM with:
@@ -33,3 +33,13 @@ Should you want to repeat the provision:
     vagrant provision
 
 Should the machine install completely without error, browse to (http://localhost:8080/)
+
+Once you are happy with the state of the machine, you can package it:
+
+    vagrant package --vagrantfile Vagrantfile.pkg
+
+This leaves you with package.box, which captures the state of the machine for use later:
+
+    vagrant box add project package.box
+    vagrant init project
+    vagrant up

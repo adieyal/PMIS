@@ -1,0 +1,308 @@
+[
+{
+  "pk": 1, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DCSR", 
+    "description": ""
+  }
+},
+{
+  "pk": 2, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DEDET", 
+    "description": ""
+  }
+},
+{
+  "pk": 3, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DoE", 
+    "description": ""
+  }
+},
+{
+  "pk": 4, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DoH", 
+    "description": ""
+  }
+},
+{
+  "pk": 5, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DSD", 
+    "description": ""
+  }
+},
+{
+  "pk": 6, 
+  "model": "projects.client", 
+  "fields": {
+    "name": "DSSL", 
+    "description": ""
+  }
+},
+{
+  "pk": 2, 
+  "model": "projects.district", 
+  "fields": {
+    "name": "Gert Sibande", 
+    "description": ""
+  }
+},
+{
+  "pk": 3, 
+  "model": "projects.district", 
+  "fields": {
+    "name": "Nkangala", 
+    "description": ""
+  }
+},
+{
+  "pk": 4, 
+  "model": "projects.district", 
+  "fields": {
+    "name": "Ehlanzeni", 
+    "description": ""
+  }
+},
+{
+  "pk": 3, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Albert Luthuli", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 4, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Msukaligwa", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 5, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Mkhondo", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 6, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Pixley ka Seme", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 7, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Lekwa", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 8, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Dipaleseng", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 9, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Govan Mbeki", 
+    "district": 2, 
+    "description": ""
+  }
+},
+{
+  "pk": 10, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Delmas", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 11, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Emalahleni", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 12, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Steve Tshwete", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 13, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Emakhazeni", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 14, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Thembisile Hani", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 15, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Dr JS Moroka", 
+    "district": 3, 
+    "description": ""
+  }
+},
+{
+  "pk": 16, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Thaba Chweu", 
+    "district": 4, 
+    "description": ""
+  }
+},
+{
+  "pk": 17, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Mbombela", 
+    "district": 4, 
+    "description": ""
+  }
+},
+{
+  "pk": 18, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Umjindi", 
+    "district": 4, 
+    "description": ""
+  }
+},
+{
+  "pk": 19, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Nkomazi", 
+    "district": 4, 
+    "description": ""
+  }
+},
+{
+  "pk": 20, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Bushbuckridge", 
+    "district": 4, 
+    "description": ""
+  }
+},
+{
+  "pk": 1, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DCSR", 
+    "permissions": []
+  }
+},
+{
+  "pk": 2, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DEDET", 
+    "permissions": []
+  }
+},
+{
+  "pk": 3, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DoE", 
+    "permissions": []
+  }
+},
+{
+  "pk": 4, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DoH", 
+    "permissions": []
+  }
+},
+{
+  "pk": 5, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DSD", 
+    "permissions": []
+  }
+},
+{
+  "pk": 6, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "DSSL", 
+    "permissions": []
+  }
+},
+{
+  "pk": 7, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "Gert Sibande", 
+    "permissions": []
+  }
+},
+{
+  "pk": 8, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "Nkangala", 
+    "permissions": []
+  }
+},
+{
+  "pk": 9, 
+  "model": "auth.group", 
+  "fields": {
+    "name": "Ehlanzeni", 
+    "permissions": []
+  }
+}
+]
