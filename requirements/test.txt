@@ -3,3 +3,4 @@
 coverage==3.6
 django-discover-runner==0.2.2
 factory-boy==2.0.2
+django-coverage==1.2.2

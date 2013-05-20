@@ -191,12 +191,14 @@ THIRD_PARTY_APPS = (
     'registration',
     'rest_framework',
     'reversion',
+    'rest_framework.authtoken',
 )
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
     'apps.projects',
     'apps.api',
+
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -260,6 +262,13 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
     #     'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     # ]
-    'DEFAULT_PERMISSION_CLASSES': ('rest_framework.permissions.IsAdminUser',),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
     'DEFAULT_FILTER_BACKENDS': ['rest_framework.filters.DjangoFilterBackend'],
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+    )
 }
+
+# OAUTH_AUTHORIZE_VIEW = 'apps.api.views.oauth_authorize'

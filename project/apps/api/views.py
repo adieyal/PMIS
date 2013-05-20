@@ -1,5 +1,8 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, permissions
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from project.apps.projects.models import Client, District, Municipality, Project
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer
 

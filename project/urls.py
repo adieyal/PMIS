@@ -23,5 +23,7 @@ urlpatterns = patterns('',
     url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}),
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^projects/', include('project.apps.projects.urls'), name='projects'),
+    url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token')
+
     # url(r'^', include(router.urls)),
 )
