@@ -175,9 +175,9 @@ class MonthlySubmission(models.Model):
     project = models.ForeignKey(Project, related_name='monthly_submissions')
     actual_expenditure = models.FloatField()
     actual_progress = models.FloatField()
-    comment = models.TextField()
-    comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions')
-    remedial_action = models.CharField(max_length=255)
+    comment = models.TextField(blank=True)
+    comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions', null=True, blank=True)
+    remedial_action = models.CharField(max_length=255, blank=True)
 
 
 class ProjectStatus(models.Model):
