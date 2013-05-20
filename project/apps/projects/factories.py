@@ -75,7 +75,7 @@ class MunicipalityFactory(factory.Factory):
 class ProgrammeFactory(factory.Factory):
     FACTORY_FOR = Programme
     name = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
-    client = factory.SubFactory(Client)
+    client = factory.SubFactory(ClientFactory)
 
     @factory.lazy_attribute
     def description(self):
@@ -91,12 +91,22 @@ class ProjectFactory(factory.Factory):
     def description(self):
         return lorem_ipsum.words(200, False).capitalize()
 
-    @classmethod
-    def _prepare(cls, create, **kwargs):
-        municipality = MunicipalityFactory()
-        project = super(ProjectFactory, cls)._prepare(create, **kwargs)
-        project.municipality.add(municipality)
-        return project
+    # @classmethod
+    # def _prepare(cls, create, **kwargs):
+    #     municipality = MunicipalityFactory()
+    #     project = super(ProjectFactory, cls)._prepare(create, **kwargs)
+    #     project.municipality.add(municipality)
+    #     return project
+    @factory.post_generation
+    def municipality(self, create, extracted, **kwargs):
+        if not create:
+            # Simple build, do nothing.
+            return
+
+        if extracted:
+            # A list of groups were passed in, use them
+            for municipality in extracted:
+                self.municipality.add(municipality)
 
 
 class EntityFactory(factory.Factory):

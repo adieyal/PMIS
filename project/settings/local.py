@@ -50,6 +50,7 @@ CACHES = {
 # See: https://github.com/django-debug-toolbar/django-debug-toolbar#installation
 INSTALLED_APPS += (
     'debug_toolbar',
+    'django_coverage',
 )
 
 # See: https://github.com/django-debug-toolbar/django-debug-toolbar#installation
@@ -62,3 +63,6 @@ MIDDLEWARE_CLASSES += (
 
 INTERCEPT_REDIRECTS = False
 ########## END TOOLBAR CONFIGURATION
+
+
+COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))
