@@ -59,7 +59,7 @@ class Municipality(models.Model):
 
 class Programme(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     client = models.ForeignKey(Client, related_name='programmes')
 
     def __unicode__(self):
@@ -68,7 +68,7 @@ class Programme(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
     municipality = models.ManyToManyField(Municipality, related_name='projects')
 
