@@ -145,9 +145,9 @@ class Planning(models.Model):
 
 class Milestone(models.Model):
     PHASE = (
-        (0, 'Planning'),
-        (1, 'Implementation'),
-        (2, 'Completed')
+        ('0', 'Planning'),
+        ('1', 'Implementation'),
+        ('2', 'Completed')
     )
     phase = models.CharField(choices=PHASE, max_length=255)
     name = models.CharField(max_length=255)
