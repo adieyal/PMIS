@@ -1,7 +1,7 @@
 from django.contrib import admin
 import reversion
 from revisions.admin import VersionedAdmin
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned, Budget
 from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionVersionedForm, ProjectStatusVersionedForm, VarianceOrderVersionedForm, ProjectMilestoneVersionedForm, ProjectFinancialVersionedForm
 
 
@@ -99,3 +99,4 @@ admin.site.register(ProjectStatus, ProjectStatusAdmin)
 admin.site.register(VarianceOrder, VarianceOrderAdmin)
 admin.site.register(Milestone, MilestoneAdmin)
 admin.site.register(ProjectFinancial, ProjectFinancialAdmin)
+admin.site.register(Budget)
