@@ -160,6 +160,8 @@ class ProjectMilestone(models.Model):
     project = models.ForeignKey(Project, related_name='project_milestone')
     milestone = models.ForeignKey(Milestone, related_name='project_milestone')
 
+    def __unicode__(self):
+        return "%s - %s" % (self.project, self.milestone)
 
 class CommentType(models.Model):
     name = models.CharField(max_length=255)
