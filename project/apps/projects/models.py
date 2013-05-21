@@ -66,6 +66,7 @@ class Programme(models.Model):
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
+    project_number = models.CharField(max_length=30, null=True, blank=True)
     description = models.TextField(blank=True)
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
     municipality = models.ManyToManyField(Municipality, related_name='projects')
