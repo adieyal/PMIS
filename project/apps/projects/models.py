@@ -1,9 +1,7 @@
 import datetime
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.db import models
-import reversion
 from reversion.models import Revision
-from revisions.models import VersionedModel
 
 
 MONTHS = (

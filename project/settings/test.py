@@ -16,3 +16,6 @@ DATABASES = {
         "PORT": "",
     },
 }
+INSTALLED_APPS += (
+    'django_coverage',
+)
