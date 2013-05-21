@@ -58,7 +58,7 @@ class ProjectFinancialVersionedForm(VersionedForm):
     class Meta:
         model = ProjectFinancial
         fieldsets = (
-            (None, {'fields': ('total_anticipated_cost', 'project_planning_budget', 'project')}),
+            (None, {'fields': ('total_anticipated_cost', 'project')}),
         )
 
 

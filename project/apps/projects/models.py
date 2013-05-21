@@ -97,7 +97,6 @@ class ProjectRole(models.Model):
 
 class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2)
-    project_planning_budget = models.DecimalField(max_digits=20, decimal_places=2)
     project = models.OneToOneField(Project, related_name='project_financial')
 
     def __unicode__(self):
@@ -107,10 +106,11 @@ class ProjectFinancial(models.Model):
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
     allocated_budget = models.DecimalField(max_digits=20, decimal_places=2)
-    project_financial = models.ForeignKey(ProjectFinancial, related_name='budgets')
+    allocated_planning_budget = models.DecimalField(max_digits=20, decimal_places=2)
+    project = models.OneToOneField(Project, related_name='budgets')
 
     def __unicode__(self):
-        return u'Budget for %s  for  %s year' % (self.project_financial.project.name, self.year)
+        return u'Budget for %s  for  %s year' % (self.project.name, self.year)
 
 
 class ScopeCode(models.Model):
