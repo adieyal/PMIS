@@ -41,8 +41,14 @@ class ProgrammeViewSet(viewsets.ViewSet):
 class ProjectViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
+        phase = request.GET.get('phase', None)
+        milestone = request.GET.get('milestone', None)
         try:
             queryset = Project.objects.filter(programme__client__id=pk)
+            if phase:
+                queryset = queryset.filter(project_milestone__milestone__phase=phase)
+            if milestone:
+                queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset)
@@ -52,8 +58,14 @@ class ProjectViewSet(viewsets.ViewSet):
 class ProjectInDistrictViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
+        phase = request.GET.get('phase', None)
+        milestone = request.GET.get('milestone', None)
         try:
             queryset = Project.objects.filter(municipality__district__id=pk).distinct()
+            if phase:
+                queryset = queryset.filter(project_milestone__milestone__phase=phase)
+            if milestone:
+                queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset)
@@ -63,8 +75,14 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
 class ProjectInMunicipalityViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
+        phase = request.GET.get('phase', None)
+        milestone = request.GET.get('milestone', None)
         try:
             queryset = Project.objects.filter(municipality__id=pk).distinct()
+            if phase:
+                queryset = queryset.filter(project_milestone__milestone__phase=phase)
+            if milestone:
+                queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset)
@@ -74,8 +92,14 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
 class ProjectInProgrammeViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
+        phase = request.GET.get('phase', None)
+        milestone = request.GET.get('milestone', None)
         try:
             queryset = Project.objects.filter(programme__id=pk).distinct()
+            if phase:
+                queryset = queryset.filter(project_milestone__milestone__phase=phase)
+            if milestone:
+                queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset)

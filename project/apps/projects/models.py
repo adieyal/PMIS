@@ -143,9 +143,9 @@ class Planning(models.Model):
 
 class Milestone(models.Model):
     PHASE = (
-        ('0', 'Planning'),
-        ('1', 'Implementation'),
-        ('2', 'Completed')
+        ('planning', 'Planning'),
+        ('implementation', 'Implementation'),
+        ('completed', 'Completed')
     )
     phase = models.CharField(choices=PHASE, max_length=255)
     name = models.CharField(max_length=255)
@@ -158,6 +158,7 @@ class Milestone(models.Model):
 class ProjectMilestone(models.Model):
     completion_date = models.DateTimeField(default=lambda: datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='project_milestone')
+    milestone = models.ForeignKey(Milestone, related_name='project_milestone')
 
 
 class CommentType(models.Model):
