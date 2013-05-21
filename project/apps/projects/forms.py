@@ -1,6 +1,9 @@
 from django import forms
+# from django.forms import inlineformset_factory
+from django.forms.formsets import formset_factory
+from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
-from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial
+from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork
 
 
 class VersionedForm(forms.ModelForm):
@@ -57,3 +60,25 @@ class ProjectFinancialVersionedForm(VersionedForm):
         fieldsets = (
             (None, {'fields': ('total_anticipated_cost', 'project_planning_budget', 'project')}),
         )
+
+
+class ScopeOfWorkForm(forms.ModelForm):
+    class Meta:
+        model = ScopeOfWork
+        fields = ['quantity', 'scope_code', ]
+
+
+class ProjectForm(forms.ModelForm):
+    class Meta:
+        model = Project
+        fields = ['programme', 'name', 'description', ]
+
+
+class LocationAndScopeForm(forms.Form):
+    # class Meta:
+    #     model = Project
+    district = forms.ChoiceField(choices=District.objects.all().values_list('id', 'name'))
+    municipality = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Municipality.objects.all().values_list('id', 'name',))
+    # scope = formset_factory(ScopeOfWorkForm)
+
+LocationAndScopeFormSet = inlineformset_factory(Project, ScopeOfWork, form = LocationAndScopeForm, formset=ScopeOfWorkForm)
