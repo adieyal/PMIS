@@ -1,13 +1,12 @@
 from django.contrib import admin
 import reversion
-from revisions.admin import VersionedAdmin
 from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned, Budget
 from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionVersionedForm, ProjectStatusVersionedForm, VarianceOrderVersionedForm, ProjectMilestoneVersionedForm, ProjectFinancialVersionedForm
 
 
 class CustomVersionAdmin(reversion.VersionAdmin):
     def log_change(self, request, object, message):
-        super(reversion.VersionAdmin, self).log_change(request, object, message)
+        super(CustomVersionAdmin, self).log_change(request, object, message)
         update_comment = request.POST['update_comment']
         update_user_id = request.POST['update_user']
         self.revision_manager.save_revision(
