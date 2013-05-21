@@ -16,7 +16,7 @@ class ProjectVersionedForm(VersionedForm):
 
     class Meta:
         model = Project
-        fields = ('name', 'programme', 'description', 'municipality',)
+        fields = ('name', 'programme', 'project_number', 'description', 'municipality',)
 
 
 class MonthlySubmissionVersionedForm(VersionedForm):
