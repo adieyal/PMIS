@@ -1,5 +1,7 @@
 import datetime
 from django.contrib.auth.models import User
+from django.contrib.contenttypes import generic
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from reversion.models import Revision
 
@@ -64,12 +66,18 @@ class Programme(models.Model):
         return self.name
 
 
+class ProjectManager(models.Manager):
+    def get_project(self, user_id=None):
+        return self.filter(group_perm_objs__group_perm__user__id=user_id)
+
+
 class Project(models.Model):
     name = models.CharField(max_length=255)
     project_number = models.CharField(max_length=30, null=True, blank=True)
     description = models.TextField(blank=True)
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
     municipality = models.ManyToManyField(Municipality, related_name='projects')
+    objects = ProjectManager()
 
     def __unicode__(self):
         return self.name
@@ -164,6 +172,7 @@ class ProjectMilestone(models.Model):
     def __unicode__(self):
         return "%s - %s" % (self.project, self.milestone)
 
+
 class CommentType(models.Model):
     name = models.CharField(max_length=255)
 
@@ -195,3 +204,19 @@ class VarianceOrder(models.Model):
     project = models.ForeignKey(Project, related_name='variance_orders')
     description = models.TextField()
     amount = models.FloatField()
+
+
+class GroupPerm(models.Model):
+    user = models.ManyToManyField(User, related_name='group_perms', blank=True, null=True)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    content_type = models.ForeignKey(ContentType)
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
+
+    def __unicode__(self):
+        return self.name
+
+
+class GroupPermObj(models.Model):
+    group_perm = models.ManyToManyField(GroupPerm, related_name='group_perm_objs')
+    project = models.ManyToManyField(Project, related_name='group_perm_objs')

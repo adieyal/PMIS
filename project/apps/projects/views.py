@@ -1,17 +1,26 @@
 from braces.views import LoginRequiredMixin
-from django.contrib.formtools.wizard.views import SessionWizardView, WizardView
+from django.contrib.formtools.wizard.views import SessionWizardView
+from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from django.views.generic import DetailView
-from project.apps.projects.forms import ProjectForm, LocationAndScopeForm
 from project.apps.projects.models import Project
-from project.apps.projects.utils import group_required
 
 
 class ProjectView(LoginRequiredMixin, DetailView):
     model = Project
 
-    def get_context_data(self, **kwargs):
-        group_required(self.request, self.object.programme.client.name, self.object.municipality.all()[0].district.name)
-        return super(ProjectView, self).get_context_data(**kwargs)
+    def get_object(self, queryset=None):
+        pk = self.kwargs.get('pk')
+        try:
+            queryset = Project.objects.get(id=pk)
+        except Project.DoesNotExist:
+            raise Http404
+        try:
+            queryset = Project.objects.get_project(self.request.user.id).get(id=pk)
+        except Project.DoesNotExist:
+            raise PermissionDenied
+
+        return queryset
 
 
 class CreateProjectWizard(SessionWizardView):
