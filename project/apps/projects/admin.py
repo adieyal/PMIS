@@ -1,6 +1,6 @@
 from django.contrib import admin
 import reversion
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned, Budget, ProjectMilestone
+from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned, Budget, ProjectMilestone, GroupPerm, GroupPermObj
 from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionVersionedForm, ProjectStatusVersionedForm, VarianceOrderVersionedForm, ProjectMilestoneVersionedForm, ProjectFinancialVersionedForm
 
 
@@ -83,6 +83,10 @@ class ProjectFinancialAdmin(CustomVersionAdmin):
     form = ProjectFinancialVersionedForm
 
 
+class GroupPermAdmin(admin.ModelAdmin):
+    fields = ('user',)
+    filter_horizontal = ('user',)
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
@@ -100,3 +104,5 @@ admin.site.register(Milestone, MilestoneAdmin)
 admin.site.register(ProjectFinancial, ProjectFinancialAdmin)
 admin.site.register(ProjectMilestone, ProjectMilestoneAdmin)
 admin.site.register(Budget)
+admin.site.register(GroupPerm, GroupPermAdmin)
+admin.site.register(GroupPermObj)
