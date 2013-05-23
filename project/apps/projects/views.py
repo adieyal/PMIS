@@ -3,8 +3,17 @@ from django.contrib.formtools.wizard.views import SessionWizardView
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
 from django.views.generic import DetailView
+from project.apps.projects.forms import ProjectForm, LocationAndScopeFormContainer, ProjectRoleFormSet
 from project.apps.projects.models import Project
 
+
+FORMS = [('project_form', ProjectForm),
+         ('location_and_scope_form', LocationAndScopeFormContainer),
+         ('project_role_form', ProjectRoleFormSet), ]
+
+TEMPLATES = {'project_form': 'formtools/wizard/project_form.html',
+             'location_and_scope_form': 'formtools/wizard/location_and_scope_form.html',
+             'project_role_form': 'formtools/wizard/project_role_form.html',}
 
 class ProjectView(LoginRequiredMixin, DetailView):
     model = Project
@@ -24,8 +33,8 @@ class ProjectView(LoginRequiredMixin, DetailView):
 
 
 class CreateProjectWizard(SessionWizardView):
-    template_name = 'formtools/wizard/wizard_form.html'
-
+    def get_template_names(self):
+        return [TEMPLATES[self.steps.current]]
 
 
 

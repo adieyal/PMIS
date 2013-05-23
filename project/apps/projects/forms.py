@@ -3,7 +3,8 @@ from django import forms
 from django.forms.formsets import formset_factory
 from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
-from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork
+from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork, ProjectRole
+from project.apps.projects.form_container import FormContainer
 
 
 class VersionedForm(forms.ModelForm):
@@ -74,11 +75,21 @@ class ProjectForm(forms.ModelForm):
         fields = ['programme', 'name', 'description', ]
 
 
-class LocationAndScopeForm(forms.Form):
-    # class Meta:
-    #     model = Project
+class LocationForm(forms.Form):
+
     district = forms.ChoiceField(choices=District.objects.all().values_list('id', 'name'))
     municipality = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Municipality.objects.all().values_list('id', 'name',))
-    # scope = formset_factory(ScopeOfWorkForm)
 
-LocationAndScopeFormSet = inlineformset_factory(Project, ScopeOfWork, form = LocationAndScopeForm, formset=ScopeOfWorkForm)
+
+class LocationAndScopeFormContainer(FormContainer):
+    location = LocationForm
+    scope = formset_factory(ScopeOfWorkForm, extra=1)
+
+
+class ProjectRoleForm(forms.ModelForm):
+
+    class Meta:
+        model = ProjectRole
+        fields = ['role', 'entity']
+
+ProjectRoleFormSet = formset_factory(ProjectRoleForm, extra=3)
