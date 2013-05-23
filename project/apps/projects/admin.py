@@ -5,8 +5,19 @@ from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionV
 
 
 class CustomVersionAdmin(reversion.VersionAdmin):
+    def log_addition(self, request, object):
+        update_comment = request.POST['update_comment']
+        update_user_id = request.POST['update_user']
+        self.revision_manager.save_revision(
+            self.get_revision_data(request, object, reversion.models.VERSION_ADD),
+            user=request.user,
+            comment="Initial version.",
+            ignore_duplicates=self.ignore_duplicate_revisions,
+            meta=((Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            db=self.revision_context_manager.get_db(),
+        )
+
     def log_change(self, request, object, message):
-        super(CustomVersionAdmin, self).log_change(request, object, message)
         update_comment = request.POST['update_comment']
         update_user_id = request.POST['update_user']
         self.revision_manager.save_revision(
@@ -16,7 +27,7 @@ class CustomVersionAdmin(reversion.VersionAdmin):
             ignore_duplicates=self.ignore_duplicate_revisions,
             meta=((Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
             db = self.revision_context_manager.get_db(),
-            )
+        )
 
 
 class ClientAdmin(admin.ModelAdmin):
@@ -87,6 +98,11 @@ class GroupPermAdmin(admin.ModelAdmin):
     fields = ('user',)
     filter_horizontal = ('user',)
 
+
+class VersionedAdmin(admin.ModelAdmin):
+    fields = ('update_comment', 'update_user')
+
+
 admin.site.register(Client, ClientAdmin)
 admin.site.register(Programme, ProgrammeAdmin)
 admin.site.register(Project, ProjectAdmin)
@@ -106,3 +122,4 @@ admin.site.register(ProjectMilestone, ProjectMilestoneAdmin)
 admin.site.register(Budget)
 admin.site.register(GroupPerm, GroupPermAdmin)
 admin.site.register(GroupPermObj)
+admin.site.register(Versioned, VersionedAdmin)

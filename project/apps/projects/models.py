@@ -26,7 +26,7 @@ YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
 
 class Versioned(models.Model):
-    revision = models.OneToOneField(Revision)  # This is required
+    revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
     update_date = models.DateTimeField(auto_now=True)
     update_comment = models.TextField()
     update_user = models.ForeignKey(User)
