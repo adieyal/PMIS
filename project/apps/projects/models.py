@@ -163,6 +163,9 @@ class Milestone(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        unique_together = ('phase', 'order',)
+
 
 class ProjectMilestone(models.Model):
     completion_date = models.DateTimeField(default=lambda: datetime.datetime.now())
