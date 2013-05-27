@@ -5,6 +5,7 @@ from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
 from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork, ProjectRole
 from project.apps.projects.form_container import FormContainer
+from project.apps.projects.widgets import CheckboxSelectMultipleIter
 
 
 class VersionedForm(forms.ModelForm):
@@ -64,6 +65,8 @@ class ProjectFinancialVersionedForm(VersionedForm):
 
 
 class ScopeOfWorkForm(forms.ModelForm):
+    quantity = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'quantity'}))
+
     class Meta:
         model = ScopeOfWork
         fields = ['quantity', 'scope_code', ]
@@ -78,7 +81,13 @@ class ProjectForm(forms.ModelForm):
 class LocationForm(forms.Form):
 
     district = forms.ChoiceField(choices=District.objects.all().values_list('id', 'name'))
-    municipality = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Municipality.objects.all().values_list('id', 'name',))
+    municipality = forms.ModelMultipleChoiceField(
+        queryset=Municipality.objects.all().values('district__id', 'id', 'name',),
+        widget=CheckboxSelectMultipleIter,
+        required=False
+    )
+    # municipality = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Municipality.objects.all().values_list('id', 'name',))
+
 
 
 class LocationAndScopeFormContainer(FormContainer):

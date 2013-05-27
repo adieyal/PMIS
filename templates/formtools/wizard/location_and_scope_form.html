@@ -7,28 +7,64 @@
 
 {% block content %}
     <p>Step {{ wizard.steps.step1 }} of {{ wizard.steps.count }}</p>
-    <form action="" method="post">{% csrf_token %}
-        <table>
-            {{ wizard.management_form }}
-            {% if wizard.form.forms %}
-                {{ wizard.form.management_form }}
-                {% for form in wizard.form.forms %}
-                    {{ form }}
+    <div class="row-fluid">
+        <div class="span6">
+            <form action="" method="post">
+                {% csrf_token %}
+                {{ wizard.management_form }}
+
+                <div class="row-fluid">
+                    {% for field in wizard.form.location %}
+                        {% if field.name == 'municipality' %}
+                            <p>
+                                {{ field.name|capfirst }}:
+                            </p>
+                            <div class="span6">
+                                {% regroup field by attrs.cat_name as list %}
+                                <ul class="municipality_list">
+                                    {% for el in list %}
+                                        <li data-district-id="{{el.grouper}}">
+                                            <ul>
+                                                {% for e in el.list %}
+                                                    {{e}}
+                                                {% endfor %}
+                                            </ul>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
+
+                        {% else %}
+                            <div class="span6">
+                                {{field.label}}: {{field}}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <p>Scope:</p>
+                {{ wizard.form.scope.management_form }}
+                {% for field in wizard.form.scope %}
+                    <div class="row-fluid">
+                        <div class="span6">{{ field.quantity }}</div>
+                        <div class="span6">{{ field.scope_code }}</div>
+                        {% if forloop.last %}
+                        </div>
+                        <div class="row-fluid">
+                            <div class="span12">
+                                <span class="add-scope-field">+ Add</span>
+                            </div>
+                        {% endif %}
+                    </div>
                 {% endfor %}
-            {% else %}
-                {{ wizard.form }}
-            {% endif %}
-        </table>
-        <table>
-            {{ wizard.form.location }}
-        </table>
-        <table>
-            {{ wizard.form.scope }}
-        </table>
-        {% if wizard.steps.prev %}
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
-            <button name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
-        {% endif %}
-        <input type="submit" value="{% trans "submit" %}"/>
-    </form>
+                {% if wizard.steps.prev %}
+                    <button class="btn btn-primary" name="wizard_goto_step" type="submit" value="{{ wizard.steps.first }}">{% trans "first step" %}</button>
+                    <button class="btn btn-primary" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}">{% trans "prev step" %}</button>
+                {% endif %}
+                <input class="btn btn-primary" type="submit" value="{% trans "submit" %}"/>
+            </form>
+        </div>
+        <div class="span6"></div>
+    </div>
+
 {% endblock %}
