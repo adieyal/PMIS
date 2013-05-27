@@ -68,7 +68,7 @@ class Programme(models.Model):
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
-        return self.filter(group_perm_objs__group_perm__user__id=user_id)
+        return self.filter(group_perm_objs__group_perm__user__id=user_id).distinct()
 
 
 class Project(models.Model):
