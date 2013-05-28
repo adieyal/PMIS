@@ -205,6 +205,9 @@ class ProjectStatus(models.Model):
     project = models.OneToOneField(Project)
     status = models.CharField(max_length=255, choices=STATUS)
 
+    class Meta:
+        verbose_name_plural = "Project statuses"
+
 
 class VarianceOrder(models.Model):
     project = models.ForeignKey(Project, related_name='variance_orders')
