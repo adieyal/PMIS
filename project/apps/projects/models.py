@@ -89,6 +89,9 @@ class Entity(models.Model):
     def __unicode__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = "Entities"
+
 
 class Role(models.Model):
     name = models.CharField(max_length=255)
