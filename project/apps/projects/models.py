@@ -123,6 +123,9 @@ class Budget(models.Model):
     def __unicode__(self):
         return u'Budget for %s  for  %s year' % (self.project.name, self.year)
 
+    class Meta:
+        unique_together = ('year', 'project',)
+
 
 class ScopeCode(models.Model):
     name = models.CharField(max_length=255)
