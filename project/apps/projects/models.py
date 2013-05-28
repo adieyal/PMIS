@@ -170,7 +170,7 @@ class Milestone(models.Model):
     order = models.PositiveSmallIntegerField()
 
     def __unicode__(self):
-        return self.name
+        return "%s - %s" % (self.phase, self.name)
 
     class Meta:
         unique_together = ('phase', 'order',)
