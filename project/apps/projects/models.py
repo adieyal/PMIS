@@ -155,6 +155,9 @@ class Planning(models.Model):
     def __unicode__(self):
         return u'Planning for project %s for month %s' % (self.project.name, self.month)
 
+    class Meta:
+        verbose_name_plural = "Project planning"
+
 
 class Milestone(models.Model):
     PHASE = (
