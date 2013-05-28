@@ -84,6 +84,7 @@ class VarianceOrderAdmin(CustomVersionAdmin):
 
 class ProjectMilestoneAdmin(CustomVersionAdmin):
     form = ProjectMilestoneVersionedForm
+    list_filter = ('milestone',) 
 
 
 class MilestoneAdmin(admin.ModelAdmin):
