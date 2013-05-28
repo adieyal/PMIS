@@ -199,6 +199,9 @@ class MonthlySubmission(models.Model):
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
 
+    def __unicode__(self):
+        return "Submission for %s for %s/%s" % (self.project, self.year, self.month)
+
 
 class ProjectStatus(models.Model):
     STATUS = (
