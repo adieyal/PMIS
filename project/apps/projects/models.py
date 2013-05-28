@@ -193,7 +193,7 @@ class MonthlySubmission(models.Model):
     actual_expenditure = models.FloatField()
     actual_progress = models.FloatField()
     comment = models.TextField(blank=True)
-    comment_type = models.ForeignKey(CommentType, related_name='monthly_submissions', null=True, blank=True)
+    comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
 
 
