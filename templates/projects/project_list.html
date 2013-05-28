@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block page_title %}
+    Project list
+{% endblock page_title %}
+{% block content %}
+
+    {% for object in object_list %}
+        <div class="row-fluid">
+            <div class="span12">
+                Project: <a href="{% url 'projects:project_view' object.id %}">{{ object.name }}</a>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock content %}

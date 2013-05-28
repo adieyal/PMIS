@@ -157,6 +157,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reversion.middleware.RevisionMiddleware',
+    'project.apps.projects.middleware.XsSharing',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -272,4 +273,6 @@ REST_FRAMEWORK = {
     )
 }
 
-# OAUTH_AUTHORIZE_VIEW = 'apps.api.views.oauth_authorize'
+# XS_SHARING_ALLOWED_ORIGINS = '*'
+# XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
+XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept',]
