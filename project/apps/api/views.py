@@ -7,7 +7,7 @@ from project.apps.projects.models import Client, District, Municipality, Project
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer
 
 
-class ClientViewSet(viewsets.ModelViewSet):
+class ClientViewSet(generics.ListAPIView):
     queryset = Client.objects.all()
     serializer_class = ClientSerializer
 
@@ -15,6 +15,18 @@ class ClientViewSet(viewsets.ModelViewSet):
 class DistrictViewSet(viewsets.ModelViewSet):
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
+
+
+class ProjectViewSet(generics.ListAPIView):
+
+    def get(self, request, *args, **kwargs):
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id)
+        except Project.DoesNotExist:
+            return Response(data)
+        data = project_serializer(queryset)
+        return Response(data)
 
 
 class MunicipalityViewSet(viewsets.ViewSet):
@@ -38,7 +50,7 @@ class ProgrammeViewSet(viewsets.ViewSet):
         return Response(data)
 
 
-class ProjectViewSet(viewsets.ViewSet):
+class ProjectOfClientViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
         phase = request.GET.get('phase', None)

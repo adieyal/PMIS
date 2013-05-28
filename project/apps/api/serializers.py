@@ -32,7 +32,8 @@ def project_serializer(queryset):
     for item in queryset:
         data += [{'id': item.id, 'name': item.name, 'description': item.description, 'programme': item.programme.id,
                   'municipality': [municipality.id for municipality in item.municipality.all()],
-                  'total_anticipated_cost': item.project_financial.total_anticipated_cost}]
+                  # 'total_anticipated_cost': item.project_financial.total_anticipated_cost
+                 }]
     return data
 
 

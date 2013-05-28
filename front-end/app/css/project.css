@@ -1,0 +1,10 @@
+/*! project specific CSS goes here. */
+.municipality_list li.active{
+    display: block;
+}
+.municipality_list li{
+    display: none;
+}
+.add-scope-field{
+    cursor: pointer;
+}
