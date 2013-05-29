@@ -26,13 +26,18 @@
                 </a>
                 <a class="brand" href="/">project</a>
                 <div class="nav-collapse collapse">
-                    <ul class="nav">
+                    <ul class="nav" ng-controller='MainCntl'>
                         <li class="active"><a href="/">Home</a></li>
-                        <li><a href="#create_project">Create project</a></li>
-                        <li><a href="#/api/projects/" ng-controller="MyCtrl1">Projects</a></li>
+                        <li><a href="/create_project/">Create project</a></li>
+                        <li><a href="/api/projects/">Projects</a></li>
                         <!--<li><a href="#api-token-auth">Projects 2</a></li>-->
-                        <li><a href="#about">About</a></li>
-                        <li><a href="#contact">Contact</a></li>
+                        <li><a href="/about/">About</a></li>
+                        <li><a href="/contact/">Contact</a></li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li ng-controller="MyCtrl2"><a href="" onclick="return false;" ng-show="is_auth()" ng-model="user">{{ user }}</a></li>
+                        <li  ng-controller="MyCtrl2"><a href="" onclick="return false;" ng-show="is_auth()" ng-click="logout()">Logout</a></li>
+                        <li  ng-controller="MyCtrl2"><a href="/login/"  ng-hide="is_auth()" ng-click="logout()">Login</a></li>
                     </ul>
                 </div><!--/.nav-collapse -->
             </div>
@@ -40,50 +45,14 @@
     </div>
     <div class="container">
 
-        <h1 class="page-header">
-
-        </h1>
-
-        <!-- {% block content %}
-            {% if user.is_authenticated %}
-                <p>Welcome, {{ user.username }}. Thanks for logging in.</p>
-                <a href="{% url "auth_logout" %}">Logout</a>
-            {% else %}
-                <a href="{% url "registration_register" %}">Registration</a>
-                <a href="{% url "auth_login" %}">Login</a>
-            {% endif %}
 
 
 
-        {% endblock content %} -->
 
         <div ng-view>
 
         </div>
 
-        <div class="row-fluid">
-            <div class="span4" ng-controller="MyCtrl2">
-                <form ng-hide="is_auth" class="form-login" name="loginForm" novalidate ng-submit="login()">
-                    <fieldset>
-                        <h2>Login</h2>
-                        <input type="text" required class="input-block-level" placeholder="Username" ng-model="username" name="username">
-                        <div ng-show="loginForm.username.$dirty && loginForm.username.$invalid">
-                            <span ng-show="loginForm.username.$error.required">Username required.</span>
-                        </div>
-                        <input type="password" required class="input-block-level" placeholder="Password" ng-model="password" name="password">
-                        <div ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
-                            <span ng-show="loginForm.password.$error.required">Password required.</span>
-                        </div>
-                        <div ng-show="loginForm.username.$dirty && loginForm.password.$dirty && loginForm.$invalid">
-                            <span>Invalid username or password</span>
-                        </div>
-                        <!--<p><a href="#forgotPassword" data-toggle="modal" class="btn btn-link">Forgot password?</a></p>-->
-                        <p><button class="btn btn-primary btn-large" ng-disabled="loginForm.$invalid" type="submit">Login</button></p>
-                    </fieldset>
-                </form>
-                <button ng-show="is_auth" class="btn btn-primary btn-large" ng-click="logout()">Log Out</button>
-            </div>
-        </div>
 
     </div> <!-- /container -->
 
@@ -99,6 +68,7 @@
   <script src="lib/angular/angular.js"></script>
   <script src="lib/angular/angular-resource.js"></script>
   <script src="lib/angular/angular-cookies.js"></script>
+  <script src="lib/angular/angular-strap.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/app.js"></script>
   <script src="js/services.js"></script>

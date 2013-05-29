@@ -1,0 +1,26 @@
+<h1 class="page-header">
+    Login
+</h1>
+
+<div class="row-fluid">
+    <div class="span4" ng-controller="MyCtrl2">
+        <form ng-hide="is_auth()" class="form-login" name="loginForm" novalidate ng-submit="login()">
+            <fieldset>
+
+                <input type="text" required class="input-block-level" placeholder="Username" ng-model="username" name="username">
+                <div ng-show="loginForm.username.$dirty && loginForm.username.$invalid">
+                    <span ng-show="loginForm.username.$error.required">Username required.</span>
+                </div>
+                <input type="password" required class="input-block-level" placeholder="Password" ng-model="password" name="password">
+                <div ng-show="loginForm.password.$dirty && loginForm.password.$invalid">
+                    <span ng-show="loginForm.password.$error.required">Password required.</span>
+                </div>
+                <div ng-show="loginForm.username.$dirty && loginForm.password.$dirty && loginForm.$invalid || non_field_errors">
+                    <span>Invalid username or password</span>
+                </div>
+                <!--<p><a href="#forgotPassword" data-toggle="modal" class="btn btn-link">Forgot password?</a></p>-->
+                <p><button class="btn btn-primary btn-large" ng-disabled="loginForm.$invalid" type="submit">Login</button></p>
+            </fieldset>
+        </form>
+    </div>
+</div>
