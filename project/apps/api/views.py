@@ -3,8 +3,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project
-from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode
+from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer
 
 
 class ClientViewSet(generics.ListAPIView):
@@ -15,6 +15,16 @@ class ClientViewSet(generics.ListAPIView):
 class DistrictViewSet(viewsets.ModelViewSet):
     queryset = District.objects.all()
     serializer_class = DistrictSerializer
+
+
+class ProgrammeViewSet(generics.ListAPIView):
+    queryset = Programme.objects.all()
+    serializer_class = ProgrammeSerializer
+
+
+class ScopeCodeViewSet(generics.ListAPIView):
+    queryset = ScopeCode.objects.all()
+    serializer_class = ScopeCodeSerializer
 
 
 class ProjectViewSet(generics.ListAPIView):
@@ -29,8 +39,9 @@ class ProjectViewSet(generics.ListAPIView):
         return Response(data)
 
 
-class MunicipalityViewSet(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):
+class MunicipalityViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         try:
             queryset = District.objects.get(id=pk).municipalities.all()
         except District.DoesNotExist:
@@ -39,7 +50,7 @@ class MunicipalityViewSet(viewsets.ViewSet):
         return Response(serializer.data)
 
 
-class ProgrammeViewSet(viewsets.ViewSet):
+class ProgrammeOfClientViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
         try:
@@ -141,3 +152,5 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
             data += [{'month': monthly_submission.month, 'year': monthly_submission.year,
                       'comment': monthly_submission.comment, 'remedial_action': monthly_submission.remedial_action}]
         return Response(data)
+
+

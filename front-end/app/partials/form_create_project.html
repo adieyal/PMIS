@@ -9,50 +9,91 @@
             <div ng-switch-when="one">
                 <h4>Project details</h4>
                 <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="programme">Programme:</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="programme" ng-model="wizard.programme">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="name">Name:</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="name" ng-model="wizard.name" required>
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="description">Description:</label>
-                        <div class="controls">
-                            <textarea class='input-xlarge' name="description" id="description" cols="30" rows="10" ng-model="wizard.description"></textarea>
-                        </div>
-                    </div>
+                    <ng-form name="step_one">
+                    <table>
+                        <tr>
+                            <td class="span5">
+                                <label class="control-label" for="programme">Programme:</label>
+                            </td>
+                            <td>
+                                <select name="programme" class="input-xlarge" id="programme" ng-model="wizard.programme" ng-options="p.name for p in programmes">
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label" for="name">Name:</label>
+                            </td>
+                            <td>
+                                <input type="text" class="input-xlarge" id="name" ng-model="wizard.name" ng-required="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label" for="description">Description:</label>
+                            </td>
+                            <td>
+                                <textarea class='input-xlarge' name="description" id="description" cols="30" rows="10" ng-model="wizard.description"></textarea>
+                            </td>
+                        </tr>
+                    </table>
+                    </ng-form>
 
                 </fieldset>
             </div>
             <div ng-switch-when="two">
                 <h4>Project location and scope</h4>
-                <a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> >
-                <span  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</span>
+                <ul class="breadcrumb">
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> <span class="divider">/</span></li>
+                    <li ng-class="{'active':isCurrentStep(1)}"><span  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</span> <span class="divider">/</span></li>
+                </ul>
+
+
                 <fieldset>
-                    <div class="control-group">
-                        <label class="control-label" for="district">District:</label>
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="district" ng-model="wizard.district">
-                        </div>
-                    </div>
-                    <label class="control-label" for="scope_0_quantity">Scope:</label>
-                    <div class="control-group" >
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="scope_0_quantity" ng-model="wizard.scope_0_quantity">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <div class="controls">
-                            <input type="text" class="input-xlarge" id="scope_0_code" ng-model="wizard.scope_0_code">
-                        </div>
-                    </div>
-                    <a href="" onclick="return false" >+ Add</a>
+                    <table>
+                        <tr>
+                            <td class="span4">
+                                <label class="control-label" for="district">District:</label>
+                            </td>
+                            <td class="span4">
+                                <select name="programme" class="input-xlarge" id="district" ng-change='get_municipality()' ng-model="wizard.district" ng-options="d.name for d in districts">
+                                </select>
+                            </td>
+                            <td>
+                                <label class="control-label" >Municipality:</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div class="row-fluid" ng-repeat="municipality in municipalities">
+                                    <div class="span6">
+                                        <label class="control-label" for="municipality-{{ municipality.id }}">{{ municipality.name }}</label>
+                                    </div>
+                                    <div class="span6">
+                                        <input type="checkbox"  name="{{ municipality.name }}" ng-model="wizard.municipalities[$index]" id="municipality-{{ municipality.id }}" value="{{ municipality.name }}">
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr  ng-repeat="s in scopes">
+                            <td>
+                                <label class="control-label" for="{{ s }}_quantity">Scope:</label>
+                            </td>
+                            <td>
+                                <input type="text" class="input-xlarge" id="{{ s }}_quantity" ng-model="wizard[s+'_quantity']">
+                            </td>
+                            <td>
+
+                                <select name="{{ s }}_code" class="input-xlarge" id="{{ s }}_code" ng-model="wizard[s+'_code']" ng-options="sc.name for sc in scope_codes">
+                                </select>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <a href="" onclick="return false" ng-click="add()" >+ Add</a>
 
                 </fieldset>
             </div>

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
-from project.apps.projects.models import Client, District, Municipality, Programme, Project
+from project.apps.projects.models import Client, District, Municipality, Programme, Project, ScopeCode
 
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
@@ -24,6 +24,12 @@ class MunicipalitySerializer(serializers.HyperlinkedModelSerializer):
 class ProgrammeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Programme
+        fields = ('id', 'name', )
+
+
+class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = ScopeCode
         fields = ('id', 'name', )
 
 
