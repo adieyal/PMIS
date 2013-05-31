@@ -118,8 +118,74 @@
                 </fieldset>
             </div>
             <div ng-switch-when="four">
+                <h4>Milestone</h4>
+                <ul class="breadcrumb">
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> <span class="divider">/</span></li>
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</a> <span class="divider">/</span></li>
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(2)}" ng-click="setCurrentStep(2)">Project people</a> <span class="divider">/</span></li>
+                    <li ng-class="{'active':isCurrentStep(3)}"><span  ng-class="{'':isCurrentStep(3)}" ng-click="setCurrentStep(3)">Milestone</span> <span class="divider">/</span></li>
+                </ul>
                 <fieldset>
-                    Step-4
+                    <table class="span12">
+                        <tr>
+                            <td class="span6">
+                                <label class="control-label" for="project_planing_budget">Project planing budget:</label>
+                            </td>
+                            <td class="span6">
+                                <input type="text" id="project_planing_budget" ng-model="wizard.project_planing_budget">
+                            </td>
+                        </tr>
+                        <tr >
+                            <td colspan="2">
+                                <accordion close-others="true">
+                                    <accordion-group  ng-repeat="phase in phases" heading="+ {{ phase }}">
+                                        <fieldset class="well well-large">
+                                            <legend>Dates</legend>
+                                            <div class="row-fluid" ng-repeat="milestone in milestones | filter:{phase:[phase]} | orderBy:order">
+                                                <div class="span6">{{ milestone.name }}</div>
+                                                <div class="span6">
+                                                    <input type="text" class="input-small" ng-model="wizard[milestone.name]" datepicker>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </accordion-group>
+                                    <accordion-group  heading="+ Overal">
+                                    <fieldset class="well well-large">
+                                        <div class="row-fluid">
+                                            <div class="span6">Start date:</div>
+                                            <div class="span6">
+                                                <input type="text" class="input-small" ng-model="wizard.start_date" datepicker placeholder="prepopulated from first milestone">
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span6">Anticipated cost:</div>
+                                            <div class="span6">
+                                                <input type="text" class="input-medium" ng-model="wizard.anticipated_cost">
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <fieldset class="well well-large">
+                                                    <legend>Annual Budget Allocation</legend>
+                                                    <div class="row-fluid" ng-repeat="year in years">
+                                                        <div class="span3">{{ year.name }}</div>
+                                                        <div class="span3">
+                                                            <input type="text" class="input-mini" ng-model="wizard[year.model]">
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </accordion-group>
+
+                                </accordion>
+
+                            </td>
+                        </tr>
+                    </table>
+
                 </fieldset>
             </div>
             <div ng-switch-when="five">

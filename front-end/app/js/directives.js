@@ -3,7 +3,7 @@
 /* Directives */
 
 
-angular.module('myApp.directives', ['$strap.directives'])
+angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
     .controller('AppCtrl', function($scope, $http) {
         $http.get('http://127.0.0.1:8000/api/programmes/', {})
             .success(function(data, status, headers, config) {
@@ -48,12 +48,33 @@ angular.module('myApp.directives', ['$strap.directives'])
                 $scope.status = status;
             });
 
+        $http.get('http://127.0.0.1:8000/api/milestones/', {})
+            .success(function(data, status, headers, config) {
+                var l = data.length;
+                var res = [];
+                $scope.phases = [];
+                $scope.milestones = data;
+                for (var i=0; i<l; i++){
+                    if ($.inArray(data[i].phase, $scope.phases) == -1){
+                        $scope.phases.push(data[i].phase)
+                    }
+                }
+            })
+            .error(function(data, status, headers, config) {
+                $scope.status = status;
+            });
+
         $scope.steps = ['one', 'two', 'three', 'four', 'five', 'six', 'seven'];
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
         $scope.wizard = {};
         $scope.wizard.municipalities = [];
-
+        $scope.years = [
+            { 'name': 'Year 1', 'model': 'year_1'},
+            { 'name': 'Year 2', 'model': 'year_2'},
+            { 'name': 'Year 3', 'model': 'year_3'},
+            { 'name': 'Year 4', 'model': 'year_4'}
+        ];
         $scope.get_municipality = function(){
 
             $http.get('http://127.0.0.1:8000/api/districts/'+$scope.wizard.district.id+'/municipalities/', {})
@@ -107,7 +128,8 @@ angular.module('myApp.directives', ['$strap.directives'])
 //                }
             }
         };
-    }).directive('autoComplete', function($timeout) {
+    })
+    .directive('autoComplete', function($timeout) {
         return function(scope, iElement, iAttrs) {
             iElement.autocomplete({
                 source: scope[iAttrs.uiItems],
@@ -118,4 +140,24 @@ angular.module('myApp.directives', ['$strap.directives'])
                 }
             });
         };
-    });
+    })
+    .directive('datepicker', function ($parse) {
+    return function (scope, element, attrs, controller) {
+        var ngModel = $parse(attrs.ngModel);
+        $(function(){
+            element.datepicker({
+                showOn:"both",
+                buttonImage: "../img/calendar.png",
+                changeYear:true,
+                changeMonth:true,
+                dateFormat:'yy-mm-dd',
+                onSelect:function (dateText, inst) {
+                    scope.$apply(function(scope){
+                        // Change binded variable
+                        ngModel.assign(scope, dateText);
+                    });
+                }
+            });
+        });
+    }
+});
