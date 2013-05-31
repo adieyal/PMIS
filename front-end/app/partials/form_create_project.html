@@ -98,8 +98,23 @@
                 </fieldset>
             </div>
             <div ng-switch-when="three">
+                <h4>Project people</h4>
+                <ul class="breadcrumb">
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> <span class="divider">/</span></li>
+                    <li><a onclick="return false;"  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</a> <span class="divider">/</span></li>
+                    <li ng-class="{'active':isCurrentStep(2)}"><span  ng-class="{'':isCurrentStep(2)}" ng-click="setCurrentStep(1)">Project people</span> <span class="divider">/</span></li>
+                </ul>
                 <fieldset>
-                    Step-3
+                    <table>
+                        <tr ng-repeat="role in roles">
+                            <td class="span6">
+                                {{ role.name }}:
+                            </td>
+                            <td class="span6">
+                                <input type="text" class="input-xlarge" id="role-{{ role.id }}" name="role-{{ role.id }}" auto-complete ui-items="entities" ng-model="wizard[role.name]">
+                            </td>
+                        </tr>
+                    </table>
                 </fieldset>
             </div>
             <div ng-switch-when="four">

@@ -3,8 +3,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode
-from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity
+from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer
 
 
 class ClientViewSet(generics.ListAPIView):
@@ -37,6 +37,16 @@ class ProjectViewSet(generics.ListAPIView):
             return Response(data)
         data = project_serializer(queryset)
         return Response(data)
+
+
+class RolesViewSet(generics.ListAPIView):
+    queryset = Role.objects.all()
+    serializer_class = RoleSerializer
+
+
+class EntitiesViewSet(generics.ListAPIView):
+    queryset = Entity.objects.all()
+    serializer_class = EntitySerializer
 
 
 class MunicipalityViewSet(generics.ListAPIView):

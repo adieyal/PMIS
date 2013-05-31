@@ -27,6 +27,27 @@ angular.module('myApp.directives', ['$strap.directives'])
             .error(function(data, status, headers, config) {
                 $scope.status = status;
             });
+
+        $http.get('http://127.0.0.1:8000/api/roles/', {})
+            .success(function(data, status, headers, config) {
+                $scope.roles = data;
+            })
+            .error(function(data, status, headers, config) {
+                $scope.status = status;
+            });
+
+        $http.get('http://127.0.0.1:8000/api/entities/', {})
+            .success(function(data, status, headers, config) {
+                var l = data.length;
+                $scope.entities = [];
+                for (var i=0; i<l; i++){
+                    $scope.entities.push(data[i].name);
+                }
+            })
+            .error(function(data, status, headers, config) {
+                $scope.status = status;
+            });
+
         $scope.steps = ['one', 'two', 'three', 'four', 'five', 'six', 'seven'];
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
@@ -85,5 +106,16 @@ angular.module('myApp.directives', ['$strap.directives'])
                     $scope.step += 1;
 //                }
             }
+        };
+    }).directive('autoComplete', function($timeout) {
+        return function(scope, iElement, iAttrs) {
+            iElement.autocomplete({
+                source: scope[iAttrs.uiItems],
+                select: function() {
+                    $timeout(function() {
+                        iElement.trigger('input');
+                    }, 0);
+                }
+            });
         };
     });
