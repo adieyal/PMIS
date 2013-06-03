@@ -167,13 +167,70 @@
                                             <div class="span12">
                                                 <fieldset class="well well-large">
                                                     <legend>Annual Budget Allocation</legend>
-                                                    <div class="row-fluid" ng-repeat="year in years">
-                                                        <div class="span3">{{ year.name }}</div>
+                                                    <div class="row-fluid" ng-repeat="y in year_items|group">
                                                         <div class="span3">
-                                                            <input type="text" class="input-mini" ng-model="wizard[year.model]">
+                                                            {{ y.0.name }}
                                                         </div>
-                                                        
+                                                        <div class="span3">
+                                                            <input type="text" class="input-mini" placeholder="amount" ng-model="wizard[y.0.name]">
+                                                        </div>
+                                                        <div class="span3">
+                                                            {{ y.1.name }}
+                                                        </div>
+                                                        <div class="span3">
+                                                            <input type="text" class="input-mini" placeholder="amount" ng-model="wizard[y.1.name]">
+                                                        </div>
+
                                                     </div>
+
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="row-fluid">
+                                            <div class="span12">
+                                                <fieldset class="well well-large">
+                                                    <legend>Cashflow and Progress</legend>
+                                                    <accordion close-others="true">
+                                                        <accordion-group  ng-repeat="year in year_items" heading="+ {{ year.name }}">
+                                                            <fieldset class="well well-large">
+                                                                <table>
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <th></th>
+                                                                        <th>Expenditure</th>
+                                                                        <th>Progress</th>
+                                                                        <th></th>
+                                                                        <th>Expenditure</th>
+                                                                        <th>Progress</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    <tr ng-repeat="m in month|group">
+                                                                        <td>{{ m.0.name }}</td>
+                                                                        <td>
+                                                                            <input class="input-mini" type="text" placeholder="amount">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="input-mini" type="text" placeholder="%">
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ m.1.name }}
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="input-mini" type="text" placeholder="amount">
+                                                                        </td>
+                                                                        <td>
+                                                                            <input class="input-mini" type="text" placeholder="%">
+                                                                        </td>
+                                                                    </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                
+                                                                
+
+                                                            </fieldset>
+                                                        </accordion-group>
+                                                    </accordion>
                                                 </fieldset>
                                             </div>
                                         </div>

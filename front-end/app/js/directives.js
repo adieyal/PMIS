@@ -75,6 +75,108 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
             { 'name': 'Year 3', 'model': 'year_3'},
             { 'name': 'Year 4', 'model': 'year_4'}
         ];
+        $scope.month = [
+            {'name': 'Jan'},
+            {'name': 'Feb'},
+            {'name': 'Mar'},
+            {'name': 'Apr'},
+            {'name': 'May'},
+            {'name': 'Jun'},
+            {'name': 'Jul'},
+            {'name': 'Aug'},
+            {'name': 'Sept'},
+            {'name': 'Oct'},
+            {'name': 'Nov'},
+            {'name': 'Dec'}];
+
+        $scope.year_items_2 = function(){
+            var res = [];
+            angular.forEach($scope.year_items, function(value, key){
+                this.push(value)
+            }, res);
+            return res
+        };
+        $scope.year_items = [ {
+                'name': 'Year 1',
+                'model': 'year_1',
+                'amount': 0,
+                'month': [
+                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
+                ]
+        },
+        {   'name': 'Year 2',
+            'model': 'year_2',
+            'amount': 0,
+            'month': [
+                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
+                ]
+            },
+            {
+                'name': 'Year 3',
+                'model': 'year_3',
+                'amount': 0,
+                'month': [
+                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
+                ]
+            },
+            {
+                'name': 'Year 4',
+                'model': 'year_4',
+                'amount': 0,
+                'month': [
+                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
+                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
+                ]
+            }
+        ];
+
+
+
+
+
         $scope.get_municipality = function(){
 
             $http.get('http://127.0.0.1:8000/api/districts/'+$scope.wizard.district.id+'/municipalities/', {})
@@ -159,5 +261,17 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
                 }
             });
         });
+    }
+}).filter('group', function() {
+    return function(input) {
+        var group = [];
+        var l = input.length;
+
+        for(var i=0; i<l;i++){
+            if (i % 2 == 0 ){
+                group.push([input[i], input[i+1]])
+            }
+        }
+        return group;
     }
 });
