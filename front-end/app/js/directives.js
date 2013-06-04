@@ -5,6 +5,7 @@
 
 angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
     .controller('AppCtrl', function($scope, $http) {
+
         $http.get('http://127.0.0.1:8000/api/programmes/', {})
             .success(function(data, status, headers, config) {
                 $scope.programmes = data;
@@ -68,13 +69,15 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
         $scope.wizard = {};
-        $scope.wizard.municipalities = [];
-        $scope.years = [
-            { 'name': 'Year 1', 'model': 'year_1'},
-            { 'name': 'Year 2', 'model': 'year_2'},
-            { 'name': 'Year 3', 'model': 'year_3'},
-            { 'name': 'Year 4', 'model': 'year_4'}
-        ];
+        $scope.wizard.project = {};
+        $scope.wizard.project.municipalities = [];
+        $scope.wizard.project_role = {};
+//        $scope.years = [
+//            { 'name': 'Year 1', 'model': 'year_1'},
+//            { 'name': 'Year 2', 'model': 'year_2'},
+//            { 'name': 'Year 3', 'model': 'year_3'},
+//            { 'name': 'Year 4', 'model': 'year_4'}
+//        ];
         $scope.month = [
             {'name': 'Jan'},
             {'name': 'Feb'},
@@ -89,13 +92,18 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
             {'name': 'Nov'},
             {'name': 'Dec'}];
 
-        $scope.year_items_2 = function(){
-            var res = [];
-            angular.forEach($scope.year_items, function(value, key){
-                this.push(value)
-            }, res);
-            return res
+        $scope.month_group = function(){
+            var res=[];
+            var l = $scope.month.length;
+            for(var i=0; i<l;i++){
+                if (i % 2 == 0 ){
+                    res.push([$scope.month[i], $scope.month[i+1]])
+                }
+            }
+            $scope.months = res
         };
+
+        $scope.month_group();
         $scope.year_items = [ {
                 'name': 'Year 1',
                 'model': 'year_1',
@@ -174,15 +182,24 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
         ];
 
 
-
-
+        $scope.year_group = function(){
+            var res=[];
+            var l = $scope.year_items.length;
+            for(var i=0; i<l;i++){
+                if (i % 2 == 0 ){
+                    res.push([$scope.year_items[i], $scope.year_items[i+1]])
+                }
+            }
+            $scope.years = res
+        };
+        $scope.year_group();
 
         $scope.get_municipality = function(){
 
             $http.get('http://127.0.0.1:8000/api/districts/'+$scope.wizard.district.id+'/municipalities/', {})
                 .success(function(data, status, headers, config) {
-                    $scope.municipalities = data;
-                    $scope.wizard.municipalities = [];
+                    $scope.municipality_list = data;
+                    $scope.wizard.project.municipalities = [];
                 })
                 .error(function(data, status, headers, config) {
                     $scope.status = status;
@@ -220,12 +237,11 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
             $scope.step -= ($scope.isFirstStep()) ? 0 : 1;
         };
 
-        $scope.handleNext = function(dismiss) {
+        $scope.handleNext = function(dismiss, is_valid) {
             if($scope.isLastStep()) {
                 dismiss();
             } else {
-//                console.log($scope.step_one)
-//                if ($scope.step_one) {
+//                if (is_valid) {
                     $scope.step += 1;
 //                }
             }

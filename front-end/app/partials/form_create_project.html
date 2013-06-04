@@ -6,17 +6,16 @@
     <div class="span6">
 
         <div ng-switch="getCurrentStep()" ng-animate="'wave'" class="slide-frame">
-            <div ng-switch-when="one">
+            <div ng-switch-when="one" ng-form='step1form'>
                 <h4>Project details</h4>
-                <fieldset>
-                    <ng-form name="step_one">
+                <fieldset >
                     <table>
                         <tr>
                             <td class="span5">
                                 <label class="control-label" for="programme">Programme:</label>
                             </td>
                             <td>
-                                <select name="programme" class="input-xlarge" id="programme" ng-model="wizard.programme" ng-options="p.name for p in programmes">
+                                <select name="programme" class="input-xlarge" id="programme" ng-model="wizard.project.programme" ng-options="p.name for p in programmes" ng-required="true">
                                 </select>
                             </td>
                         </tr>
@@ -25,7 +24,15 @@
                                 <label class="control-label" for="name">Name:</label>
                             </td>
                             <td>
-                                <input type="text" class="input-xlarge" id="name" ng-model="wizard.name" ng-required="true">
+                                <input type="text" class="input-xlarge" id="name" ng-model="wizard.project.name" ng-required="true">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label class="control-label" for="name">Project number:</label>
+                            </td>
+                            <td>
+                                <input type="text" class="input-xlarge" id="project_number" ng-model="wizard.project.project_number">
                             </td>
                         </tr>
                         <tr>
@@ -33,13 +40,12 @@
                                 <label class="control-label" for="description">Description:</label>
                             </td>
                             <td>
-                                <textarea class='input-xlarge' name="description" id="description" cols="30" rows="10" ng-model="wizard.description"></textarea>
+                                <textarea class='input-xlarge' name="description" id="description" cols="30" rows="10" ng-model="wizard.project.description"></textarea>
                             </td>
                         </tr>
                     </table>
-                    </ng-form>
-
                 </fieldset>
+                <a class="btn btn-primary" ng-disabled="!step1form.$valid" ng-click="handleNext(dismiss,step1form.$valid)">Continue to location</a>
             </div>
             <div ng-switch-when="two">
                 <h4>Project location and scope</h4>
@@ -47,8 +53,6 @@
                     <li><a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> <span class="divider">/</span></li>
                     <li ng-class="{'active':isCurrentStep(1)}"><span  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</span> <span class="divider">/</span></li>
                 </ul>
-
-
                 <fieldset>
                     <table>
                         <tr>
@@ -67,14 +71,15 @@
                             <td></td>
                             <td></td>
                             <td>
-                                <div class="row-fluid" ng-repeat="municipality in municipalities">
+                                <div class="row-fluid" ng-repeat="municipality in municipality_list">
                                     <div class="span6">
                                         <label class="control-label" for="municipality-{{ municipality.id }}">{{ municipality.name }}</label>
                                     </div>
                                     <div class="span6">
-                                        <input type="checkbox"  name="{{ municipality.name }}" ng-model="wizard.municipalities[$index]" id="municipality-{{ municipality.id }}" value="{{ municipality.name }}">
+                                        <input type="checkbox" ng-model="wizard.project.municipalities[$index]"  ng-true-value='{{ municipality }}'>
                                     </div>
                                 </div>
+                                <span ng-repeat="k in  wizard.project.municipalities">{{ k }}</span>
                             </td>
                         </tr>
                         <tr  ng-repeat="s in scopes">
@@ -96,8 +101,12 @@
                     <a href="" onclick="return false" ng-click="add()" >+ Add</a>
 
                 </fieldset>
+                <div >
+                    <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
+                    <a class="btn btn-primary" ng-disabled="!step1form.$valid" ng-click="handleNext(dismiss)">{{ getNextLabel() }}</a>
+                </div>
             </div>
-            <div ng-switch-when="three">
+            <div ng-switch-when="three" ng-form='step3form'>
                 <h4>Project people</h4>
                 <ul class="breadcrumb">
                     <li><a onclick="return false;"  ng-class="{'':isCurrentStep(0)}" ng-click="setCurrentStep(0)">Project details</a> <span class="divider">/</span></li>
@@ -111,11 +120,15 @@
                                 {{ role.name }}:
                             </td>
                             <td class="span6">
-                                <input type="text" class="input-xlarge" id="role-{{ role.id }}" name="role-{{ role.id }}" auto-complete ui-items="entities" ng-model="wizard[role.name]">
+                                <input type="text" class="input-xlarge" id="role-{{ role.id }}" name="role-{{ role.id }}" auto-complete ui-items="entities" ng-model="wizard.project_role['role-'+role.id]" ng-required="true">
                             </td>
                         </tr>
                     </table>
                 </fieldset>
+                <div >
+                    <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
+                    <a class="btn btn-primary" ng-disabled="!step3form.$valid" ng-click="handleNext(dismiss, !step3form.$valid)">Continue to milestone</a>
+                </div>
             </div>
             <div ng-switch-when="four">
                 <h4>Milestone</h4>
@@ -167,7 +180,7 @@
                                             <div class="span12">
                                                 <fieldset class="well well-large">
                                                     <legend>Annual Budget Allocation</legend>
-                                                    <div class="row-fluid" ng-repeat="y in year_items|group">
+                                                    <div class="row-fluid" ng-repeat="y in years">
                                                         <div class="span3">
                                                             {{ y.0.name }}
                                                         </div>
@@ -205,7 +218,7 @@
                                                                     </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                    <tr ng-repeat="m in month|group">
+                                                                    <tr ng-repeat="m in months">
                                                                         <td>{{ m.0.name }}</td>
                                                                         <td>
                                                                             <input class="input-mini" type="text" placeholder="amount">
@@ -225,8 +238,8 @@
                                                                     </tr>
                                                                     </tbody>
                                                                 </table>
-                                                                
-                                                                
+
+
 
                                                             </fieldset>
                                                         </accordion-group>
@@ -234,6 +247,7 @@
                                                 </fieldset>
                                             </div>
                                         </div>
+
                                     </fieldset>
                                 </accordion-group>
 
@@ -244,11 +258,19 @@
                     </table>
 
                 </fieldset>
+                <div >
+                    <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
+                    <a class="btn btn-primary" ng-disabled="!step1form.$valid" ng-click="handleNext(dismiss)">{{ getNextLabel() }}</a>
+                </div>
             </div>
             <div ng-switch-when="five">
                 <fieldset>
                     Step-5
                 </fieldset>
+                <div >
+                    <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
+                    <a class="btn btn-primary" ng-disabled="!step1form.$valid" ng-click="handleNext(dismiss)">{{ getNextLabel() }}</a>
+                </div>
             </div>
             <div ng-switch-when="six">
                 <fieldset>
@@ -263,7 +285,3 @@
         </div>
     </div>
 </div>
-<div >
-    <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
-    <a class="btn btn-primary" ng-click="handleNext(dismiss)">{{getNextLabel()}}</a>
-</div>	
