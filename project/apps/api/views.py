@@ -1,4 +1,4 @@
-from rest_framework import viewsets, generics, permissions
+from rest_framework import viewsets, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -169,3 +169,9 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
         return Response(data)
 
 
+class CreateProject(generics.CreateAPIView):
+
+    def post(self, request, *args, **kwargs):
+        print request.DATA
+        print kwargs
+        return Response({'status': status.HTTP_201_CREATED})

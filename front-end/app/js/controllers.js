@@ -81,7 +81,7 @@ angular.module('myApp.controllers', ['ngCookies'])
     .controller('MyCtrl5', ['$scope', function ($scope) {
 
     }])
-    .controller('AppCtrl', function($scope, $http, HOST) {
+    .controller('AppCtrl', function($scope, $http, HOST, $location) {
         $scope.steps = ['one', 'two', 'three', 'four'];
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
@@ -196,89 +196,13 @@ angular.module('myApp.controllers', ['ngCookies'])
                 for(var j=0; j<l2; j++){
                     $scope.wizard.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
                         'amount': "",
-                        'progress': 0
+                        'progress': ""
                     }}));
                 }
             }
         };
         $scope.create_years_record();
         $scope.month_group();
-        $scope.year_items = [ {
-            'name': 'Year 1',
-            'model': 'year_1',
-            'amount': 0,
-            'month': [
-                {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
-                {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
-            ]
-        },
-            {   'name': 'Year 2',
-                'model': 'year_2',
-                'amount': 0,
-                'month': [
-                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
-                ]
-            },
-            {
-                'name': 'Year 3',
-                'model': 'year_3',
-                'amount': 0,
-                'month': [
-                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
-                ]
-            },
-            {
-                'name': 'Year 4',
-                'model': 'year_4',
-                'amount': 0,
-                'month': [
-                    {'name': 'Jan', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Feb', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Mar', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Apr', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'May', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jun', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Jul', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Aug', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Sept', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Oct', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Nov', 'planning': { 'amount': 0, 'progress': 0 } },
-                    {'name': 'Dec', 'planning': { 'amount': 0, 'progress': 0 } }
-                ]
-            }
-        ];
 
 
         $scope.year_group = function(){
@@ -350,13 +274,23 @@ angular.module('myApp.controllers', ['ngCookies'])
             $scope.step -= ($scope.isFirstStep()) ? 0 : 1;
         };
 
+        $scope.submitForm = function(){
+            $http.post(HOST+'/api/create_project/', $scope.wizard)
+                .success(function(data, status, headers, config) {
+                    $location.path('/');
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.status = status;
+                });
+        };
         $scope.handleNext = function(dismiss, is_valid) {
-            if($scope.isLastStep()) {
-                dismiss();
-            } else {
-//                if (is_valid) {
-                $scope.step += 1;
-//                }
+            if (is_valid) {
+                if($scope.isLastStep()) {
+//                    dismiss();
+                    $scope.submitForm();
+                } else {
+                    $scope.step += 1;
+                }
             }
         };
     })

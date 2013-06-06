@@ -22,4 +22,5 @@ urlpatterns = patterns('',
                        url(r'^programmes/(?P<pk>\d+)/projects/$', views.ProjectInProgrammeViewSet.as_view({'get': 'retrieve'}), name='project_in_programme_view'),
                        url(r'^projects/(?P<pk>\d+)/progress/$', views.ProgressView.as_view({'get': 'retrieve'}), name='progress_view'),
                        url(r'^projects/(?P<pk>\d+)/comments/$', views.ProjectCommentsViewSet.as_view({'get': 'retrieve'}), name='project_comments_view'),
+                       url(r'^create_project/$', views.CreateProject.as_view(), name='create_project'),
 )
