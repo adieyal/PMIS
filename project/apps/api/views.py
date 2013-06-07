@@ -3,7 +3,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer
 
 
@@ -28,7 +28,6 @@ class ScopeCodeViewSet(generics.ListAPIView):
 
 
 class ProjectViewSet(generics.ListAPIView):
-
     def get(self, request, *args, **kwargs):
         data = {}
         try:
@@ -170,8 +169,42 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
 
 
 class CreateProject(generics.CreateAPIView):
-
     def post(self, request, *args, **kwargs):
+        data_project = request.DATA.get('project')
+        new_project = {
+            'name': data_project.get('name', ''),
+            'project_number': data_project.get('project_number', ''),
+            'description': data_project.get('description', ''),
+            'programme_id': data_project.get('programme', {}).get('id', ''),
+        }
+        if new_project['name'] == "" or new_project['programme_id'] == '':
+            return Response({'status': status.HTTP_400_BAD_REQUEST})
+        municipalities = [x['id'] for x in data_project.get('municipalities') if x['selected'] == True]
+        project = Project(name=new_project['name'], project_number=new_project['project_number'],
+                          description=new_project['description'], programme_id=new_project['programme_id'])
+        project.save()
+        for municipality in municipalities:
+                project.municipality.add(municipality)
+        project.save()
+
+        data_scope_of_work = request.DATA.get('scope_of_work', [])
+
+        for scope in data_scope_of_work:
+            scope_code_id = scope.get('scope_code', {}).get('id', '')
+            quantity = scope.get('quantity', '')
+            if scope_code_id and quantity:
+                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id, quantity=quantity, project_id=project.id)
+                scope_of_work.save()
+
+        data_project_role = request.DATA.get('project_role', [])
+        for project_role_item in data_project_role:
+            role_id = project_role_item.get('role', {}).get('id', '')
+            entity_name = project_role_item.get('entity_name', '')
+
+            if role_id and entity_name:
+                entity, create = Entity.objects.get_or_create(name=entity_name)
+                project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
+                project_role.save()
+
         print request.DATA
-        print kwargs
         return Response({'status': status.HTTP_201_CREATED})
