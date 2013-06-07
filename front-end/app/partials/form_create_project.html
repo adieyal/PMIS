@@ -20,7 +20,7 @@
                             </select>
                         </div>
                         <div class="span4">
-                            <p class="error" ng-show="step1form.select.$error.required">Required!</p>
+                            <p class="error" ng-show="step1form.programme.$error.required">Required!</p>
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -30,10 +30,10 @@
                             </p>
                         </div>
                         <div class="span4">
-                            <input type="text" class="input-large" id="name" ng-model="wizard.project.name" ng-required="true">
+                            <input type="text" class="input-large" name="name" ng-model="wizard.project.name" ng-required="true">
                         </div>
                         <div class="span4">
-                            <p class="error" ng-show="step1form.input.$error.required">Required!</p>
+                            <p class="error" ng-show="step1form.name.$error.required">Required!</p>
                         </div>
                     </div>
                     <div class="row-fluid">
@@ -43,9 +43,11 @@
                             </p>
                         </div>
                         <div class="span4">
-                            <input type="text" class="input-large" id="project_number" ng-model="wizard.project.project_number" ng-pattern="number">
+                            <input type="text" class="input-large" name="project_number" ng-model="wizard.project.project_number" ng-pattern="number">
                         </div>
-                        <div class="span4"></div>
+                        <div class="span4">
+                            <span class="error" ng-show="step1form.project_number.$error.pattern">There must be a number.</span>
+                        </div>
                     </div>
                     <div class="row-fluid">
                         <div class="span4">
@@ -68,57 +70,71 @@
                     <li ng-class="{'active':isCurrentStep(1)}"><span  ng-class="{'':isCurrentStep(1)}" ng-click="setCurrentStep(1)">Project location and scope</span> <span class="divider">/</span></li>
                 </ul>
                 <fieldset>
-                    <table>
-                        <tr>
-                            <td class="span4">
-                                <label class="control-label" for="district">District:</label>
-                            </td>
-                            <td class="span4">
-                                <select name="programme" class="input-large" id="district" ng-change='get_municipality()' ng-model="wizard.district" ng-options="d.name for d in districts" ng-required="true">
-                                </select>
-                            </td>
-                            <td>
-                                <label class="control-label" >Municipality:</label>
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td>
-                                <div class="row-fluid" ng-repeat="municipality in wizard.project.municipalities">
-                                    <div class="span6">
-                                        <label class="control-label" for="municipality-{{ municipality.id }}">{{ municipality.name }}</label>
-                                    </div>
-                                    <div class="span6">
-                                        <input type="checkbox" ng-model="municipality.selected" custom-validate>
-                                    </div>
+                    <div class="row-fluid">
+                        <div class="span2">
+                            <p>
+                                District:
+                            </p>
+                        </div>
+                        <div class="span4">
+                            <select name="programme" class="input-large" id="district" ng-change='get_municipality()' ng-model="wizard.district" ng-options="d.name for d in districts" ng-required="true">
+                            </select>
+                        </div>
+                        <div class="span3">
+                            <p>
+                                Municipality:
+                            </p>
+                        </div>
+                        <div class="span3">
+                            <p class="error" ng-show="!(wizard.project.municipalities|is_check)">Required!</p>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span8">
+
+                        </div>
+                        <div class="span4">
+                            <div class="row-fluid" ng-repeat="municipality in wizard.project.municipalities">
+                                <div class="span6">
+                                    <label class="control-label" for="municipality-{{ municipality.id }}">{{ municipality.name }}</label>
                                 </div>
+                                <div class="span6">
+                                    <input type="checkbox" ng-model="municipality.selected" >
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span3">
+                            Scope:
+                        </div>
+                        <div class="span9"></div>
+                    </div>
+                    <div class="row-fluid" ng-repeat="s in wizard.scope_of_work">
+                        <ng-form name="scopeWrapForm">
+                            <div class="span1">
 
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr  ng-repeat="s in wizard.scope_of_work">
-                            <td>
-                                <label class="control-label">Scope:</label>
-                            </td>
-                            <td>
-                                <input type="text" class="input-large" ng-model="s.quantity" ng-required="true" ng-pattern="number">
-                            </td>
-                            <td>
-
-                                <select class="input-large" ng-model="s.scope_code" ng-options="sc.name for sc in scope_codes" ng-required="true">
+                            </div>
+                            <div class="span4">
+                                <input type="text" class="input-large" name="quantity" ng-model="s.quantity" ng-required="true" ng-pattern="number" placeholder="quantity">
+                                <span class="error" ng-show="scopeWrapForm.quantity.$error.required">Required!</span>
+                                <span class="error" ng-show="scopeWrapForm.quantity.$error.pattern">There must be a number!</span>
+                            </div>
+                            <div class="span4">
+                                <select class="input-large" name="scope_code" ng-model="s.scope_code" ng-options="sc.name for sc in scope_codes" ng-required="true">
                                 </select>
-                            </td>
-                            <td>
+                                <span class="error" ng-show="scopeWrapForm.scope_code.$error.required">Required!</span>
+                            </div>
+                            <div class="span3 text-center">
                                 <i ng-show="$index" class="icon-remove" ng-click="removeScopeOfWork(s)"></i>
-                            </td>
-                        </tr>
-                    </table>
-
-
-                    <a href="" onclick="return false" ng-click="addScopeOfWork()" >+ Add</a>
-
+                            </div>
+                        </ng-form>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <a href="" onclick="return false" ng-click="addScopeOfWork()" >+ Add</a>
+                        </div>
+                    </div>
                 </fieldset>
                 <div >
                     <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
@@ -133,16 +149,20 @@
                     <li ng-class="{'active':isCurrentStep(2)}"><span  ng-class="{'':isCurrentStep(2)}" ng-click="setCurrentStep(1)">Project people</span> <span class="divider">/</span></li>
                 </ul>
                 <fieldset>
-                    <table>
-                        <tr ng-repeat="role in roles">
-                            <td class="span6">
-                                {{ role.name }}:
-                            </td>
-                            <td class="span6">
-                                <input type="text" class="input-xlarge" id="role-{{ role.id }}" name="role-{{ role.id }}" auto-complete ui-items="entities" ng-model="wizard.project_role['role-'+role.id]" ng-required="true">
-                            </td>
-                        </tr>
-                    </table>
+                    <div class="row-fluid" ng-repeat="role in roles">
+                        <ng-form name="roleWrapForm">
+                            <div class="span4">
+                                {{ role.name }}
+                            </div>
+                            <div class="span4">
+                                <input type="text" class="input-large" name="r" auto-complete ui-items="entities" ng-model="wizard.project_role['role-'+role.id]" ng-required="true">
+                            </div>
+                            <div class="span4">
+                                <p class="error" ng-show="roleWrapForm.r.$error.required">Required!</p>
+                            </div>
+                        </ng-form>
+                    </div>
+
                 </fieldset>
                 <div >
                     <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
@@ -158,45 +178,62 @@
                     <li ng-class="{'active':isCurrentStep(3)}"><span  ng-class="{'':isCurrentStep(3)}" ng-click="setCurrentStep(3)">Milestone</span> <span class="divider">/</span></li>
                 </ul>
                 <fieldset>
-                    <table class="span12">
-                        <tr>
-                            <td class="span6">
-                                <label class="control-label" for="project_planing_budget">Project planing budget:</label>
-                            </td>
-                            <td class="span6">
-                                <input type="text" id="project_planing_budget" ng-model="wizard.project_planing_budget">
-                            </td>
-                        </tr>
-                        <tr >
-                            <td colspan="2">
-                                <accordion close-others="true">
-                                    <accordion-group  ng-repeat="phase in phases" heading="+ {{ phase|capitalize }}">
-                                        <fieldset class="well well-large">
-                                            <legend>Dates</legend>
-                                            <div class="row-fluid" ng-repeat="milestone in wizard.project_milestones | filter:{phase:[phase]} | orderBy:order">
-                                                <div class="span6">
-                                                    <p>
-                                                        {{ milestone.name }}:
-                                                    </p>
-                                                </div>
-                                                <div class="span6">
-                                                    <input type="text" class="input-small" ng-model="milestone.completion_date" datepicker ng-required="true">
-                                                </div>
+                    <div class="row-fluid">
+                        <div class="span4">
+                            <p>
+                                Project planing budget:
+                            </p>
+                        </div>
+                        <div class="span4">
+                            <input type="text" name="project_planing_budget" ng-model="wizard.project_planing_budget" ng-required="true" ng-pattern="number">
+                        </div>
+                        <div class="span4">
+                            <span class="error" ng-show="step4form.project_planing_budget.$error.required">Required!</span>
+                            <span class="error" ng-show="step4form.project_planing_budget.$error.pattern">There must be a number.</span>
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <accordion close-others="true">
+                                <accordion-group  ng-repeat="phase in phases" heading="+ {{ phase|capitalize }}">
+                                    <fieldset class="well well-large">
+                                        <legend>Dates</legend>
+                                        <div class="row-fluid" ng-repeat="milestone in wizard.project_milestones | filter:{phase:[phase]} | orderBy:order">
+                                            <ng-form name="dateWrapForm">
+                                            <div class="span6">
+                                                <p>
+                                                    {{ milestone.name }}:
+                                                </p>
                                             </div>
-                                        </fieldset>
-                                    </accordion-group>
-                                    <accordion-group  heading="+ Overall">
+                                            <div class="span3">
+                                                <input type="text" name="date" class="input-small" ng-model="milestone.completion_date" datepicker ng-required="true">
+                                            </div>
+                                            <div class="span3">
+                                                <p class="error" ng-show="dateWrapForm.date.$error.required">Required!</p>
+                                            </div>
+                                            </ng-form>
+                                        </div>
+                                    </fieldset>
+                                </accordion-group>
+                                <accordion-group  heading="+ Overall">
                                     <fieldset class="well well-large">
                                         <div class="row-fluid">
-                                            <div class="span6">Start date:</div>
-                                            <div class="span6">
-                                                <input type="text" class="input-small" ng-model="wizard.start_date" datepicker placeholder="prepopulated from first milestone">
+                                            <div class="span3">Start date:</div>
+                                            <div class="span5">
+                                                <input type="text" class="input-large" name="start_date" ng-model="wizard.start_date" datepicker placeholder="prepopulated from first milestone" ng-required="true">
+                                            </div>
+                                            <div class="span4">
+                                                <p class="error" ng-show="step4form.start_date.$error.required">Required!</p>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
-                                            <div class="span6">Anticipated cost:</div>
-                                            <div class="span6">
-                                                <input type="text" class="input-medium" ng-model="wizard.project_financial.total_anticipated_cost" ng-pattern="number">
+                                            <div class="span3">Anticipated cost:</div>
+                                            <div class="span5">
+                                                <input type="text" name="anticipated_cost" class="input-large" ng-model="wizard.project_financial.total_anticipated_cost" ng-pattern="number" ng-required="true">
+                                            </div>
+                                            <div class="span4">
+                                                <p class="error" ng-show="step4form.anticipated_cost.$error.required">Required!</p>
+                                                <span class="error" ng-show="step4form.anticipated_cost.$error.pattern">There must be a number.</span>
                                             </div>
                                         </div>
                                         <div class="row-fluid">
@@ -204,19 +241,24 @@
                                                 <fieldset class="well well-large">
                                                     <legend>Annual Budget Allocation</legend>
                                                     <div class="row-fluid" ng-repeat="y in years">
-                                                        <div class="span3">
-                                                            {{ y.0.name }}
-                                                        </div>
-                                                        <div class="span3">
-                                                            <input type="text" class="input-mini" placeholder="amount" ng-model="y.0.amount">
-                                                        </div>
-                                                        <div class="span3">
-                                                            {{ y.1.name }}
-                                                        </div>
-                                                        <div class="span3">
-                                                            <input type="text" class="input-mini" placeholder="amount" ng-model="y.1.amount">
-                                                        </div>
-
+                                                        <ng-form name="allocationWrapForm">
+                                                            <div class="span3">
+                                                                {{ y.0.name }}
+                                                            </div>
+                                                            <div class="span3">
+                                                                <input type="text" name="input1" class="input-small" placeholder="amount" ng-model="y.0.amount" ng-pattern="number" ng-required="true"><br>
+                                                                <p class="error" ng-show="allocationWrapForm.input1.$error.required">Required!</p>
+                                                                <span class="error" ng-show="allocationWrapForm.input1.$error.pattern">There must be a number.</span>
+                                                            </div>
+                                                            <div class="span3">
+                                                                {{ y.1.name }}
+                                                            </div>
+                                                            <div class="span3">
+                                                                <input type="text" name="input2" class="input-small" placeholder="amount" ng-model="y.1.amount" ng-pattern="number" ng-required="true"><br>
+                                                                <p class="error" ng-show="allocationWrapForm.input2.$error.required">Required!</p>
+                                                                <span class="error" ng-show="allocationWrapForm.input2.$error.pattern">There must be a number.</span>
+                                                            </div>
+                                                        </ng-form>
                                                     </div>
 
                                                 </fieldset>
@@ -234,9 +276,9 @@
                                                                         <div class="row-fluid">
                                                                             <div class="span2"></div>
                                                                             <div class="span5">
-                                                                               <p class="text-center">
-                                                                                   Expenditure
-                                                                               </p>
+                                                                                <p class="text-center">
+                                                                                    Expenditure
+                                                                                </p>
                                                                             </div>
                                                                             <div class="span5">
                                                                                 <p class="text-center">
@@ -290,12 +332,10 @@
                                     </fieldset>
                                 </accordion-group>
 
-                                </accordion>
+                            </accordion>
 
-                            </td>
-                        </tr>
-                    </table>
-
+                        </div>
+                    </div>
                 </fieldset>
                 <div >
                     <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>

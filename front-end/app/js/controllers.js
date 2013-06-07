@@ -284,13 +284,13 @@ angular.module('myApp.controllers', ['ngCookies'])
                 });
         };
         $scope.handleNext = function(dismiss, is_valid) {
-            if (is_valid) {
+//            if (is_valid) {
                 if($scope.isLastStep()) {
 //                    dismiss();
                     $scope.submitForm();
                 } else {
                     $scope.step += 1;
                 }
-            }
+//            }
         };
     })

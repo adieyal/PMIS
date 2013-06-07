@@ -8,3 +8,11 @@
 .add-scope-field{
     cursor: pointer;
 }
+
+.error{
+    color: red;
+}
+
+.icon-remove{
+    cursor: pointer;
+}
