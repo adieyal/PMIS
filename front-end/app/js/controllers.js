@@ -88,7 +88,7 @@ angular.module('myApp.controllers', ['ngCookies'])
         $scope.wizard = {};
         $scope.wizard.project = {};
         $scope.wizard.project.municipalities = [];
-        $scope.wizard.project_role = {};
+        $scope.wizard.project_role = [];
         $scope.wizard.project_financial = {};
         $scope.wizard.scope_of_work = [{'quantity': "", 'scope_code': ""}];
         $scope.wizard.planning = [];
@@ -117,7 +117,10 @@ angular.module('myApp.controllers', ['ngCookies'])
 
         $http.get(HOST+'/api/roles/', {})
             .success(function(data, status, headers, config) {
-                $scope.roles = data;
+                var l = data.length;
+                for (var i=0; i<l; i++){
+                    $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
+                }
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;

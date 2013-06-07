@@ -149,13 +149,13 @@
                     <li ng-class="{'active':isCurrentStep(2)}"><span  ng-class="{'':isCurrentStep(2)}" ng-click="setCurrentStep(1)">Project people</span> <span class="divider">/</span></li>
                 </ul>
                 <fieldset>
-                    <div class="row-fluid" ng-repeat="role in roles">
+                    <div class="row-fluid" ng-repeat="role_item in wizard.project_role">
                         <ng-form name="roleWrapForm">
                             <div class="span4">
-                                {{ role.name }}
+                                {{ role_item.role.name }}
                             </div>
                             <div class="span4">
-                                <input type="text" class="input-large" name="r" auto-complete ui-items="entities" ng-model="wizard.project_role['role-'+role.id]" ng-required="true">
+                                <input type="text" class="input-large" name="r" auto-complete ui-items="entities" ng-model="role_item.entity_name" ng-required="true">
                             </div>
                             <div class="span4">
                                 <p class="error" ng-show="roleWrapForm.r.$error.required">Required!</p>
