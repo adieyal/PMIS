@@ -20,7 +20,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DoE", 
-    "description": ""
+    "description": "Department of Education"
   }
 },
 {
@@ -28,7 +28,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DoH", 
-    "description": ""
+    "description": "Department of Health"
   }
 },
 {
@@ -304,5 +304,149 @@
     "name": "Ehlanzeni", 
     "permissions": []
   }
+},
+{
+    "pk": 1, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "C", 
+        "name": "Classroom", 
+        "description": ""
+    }
+},
+{
+    "pk": 2, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "CC", 
+        "name": "Computer Centre", 
+        "description": ""
+    }
+},
+{
+    "pk": 3, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "LIB", 
+        "name": "Library", 
+        "description": ""
+    }
+},
+{
+    "pk": 4, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "LAB", 
+        "name": "Laboratory", 
+        "description": ""
+    }
+},
+{
+    "pk": 5, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "KIT", 
+        "name": "Kitchen", 
+        "description": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "R&R", 
+        "name": "Rails & Ramps", 
+        "description": ""
+    }
+},
+{
+    "pk": 7, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "H/E", 
+        "name": "Home Economics", 
+        "description": ""
+    }
+},
+{
+    "pk": 8, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "SG", 
+        "name": "Sports Ground", 
+        "description": ""
+    }
+},
+{
+    "pk": 9, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "PA", 
+        "name": "Parking Areas", 
+        "description": ""
+    }
+},
+{
+    "pk": 10, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "AD", 
+        "name": "Administration Block", 
+        "description": ""
+    }
+},
+{
+    "pk": 11, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "SH", 
+        "name": "School Hall", 
+        "description": ""
+    }
+},
+{
+    "pk": 12, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "T", 
+        "name": "Toilet", 
+        "description": ""
+    }
+},
+{
+    "pk": 13, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "W", 
+        "name": "Water Supply", 
+        "description": ""
+    }
+},
+{
+    "pk": 14, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "E", 
+        "name": "Electricity Supply", 
+        "description": ""
+    }
+},
+{
+    "pk": 15, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "BD", 
+        "name": "Boarding School", 
+        "description": ""
+    }
+},
+{
+    "pk": 16, 
+    "model": "projects.scopecode", 
+    "fields": {
+        "code": "F", 
+        "name": "Fencing", 
+        "description": ""
+    }
 }
 ]
