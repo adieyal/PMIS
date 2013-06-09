@@ -529,5 +529,167 @@
         "name": "Final Accounts", 
         "order": 0
     }
+},
+{
+    "pk": 1, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Mud Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 2, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Mud and Unsafe Structures (Conventional)", 
+        "description": ""
+    }
+},
+{
+    "pk": 3, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Substitution of Unsafe Structures", 
+        "description": ""
+    }
+},
+{
+    "pk": 4, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Technical Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 5, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "New Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 6, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Special Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 7, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Boarding Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 8, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Refurbishment and Renovation", 
+        "description": ""
+    }
+},
+{
+    "pk": 9, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Mud Schools (Unconventional to Conventional)", 
+        "description": ""
+    }
+},
+{
+    "pk": 10, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Mud Schools (Unconventional)", 
+        "description": ""
+    }
+},
+{
+    "pk": 11, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Grade R", 
+        "description": ""
+    }
+},
+{
+    "pk": 12, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Substitute Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 13, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Storm Damage", 
+        "description": ""
+    }
+},
+{
+    "pk": 14, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "DoE Special Projects", 
+        "description": ""
+    }
+},
+{
+    "pk": 15, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Maintenance", 
+        "description": ""
+    }
+},
+{
+    "pk": 16, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Singita", 
+        "description": ""
+    }
+},
+{
+    "pk": 17, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Enviroloo Toilet", 
+        "description": ""
+    }
+},
+{
+    "pk": 18, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Upgrade and Addition", 
+        "description": ""
+    }
 }
 ]
