@@ -691,5 +691,19 @@
         "name": "Upgrade and Addition", 
         "description": ""
     }
+},
+{
+    "pk": 1, 
+    "model": "projects.entity", 
+    "fields": {
+        "name": "DPWRT"
+    }
+},
+{
+    "pk": 1, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Implementing Agent"
+    }
 }
 ]
