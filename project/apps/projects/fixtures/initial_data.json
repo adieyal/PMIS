@@ -500,7 +500,7 @@
     "fields": {
         "phase": "implementation", 
         "name": "Implementation", 
-        "order": 1
+        "order": 0
     }
 },
 {
@@ -527,7 +527,7 @@
     "fields": {
         "phase": "completed", 
         "name": "Final Accounts", 
-        "order": 1
+        "order": 0
     }
 }
 ]
