@@ -238,7 +238,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                     $scope.status = status;
                 });
         };
-        $scope.number = /^\d+$/;
+        $scope.number = /^[\d\w\/]+$/;
         $scope.addScopeOfWork = function(){
             $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': ""});
         };
