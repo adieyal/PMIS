@@ -1,6 +1,6 @@
 from django.contrib import admin
 import reversion
-from models import Client, Programme, Project, Municipality, District, Entity, Role, ProjectRole, Planning, MonthlySubmission, CommentType, ProjectStatus, VarianceOrder, Milestone, ProjectFinancial, Versioned, Budget, ProjectMilestone, GroupPerm, GroupPermObj, ScopeCode
+import models
 from project.apps.projects.forms import ProjectVersionedForm, MonthlySubmissionVersionedForm, ProjectStatusVersionedForm, VarianceOrderVersionedForm, ProjectMilestoneVersionedForm, ProjectFinancialVersionedForm
 
 
@@ -13,7 +13,7 @@ class CustomVersionAdmin(reversion.VersionAdmin):
             user=request.user,
             comment="Initial version.",
             ignore_duplicates=self.ignore_duplicate_revisions,
-            meta=((Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            meta=((model.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
             db=self.revision_context_manager.get_db(),
         )
 
@@ -25,7 +25,7 @@ class CustomVersionAdmin(reversion.VersionAdmin):
             user=request.user,
             comment=message,
             ignore_duplicates=self.ignore_duplicate_revisions,
-            meta=((Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            meta=((model.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
             db = self.revision_context_manager.get_db(),
         )
 
@@ -43,7 +43,7 @@ class ProjectAdmin(CustomVersionAdmin):
 
 
 class MunicipalityAdmin(admin.TabularInline):
-    model = Municipality
+    model = models.Municipality
 
 
 class DistrictAdmin(admin.ModelAdmin):
@@ -104,24 +104,24 @@ class VersionedAdmin(admin.ModelAdmin):
     fields = ('update_comment', 'update_user')
 
 
-admin.site.register(Client, ClientAdmin)
-admin.site.register(Programme, ProgrammeAdmin)
-admin.site.register(Project, ProjectAdmin)
+admin.site.register(models.Client, ClientAdmin)
+admin.site.register(models.Programme, ProgrammeAdmin)
+admin.site.register(models.Project, ProjectAdmin)
 
-admin.site.register(District, DistrictAdmin)
-admin.site.register(Entity, EntityAdmin)
-admin.site.register(Role, RoleAdmin)
-admin.site.register(ProjectRole, ProjectRoleAdmin)
-admin.site.register(Planning, PlanningAdmin)
-admin.site.register(MonthlySubmission, MonthlySubmissionAdmin)
-admin.site.register(CommentType, CommentTypeAdmin)
-admin.site.register(ProjectStatus, ProjectStatusAdmin)
-admin.site.register(VarianceOrder, VarianceOrderAdmin)
-admin.site.register(Milestone, MilestoneAdmin)
-admin.site.register(ProjectFinancial, ProjectFinancialAdmin)
-admin.site.register(ProjectMilestone, ProjectMilestoneAdmin)
-admin.site.register(Budget)
-admin.site.register(GroupPerm, GroupPermAdmin)
-admin.site.register(GroupPermObj)
-admin.site.register(Versioned, VersionedAdmin)
-admin.site.register(ScopeCode)
+admin.site.register(models.District, DistrictAdmin)
+admin.site.register(models.Entity, EntityAdmin)
+admin.site.register(models.Role, RoleAdmin)
+admin.site.register(model.ProjectRole, ProjectRoleAdmin)
+admin.site.register(model.Planning, PlanningAdmin)
+admin.site.register(model.MonthlySubmission, MonthlySubmissionAdmin)
+admin.site.register(model.CommentType, CommentTypeAdmin)
+admin.site.register(model.ProjectStatus, ProjectStatusAdmin)
+admin.site.register(model.VarianceOrder, VarianceOrderAdmin)
+admin.site.register(model.Milestone, MilestoneAdmin)
+admin.site.register(model.ProjectFinancial, ProjectFinancialAdmin)
+admin.site.register(model.ProjectMilestone, ProjectMilestoneAdmin)
+admin.site.register(model.Budget)
+admin.site.register(model.GroupPerm, GroupPermAdmin)
+admin.site.register(model.GroupPermObj)
+admin.site.register(model.Versioned, VersionedAdmin)
+admin.site.register(model.ScopeCode)
