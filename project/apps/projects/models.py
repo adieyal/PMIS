@@ -144,6 +144,9 @@ class ScopeOfWork(models.Model):
     def __unicode__(self):
         return u'Scope of work for %s' % self.project.name
 
+    class Meta:
+        verbose_name_plural = "Scopes of Work"
+
 
 class Planning(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS)

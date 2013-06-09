@@ -13,7 +13,7 @@ class CustomVersionAdmin(reversion.VersionAdmin):
             user=request.user,
             comment="Initial version.",
             ignore_duplicates=self.ignore_duplicate_revisions,
-            meta=((model.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            meta=((models.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
             db=self.revision_context_manager.get_db(),
         )
 
@@ -25,7 +25,7 @@ class CustomVersionAdmin(reversion.VersionAdmin):
             user=request.user,
             comment=message,
             ignore_duplicates=self.ignore_duplicate_revisions,
-            meta=((model.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
+            meta=((models.Versioned, {"update_comment": update_comment, "update_user_id": update_user_id}),),
             db = self.revision_context_manager.get_db(),
         )
 
@@ -111,17 +111,18 @@ admin.site.register(models.Project, ProjectAdmin)
 admin.site.register(models.District, DistrictAdmin)
 admin.site.register(models.Entity, EntityAdmin)
 admin.site.register(models.Role, RoleAdmin)
-admin.site.register(model.ProjectRole, ProjectRoleAdmin)
-admin.site.register(model.Planning, PlanningAdmin)
-admin.site.register(model.MonthlySubmission, MonthlySubmissionAdmin)
-admin.site.register(model.CommentType, CommentTypeAdmin)
-admin.site.register(model.ProjectStatus, ProjectStatusAdmin)
-admin.site.register(model.VarianceOrder, VarianceOrderAdmin)
-admin.site.register(model.Milestone, MilestoneAdmin)
-admin.site.register(model.ProjectFinancial, ProjectFinancialAdmin)
-admin.site.register(model.ProjectMilestone, ProjectMilestoneAdmin)
-admin.site.register(model.Budget)
-admin.site.register(model.GroupPerm, GroupPermAdmin)
-admin.site.register(model.GroupPermObj)
-admin.site.register(model.Versioned, VersionedAdmin)
-admin.site.register(model.ScopeCode)
+admin.site.register(models.ProjectRole, ProjectRoleAdmin)
+admin.site.register(models.Planning, PlanningAdmin)
+admin.site.register(models.MonthlySubmission, MonthlySubmissionAdmin)
+admin.site.register(models.CommentType, CommentTypeAdmin)
+admin.site.register(models.ProjectStatus, ProjectStatusAdmin)
+admin.site.register(models.VarianceOrder, VarianceOrderAdmin)
+admin.site.register(models.Milestone, MilestoneAdmin)
+admin.site.register(models.ProjectFinancial, ProjectFinancialAdmin)
+admin.site.register(models.ProjectMilestone, ProjectMilestoneAdmin)
+admin.site.register(models.Budget)
+admin.site.register(models.GroupPerm, GroupPermAdmin)
+admin.site.register(models.GroupPermObj)
+admin.site.register(models.Versioned, VersionedAdmin)
+admin.site.register(models.ScopeCode)
+admin.site.register(models.ScopeOfWork)
