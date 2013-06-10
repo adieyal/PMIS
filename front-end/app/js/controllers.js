@@ -92,6 +92,8 @@ angular.module('myApp.controllers', ['ngCookies'])
         $scope.wizard.project_financial = {};
         $scope.wizard.scope_of_work = [{'quantity': "", 'scope_code': ""}];
         $scope.wizard.planning = [];
+        $scope.additional_roles = [];
+        $scope.add_role = {};
         $http.get(HOST+'/api/programmes/', {})
             .success(function(data, status, headers, config) {
                 $scope.programmes = data;
@@ -120,7 +122,11 @@ angular.module('myApp.controllers', ['ngCookies'])
                 var l = data.length;
                 for (var i=0; i<l; i++){
                     $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
+                    if (data[i].name=='Consultant' || data[i].name=='Contractor'){
+                        $scope.additional_roles.push(data[i]);
+                    }
                 }
+
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -201,13 +207,10 @@ angular.module('myApp.controllers', ['ngCookies'])
 
             $http.get(HOST+'/api/districts/'+$scope.wizard.district.id+'/municipalities/', {})
                 .success(function(data, status, headers, config) {
-//                    $scope.municipality_list = data;
-//                    $scope.wizard.project.municipalities = [];
                     var res = [];
                     var l = data.length;
                     for (var i=0; i<l; i++){
                         data[i].selected=false;
-//                        res.push(data[i].selected=false)
                     }
                     $scope.wizard.project.municipalities = data
                 })
@@ -244,6 +247,11 @@ angular.module('myApp.controllers', ['ngCookies'])
             }
         };
 
+        $scope.addRoleItem = function(add_role, is_selected){
+            if (is_selected){
+                $scope.wizard.project_role.push({'role': add_role, 'entity_name': ''})
+            };
+        };
 
         $scope.addScopeOfWork = function(){
             $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': ""});
