@@ -1,9 +1,10 @@
+import dateutil.parser
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer
 
 
@@ -184,7 +185,7 @@ class CreateProject(generics.CreateAPIView):
                           description=new_project['description'], programme_id=new_project['programme_id'])
         project.save()
         for municipality in municipalities:
-                project.municipality.add(municipality)
+            project.municipality.add(municipality)
         project.save()
 
         data_scope_of_work = request.DATA.get('scope_of_work', [])
@@ -206,5 +207,30 @@ class CreateProject(generics.CreateAPIView):
                 project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
                 project_role.save()
 
+        data_project_milestones = request.DATA.get('project_milestones', [])
+        for project_milestone in data_project_milestones:
+            completion_date = project_milestone.get('completion_date', '')
+            milestone_id = project_milestone.get('id', '')
+            if completion_date and milestone_id:
+                pm = ProjectMilestone(completion_date=dateutil.parser.parse(completion_date), milestone_id=milestone_id,
+                                      project_id=project.id)
+                pm.save()
+
+        data_planning = request.DATA.get('planning', [])
+        for planning in data_planning:
+            year = dateutil.parser.parse(planning.get('name', ''))
+            print 'year: %s' % year
+            if year:
+                for month in planning.get('month', []):
+                    planned_expenses = month.get('planning', {}).get('amount', '')
+                    planned_progress = month.get('planning', {}).get('progress', '')
+                    month_id = month.get('id', '')
+                    print 'planned_expenses: %s' % planned_expenses
+                    print 'planned_progress: %s' % planned_progress
+                    print 'month_id: %s' % month_id
+                    if planned_expenses and planned_progress and month_id:
+                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
+                                     planned_progress=planned_progress, project_id=project.id)
+                        p.save()
         print request.DATA
         return Response({'status': status.HTTP_201_CREATED})

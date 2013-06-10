@@ -14,12 +14,11 @@ MONTHS = (
     ('5', 'May'),
     ('6', 'June'),
     ('7', 'July'),
-    ('8', 'July'),
-    ('9', 'August'),
-    ('10', 'September'),
-    ('11', 'October'),
-    ('12', 'November'),
-    ('13', 'December'),
+    ('8', 'August'),
+    ('9', 'September'),
+    ('10', 'October'),
+    ('11', 'November'),
+    ('12', 'December'),
 )
 
 YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
@@ -180,7 +179,7 @@ class Milestone(models.Model):
 
 
 class ProjectMilestone(models.Model):
-    completion_date = models.DateField(default=lambda: datetime.datetime.now())
+    completion_date = models.DateField(default=datetime.datetime.now)
     project = models.ForeignKey(Project, related_name='project_milestone')
     milestone = models.ForeignKey(Milestone, related_name='project_milestone')
 

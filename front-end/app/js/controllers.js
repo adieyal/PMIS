@@ -166,18 +166,18 @@ angular.module('myApp.controllers', ['ngCookies'])
 
         ];
         $scope.month = [
-            {'name': 'Apr'},
-            {'name': 'May'},
-            {'name': 'Jun'},
-            {'name': 'Jul'},
-            {'name': 'Aug'},
-            {'name': 'Sept'},
-            {'name': 'Oct'},
-            {'name': 'Nov'},
-            {'name': 'Dec'},
-            {'name': 'Jan'},
-            {'name': 'Feb'},
-            {'name': 'Mar'}
+            {'name': 'Apr', 'id': 4},
+            {'name': 'May', 'id': 5},
+            {'name': 'Jun', 'id': 6},
+            {'name': 'Jul', 'id': 7},
+            {'name': 'Aug', 'id': 8},
+            {'name': 'Sept', 'id': 9},
+            {'name': 'Oct', 'id': 10},
+            {'name': 'Nov', 'id': 11},
+            {'name': 'Dec', 'id': 12},
+            {'name': 'Jan', 'id': 1},
+            {'name': 'Feb', 'id': 2},
+            {'name': 'Mar', 'id': 3}
         ];
 
 
@@ -189,6 +189,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                     $scope.year_list[i],
                     {
                         amount: "",
+                        budget: "",
                         month: []
                     }
                 ));
@@ -241,6 +242,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                     {'name': year},
                     {
                         amount: "",
+                        budget: "",
                         month: months
                     }
                 ));
