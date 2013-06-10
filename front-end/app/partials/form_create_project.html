@@ -43,7 +43,7 @@
                             </p>
                         </div>
                         <div class="span4">
-                            <input type="text" class="input-large" name="project_number" ng-model="wizard.project.project_number" ng-pattern="number">
+                            <input type="text" class="input-large" name="project_number" ng-model="wizard.project.project_number" ng-pattern="project_number">
                         </div>
                         <div class="span4">
                             <span class="error" ng-show="step1form.project_number.$error.pattern">There must be a number.</span>
@@ -185,10 +185,9 @@
                             </p>
                         </div>
                         <div class="span4">
-                            <input type="text" name="project_planing_budget" ng-model="wizard.project_planing_budget" ng-required="true" ng-pattern="number">
+                            <input type="text" name="project_planing_budget" ng-model="wizard.project_planing_budget" ng-pattern="number">
                         </div>
                         <div class="span4">
-                            <span class="error" ng-show="step4form.project_planing_budget.$error.required">Required!</span>
                             <span class="error" ng-show="step4form.project_planing_budget.$error.pattern">There must be a number.</span>
                         </div>
                     </div>
@@ -240,26 +239,37 @@
                                             <div class="span12">
                                                 <fieldset class="well well-large">
                                                     <legend>Annual Budget Allocation</legend>
-                                                    <div class="row-fluid" ng-repeat="y in years">
-                                                        <ng-form name="allocationWrapForm">
-                                                            <div class="span3">
-                                                                {{ y.0.name }}
+                        
+                                                    <div class="row-fluid" ng-repeat='i in []|range:(wizard.planning.length+1)'>
+                                                        <div class="span6" ng-repeat='y in wizard.planning.slice($index*2,$index*2+2)'>
+                                                            <ng-form name="allocationWrapForm">
+                                                            <div class="row-fluid">
+                                                                <div class="span6">{{ y.name }}</div>
+                                                                <div class="span6">
+                                                                    <input type="text" name="input" class="input-small" placeholder="amount" ng-model="y.amount" ng-pattern="number" ng-required='true'><br>
+                                                                    <p class="error" ng-show="allocationWrapForm.input.$error.required">Required!</p>
+                                                                    <span class="error" ng-show="allocationWrapForm.input.$error.pattern">There must be a number.</span>
+                                                                </div>
                                                             </div>
-                                                            <div class="span3">
-                                                                <input type="text" name="input1" class="input-small" placeholder="amount" ng-model="y.0.amount" ng-pattern="number" ng-required="true"><br>
-                                                                <p class="error" ng-show="allocationWrapForm.input1.$error.required">Required!</p>
-                                                                <span class="error" ng-show="allocationWrapForm.input1.$error.pattern">There must be a number.</span>
+                                                            </ng-form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row-fluid">
+                                                        <ng-form name="addYearForm">
+                                                            <div class="span4">
+                                                                <p>
+                                                                    Enter new year:
+                                                                </p>
                                                             </div>
-                                                            <div class="span3">
-                                                                {{ y.1.name }}
+                                                            <div class="span4">
+                                                                <input type="text" name="input" class="input-xlagre" ng-model='default.year' ng-pattern="year" >
                                                             </div>
-                                                            <div class="span3">
-                                                                <input type="text" name="input2" class="input-small" placeholder="amount" ng-model="y.1.amount" ng-pattern="number" ng-required="true"><br>
-                                                                <p class="error" ng-show="allocationWrapForm.input2.$error.required">Required!</p>
-                                                                <span class="error" ng-show="allocationWrapForm.input2.$error.pattern">There must be a number.</span>
+                                                            <div class="span4">
+                                                                <button class="btn pull-right" ng-disabled="!(addYearForm.$valid&&default.year)" ng-click="addYear(default.year, (addYearForm.$valid&&default.year))">+ Add</button>
                                                             </div>
                                                         </ng-form>
                                                     </div>
+
 
                                                 </fieldset>
                                             </div>

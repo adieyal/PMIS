@@ -156,15 +156,10 @@ angular.module('myApp.controllers', ['ngCookies'])
 
 
         $scope.year_list = [
-            { 'name': 'Year 1', 'model': 'year_1'},
-            { 'name': 'Year 2', 'model': 'year_2'},
-            { 'name': 'Year 3', 'model': 'year_3'},
-            { 'name': 'Year 4', 'model': 'year_4'}
+            { 'name': '2013'}
+
         ];
         $scope.month = [
-            {'name': 'Jan'},
-            {'name': 'Feb'},
-            {'name': 'Mar'},
             {'name': 'Apr'},
             {'name': 'May'},
             {'name': 'Jun'},
@@ -173,18 +168,13 @@ angular.module('myApp.controllers', ['ngCookies'])
             {'name': 'Sept'},
             {'name': 'Oct'},
             {'name': 'Nov'},
-            {'name': 'Dec'}];
+            {'name': 'Dec'},
+            {'name': 'Jan'},
+            {'name': 'Feb'},
+            {'name': 'Mar'}
+        ];
 
-        $scope.month_group = function(){
-            var res=[];
-            var l = $scope.month.length;
-            for(var i=0; i<l;i++){
-                if (i % 2 == 0 ){
-                    res.push([$scope.month[i], $scope.month[i+1]])
-                }
-            }
-            $scope.months = res
-        };
+
         $scope.create_years_record = function(){
             var l1 = $scope.year_list.length;
             var l2 = $scope.month.length;
@@ -205,20 +195,7 @@ angular.module('myApp.controllers', ['ngCookies'])
             }
         };
         $scope.create_years_record();
-        $scope.month_group();
 
-
-        $scope.year_group = function(){
-            var res=[];
-            var l = $scope.wizard.planning.length;
-            for(var i=0; i<l;i++){
-                if (i % 2 == 0 ){
-                    res.push([$scope.wizard.planning[i], $scope.wizard.planning[i+1]])
-                }
-            }
-            $scope.years = res
-        };
-        $scope.year_group();
 
         $scope.get_municipality = function(){
 
@@ -238,7 +215,36 @@ angular.module('myApp.controllers', ['ngCookies'])
                     $scope.status = status;
                 });
         };
-        $scope.number = /^[\d\w\/]+$/;
+        $scope.number = /^\d+$/;
+        $scope.year = /^\d{4,4}$/;
+        $scope.project_number = /^[\d\w\/]+$/;
+        $scope.default = {
+            year: ''
+        };
+
+        $scope.addYear = function(year, is_valid){
+            if (is_valid){
+                $scope.default.year = '';
+                $scope.year_list.push({'name': year });
+                var l2 = $scope.month.length;
+                var months = [];
+                for(var j=0; j<l2; j++){
+                    months.push($.extend({},$scope.month[j],{'planning': {
+                        'amount': "",
+                        'progress': ""
+                    }}));
+                }
+                $scope.wizard.planning.push($.extend({},
+                    {'name': year},
+                    {
+                        amount: "",
+                        month: months
+                    }
+                ));
+            }
+        };
+
+
         $scope.addScopeOfWork = function(){
             $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': ""});
         };
@@ -296,4 +302,4 @@ angular.module('myApp.controllers', ['ngCookies'])
                 }
             }
         };
-    })
+    });
