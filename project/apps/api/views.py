@@ -193,9 +193,12 @@ class CreateProject(generics.CreateAPIView):
             scope_code_id = scope.get('scope_code', {})
             if scope_code_id != '':
                 scope_code_id = scope_code_id.get('id', '')
-            quantity = scope.get('quantity', '')
+            quantity = scope.get('quantity', None)
             if scope_code_id:
-                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id, quantity=quantity, project_id=project.id)
+                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id,  project_id=project.id)
+                scope_of_work.save()
+            if quantity:
+                scope_of_work.quantity = quantity
                 scope_of_work.save()
 
         data_project_role = request.DATA.get('project_role', [])
@@ -240,5 +243,5 @@ class CreateProject(generics.CreateAPIView):
         if total_anticipated_cost:
             pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
             pf.save()
-        print request.DATA
+
         return Response({'status': status.HTTP_201_CREATED})

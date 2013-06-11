@@ -136,7 +136,7 @@ class ScopeCode(models.Model):
 
 
 class ScopeOfWork(models.Model):
-    quantity = models.PositiveIntegerField()
+    quantity = models.PositiveIntegerField(null=True, blank=True)
     scope_code = models.ForeignKey(ScopeCode, related_name='scope_of_works')
     project = models.ForeignKey(Project, related_name='scope_of_works')
 
