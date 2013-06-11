@@ -116,14 +116,12 @@
 
                             </div>
                             <div class="span4">
-                                <input type="text" class="input-large" name="quantity" ng-model="s.quantity" ng-required="true" ng-pattern="number" placeholder="quantity">
-                                <span class="error" ng-show="scopeWrapForm.quantity.$error.required">Required!</span>
+                                <input type="text" class="input-large" name="quantity" ng-model="s.quantity" ng-pattern="number" placeholder="quantity">
                                 <span class="error" ng-show="scopeWrapForm.quantity.$error.pattern">There must be a number!</span>
                             </div>
                             <div class="span4">
-                                <select class="input-large" name="scope_code" ng-model="s.scope_code" ng-options="sc.name for sc in scope_codes" ng-required="true">
+                                <select class="input-large" name="scope_code" ng-model="s.scope_code" ng-options="sc.name for sc in scope_codes" >
                                 </select>
-                                <span class="error" ng-show="scopeWrapForm.scope_code.$error.required">Required!</span>
                             </div>
                             <div class="span3 text-center">
                                 <i ng-show="$index" class="icon-remove" ng-click="removeScopeOfWork(s)"></i>

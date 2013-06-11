@@ -193,7 +193,7 @@ class CreateProject(generics.CreateAPIView):
         for scope in data_scope_of_work:
             scope_code_id = scope.get('scope_code', {}).get('id', '')
             quantity = scope.get('quantity', '')
-            if scope_code_id and quantity:
+            if scope_code_id:
                 scope_of_work = ScopeOfWork(scope_code_id=scope_code_id, quantity=quantity, project_id=project.id)
                 scope_of_work.save()
 

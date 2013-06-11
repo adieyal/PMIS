@@ -102,7 +102,7 @@ class Role(models.Model):
 class ProjectRole(models.Model):
     project = models.ForeignKey(Project, related_name='project_roles')
     role = models.ForeignKey(Role, related_name='project_roles')
-    entity = models.ForeignKey(Entity, related_name='project_roles')
+    entity = models.ForeignKey(Entity, related_name='project_roles', blank=True, null=True)
 
 
 class ProjectFinancial(models.Model):
