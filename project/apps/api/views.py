@@ -178,15 +178,13 @@ class CreateProject(generics.CreateAPIView):
             'project_number': data_project.get('project_number', ''),
             'description': data_project.get('description', ''),
             'programme_id': data_project.get('programme', {}).get('id', ''),
+            'municipality_id': data_project.get('municipality', {}).get('id', '')
         }
-        if new_project['name'] == "" or new_project['programme_id'] == '':
+        if new_project['name'] == "" or new_project['programme_id'] == '' or new_project['municipality_id'] == '':
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-        municipalities = [x['id'] for x in data_project.get('municipalities') if x['selected'] == True]
         project = Project(name=new_project['name'], project_number=new_project['project_number'],
-                          description=new_project['description'], programme_id=new_project['programme_id'])
-        project.save()
-        for municipality in municipalities:
-            project.municipality.add(municipality)
+                          description=new_project['description'], programme_id=new_project['programme_id'],
+                          municipality_id=new_project['municipality_id'])
         project.save()
 
         data_scope_of_work = request.DATA.get('scope_of_work', [])

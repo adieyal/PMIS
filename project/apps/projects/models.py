@@ -75,7 +75,7 @@ class Project(models.Model):
     project_number = models.CharField(max_length=30, null=True, blank=True)
     description = models.TextField(blank=True)
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
-    municipality = models.ManyToManyField(Municipality, related_name='projects')
+    municipality = models.ForeignKey(Municipality, related_name='projects', null=True)
     objects = ProjectManager()
 
     def __unicode__(self):

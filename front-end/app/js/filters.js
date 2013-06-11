@@ -5,15 +5,8 @@
 angular.module('myApp.filters', [])
 .filter('is_check', function() {
     return function(input) {
-        var res = false
-        var l = input.length
-
-        for(var i=0; i<l;i++){
-            if (input[i].selected ){
-                res = true
-            }
-        }
-        return res;
+        for (var prop in input) if (input.hasOwnProperty(prop)) return true;
+        return false;
     }
 })
 .filter('capitalize', function() {
@@ -29,3 +22,4 @@ angular.module('myApp.filters', [])
         return input;
     };
 });
+

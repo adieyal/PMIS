@@ -87,7 +87,8 @@ angular.module('myApp.controllers', ['ngCookies'])
         $scope.step = 0;
         $scope.wizard = {};
         $scope.wizard.project = {};
-        $scope.wizard.project.municipalities = [];
+        $scope.municipalities = [];
+        $scope.wizard.project.municipality = {};
         $scope.wizard.project_role = [];
         $scope.wizard.project_financial = {};
         $scope.wizard.scope_of_work = [{'quantity': "", 'scope_code': ""}];
@@ -208,12 +209,8 @@ angular.module('myApp.controllers', ['ngCookies'])
 
             $http.get(HOST+'/api/districts/'+$scope.wizard.district.id+'/municipalities/', {})
                 .success(function(data, status, headers, config) {
-                    var res = [];
-                    var l = data.length;
-                    for (var i=0; i<l; i++){
-                        data[i].selected=false;
-                    }
-                    $scope.wizard.project.municipalities = data
+                    $scope.municipalities = data
+                    $scope.wizard.project.municipality = {}
                 })
                 .error(function(data, status, headers, config) {
                     $scope.status = status;
@@ -303,13 +300,13 @@ angular.module('myApp.controllers', ['ngCookies'])
                 });
         };
         $scope.handleNext = function(dismiss, is_valid) {
-            if (is_valid) {
+//            if (is_valid) {
                 if($scope.isLastStep()) {
 //                    dismiss();
                     $scope.submitForm();
                 } else {
                     $scope.step += 1;
-                }
+//                }
             }
         };
     });
