@@ -300,13 +300,24 @@ angular.module('myApp.controllers', ['ngCookies'])
                 });
         };
         $scope.handleNext = function(dismiss, is_valid) {
-//            if (is_valid) {
+            if (is_valid) {
                 if($scope.isLastStep()) {
 //                    dismiss();
                     $scope.submitForm();
                 } else {
                     $scope.step += 1;
-//                }
+                }
             }
         };
-    });
+    })
+    .controller('ProjectCtrl', ['$scope', '$routeParams', '$http', 'HOST', function ($scope, $routeParams, $http, HOST) {
+        $scope.project_id = $routeParams.projectId;
+        console.log($scope.project_id)
+        $http.get(HOST+'/api/project/'+$scope.project_id+'/', {})
+            .success(function(data, status, headers, config) {
+                $scope.project = data;
+            })
+            .error(function(data, status, headers, config) {
+                $scope.status = status;
+            });
+    }]);

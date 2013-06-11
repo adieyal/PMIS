@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial
-from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer
+from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
 
 
 class ClientViewSet(generics.ListAPIView):
@@ -142,6 +142,18 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset)
+        return Response(data)
+
+
+class ProjectDetailView(generics.SingleObjectAPIView):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
+        data = {}
+        try:
+            object = Project.objects.get_project(request.user.id).get(id=pk)
+        except Project.DoesNotExist:
+            return Response({'status': status.HTTP_400_BAD_REQUEST})
+        data = project_detail_serializer(object)
         return Response(data)
 
 

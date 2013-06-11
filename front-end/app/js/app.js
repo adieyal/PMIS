@@ -11,6 +11,7 @@ angular
         $routeProvider.when('/', {templateUrl: '/partials/home.html', controller: 'MyCtrl3'});
         $routeProvider.when('/about/', {templateUrl: '/partials/about.html', controller: 'MyCtrl4'});
         $routeProvider.when('/contact/', {templateUrl: '/partials/contact.html', controller: 'MyCtrl5'});
+        $routeProvider.when('/api/project/:projectId', {templateUrl: '/partials/project_detail.html', controller: 'ProjectCtrl'});
         $routeProvider.when('/create_project/', {templateUrl: '/partials/form_create_project.html', controller: 'AppCtrl'});
         $routeProvider.otherwise();
         $locationProvider.html5Mode(true);
