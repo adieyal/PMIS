@@ -5,7 +5,7 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer
 
 
@@ -236,5 +236,11 @@ class CreateProject(generics.CreateAPIView):
                         p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
                                      planned_progress=planned_progress, project_id=project.id)
                         p.save()
+
+        project_financial = request.DATA.get('project_financial', {})
+        total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
+        if total_anticipated_cost:
+            pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
+            pf.save()
         print request.DATA
         return Response({'status': status.HTTP_201_CREATED})
