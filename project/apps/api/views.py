@@ -1,10 +1,11 @@
+import decimal
 import dateutil.parser
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer
 
 
@@ -191,7 +192,9 @@ class CreateProject(generics.CreateAPIView):
         data_scope_of_work = request.DATA.get('scope_of_work', [])
 
         for scope in data_scope_of_work:
-            scope_code_id = scope.get('scope_code', {}).get('id', '')
+            scope_code_id = scope.get('scope_code', {})
+            if scope_code_id != '':
+                scope_code_id = scope_code_id.get('id', '')
             quantity = scope.get('quantity', '')
             if scope_code_id:
                 scope_of_work = ScopeOfWork(scope_code_id=scope_code_id, quantity=quantity, project_id=project.id)
@@ -219,15 +222,16 @@ class CreateProject(generics.CreateAPIView):
         data_planning = request.DATA.get('planning', [])
         for planning in data_planning:
             year = dateutil.parser.parse(planning.get('name', ''))
-            print 'year: %s' % year
+            allocated_budget = planning.get('amount', '')
+            allocated_planning_budget = planning.get('budget', '')
+            budget = Budget(allocated_budget=allocated_budget, allocated_planning_budget=allocated_planning_budget,
+                            year=year, project_id=project.id)
+            budget.save()
             if year:
                 for month in planning.get('month', []):
                     planned_expenses = month.get('planning', {}).get('amount', '')
                     planned_progress = month.get('planning', {}).get('progress', '')
                     month_id = month.get('id', '')
-                    print 'planned_expenses: %s' % planned_expenses
-                    print 'planned_progress: %s' % planned_progress
-                    print 'month_id: %s' % month_id
                     if planned_expenses and planned_progress and month_id:
                         p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
                                      planned_progress=planned_progress, project_id=project.id)

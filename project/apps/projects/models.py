@@ -116,7 +116,7 @@ class ProjectFinancial(models.Model):
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
     allocated_budget = models.DecimalField(max_digits=20, decimal_places=2)
-    allocated_planning_budget = models.DecimalField(max_digits=20, decimal_places=2)
+    allocated_planning_budget = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     project = models.ForeignKey(Project, related_name='budgets')
 
     def __unicode__(self):
