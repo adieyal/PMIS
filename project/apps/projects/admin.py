@@ -42,6 +42,7 @@ class ProjectFinancialInlineAdmin(admin.TabularInline):
 
 class BudgetInlineAdmin(admin.TabularInline):
     model = models.Budget
+    extra = 0
 
 class PlanningInlineAdmin(admin.TabularInline):
     model = models.Planning
@@ -56,6 +57,7 @@ class ProjectRoleInlineAdmin(admin.TabularInline):
 
 class ScopeOfWorkInlineAdmin(admin.TabularInline):
     model = models.ScopeOfWork
+    extra = 0
 
 class MonthlySubmissionInlineAdmin(admin.TabularInline):
     model = models.MonthlySubmission
