@@ -104,6 +104,9 @@ class ProjectRole(models.Model):
     role = models.ForeignKey(Role, related_name='project_roles')
     entity = models.ForeignKey(Entity, related_name='project_roles', blank=True, null=True)
 
+    def __unicode__(self):
+        return u'%s - %s: %s' % (self.project, self.role, self.entity)
+
 
 class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2)
