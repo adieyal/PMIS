@@ -65,11 +65,12 @@ def project_detail_serializer(object):
     project_role = []
     for pr in object.project_roles.all():
         project_role += [{
+            ''
             'role': {
                 'id': pr.role.id,
                 'name': pr.role.name
             },
-            'entity': pr.entity.name
+            'entity_name': pr.entity.name
         }]
     scope_of_work = []
     for sow in object.scope_of_works.all():
@@ -80,12 +81,44 @@ def project_detail_serializer(object):
                 'name': sow.scope_code.name
             }
         }]
+    planning = []
+    for b in object.budgets.all():
+        month = []
+        for p in object.plannings.filter(year=b.year):
+            month += [{
+                      'name': p.get_month_display(),
+                      'id': p.month,
+                      'planning': {
+                          'amount': p.planned_expenses,
+                          'progress': p.planned_progress,
+                      }}]
+        planning += [{
+            'name': b.year,
+            'amount': b.allocated_budget,
+            'budget': b.allocated_planning_budget,
+            'month': month
+        }]
+    project_milestones = []
+    for pm in object.project_milestone.all():
+        project_milestones += [{
+            'id': pm.milestone.id,
+            'name': pm.milestone.name,
+            'phase': pm.milestone.phase,
+            'order': pm.milestone.order,
+            'completion_date': pm.completion_date
+        }]
     data = {
         'project': {
             'id': object.id,
             'name': object.name,
             'description': object.description,
             'project_number': object.project_number,
+            'project_financial': {
+                'total_anticipated_cost': object.project_financial.total_anticipated_cost
+            },
+            'district': {
+                'id': object.municipality.district.id
+            },
             'programme': {
                 'id': object.programme.id,
                 'name': object.programme.name
@@ -95,7 +128,10 @@ def project_detail_serializer(object):
                 'name': getattr(object.municipality, 'name', '')
             },
             'project_role': project_role,
-            'scope_of_work': scope_of_work
+            'scope_of_work': scope_of_work,
+            'planning': planning,
+            'project_milestones': project_milestones
+
         }
     }
 

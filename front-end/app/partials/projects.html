@@ -4,6 +4,6 @@
 
 <div ng-controller="MyCtrl1" class="row-fluid" ng-repeat="project in projects">
     <div class="span12">
-        Project: <a href="/api/project/{{ project.id }}">{{ project.name }}</a>
+        Project: <a href="/api/project/{{ project.id }}">{{ project.name }}</a> <a href="/api/project/{{ project.id }}/update/"><i class="icon-pencil"></i></a>
     </div>
 </div>

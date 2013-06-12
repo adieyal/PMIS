@@ -13,6 +13,7 @@ angular
         $routeProvider.when('/contact/', {templateUrl: '/partials/contact.html', controller: 'MyCtrl5'});
         $routeProvider.when('/api/project/:projectId', {templateUrl: '/partials/project_detail.html', controller: 'ProjectCtrl'});
         $routeProvider.when('/create_project/', {templateUrl: '/partials/form_create_project.html', controller: 'AppCtrl'});
+        $routeProvider.when('/api/project/:projectId/update/', {templateUrl: '/partials/form_update_project.html', controller: 'ProjectUpdateCtrl'});
         $routeProvider.otherwise();
         $locationProvider.html5Mode(true);
     }]);

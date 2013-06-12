@@ -16,3 +16,7 @@
 .icon-remove{
     cursor: pointer;
 }
+
+.active a{
+    color: #999;
+}
