@@ -75,9 +75,9 @@ class ProgrammeViewSetTest(TestCase):
     def test_get_municipalities_list(self):
 
         data = {
-            'pk': self.clients.id,
+            # 'pk': self.clients.id,
         }
-        response = self.client.get(reverse('api:programmes_view', kwargs=data), )
+        response = self.client.get(reverse('api:programme_view', kwargs=data), )
         self.assertEqual(response.status_code, 401)
 
         #
@@ -97,7 +97,7 @@ class ProjectViewSetTest(TestCase):
     def test_get_project_list(self):
         print self.project.programme.id
         data = {
-            'pk': self.project.programme.id,
+            # 'pk': self.project.programme.id,
             }
         response = self.client.get(reverse('api:project_view', kwargs=data), )
         self.assertEqual(response.status_code, 401)
