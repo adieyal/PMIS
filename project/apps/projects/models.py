@@ -183,7 +183,7 @@ class Milestone(models.Model):
 
 
 class ProjectMilestone(models.Model):
-    completion_date = models.DateField(default=datetime.datetime.now)
+    completion_date = models.DateField(default=datetime.datetime.now, blank=True, null=True)
     project = models.ForeignKey(Project, related_name='project_milestone')
     milestone = models.ForeignKey(Milestone, related_name='project_milestone')
 

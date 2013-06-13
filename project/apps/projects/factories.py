@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.webdesign import lorem_ipsum
 import factory
-from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS
+from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork
 
 
 class UserFactory(factory.Factory):
@@ -124,3 +124,22 @@ class BudgetFactory(factory.Factory):
     project_financial = factory.SubFactory(ProjectFinancial)
 
 
+class ScopeCodeFactory(factory.Factory):
+    FACTORY_FOR = ScopeCode
+    name = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
+
+    @factory.lazy_attribute
+    def description(self):
+        return lorem_ipsum.words(200, False).capitalize()
+    code = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
+
+
+class ScopeOfWorkFactory(factory.Factory):
+    FACTORY_FOR = ScopeOfWork
+    quantity = random.randint(0, 1000)
+    scope_code = factory.SubFactory(ScopeCodeFactory)
+    project = factory.SubFactory(ProjectFactory)
+
+    @factory.lazy_attribute
+    def description(self):
+        return lorem_ipsum.words(200, False).capitalize()

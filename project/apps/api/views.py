@@ -237,9 +237,17 @@ class CreateProject(generics.CreateAPIView):
             year = dateutil.parser.parse(planning.get('name', '')).year
             allocated_budget = planning.get('allocated_budget', '')
             allocated_planning_budget = planning.get('allocated_planning_budget', '')
-            budget = Budget(allocated_budget=allocated_budget, allocated_planning_budget=allocated_planning_budget,
-                            year=year, project_id=project.id)
+
+            budget = Budget(year=year, project_id=project.id)
             budget.save()
+            if allocated_budget:
+                budget.allocated_budget = allocated_budget
+                budget.save()
+
+            if allocated_planning_budget:
+                budget.allocated_planning_budget = allocated_planning_budget
+                budget.save()
+
             if year:
                 for month in planning.get('month', []):
                     planned_expenses = month.get('planning', {}).get('amount', '')
