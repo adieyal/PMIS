@@ -122,3 +122,5 @@ class BudgetFactory(factory.Factory):
     year = random.choice(YEARS)
     allocated_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
     project_financial = factory.SubFactory(ProjectFinancial)
+
+

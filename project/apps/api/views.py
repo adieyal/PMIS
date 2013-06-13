@@ -235,8 +235,8 @@ class CreateProject(generics.CreateAPIView):
         data_planning = request.DATA.get('planning', [])
         for planning in data_planning:
             year = dateutil.parser.parse(planning.get('name', '')).year
-            allocated_budget = planning.get('amount', '')
-            allocated_planning_budget = planning.get('budget', '')
+            allocated_budget = planning.get('allocated_budget', '')
+            allocated_planning_budget = planning.get('allocated_planning_budget', '')
             budget = Budget(allocated_budget=allocated_budget, allocated_planning_budget=allocated_planning_budget,
                             year=year, project_id=project.id)
             budget.save()
@@ -261,4 +261,8 @@ class CreateProject(generics.CreateAPIView):
 
 class UpdateProject(generics.UpdateAPIView):
     def post(self, request, *args, **kwargs):
+        print request.DATA.get('project', {})
+        # project_id = request.DATA.get('project', {}).get('id', '')
+        # project = Project.objects.get(project_id)
+
         return Response({'status': status.HTTP_200_OK})
