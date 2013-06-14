@@ -90,7 +90,7 @@ class ProjectViewSetTest(TestCase):
 
     def test_get_project_list(self):
         data = {}
-        response = self.client.get(reverse('api:project_view', kwargs=data), )
+        response = self.client.get(reverse('api:projects_view', kwargs=data), )
         self.assertEqual(response.status_code, 401)
 
 

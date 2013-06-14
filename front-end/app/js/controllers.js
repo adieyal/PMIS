@@ -291,7 +291,7 @@ angular.module('myApp.controllers', ['ngCookies'])
         };
 
         $scope.submitForm = function(){
-            $http.post(HOST+'/api/create_project/', $scope.wizard)
+            $http.post(HOST+'/api/projects/', $scope.wizard)
                 .success(function(data, status, headers, config) {
                     $location.path('/');
                 })
@@ -312,13 +312,7 @@ angular.module('myApp.controllers', ['ngCookies'])
     })
     .controller('ProjectCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$resource', function ($scope, $routeParams, $http, HOST,$resource) {
         $scope.project_id = $routeParams.projectId;
-        console.log($scope.project_id)
-        var Project = $resource(HOST+'/api/project/:projectId/',
-            {projectId: $scope.project_id, port: 8000}, {});
-        $scope.project = Project.get({},function(){
-            console.log('send request')
-        });
-        $http.get(HOST+'/api/project/'+$scope.project_id+'/', {})
+        $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
                 $scope.project = data;
             })
@@ -358,7 +352,7 @@ angular.module('myApp.controllers', ['ngCookies'])
 
         $scope.project_id = $routeParams.projectId;
         console.log($scope.project_id)
-        $http.get(HOST+'/api/project/'+$scope.project_id+'/', {})
+        $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
                 $scope.wizard = data;
                 $http.get(HOST+'/api/districts/'+$scope.wizard.project.district.id+'/municipalities/', {})
@@ -590,7 +584,7 @@ angular.module('myApp.controllers', ['ngCookies'])
 
         $scope.submitForm = function(is_valid){
             if (is_valid) {
-            $http.post(HOST+'/api/update_project/', $scope.wizard)
+            $http.put(HOST+'/api/projects/'+$scope.project_id+'/', $scope.wizard)
                 .success(function(data, status, headers, config) {
                     $location.path('/');
                 })

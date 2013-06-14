@@ -29,7 +29,7 @@ class ScopeCodeViewSet(generics.ListAPIView):
     serializer_class = ScopeCodeSerializer
 
 
-class ProjectViewSet(generics.ListAPIView):
+class ProjectsView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         data = {}
         try:
@@ -38,6 +38,89 @@ class ProjectViewSet(generics.ListAPIView):
             return Response(data)
         data = project_serializer(queryset)
         return Response(data)
+
+    def post(self, request, *args, **kwargs):
+        data_project = request.DATA.get('project')
+        new_project = {
+            'name': data_project.get('name', ''),
+            'project_number': data_project.get('project_number', ''),
+            'description': data_project.get('description', ''),
+            'programme_id': data_project.get('programme', {}).get('id', ''),
+            'municipality_id': data_project.get('municipality', {}).get('id', '')
+        }
+        if new_project['name'] == "" or new_project['programme_id'] == '' or new_project['municipality_id'] == '':
+            return Response({'status': status.HTTP_400_BAD_REQUEST})
+        project = Project(name=new_project['name'], project_number=new_project['project_number'],
+                          description=new_project['description'], programme_id=new_project['programme_id'],
+                          municipality_id=new_project['municipality_id'])
+        project.save()
+
+        data_scope_of_work = request.DATA.get('scope_of_work', [])
+
+        for scope in data_scope_of_work:
+            scope_code_id = scope.get('scope_code', {})
+            if scope_code_id != '':
+                scope_code_id = scope_code_id.get('id', '')
+            quantity = scope.get('quantity', None)
+            if scope_code_id:
+                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id,  project_id=project.id)
+                scope_of_work.save()
+            if quantity:
+                scope_of_work.quantity = quantity
+                scope_of_work.save()
+
+        data_project_role = request.DATA.get('project_role', [])
+        for project_role_item in data_project_role:
+            role_id = project_role_item.get('role', {}).get('id', '')
+            entity_name = project_role_item.get('entity_name', '')
+
+            if role_id and entity_name:
+                entity, create = Entity.objects.get_or_create(name=entity_name)
+                project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
+                project_role.save()
+
+        data_project_milestones = request.DATA.get('project_milestones', [])
+        for project_milestone in data_project_milestones:
+            completion_date = project_milestone.get('completion_date', '')
+            milestone_id = project_milestone.get('id', '')
+            if completion_date and milestone_id:
+                pm = ProjectMilestone(completion_date=dateutil.parser.parse(completion_date), milestone_id=milestone_id,
+                                      project_id=project.id)
+                pm.save()
+
+        data_planning = request.DATA.get('planning', [])
+        for planning in data_planning:
+            year = dateutil.parser.parse(planning.get('name', '')).year
+            allocated_budget = planning.get('allocated_budget', '')
+            allocated_planning_budget = planning.get('allocated_planning_budget', '')
+
+            budget = Budget(year=year, project_id=project.id)
+            budget.save()
+            if allocated_budget:
+                budget.allocated_budget = allocated_budget
+                budget.save()
+
+            if allocated_planning_budget:
+                budget.allocated_planning_budget = allocated_planning_budget
+                budget.save()
+
+            if year:
+                for month in planning.get('month', []):
+                    planned_expenses = month.get('planning', {}).get('amount', '')
+                    planned_progress = month.get('planning', {}).get('progress', '')
+                    month_id = month.get('id', '')
+                    if planned_expenses and planned_progress and month_id:
+                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
+                                     planned_progress=planned_progress, project_id=project.id)
+                        p.save()
+
+        project_financial = request.DATA.get('project_financial', {})
+        total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
+        if total_anticipated_cost:
+            pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
+            pf.save()
+
+        return Response({'status': status.HTTP_201_CREATED})
 
 
 class RolesViewSet(generics.ListAPIView):
@@ -156,6 +239,15 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         data = project_detail_serializer(object)
         return Response(data)
 
+    def put(self, request, *args, **kwargs):
+        print request.DATA.get('project', {})
+        project_id = request.DATA.get('project', {}).get('id', '')
+        project = Project.objects.get(id=project_id)
+
+        print project_id
+        print project
+        return Response({'status': status.HTTP_200_OK})
+
 
 class ProgressView(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
@@ -180,97 +272,3 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
             data += [{'month': monthly_submission.month, 'year': monthly_submission.year,
                       'comment': monthly_submission.comment, 'remedial_action': monthly_submission.remedial_action}]
         return Response(data)
-
-
-class CreateProject(generics.CreateAPIView):
-    def post(self, request, *args, **kwargs):
-        data_project = request.DATA.get('project')
-        new_project = {
-            'name': data_project.get('name', ''),
-            'project_number': data_project.get('project_number', ''),
-            'description': data_project.get('description', ''),
-            'programme_id': data_project.get('programme', {}).get('id', ''),
-            'municipality_id': data_project.get('municipality', {}).get('id', '')
-        }
-        if new_project['name'] == "" or new_project['programme_id'] == '' or new_project['municipality_id'] == '':
-            return Response({'status': status.HTTP_400_BAD_REQUEST})
-        project = Project(name=new_project['name'], project_number=new_project['project_number'],
-                          description=new_project['description'], programme_id=new_project['programme_id'],
-                          municipality_id=new_project['municipality_id'])
-        project.save()
-
-        data_scope_of_work = request.DATA.get('scope_of_work', [])
-
-        for scope in data_scope_of_work:
-            scope_code_id = scope.get('scope_code', {})
-            if scope_code_id != '':
-                scope_code_id = scope_code_id.get('id', '')
-            quantity = scope.get('quantity', None)
-            if scope_code_id:
-                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id,  project_id=project.id)
-                scope_of_work.save()
-            if quantity:
-                scope_of_work.quantity = quantity
-                scope_of_work.save()
-
-        data_project_role = request.DATA.get('project_role', [])
-        for project_role_item in data_project_role:
-            role_id = project_role_item.get('role', {}).get('id', '')
-            entity_name = project_role_item.get('entity_name', '')
-
-            if role_id and entity_name:
-                entity, create = Entity.objects.get_or_create(name=entity_name)
-                project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
-                project_role.save()
-
-        data_project_milestones = request.DATA.get('project_milestones', [])
-        for project_milestone in data_project_milestones:
-            completion_date = project_milestone.get('completion_date', '')
-            milestone_id = project_milestone.get('id', '')
-            if completion_date and milestone_id:
-                pm = ProjectMilestone(completion_date=dateutil.parser.parse(completion_date), milestone_id=milestone_id,
-                                      project_id=project.id)
-                pm.save()
-
-        data_planning = request.DATA.get('planning', [])
-        for planning in data_planning:
-            year = dateutil.parser.parse(planning.get('name', '')).year
-            allocated_budget = planning.get('allocated_budget', '')
-            allocated_planning_budget = planning.get('allocated_planning_budget', '')
-
-            budget = Budget(year=year, project_id=project.id)
-            budget.save()
-            if allocated_budget:
-                budget.allocated_budget = allocated_budget
-                budget.save()
-
-            if allocated_planning_budget:
-                budget.allocated_planning_budget = allocated_planning_budget
-                budget.save()
-
-            if year:
-                for month in planning.get('month', []):
-                    planned_expenses = month.get('planning', {}).get('amount', '')
-                    planned_progress = month.get('planning', {}).get('progress', '')
-                    month_id = month.get('id', '')
-                    if planned_expenses and planned_progress and month_id:
-                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
-                                     planned_progress=planned_progress, project_id=project.id)
-                        p.save()
-
-        project_financial = request.DATA.get('project_financial', {})
-        total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
-        if total_anticipated_cost:
-            pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
-            pf.save()
-
-        return Response({'status': status.HTTP_201_CREATED})
-
-
-class UpdateProject(generics.UpdateAPIView):
-    def post(self, request, *args, **kwargs):
-        print request.DATA.get('project', {})
-        # project_id = request.DATA.get('project', {}).get('id', '')
-        # project = Project.objects.get(project_id)
-
-        return Response({'status': status.HTTP_200_OK})
