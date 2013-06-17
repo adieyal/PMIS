@@ -4,6 +4,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from reversion.models import Revision
+import reversion
 
 
 MONTHS = (
@@ -118,7 +119,7 @@ class ProjectFinancial(models.Model):
 
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
-    allocated_budget = models.DecimalField(max_digits=20, decimal_places=2)
+    allocated_budget = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     allocated_planning_budget = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     project = models.ForeignKey(Project, related_name='budgets')
 
@@ -183,7 +184,7 @@ class Milestone(models.Model):
 
 
 class ProjectMilestone(models.Model):
-    completion_date = models.DateField(default=datetime.datetime.now)
+    completion_date = models.DateField(default=datetime.datetime.now, blank=True, null=True)
     project = models.ForeignKey(Project, related_name='project_milestone')
     milestone = models.ForeignKey(Milestone, related_name='project_milestone')
 
@@ -244,3 +245,6 @@ class GroupPerm(models.Model):
 class GroupPermObj(models.Model):
     group_perm = models.ManyToManyField(GroupPerm, related_name='group_perm_objs')
     project = models.ManyToManyField(Project, related_name='group_perm_objs')
+
+
+

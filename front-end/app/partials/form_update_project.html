@@ -209,7 +209,7 @@
                                         </p>
                                     </div>
                                     <div class="span3">
-                                        <input type="text" name="date" class="input-small" ng-model="milestone.completion_date" datepicker ng-required="true">
+                                        <input type="text" name="date" class="input-small" ng-model="milestone.completion_date" datepicker >
                                     </div>
                                     <div class="span3">
                                         <p class="error" ng-show="dateWrapForm.date.$error.required">Required!</p>
@@ -252,11 +252,11 @@
                                                     <div class="row-fluid">
                                                         <div class="span2">{{ y.name }}</div>
                                                         <div class="span5">
-                                                            <input type="text" name="input1" class="input-small" placeholder="budget" ng-model="y.budget" ng-pattern="number" ><br>
+                                                            <input type="text" name="input1" class="input-small" placeholder="budget" ng-model="y.allocated_planning_budget" ng-pattern="number" ><br>
                                                             <span class="error" ng-show="allocationWrapForm.input1.$error.pattern">There must be a number.</span>
                                                         </div>
                                                         <div class="span5">
-                                                            <input type="text" name="input2" class="input-small" placeholder="amount" ng-model="y.amount" ng-pattern="number" ng-required='true'><br>
+                                                            <input type="text" name="input2" class="input-small" placeholder="amount" ng-model="y.allocated_budget" ng-pattern="number"><br>
                                                             <p class="error" ng-show="allocationWrapForm.input2.$error.required">Required!</p>
                                                             <span class="error" ng-show="allocationWrapForm.input2.$error.pattern">There must be a number.</span>
                                                         </div>

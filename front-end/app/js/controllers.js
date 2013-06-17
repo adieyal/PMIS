@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['ngCookies'])
+angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
     .controller('MyCtrl1', ['$scope', '$http', '$routeParams', 'HOST', function($scope, $http, $routeParams, HOST) {
         $http.defaults.useXDomain = true;
 //        $scope.name = "BookCntl";
@@ -189,8 +189,8 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.wizard.planning.push($.extend({},
                     $scope.year_list[i],
                     {
-                        amount: "",
-                        budget: "",
+                        allocated_budget: "",
+                        allocated_planning_budget: "",
                         month: []
                     }
                 ));
@@ -238,8 +238,8 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.wizard.planning.push($.extend({},
                     {'name': year},
                     {
-                        amount: "",
-                        budget: "",
+                        allocated_budget: "",
+                        allocated_planning_budget: "",
                         month: months
                     }
                 ));
@@ -291,7 +291,7 @@ angular.module('myApp.controllers', ['ngCookies'])
         };
 
         $scope.submitForm = function(){
-            $http.post(HOST+'/api/create_project/', $scope.wizard)
+            $http.post(HOST+'/api/projects/', $scope.wizard)
                 .success(function(data, status, headers, config) {
                     $location.path('/');
                 })
@@ -312,13 +312,7 @@ angular.module('myApp.controllers', ['ngCookies'])
     })
     .controller('ProjectCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$resource', function ($scope, $routeParams, $http, HOST,$resource) {
         $scope.project_id = $routeParams.projectId;
-        console.log($scope.project_id)
-        var Project = $resource(HOST+'/api/project/:projectId/',
-            {projectId: $scope.project_id, port: 8000}, {});
-        $scope.project = Project.get({},function(){
-            console.log('send request')
-        });
-        $http.get(HOST+'/api/project/'+$scope.project_id+'/', {})
+        $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
                 $scope.project = data;
             })
@@ -326,7 +320,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.status = status;
             });
     }])
-    .controller('ProjectUpdateCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$location', function ($scope, $routeParams, $http, HOST, $location) {
+    .controller('ProjectUpdateCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$location', '$dialog', function ($scope, $routeParams, $http, HOST, $location, $dialog) {
         $scope.steps = ['one', 'two', 'three', 'four'];
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
@@ -358,7 +352,7 @@ angular.module('myApp.controllers', ['ngCookies'])
 
         $scope.project_id = $routeParams.projectId;
         console.log($scope.project_id)
-        $http.get(HOST+'/api/project/'+$scope.project_id+'/', {})
+        $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
                 $scope.wizard = data;
                 $http.get(HOST+'/api/districts/'+$scope.wizard.project.district.id+'/municipalities/', {})
@@ -368,6 +362,8 @@ angular.module('myApp.controllers', ['ngCookies'])
                     .error(function(data, status, headers, config) {
                         $scope.status = status;
                     });
+                $scope.update_years_record();
+                $scope.extend_milestones();
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -402,7 +398,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                 var l = data.length;
                 console.log(data)
                 for (var i=0; i<l; i++){
-//                    $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
+                    $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
                     if (data[i].name=='Consultant' || data[i].name=='Contractor'){
                         $scope.additional_roles.push(data[i]);
                     }
@@ -425,21 +421,34 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.status = status;
             });
 
-        $http.get(HOST+'/api/milestones/', {})
-            .success(function(data, status, headers, config) {
-                var l = data.length;
-                $scope.phases = [];
-                for (var i=0; i<l; i++){
-                    data[i].completion_date = "";
-                    if ($.inArray(data[i].phase, $scope.phases) == -1){
-                        $scope.phases.push(data[i].phase)
+        $scope.extend_milestones = function(){
+            var is_enter = false;
+            $http.get(HOST+'/api/milestones/', {})
+                .success(function(data, status, headers, config) {
+                    var l = data.length;
+                    $scope.phases = [];
+                    for (var i=0; i<l; i++){
+                        data[i].completion_date = "";
+                        if ($.inArray(data[i].phase, $scope.phases) == -1){
+                            $scope.phases.push(data[i].phase)
+                        }
+                        is_enter = false;
+                        $.each($scope.wizard.project.project_milestones, function(index, value){
+                            if (value.milestone_id==data[i].id){
+                                is_enter = true;
+                            }
+                        });
+                        if (!is_enter){
+                            $scope.wizard.project.project_milestones.push(data[i])
+                        }
                     }
-                }
-                $scope.wizard.project_milestones = data;
-            })
-            .error(function(data, status, headers, config) {
-                $scope.status = status;
-            });
+                    $scope.wizard.project_milestones = data;
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.status = status;
+                });
+        };
+
 
 
         $scope.year_list = [
@@ -461,28 +470,29 @@ angular.module('myApp.controllers', ['ngCookies'])
             {'name': 'Mar', 'id': 3}
         ];
 
-
-        $scope.create_years_record = function(){
-            var l1 = $scope.year_list.length;
+        $scope.planning = [];
+        $scope.update_years_record = function(){
             var l2 = $scope.month.length;
-            for(var i=0; i<l1; i++){
-                $scope.wizard.planning.push($.extend({},
-                    $scope.year_list[i],
-                    {
-                        amount: "",
-                        budget: "",
-                        month: []
+            var l3 = $scope.wizard.project.planning.length;
+            var is_enter = false;
+            for(var i=0; i<l3; i++){
+                for (var j=0; j<l2; j++){
+                    is_enter = false;
+                    $.each($scope.wizard.project.planning[i].month, function(index, value){
+                        if ($scope.month[j].id == value.month_id){
+                            is_enter = true
+                        }
+                    });
+                    if (!is_enter){
+                        $scope.wizard.project.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
+                            'amount': "",
+                            'progress': ""
+                        }}))
                     }
-                ));
-                for(var j=0; j<l2; j++){
-                    $scope.wizard.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
-                    }}));
                 }
             }
         };
-//        $scope.create_years_record();
+
 
 
         $scope.get_municipality = function(){
@@ -519,8 +529,8 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.wizard.project.planning.push($.extend({},
                     {'name': year},
                     {
-                        amount: "",
-                        budget: "",
+                        allocated_planning_budget: "",
+                        allocated_budget: "",
                         month: months
                     }
                 ));
@@ -571,26 +581,73 @@ angular.module('myApp.controllers', ['ngCookies'])
         $scope.handlePrevious = function() {
             $scope.step -= ($scope.isFirstStep()) ? 0 : 1;
         };
-
+        $scope.wizard.project.update_comment = '';
         $scope.submitForm = function(is_valid){
-            if (is_valid) {
-            $http.post(HOST+'/api/update_project/', $scope.wizard)
-                .success(function(data, status, headers, config) {
-                    $location.path('/');
-                })
-                .error(function(data, status, headers, config) {
-                    $scope.status = status;
-                });
-            }
-        };
-        $scope.handleNext = function(dismiss, is_valid) {
-            if (is_valid) {
-                if($scope.isLastStep()) {
-//                    dismiss();
-                    $scope.submitForm();
-                } else {
-                    $scope.step += 1;
+            if (!$scope.wizard.project.update_comment){
+                $scope.openDialog();
+            }else{
+                if (is_valid) {
+                $http.put(HOST+'/api/projects/'+$scope.project_id+'/', $scope.wizard)
+                    .success(function(data, status, headers, config) {
+                        $location.path('/');
+                    })
+                    .error(function(data, status, headers, config) {
+                        $scope.status = status;
+                    });
                 }
             }
+        };
+
+        $scope.handleNext = function(dismiss, is_valid) {
+            if (!$scope.wizard.project.update_comment){
+                $scope.openDialog();
+            }else{
+                if (is_valid) {
+                    if($scope.isLastStep()) {
+//                    dismiss();
+                        $scope.submitForm();
+                    } else {
+                        $scope.step += 1;
+                    }
+                }
+            }
+
+        };
+        var t = '<div class="modal-header">'+
+            '<h1>Update comment</h1>'+
+            '</div>'+
+            '<div class="modal-body">'+
+            '<div class="row-fluid">'+
+            '<textarea class="span12" ng-model="result"></textarea>'+
+            '</div>'+
+            '</div>'+
+            '<div class="modal-footer">'+
+            '<button ng-click="close(result)" class="btn btn-primary" >Update project</button>'+
+            '</div>';
+
+        $scope.opts = {
+            backdrop: true,
+            keyboard: true,
+            backdropClick: true,
+            template:  t, // OR: templateUrl: 'path/to/view.html',
+            controller: 'DialogCtl'
+
+        };
+
+        $scope.openDialog = function(){
+            var d = $dialog.dialog($scope.opts);
+            d.open().then(function(result){
+                if(result)
+                {
+                    $scope.wizard.project.update_comment = result;
+                    $scope.submitForm(true);
+                }
+            });
+        };
+
+    }])
+    .controller("DialogCtl", ["$scope", "dialog", function($scope, dialog){
+        $scope.close = function(result) {
+            dialog.close(result);
         };
     }]);

@@ -65,7 +65,7 @@ def project_detail_serializer(object):
     project_role = []
     for pr in object.project_roles.all():
         project_role += [{
-            ''
+            'id': pr.id,
             'role': {
                 'id': pr.role.id,
                 'name': pr.role.name
@@ -75,6 +75,7 @@ def project_detail_serializer(object):
     scope_of_work = []
     for sow in object.scope_of_works.all():
         scope_of_work += [{
+            'id': sow.id,
             'quantity': sow.quantity,
             'scope_code': {
                 'id': sow.scope_code.id,
@@ -86,22 +87,25 @@ def project_detail_serializer(object):
         month = []
         for p in object.plannings.filter(year=b.year):
             month += [{
+                      'id': p.id,
                       'name': p.get_month_display(),
-                      'id': p.month,
+                      'month_id': p.month,
                       'planning': {
                           'amount': p.planned_expenses,
                           'progress': p.planned_progress,
                       }}]
         planning += [{
+            'id': b.id,
             'name': b.year,
-            'amount': b.allocated_budget,
-            'budget': b.allocated_planning_budget,
+            'allocated_budget': b.allocated_budget,
+            'allocated_planning_budget': b.allocated_planning_budget,
             'month': month
         }]
     project_milestones = []
     for pm in object.project_milestone.all():
         project_milestones += [{
-            'id': pm.milestone.id,
+            'id': pm.id,
+            'milestone_id': pm.milestone.id,
             'name': pm.milestone.name,
             'phase': pm.milestone.phase,
             'order': pm.milestone.order,

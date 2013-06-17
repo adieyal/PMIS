@@ -74,10 +74,8 @@ class ProgrammeViewSetTest(TestCase):
 
     def test_get_municipalities_list(self):
 
-        data = {
-            'pk': self.clients.id,
-        }
-        response = self.client.get(reverse('api:programmes_view', kwargs=data), )
+        data = {}
+        response = self.client.get(reverse('api:programme_view', kwargs=data), )
         self.assertEqual(response.status_code, 401)
 
         #
@@ -87,17 +85,20 @@ class ProgrammeViewSetTest(TestCase):
 
 class ProjectViewSetTest(TestCase):
     def setUp(self):
-        # self.clients = factories.ClientFactory.create(id=1)
         self.programme = factories.ProgrammeFactory.create(id=1)
-        # self.district = factories.DistrictFactory.create(id=1)
-        # self.municipality = factories.MunicipalityFactory.create(district=self.district)
         self.project = factories.ProjectFactory.create(programme=self.programme)
-        # self.programme = factories.ProgrammeFactory.create(client=self.clients)
 
     def test_get_project_list(self):
-        print self.project.programme.id
-        data = {
-            'pk': self.project.programme.id,
-            }
-        response = self.client.get(reverse('api:project_view', kwargs=data), )
+        data = {}
+        response = self.client.get(reverse('api:projects_view', kwargs=data), )
+        self.assertEqual(response.status_code, 401)
+
+
+class ScopeCodeViewSetTest(TestCase):
+    def setUp(self):
+        self.scope_code = factories.ScopeCodeFactory.create()
+
+    def test_get_project_list(self):
+        data = {}
+        response = self.client.get(reverse('api:scope_codes_view', kwargs=data), )
         self.assertEqual(response.status_code, 401)

@@ -1,7 +1,7 @@
 from base import *
 
 ########## TEST SETTINGS
-TEST_RUNNER = 'discover_runner.DiscoverRunner'
+TEST_RUNNER = 'django_coverage.coverage_runner.CoverageRunner'
 TEST_DISCOVER_TOP_LEVEL = SITE_ROOT
 TEST_DISCOVER_ROOT = SITE_ROOT
 TEST_DISCOVER_PATTERN = "test_*.py"
@@ -19,3 +19,5 @@ DATABASES = {
 INSTALLED_APPS += (
     'django_coverage',
 )
+
+COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))

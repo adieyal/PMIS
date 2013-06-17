@@ -37,31 +37,39 @@ class ClientAdmin(admin.ModelAdmin):
 class ProgrammeAdmin(admin.ModelAdmin):
     fields = ('name', 'description', 'client')
 
+
 class ProjectFinancialInlineAdmin(admin.TabularInline):
     model = models.ProjectFinancial
+
 
 class BudgetInlineAdmin(admin.TabularInline):
     model = models.Budget
     extra = 0
 
+
 class PlanningInlineAdmin(admin.TabularInline):
     model = models.Planning
     extra = 0
+
 
 class ProjectMilestoneInlineAdmin(admin.TabularInline):
     model = models.ProjectMilestone
     extra = 0
 
+
 class ProjectRoleInlineAdmin(admin.TabularInline):
     model = models.ProjectRole
+
 
 class ScopeOfWorkInlineAdmin(admin.TabularInline):
     model = models.ScopeOfWork
     extra = 0
 
+
 class MonthlySubmissionInlineAdmin(admin.TabularInline):
     model = models.MonthlySubmission
     extra = 0
+
 
 class ProjectAdmin(CustomVersionAdmin):
     form = ProjectVersionedForm
@@ -110,7 +118,7 @@ class VarianceOrderAdmin(CustomVersionAdmin):
 
 class ProjectMilestoneAdmin(CustomVersionAdmin):
     form = ProjectMilestoneVersionedForm
-    list_filter = ('project', 'milestone',) 
+    list_filter = ('project', 'milestone',)
     list_display = ('project', 'milestone', 'completion_date')
 
 
