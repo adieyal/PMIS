@@ -156,8 +156,8 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'reversion.middleware.RevisionMiddleware',
     'project.apps.projects.middleware.XsSharing',
+    'reversion.middleware.RevisionMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 

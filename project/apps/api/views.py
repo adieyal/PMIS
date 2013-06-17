@@ -5,7 +5,8 @@ from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial
+import reversion
+from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial, Versioned
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
 
 
@@ -240,12 +241,43 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         return Response(data)
 
     def put(self, request, *args, **kwargs):
+        print request.user
         print request.DATA.get('project', {})
         project_id = request.DATA.get('project', {}).get('id', '')
-        project = Project.objects.get(id=project_id)
-
-        print project_id
+        project = request.DATA.get('project', {})
         print project
+        instance = Project.objects.get(id=project_id)
+        for item in instance._meta.fields:
+            if item.rel:
+                if getattr(instance, item.name).id == project.get(item.name, {}).get('id', ''):
+                    print "Don't change field: %s" % item.name
+                else:
+                    print '----------------------'
+                    print getattr(instance, item.name)
+                    print project.get(item.name)
+                    print "Change field: %s" % item.name
+                    print '----------------------'
+                    setattr(instance, '%s_id' % item.name, project.get(item.name, {}).get('id', ''))
+            else:
+                if getattr(instance, item.name) == project.get(item.name):
+                    print "Don't change field: %s" % item.name
+                else:
+                    print '----------------------'
+                    print getattr(instance, item.name)
+                    print project.get(item.name)
+                    print "Change field: %s" % item.name
+                    print '----------------------'
+                    setattr(instance, item.name, project.get(item.name))
+        with reversion.create_revision():
+            instance.save()
+            reversion.set_user(request.user)
+            print reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
+            # versioned = Versioned(reversion=reversion)
+            # print versioned.revision.id
+            # reversion.set_comment("Comment text...")
+        # instance.save()
+        print project_id
+        print instance
         return Response({'status': status.HTTP_200_OK})
 
 

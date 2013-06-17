@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['ngCookies'])
+angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
     .controller('MyCtrl1', ['$scope', '$http', '$routeParams', 'HOST', function($scope, $http, $routeParams, HOST) {
         $http.defaults.useXDomain = true;
 //        $scope.name = "BookCntl";
@@ -320,7 +320,7 @@ angular.module('myApp.controllers', ['ngCookies'])
                 $scope.status = status;
             });
     }])
-    .controller('ProjectUpdateCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$location', function ($scope, $routeParams, $http, HOST, $location) {
+    .controller('ProjectUpdateCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$location', '$dialog', function ($scope, $routeParams, $http, HOST, $location, $dialog) {
         $scope.steps = ['one', 'two', 'three', 'four'];
         $scope.scopes = ['scope_1'];
         $scope.step = 0;
@@ -581,26 +581,73 @@ angular.module('myApp.controllers', ['ngCookies'])
         $scope.handlePrevious = function() {
             $scope.step -= ($scope.isFirstStep()) ? 0 : 1;
         };
-
+        $scope.wizard.project.update_comment = '';
         $scope.submitForm = function(is_valid){
-            if (is_valid) {
-            $http.put(HOST+'/api/projects/'+$scope.project_id+'/', $scope.wizard)
-                .success(function(data, status, headers, config) {
-                    $location.path('/');
-                })
-                .error(function(data, status, headers, config) {
-                    $scope.status = status;
-                });
-            }
-        };
-        $scope.handleNext = function(dismiss, is_valid) {
-            if (is_valid) {
-                if($scope.isLastStep()) {
-//                    dismiss();
-                    $scope.submitForm();
-                } else {
-                    $scope.step += 1;
+            if (!$scope.wizard.project.update_comment){
+                $scope.openDialog();
+            }else{
+                if (is_valid) {
+                $http.put(HOST+'/api/projects/'+$scope.project_id+'/', $scope.wizard)
+                    .success(function(data, status, headers, config) {
+                        $location.path('/');
+                    })
+                    .error(function(data, status, headers, config) {
+                        $scope.status = status;
+                    });
                 }
             }
+        };
+
+        $scope.handleNext = function(dismiss, is_valid) {
+            if (!$scope.wizard.project.update_comment){
+                $scope.openDialog();
+            }else{
+                if (is_valid) {
+                    if($scope.isLastStep()) {
+//                    dismiss();
+                        $scope.submitForm();
+                    } else {
+                        $scope.step += 1;
+                    }
+                }
+            }
+
+        };
+        var t = '<div class="modal-header">'+
+            '<h1>Update comment</h1>'+
+            '</div>'+
+            '<div class="modal-body">'+
+            '<div class="row-fluid">'+
+            '<textarea class="span12" ng-model="result"></textarea>'+
+            '</div>'+
+            '</div>'+
+            '<div class="modal-footer">'+
+            '<button ng-click="close(result)" class="btn btn-primary" >Update project</button>'+
+            '</div>';
+
+        $scope.opts = {
+            backdrop: true,
+            keyboard: true,
+            backdropClick: true,
+            template:  t, // OR: templateUrl: 'path/to/view.html',
+            controller: 'DialogCtl'
+
+        };
+
+        $scope.openDialog = function(){
+            var d = $dialog.dialog($scope.opts);
+            d.open().then(function(result){
+                if(result)
+                {
+                    $scope.wizard.project.update_comment = result;
+                    $scope.submitForm(true);
+                }
+            });
+        };
+
+    }])
+    .controller("DialogCtl", ["$scope", "dialog", function($scope, dialog){
+        $scope.close = function(result) {
+            dialog.close(result);
         };
     }]);

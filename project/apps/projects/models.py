@@ -4,6 +4,7 @@ from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from reversion.models import Revision
+import reversion
 
 
 MONTHS = (
@@ -244,3 +245,6 @@ class GroupPerm(models.Model):
 class GroupPermObj(models.Model):
     group_perm = models.ManyToManyField(GroupPerm, related_name='group_perm_objs')
     project = models.ManyToManyField(Project, related_name='group_perm_objs')
+
+
+

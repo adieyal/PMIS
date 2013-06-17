@@ -118,7 +118,7 @@ class VarianceOrderAdmin(CustomVersionAdmin):
 
 class ProjectMilestoneAdmin(CustomVersionAdmin):
     form = ProjectMilestoneVersionedForm
-    list_filter = ('project', 'milestone',) 
+    list_filter = ('project', 'milestone',)
     list_display = ('project', 'milestone', 'completion_date')
 
 
