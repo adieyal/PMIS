@@ -70,7 +70,10 @@ def project_detail_serializer(object):
                 'id': pr.role.id,
                 'name': pr.role.name
             },
-            'entity_name': pr.entity.name
+            'entity': {
+                'id': pr.entity.id,
+                'name': pr.entity.name
+            }
         }]
     scope_of_work = []
     for sow in object.scope_of_works.all():
@@ -111,6 +114,10 @@ def project_detail_serializer(object):
             'order': pm.milestone.order,
             'completion_date': pm.completion_date
         }]
+    try:
+        total_anticipated_cost = object.project_financial.total_anticipated_cost
+    except:
+        total_anticipated_cost = ''
     data = {
         'project': {
             'id': object.id,
@@ -118,7 +125,7 @@ def project_detail_serializer(object):
             'description': object.description,
             'project_number': object.project_number,
             'project_financial': {
-                'total_anticipated_cost': object.project_financial.total_anticipated_cost
+                'total_anticipated_cost': total_anticipated_cost
             },
             'district': {
                 'id': object.municipality.district.id

@@ -153,25 +153,13 @@
                                 {{ role_item.role.name }}:
                             </div>
                             <div class="span4">
-                                <input type="text" class="input-large" name="r" auto-complete ui-items="entities" ng-model="role_item.entity_name" ng-required="true">
+                                <select chosen data-placeholder="Select entity" disable-search="false" ng-model="role_item.entity" ng-options="e.name for e in entities" ></select>
                             </div>
                             <div class="span4">
                                 <p class="error" ng-show="roleWrapForm.r.$error.required">Required!</p>
                             </div>
                         </ng-form>
                     </div>
-                    <div class="row-fluid">
-                        <div class="span4">
-                            <p>Select role:</p>
-                        </div>
-                        <div class="span4">
-                            <select name="additional-roles" id="additional-roles" ng-model='add_role' ng-options="ar.name for ar in additional_roles"></select>
-                        </div>
-                        <div class="span4">
-                            <button class="btn"  ng-disabled="!add_role.id" ng-click='addRoleItem(add_role, add_role.id)'>+Add</button>
-                        </div>
-                    </div>
-
                 </fieldset>
                 <div >
                     <a class="btn" ng-click="handlePrevious()" ng-show="!isFirstStep()">Back</a>
