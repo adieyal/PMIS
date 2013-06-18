@@ -527,12 +527,6 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
             }
         };
 
-        $scope.addRoleItem = function(add_role, is_selected){
-            if (is_selected){
-                $scope.wizard.project.project_role.push({'role': add_role, 'entity_name': ''})
-            }
-        };
-
         $scope.addScopeOfWork = function(){
             $scope.wizard.project.scope_of_work.push({'quantity': "", 'scope_code': ""});
         };
