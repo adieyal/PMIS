@@ -189,8 +189,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                 ));
                 for(var j=0; j<l2; j++){
                     $scope.wizard.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
             }
@@ -224,8 +224,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                 var months = [];
                 for(var j=0; j<l2; j++){
                     months.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
                 $scope.wizard.planning.push($.extend({},
@@ -475,8 +475,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                     });
                     if (!is_enter){
                         $scope.wizard.project.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
-                            'amount': "",
-                            'progress': ""
+                            'planned_expenses': "",
+                            'planned_progress': ""
                         }}))
                     }
                 }
@@ -512,8 +512,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                 var months = [];
                 for(var j=0; j<l2; j++){
                     months.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
                 $scope.wizard.project.planning.push($.extend({},

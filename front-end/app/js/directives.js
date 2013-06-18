@@ -22,7 +22,7 @@ angular.module('myApp.directives', ['$strap.directives', 'ui.bootstrap'])
         $(function(){
             element.datepicker({
                 showOn:"both",
-                buttonImage: "../img/calendar.png",
+                buttonImage: "/img/calendar.png",
                 changeYear:true,
                 changeMonth:true,
                 dateFormat:'yy-mm-dd',

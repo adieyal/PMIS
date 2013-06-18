@@ -222,7 +222,7 @@
                             <div class="row-fluid">
                                 <div class="span3">Anticipated cost:</div>
                                 <div class="span5">
-                                    <input type="text" name="anticipated_cost" class="input-large" ng-model="wizard.project.project_financial.total_anticipated_cost" ng-pattern="number" ng-required="true">
+                                    <input type="text" name="anticipated_cost" class="input-large" ng-model="wizard.project.project_financial.total_anticipated_cost" ng-pattern="number" >
                                 </div>
                                 <div class="span4">
                                     <p class="error" ng-show="step4form.anticipated_cost.$error.required">Required!</p>
@@ -318,11 +318,11 @@
                                                                     {{ item.name.substring(0, 3) }}
                                                                 </div>
                                                                 <div class="span5">
-                                                                    <input type="text" class="input-mini" placeholder="amount" ng-model='item.planning.amount' ng-pattern="number" ng-required='true'>
+                                                                    <input type="text" class="input-mini" placeholder="amount" ng-model='item.planning.planned_expenses' ng-pattern="number">
 
                                                                 </div>
                                                                 <div class="span5">
-                                                                    <input type="text" class="input-mini" placeholder="%" ng-model="item.planning.progress" ng-pattern="number" ng-required='true'>
+                                                                    <input type="text" class="input-mini" placeholder="%" ng-model="item.planning.planned_progress" ng-pattern="number">
 
                                                                 </div>
                                                             </div>

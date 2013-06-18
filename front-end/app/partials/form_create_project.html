@@ -206,7 +206,7 @@
                                         <div class="row-fluid">
                                             <div class="span3">Start date:</div>
                                             <div class="span5">
-                                                <input type="text" class="input-large" name="start_date" ng-model="wizard.start_date" datepicker placeholder="prepopulated from first milestone" ng-required="true">
+                                                <input type="text" class="input-large" name="start_date" ng-model="wizard.start_date" datepicker placeholder="prepopulated from first milestone" >
                                             </div>
                                             <div class="span4">
                                                 <p class="error" ng-show="step4form.start_date.$error.required">Required!</p>
@@ -215,7 +215,7 @@
                                         <div class="row-fluid">
                                             <div class="span3">Anticipated cost:</div>
                                             <div class="span5">
-                                                <input type="text" name="anticipated_cost" class="input-large" ng-model="wizard.project_financial.total_anticipated_cost" ng-pattern="number" ng-required="true">
+                                                <input type="text" name="anticipated_cost" class="input-large" ng-model="wizard.project_financial.total_anticipated_cost" ng-pattern="number" >
                                             </div>
                                             <div class="span4">
                                                 <p class="error" ng-show="step4form.anticipated_cost.$error.required">Required!</p>
@@ -311,11 +311,11 @@
                                                                                 {{ item.name }}
                                                                             </div>
                                                                             <div class="span5">
-                                                                                <input type="text" class="input-mini" placeholder="amount" ng-model='item.planning.amount' ng-pattern="number" ng-required='true'>
+                                                                                <input type="text" class="input-mini" placeholder="amount" ng-model='item.planning.planned_expenses' ng-pattern="number">
 
                                                                             </div>
                                                                             <div class="span5">
-                                                                                <input type="text" class="input-mini" placeholder="%" ng-model="item.planning.progress" ng-pattern="number" ng-required='true'>
+                                                                                <input type="text" class="input-mini" placeholder="%" ng-model="item.planning.planned_progress" ng-pattern="number">
 
                                                                             </div>
                                                                         </div>

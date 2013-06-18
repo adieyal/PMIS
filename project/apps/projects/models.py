@@ -155,8 +155,8 @@ class ScopeOfWork(models.Model):
 class Planning(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
-    planned_expenses = models.FloatField()
-    planned_progress = models.FloatField()
+    planned_expenses = models.FloatField(blank=True, null=True)
+    planned_progress = models.FloatField(blank=True, null=True)
     project = models.ForeignKey(Project, related_name='plannings')
 
     def __unicode__(self):

@@ -106,12 +106,15 @@ class ProjectsView(generics.ListAPIView):
 
             if year:
                 for month in planning.get('month', []):
-                    planned_expenses = month.get('planning', {}).get('amount', '')
-                    planned_progress = month.get('planning', {}).get('progress', '')
+                    planned_expenses = month.get('planning', {}).get('planned_expenses', '')
+                    planned_progress = month.get('planning', {}).get('planned_progress', '')
                     month_id = month.get('id', '')
-                    if planned_expenses and planned_progress and month_id:
-                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
-                                     planned_progress=planned_progress, project_id=project.id)
+                    if month_id:
+                        p = Planning(month=month_id, year=year, project_id=project.id)
+                        if planned_expenses:
+                            p.planned_expenses = planned_expenses
+                        if planned_progress:
+                            p.planned_progress = planned_progress
                         p.save()
 
         project_financial = request.DATA.get('project_financial', {})
@@ -288,6 +291,32 @@ class ProjectDetailView(generics.SingleObjectAPIView):
                     project_role_obj.save()
             except ProjectRole.DoesNotExist:
                 pass
+        planning = project.get('planning', [])
+        print planning
+        for p in planning:
+            year = dateutil.parser.parse(p.get('name', '')).year
+            month = p.get('month', [])
+            for m in month:
+                planning_id = m.get('id', '')
+                planned_expenses = m.get('planning', {}).get('planned_expenses', '')
+                planned_progress = m.get('planning', {}).get('planned_progress', '')
+                month_id = m.get('month_id', '')
+                if planning_id:
+                    planning_obj = Planning.objects.get(id=planning_id)
+                    if planning_obj.planned_expenses != planned_expenses:
+                        planning_obj.planned_expenses = planned_expenses
+                        planning_obj.save()
+                    if planning_obj.planned_progress != planned_progress:
+                        planning_obj.planned_progress = planned_progress
+                        planning_obj.save()
+                else:
+                    if year and month_id:
+                        planning_obj = Planning(month=month_id, year=year, project_id=instance.id)
+                        if planned_expenses:
+                            planning_obj.planned_expenses = planned_expenses
+                        if planned_progress:
+                            planning_obj.planned_progress = planned_progress
+                        p.save()
 
         with reversion.create_revision():
             instance.save()

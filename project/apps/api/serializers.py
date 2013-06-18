@@ -71,8 +71,7 @@ def project_detail_serializer(object):
                 'name': pr.role.name
             },
             'entity': {
-                'id': pr.entity.id,
-                'name': pr.entity.name
+                'id': pr.entity_id,
             }
         }]
     scope_of_work = []
@@ -94,8 +93,8 @@ def project_detail_serializer(object):
                       'name': p.get_month_display(),
                       'month_id': p.month,
                       'planning': {
-                          'amount': p.planned_expenses,
-                          'progress': p.planned_progress,
+                          'planned_expenses': p.planned_expenses,
+                          'planned_progress': p.planned_progress,
                       }}]
         planning += [{
             'id': b.id,
@@ -128,7 +127,8 @@ def project_detail_serializer(object):
                 'total_anticipated_cost': total_anticipated_cost
             },
             'district': {
-                'id': object.municipality.district.id
+                'id': object.municipality.district.id,
+                'name': object.municipality.district.name
             },
             'programme': {
                 'id': object.programme.id,
