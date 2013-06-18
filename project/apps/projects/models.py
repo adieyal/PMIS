@@ -246,5 +246,9 @@ class GroupPermObj(models.Model):
     group_perm = models.ManyToManyField(GroupPerm, related_name='group_perm_objs')
     project = models.ManyToManyField(Project, related_name='group_perm_objs')
 
-
-
+    def __unicode__(self):
+        projects = self.project.all()
+        s_projects = " ".join(map(str, projects))
+        perms = self.group_perm.all()
+        s_perms = ", ".join(map(str, perms))
+        return "%s (%s)" % (s_projects, s_perms)
