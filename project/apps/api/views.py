@@ -73,11 +73,10 @@ class ProjectsView(generics.ListAPIView):
         data_project_role = request.DATA.get('project_role', [])
         for project_role_item in data_project_role:
             role_id = project_role_item.get('role', {}).get('id', '')
-            entity_name = project_role_item.get('entity_name', '')
+            entity_id = project_role_item.get('entity', {}).get('id', '')
 
-            if role_id and entity_name:
-                entity, create = Entity.objects.get_or_create(name=entity_name)
-                project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
+            if role_id and entity_id:
+                project_role = ProjectRole(project_id=project.id, entity_id=entity_id, role_id=role_id)
                 project_role.save()
 
         data_project_milestones = request.DATA.get('project_milestones', [])
@@ -107,12 +106,15 @@ class ProjectsView(generics.ListAPIView):
 
             if year:
                 for month in planning.get('month', []):
-                    planned_expenses = month.get('planning', {}).get('amount', '')
-                    planned_progress = month.get('planning', {}).get('progress', '')
+                    planned_expenses = month.get('planning', {}).get('planned_expenses', '')
+                    planned_progress = month.get('planning', {}).get('planned_progress', '')
                     month_id = month.get('id', '')
-                    if planned_expenses and planned_progress and month_id:
-                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
-                                     planned_progress=planned_progress, project_id=project.id)
+                    if month_id:
+                        p = Planning(month=month_id, year=year, project_id=project.id)
+                        if planned_expenses:
+                            p.planned_expenses = planned_expenses
+                        if planned_progress:
+                            p.planned_progress = planned_progress
                         p.save()
 
         project_financial = request.DATA.get('project_financial', {})
@@ -268,14 +270,59 @@ class ProjectDetailView(generics.SingleObjectAPIView):
                     print "Change field: %s" % item.name
                     print '----------------------'
                     setattr(instance, item.name, project.get(item.name))
+        project_role = project.get('project_role', {})
+        print project_role
+        for pr in project_role:
+            pr_id = pr.get('id', '')
+            role_id = pr.get('role', {}).get('id', '')
+            entity_id = pr.get('entity', {}).get('id', '')
+
+            try:
+                if pr_id:
+                    project_role_obj = ProjectRole.objects.get(id=pr_id)
+                    if project_role_obj.role_id != role_id:
+                        project_role_obj.role_id = role_id
+                        project_role_obj.save()
+                    if project_role_obj.entity_id != entity_id:
+                        project_role_obj.entity_id = entity_id
+                        project_role_obj.save()
+                else:
+                    project_role_obj = ProjectRole(role_id=role_id, entity_id=entity_id, project_id=instance.id)
+                    project_role_obj.save()
+            except ProjectRole.DoesNotExist:
+                pass
+        planning = project.get('planning', [])
+        print planning
+        for p in planning:
+            year = dateutil.parser.parse(p.get('name', '')).year
+            month = p.get('month', [])
+            for m in month:
+                planning_id = m.get('id', '')
+                planned_expenses = m.get('planning', {}).get('planned_expenses', '')
+                planned_progress = m.get('planning', {}).get('planned_progress', '')
+                month_id = m.get('month_id', '')
+                if planning_id:
+                    planning_obj = Planning.objects.get(id=planning_id)
+                    if planning_obj.planned_expenses != planned_expenses:
+                        planning_obj.planned_expenses = planned_expenses
+                        planning_obj.save()
+                    if planning_obj.planned_progress != planned_progress:
+                        planning_obj.planned_progress = planned_progress
+                        planning_obj.save()
+                else:
+                    if year and month_id:
+                        planning_obj = Planning(month=month_id, year=year, project_id=instance.id)
+                        if planned_expenses:
+                            planning_obj.planned_expenses = planned_expenses
+                        if planned_progress:
+                            planning_obj.planned_progress = planned_progress
+                        p.save()
+
         with reversion.create_revision():
             instance.save()
             reversion.set_user(request.user)
-            print reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
-            # versioned = Versioned(reversion=reversion)
-            # print versioned.revision.id
-            # reversion.set_comment("Comment text...")
-        # instance.save()
+            reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
+
         print project_id
         print instance
         return Response({'status': status.HTTP_200_OK})

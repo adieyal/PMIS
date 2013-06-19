@@ -36,6 +36,10 @@ class ClientAdmin(admin.ModelAdmin):
 
 class ProgrammeAdmin(admin.ModelAdmin):
     fields = ('name', 'description', 'client')
+    list_display = ('name', 'client')
+    list_filter = ('client',)
+    
+
 
 
 class ProjectFinancialInlineAdmin(admin.TabularInline):

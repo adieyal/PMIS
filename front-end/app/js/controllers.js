@@ -2,7 +2,7 @@
 
 /* Controllers */
 
-angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
+angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.directives'])
     .controller('MyCtrl1', ['$scope', '$http', '$routeParams', 'HOST', function($scope, $http, $routeParams, HOST) {
         $http.defaults.useXDomain = true;
 //        $scope.name = "BookCntl";
@@ -122,10 +122,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
             .success(function(data, status, headers, config) {
                 var l = data.length;
                 for (var i=0; i<l; i++){
-                    $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
-                    if (data[i].name=='Consultant' || data[i].name=='Contractor'){
-                        $scope.additional_roles.push(data[i]);
-                    }
+                    $scope.wizard.project_role.push({'role': data[i], 'entity': {}});
                 }
 
             })
@@ -135,11 +132,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
 
         $http.get(HOST+'/api/entities/', {})
             .success(function(data, status, headers, config) {
-                var l = data.length;
-                $scope.entities = [];
-                for (var i=0; i<l; i++){
-                    $scope.entities.push(data[i].name);
-                }
+                $scope.entities = data;
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -196,8 +189,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                 ));
                 for(var j=0; j<l2; j++){
                     $scope.wizard.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
             }
@@ -231,8 +224,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                 var months = [];
                 for(var j=0; j<l2; j++){
                     months.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
                 $scope.wizard.planning.push($.extend({},
@@ -246,11 +239,6 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
             }
         };
 
-        $scope.addRoleItem = function(add_role, is_selected){
-            if (is_selected){
-                $scope.wizard.project_role.push({'role': add_role, 'entity_name': ''})
-            };
-        };
 
         $scope.addScopeOfWork = function(){
             $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': ""});
@@ -300,14 +288,14 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                 });
         };
         $scope.handleNext = function(dismiss, is_valid) {
-            if (is_valid) {
+//            if (is_valid) {
                 if($scope.isLastStep()) {
 //                    dismiss();
                     $scope.submitForm();
                 } else {
                     $scope.step += 1;
                 }
-            }
+//            }
         };
     })
     .controller('ProjectCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$resource', function ($scope, $routeParams, $http, HOST,$resource) {
@@ -364,6 +352,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                     });
                 $scope.update_years_record();
                 $scope.extend_milestones();
+                $scope.extend_project_role();
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -392,30 +381,31 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
             .error(function(data, status, headers, config) {
                 $scope.status = status;
             });
-
-        $http.get(HOST+'/api/roles/', {})
-            .success(function(data, status, headers, config) {
-                var l = data.length;
-                console.log(data)
-                for (var i=0; i<l; i++){
-                    $scope.wizard.project_role.push({'role': data[i], 'entity_name': ''});
-                    if (data[i].name=='Consultant' || data[i].name=='Contractor'){
-                        $scope.additional_roles.push(data[i]);
+        $scope.extend_project_role = function(){
+            $http.get(HOST+'/api/roles/', {})
+                .success(function(data, status, headers, config) {
+                    var l = data.length;
+                    var is_enter = false;
+                    for (var i=0; i<l; i++){
+                        is_enter = false;
+                        $.each($scope.wizard.project.project_role, function(index, value){
+                            if (value.role.id==data[i].id){
+                                is_enter = true;
+                            }
+                        });
+                        if (!is_enter){
+                            $scope.wizard.project.project_role.push({'role': data[i], 'id':'', 'entity': {'id': ''}});
+                        }
                     }
-                }
-
-            })
-            .error(function(data, status, headers, config) {
-                $scope.status = status;
-            });
+                })
+                .error(function(data, status, headers, config) {
+                    $scope.status = status;
+                });
+        };
 
         $http.get(HOST+'/api/entities/', {})
             .success(function(data, status, headers, config) {
-                var l = data.length;
-                $scope.entities = [];
-                for (var i=0; i<l; i++){
-                    $scope.entities.push(data[i].name);
-                }
+                $scope.entities = data;
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -485,8 +475,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                     });
                     if (!is_enter){
                         $scope.wizard.project.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
-                            'amount': "",
-                            'progress': ""
+                            'planned_expenses': "",
+                            'planned_progress': ""
                         }}))
                     }
                 }
@@ -522,8 +512,8 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                 var months = [];
                 for(var j=0; j<l2; j++){
                     months.push($.extend({},$scope.month[j],{'planning': {
-                        'amount': "",
-                        'progress': ""
+                        'planned_expenses': "",
+                        'planned_progress': ""
                     }}));
                 }
                 $scope.wizard.project.planning.push($.extend({},
@@ -534,12 +524,6 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap'])
                         month: months
                     }
                 ));
-            }
-        };
-
-        $scope.addRoleItem = function(add_role, is_selected){
-            if (is_selected){
-                $scope.wizard.project.project_role.push({'role': add_role, 'entity_name': ''})
             }
         };
 

@@ -70,7 +70,9 @@ def project_detail_serializer(object):
                 'id': pr.role.id,
                 'name': pr.role.name
             },
-            'entity_name': pr.entity.name
+            'entity': {
+                'id': pr.entity_id,
+            }
         }]
     scope_of_work = []
     for sow in object.scope_of_works.all():
@@ -91,8 +93,8 @@ def project_detail_serializer(object):
                       'name': p.get_month_display(),
                       'month_id': p.month,
                       'planning': {
-                          'amount': p.planned_expenses,
-                          'progress': p.planned_progress,
+                          'planned_expenses': p.planned_expenses,
+                          'planned_progress': p.planned_progress,
                       }}]
         planning += [{
             'id': b.id,
@@ -111,6 +113,10 @@ def project_detail_serializer(object):
             'order': pm.milestone.order,
             'completion_date': pm.completion_date
         }]
+    try:
+        total_anticipated_cost = object.project_financial.total_anticipated_cost
+    except:
+        total_anticipated_cost = ''
     data = {
         'project': {
             'id': object.id,
@@ -118,10 +124,11 @@ def project_detail_serializer(object):
             'description': object.description,
             'project_number': object.project_number,
             'project_financial': {
-                'total_anticipated_cost': object.project_financial.total_anticipated_cost
+                'total_anticipated_cost': total_anticipated_cost
             },
             'district': {
-                'id': object.municipality.district.id
+                'id': object.municipality.district.id,
+                'name': object.municipality.district.name
             },
             'programme': {
                 'id': object.programme.id,
