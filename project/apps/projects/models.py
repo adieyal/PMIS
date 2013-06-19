@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models import Q, F, Count
 from reversion.models import Revision
 import reversion
 
@@ -68,7 +69,7 @@ class Programme(models.Model):
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
-        return self.filter(group_perm_objs__group_perm__user__id=user_id).distinct()
+        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
 
 
 class Project(models.Model):
@@ -245,6 +246,3 @@ class GroupPerm(models.Model):
 class GroupPermObj(models.Model):
     group_perm = models.ManyToManyField(GroupPerm, related_name='group_perm_objs')
     project = models.ManyToManyField(Project, related_name='group_perm_objs')
-
-
-
