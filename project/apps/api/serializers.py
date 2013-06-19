@@ -115,8 +115,10 @@ def project_detail_serializer(object):
         }]
     try:
         total_anticipated_cost = object.project_financial.total_anticipated_cost
+        id = object.project_financial.id
     except:
         total_anticipated_cost = ''
+        id = ''
     data = {
         'project': {
             'id': object.id,
@@ -124,6 +126,7 @@ def project_detail_serializer(object):
             'description': object.description,
             'project_number': object.project_number,
             'project_financial': {
+                'id': id,
                 'total_anticipated_cost': total_anticipated_cost
             },
             'district': {

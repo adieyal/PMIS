@@ -243,40 +243,21 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         return Response(data)
 
     def put(self, request, *args, **kwargs):
-        print request.user
-        print request.DATA.get('project', {})
         project_id = request.DATA.get('project', {}).get('id', '')
         project = request.DATA.get('project', {})
-        print project
         instance = Project.objects.get(id=project_id)
         for item in instance._meta.fields:
             if item.rel:
-                if getattr(instance, item.name).id == project.get(item.name, {}).get('id', ''):
-                    print "Don't change field: %s" % item.name
-                else:
-                    print '----------------------'
-                    print getattr(instance, item.name)
-                    print project.get(item.name)
-                    print "Change field: %s" % item.name
-                    print '----------------------'
+                if getattr(instance, item.name).id != project.get(item.name, {}).get('id', ''):
                     setattr(instance, '%s_id' % item.name, project.get(item.name, {}).get('id', ''))
             else:
-                if getattr(instance, item.name) == project.get(item.name):
-                    print "Don't change field: %s" % item.name
-                else:
-                    print '----------------------'
-                    print getattr(instance, item.name)
-                    print project.get(item.name)
-                    print "Change field: %s" % item.name
-                    print '----------------------'
+                if getattr(instance, item.name) != project.get(item.name):
                     setattr(instance, item.name, project.get(item.name))
         project_role = project.get('project_role', {})
-        print project_role
         for pr in project_role:
             pr_id = pr.get('id', '')
             role_id = pr.get('role', {}).get('id', '')
             entity_id = pr.get('entity', {}).get('id', '')
-
             try:
                 if pr_id:
                     project_role_obj = ProjectRole.objects.get(id=pr_id)
@@ -292,10 +273,29 @@ class ProjectDetailView(generics.SingleObjectAPIView):
             except ProjectRole.DoesNotExist:
                 pass
         planning = project.get('planning', [])
-        print planning
         for p in planning:
             year = dateutil.parser.parse(p.get('name', '')).year
             month = p.get('month', [])
+            allocated_budget = p.get('allocated_budget', '')
+            allocated_planning_budget = p.get('allocated_planning_budget', '')
+            p_id = p.get('id', '')
+            if year:
+                if p_id:
+                    p_obj = Budget.objects.get(id=p_id)
+                    if p_obj.allocated_budget != allocated_budget:
+                        p_obj.allocated_budget = allocated_budget
+                        p_obj.save()
+                    if p_obj.allocated_planning_budget != allocated_planning_budget:
+                        p_obj.allocated_planning_budget = allocated_planning_budget
+                        p_obj.save()
+                else:
+                    p_obj = Budget(year=year, project_id=instance.id)
+                    if allocated_budget:
+                        p_obj.allocated_budget = allocated_budget
+                    if allocated_planning_budget:
+                        p_obj.allocated_planning_budget = allocated_planning_budget
+                    p_obj.save()
+
             for m in month:
                 planning_id = m.get('id', '')
                 planned_expenses = m.get('planning', {}).get('planned_expenses', '')
@@ -316,15 +316,63 @@ class ProjectDetailView(generics.SingleObjectAPIView):
                             planning_obj.planned_expenses = planned_expenses
                         if planned_progress:
                             planning_obj.planned_progress = planned_progress
-                        p.save()
+                        planning_obj.save()
+
+        project_milestones = project.get('project_milestones', [])
+        for pm in project_milestones:
+            pm_id = pm.get('id', '')
+            completion_date = pm.get('completion_date', '')
+            milestone_id = pm.get('milestone_id', '')
+            if pm_id:
+                pm_obj = ProjectMilestone.objects.get(id=pm_id)
+                if completion_date and pm_obj.completion_date != dateutil.parser.parse(completion_date):
+                    pm_obj.completion_date = dateutil.parser.parse(completion_date)
+                    pm_obj.save()
+            else:
+                pm_obj = ProjectMilestone(milestone_id=milestone_id, project_id=instance.id)
+                if completion_date:
+                    pm_obj.completion_date = dateutil.parser.parse(completion_date)
+                else:
+                    pm_obj.completion_date = None
+                pm_obj.save()
+        scope_of_work = project.get('scope_of_work')
+        for sow in scope_of_work:
+            sow_id = sow.get('id', '')
+            quantity = sow.get('quantity', '')
+            scope_code_id = sow.get('scope_code', {}).get('id', '')
+            if sow_id:
+                sow_obj = ScopeOfWork.objects.get(id=sow_id)
+                if sow_obj.quantity != quantity:
+                    sow_obj.quantity = quantity
+                    sow_obj.save()
+                if scope_code_id and sow_obj.scope_code_id != scope_code_id:
+                    sow_obj.scope_code_id = scope_code_id
+                    sow_obj.save()
+            else:
+                if scope_code_id:
+                    sow_obj = ScopeOfWork(project_id=instance.id, scope_code_id=scope_code_id)
+                    if quantity:
+                        sow_obj.quantity = quantity
+                    sow_obj.save()
+        project_financial = project.get('project_financial', {})
+        project_financial_id = project_financial.get('id', '')
+        project_financial_total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
+        if project_financial_id:
+            pf_obj = ProjectFinancial.objects.get(id=project_financial_id)
+            if pf_obj.total_anticipated_cost != project_financial_total_anticipated_cost:
+                pf_obj.total_anticipated_cost = project_financial_total_anticipated_cost
+                pf_obj.save()
+        else:
+            pf_obj = ProjectFinancial(project_id=instance.id)
+            if project_financial_total_anticipated_cost:
+                pf_obj.total_anticipated_cost = project_financial_total_anticipated_cost
+            pf_obj.save()
 
         with reversion.create_revision():
             instance.save()
             reversion.set_user(request.user)
             reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
 
-        print project_id
-        print instance
         return Response({'status': status.HTTP_200_OK})
 
 

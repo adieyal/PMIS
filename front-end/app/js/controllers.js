@@ -91,7 +91,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         $scope.wizard.project.municipality = {};
         $scope.wizard.project_role = [];
         $scope.wizard.project_financial = {};
-        $scope.wizard.scope_of_work = [{'quantity': "", 'scope_code': ""}];
+        $scope.wizard.scope_of_work = [{'quantity': "", 'scope_code': {}}];
         $scope.wizard.planning = [];
         $scope.additional_roles = [];
         $scope.add_role = {};
@@ -241,7 +241,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
 
 
         $scope.addScopeOfWork = function(){
-            $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': ""});
+            $scope.wizard.scope_of_work.push({'quantity': "", 'scope_code': {}});
         };
         $scope.removeScopeOfWork = function(s){
             for (var i = 0, ii = $scope.wizard.scope_of_work.length; i < ii; i++) {
@@ -288,14 +288,14 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                 });
         };
         $scope.handleNext = function(dismiss, is_valid) {
-//            if (is_valid) {
+            if (is_valid) {
                 if($scope.isLastStep()) {
 //                    dismiss();
                     $scope.submitForm();
                 } else {
                     $scope.step += 1;
                 }
-//            }
+            }
         };
     })
     .controller('ProjectCtrl', ['$scope', '$routeParams', '$http', 'HOST', '$resource', function ($scope, $routeParams, $http, HOST,$resource) {
@@ -429,10 +429,12 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                             }
                         });
                         if (!is_enter){
+                            data[i].milestone_id=data[i].id
+                            delete data[i].id
                             $scope.wizard.project.project_milestones.push(data[i])
                         }
                     }
-                    $scope.wizard.project_milestones = data;
+//                    $scope.wizard.project.project_milestones = data;
                 })
                 .error(function(data, status, headers, config) {
                     $scope.status = status;
@@ -446,18 +448,18 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
 
         ];
         $scope.month = [
-            {'name': 'Apr', 'id': 4},
-            {'name': 'May', 'id': 5},
-            {'name': 'Jun', 'id': 6},
-            {'name': 'Jul', 'id': 7},
-            {'name': 'Aug', 'id': 8},
-            {'name': 'Sep', 'id': 9},
-            {'name': 'Oct', 'id': 10},
-            {'name': 'Nov', 'id': 11},
-            {'name': 'Dec', 'id': 12},
-            {'name': 'Jan', 'id': 1},
-            {'name': 'Feb', 'id': 2},
-            {'name': 'Mar', 'id': 3}
+            {'name': 'Apr', 'month_id': 4},
+            {'name': 'May', 'month_id': 5},
+            {'name': 'Jun', 'month_id': 6},
+            {'name': 'Jul', 'month_id': 7},
+            {'name': 'Aug', 'month_id': 8},
+            {'name': 'Sep', 'month_id': 9},
+            {'name': 'Oct', 'month_id': 10},
+            {'name': 'Nov', 'month_id': 11},
+            {'name': 'Dec', 'month_id': 12},
+            {'name': 'Jan', 'month_id': 1},
+            {'name': 'Feb', 'month_id': 2},
+            {'name': 'Mar', 'month_id': 3}
         ];
 
         $scope.planning = [];
@@ -528,7 +530,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         };
 
         $scope.addScopeOfWork = function(){
-            $scope.wizard.project.scope_of_work.push({'quantity': "", 'scope_code': ""});
+            $scope.wizard.project.scope_of_work.push({'quantity': "", 'scope_code': {}});
         };
 
         $scope.removeScopeOfWork = function(s){
