@@ -1,4 +1,5 @@
 import decimal
+import datetime
 import dateutil.parser
 from rest_framework import viewsets, generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
@@ -413,4 +414,68 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
         for monthly_submission in project.monthly_submissions.all():
             data += [{'month': monthly_submission.month, 'year': monthly_submission.year,
                       'comment': monthly_submission.comment, 'remedial_action': monthly_submission.remedial_action}]
+        return Response(data)
+
+
+class ProjectTopPerformingViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        num = request.GET.get('num', None)
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+
+        year = datetime.datetime.now().year
+        month = datetime.datetime.now().month - 1
+        # print queryset.values_list('id', )
+        projects = []
+        for x in queryset:
+            try:
+                print x
+                print x.plannings.values_list('id', 'month', 'year')
+                print x.monthly_submissions.values_list('id', 'month', 'year')
+                y = x.plannings.get(year=year, month=month)
+                print getattr(y, 'planned_progress', '')
+                print '--------monthly_submissions-----------'
+                z = x.monthly_submissions.get(year=year, month=month)
+                print getattr(z, 'actual_progress', '')
+            except:
+                print 'except'
+
+
+
+        data = project_serializer(queryset)
+        return Response(data)
+
+
+class ProjectWorstPerformingViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        num = request.GET.get('num', None)
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+
+        data = project_serializer(queryset)
+        return Response(data)
+
+
+class ProjectOverallProgressViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        year = request.GET.get('year', None)
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+
+        data = project_serializer(queryset)
         return Response(data)

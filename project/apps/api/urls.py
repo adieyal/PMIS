@@ -24,4 +24,7 @@ urlpatterns = patterns('',
                        url(r'^programmes/(?P<pk>\d+)/projects/$', views.ProjectInProgrammeViewSet.as_view({'get': 'retrieve'}), name='project_in_programme_view'),
                        url(r'^projects/(?P<pk>\d+)/progress/$', views.ProgressView.as_view(), name='progress_view'),
                        url(r'^projects/(?P<pk>\d+)/comments/$', views.ProjectCommentsViewSet.as_view({'get': 'retrieve'}), name='project_comments_view'),
+                       url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/top_performing/$', views.ProjectTopPerformingViewSet.as_view(), name='project_top_performing_view'),
+                       url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/worst_performing/$', views.ProjectWorstPerformingViewSet.as_view(), name='project_worst_performing_view'),
+                       url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/implementation/overall_progress/$', views.ProjectOverallProgressViewSet.as_view(), name='project_overall_progress_view'),
 )
