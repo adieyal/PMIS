@@ -4,7 +4,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.webdesign import lorem_ipsum
 import factory
-from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork
+from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork, Planning, MONTHS, Milestone, ProjectMilestone, CommentType, MonthlySubmission, ProjectStatus, VarianceOrder
+from datetime import date
 
 
 class UserFactory(factory.Factory):
@@ -131,6 +132,7 @@ class ScopeCodeFactory(factory.Factory):
     @factory.lazy_attribute
     def description(self):
         return lorem_ipsum.words(200, False).capitalize()
+
     code = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
 
 
@@ -143,3 +145,61 @@ class ScopeOfWorkFactory(factory.Factory):
     @factory.lazy_attribute
     def description(self):
         return lorem_ipsum.words(200, False).capitalize()
+
+
+class PlanningFactory(factory.Factory):
+    FACTORY_FOR = Planning
+    month = random.choice(MONTHS)
+    year = random.choice(YEARS)
+    planned_expenses = random.randint(0, 100)
+    planned_progress = random.randint(0, 100)
+    project = factory.SubFactory(ProjectFactory)
+
+
+class MilestoneFactory(factory.Factory):
+    FACTORY_FOR = Milestone
+    phase = random.choice(Milestone.PHASE)
+    name = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
+    order = random.randint(0, 100)
+
+
+class ProjectMilestoneFactory(factory.Factory):
+    FACTORY_FOR = ProjectMilestone
+    completion_date = date.fromordinal(
+        random.randint(date.today().replace(day=1, month=1).toordinal(), date.today().toordinal()))
+    project = factory.SubFactory(ProjectFactory)
+    milestone = factory.SubFactory(MilestoneFactory)
+
+
+class CommentTypeFactory(factory.Factory):
+    FACTORY_FOR = CommentType
+    name = factory.Sequence(lambda n: u'{0}_{1}'.format(lorem_ipsum.words(1, 0), n))
+
+
+class MonthlySubmissionFactory(factory.Factory):
+    FACTORY_FOR = MonthlySubmission
+    month = random.choice(MONTHS)
+    year = random.choice(YEARS)
+    project = factory.SubFactory(ProjectFactory)
+    actual_expenditure = random.randint(0, 100)
+    actual_progress = random.randint(0, 100)
+    comment = lorem_ipsum.words(5, False)
+    comment_type = factory.SubFactory(CommentTypeFactory)
+    remedial_action = lorem_ipsum.words(5, False)
+
+
+class ProjectStatusFactory(factory.Factory):
+    FACTORY_FOR = ProjectStatus
+    project = factory.SubFactory(ProjectFactory)
+    status = random.choice(ProjectStatus.STATUS)
+
+
+class VarianceOrderFactory(factory.Factory):
+    FACTORY_FOR = VarianceOrder
+    project = factory.SubFactory(ProjectFactory)
+
+    @factory.lazy_attribute
+    def description(self):
+        return lorem_ipsum.words(200, False).capitalize()
+
+    amount = random.random()*1000

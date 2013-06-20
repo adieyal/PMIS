@@ -69,7 +69,9 @@ class Programme(models.Model):
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
-        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
+        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
+            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
+            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
 
 
 class Project(models.Model):
