@@ -17,6 +17,8 @@ urlpatterns = patterns('',
                        url(r'^districts/(?P<pk>\d+)/municipalities/$', views.MunicipalityViewSet.as_view(), name='municipalities_view'),
                        url(r'^clients/(?P<pk>\d+)/programmes/$', views.ProgrammeOfClientViewSet.as_view({'get': 'retrieve'}), name='programmes_of_client_view'),
                        url(r'^clients/(?P<pk>\d+)/projects/$', views.ProjectOfClientViewSet.as_view({'get': 'retrieve'}), name='project_of_client_view'),
+                       url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/$', views.ProjectOfClientOfDistrictViewSet.as_view(), name='project_of_client_of_district_view'),
+
                        url(r'^districts/(?P<pk>\d+)/projects/$', views.ProjectInDistrictViewSet.as_view({'get': 'retrieve'}), name='project_in_district_view'),
                        url(r'^municipalities/(?P<pk>\d+)/projects/$', views.ProjectInMunicipalityViewSet.as_view({'get': 'retrieve'}), name='project_in_municipality_view'),
                        url(r'^programmes/(?P<pk>\d+)/projects/$', views.ProjectInProgrammeViewSet.as_view({'get': 'retrieve'}), name='project_in_programme_view'),

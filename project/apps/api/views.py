@@ -180,6 +180,20 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
         return Response(data)
 
 
+class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+        data = project_serializer(queryset)
+        return Response(data)
+
+
+
 class ProjectInDistrictViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
