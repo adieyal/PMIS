@@ -1,7 +1,8 @@
 import datetime
+from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
-from project.apps.projects.models import Client, District, Municipality, Programme, Project, ScopeCode, Role, Entity, Milestone
+from project.apps.projects.models import Client, District, Municipality, Programme, Project, ScopeCode, Role, Entity, Milestone, MonthlySubmission
 
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
@@ -209,15 +210,36 @@ def project_detail_serializer(object):
     return data
 
 
-def progress_serializer(project):
-    data = {'id': project.id, 'planned_expenses': 0, 'planned_progress': 0, 'actual_expenditure': 0,
-            'actual_progress': 0}
-    for planning in project.plannings.all():
-        data['planned_expenses'] += planning.planned_expenses
-        data['planned_progress'] += planning.planned_expenses
+def progress_serializer(project, year):
+    data = []
+    if year:
+        plannings = project.plannings.filter(Q(year=(int(year) - 1), month__gt=3) | Q(year=year, month__lte=3))
+        for p in plannings:
+            try:
+                monthly_submission = project.monthly_submissions.get(month=p.month, year=p.year)
+                actual_progress = getattr(monthly_submission, 'actual_progress', '')
+            except:
+                actual_progress = ''
 
-    for monthly_submission in project.monthly_submissions.all():
-        data['actual_expenditure'] += monthly_submission.actual_expenditure
-        data['actual_progress'] += monthly_submission.actual_progress
+            data += [{
+                'month': p.get_month_display(),
+                'planned': getattr(p, 'planned_progress', ''),
+                'actual': actual_progress
+            }]
+    else:
+        plannings = project.plannings.all()
+        for p in plannings:
+            try:
+                monthly_submission = project.monthly_submissions.get(month=p.month, year=p.year)
+                actual_progress = getattr(monthly_submission, 'actual_progress', '')
+            except:
+                actual_progress = ''
+
+            data += [{
+                        'year': p.year,
+                        'month': p.get_month_display(),
+                        'planned': getattr(p, 'planned_progress', ''),
+                        'actual': actual_progress
+                    }]
 
     return data

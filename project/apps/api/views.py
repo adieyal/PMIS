@@ -193,7 +193,6 @@ class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
         return Response(data)
 
 
-
 class ProjectInDistrictViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
@@ -390,14 +389,16 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         return Response({'status': status.HTTP_200_OK})
 
 
-class ProgressView(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):
+class ProgressView(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
         data = {}
+        year = request.GET.get('year', None)
+        pk = kwargs.get('pk')
         try:
             project = Project.objects.get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
-        data = progress_serializer(project)
+        data = progress_serializer(project, year)
         return Response(data)
 
 

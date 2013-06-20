@@ -22,6 +22,6 @@ urlpatterns = patterns('',
                        url(r'^districts/(?P<pk>\d+)/projects/$', views.ProjectInDistrictViewSet.as_view({'get': 'retrieve'}), name='project_in_district_view'),
                        url(r'^municipalities/(?P<pk>\d+)/projects/$', views.ProjectInMunicipalityViewSet.as_view({'get': 'retrieve'}), name='project_in_municipality_view'),
                        url(r'^programmes/(?P<pk>\d+)/projects/$', views.ProjectInProgrammeViewSet.as_view({'get': 'retrieve'}), name='project_in_programme_view'),
-                       url(r'^projects/(?P<pk>\d+)/progress/$', views.ProgressView.as_view({'get': 'retrieve'}), name='progress_view'),
+                       url(r'^projects/(?P<pk>\d+)/progress/$', views.ProgressView.as_view(), name='progress_view'),
                        url(r'^projects/(?P<pk>\d+)/comments/$', views.ProjectCommentsViewSet.as_view({'get': 'retrieve'}), name='project_comments_view'),
 )
