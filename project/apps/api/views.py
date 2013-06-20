@@ -169,7 +169,7 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
         try:
-            queryset = Project.objects.filter(programme__client__id=pk)
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client__id=pk)
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
@@ -199,7 +199,7 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
         try:
-            queryset = Project.objects.filter(municipality__district__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(municipality__district__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
@@ -216,7 +216,7 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
         try:
-            queryset = Project.objects.filter(municipality__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(municipality__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
@@ -233,7 +233,7 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
         try:
-            queryset = Project.objects.filter(programme__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(programme__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
@@ -395,7 +395,7 @@ class ProgressView(generics.ListAPIView):
         year = request.GET.get('year', None)
         pk = kwargs.get('pk')
         try:
-            project = Project.objects.get(id=pk)
+            project = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
         data = progress_serializer(project, year)
@@ -406,7 +406,7 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
         try:
-            project = Project.objects.get(id=pk)
+            project = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
         data = []
