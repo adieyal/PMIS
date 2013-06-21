@@ -28,7 +28,7 @@ YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 class PMISUser(User):
     @property
     def projects(self):
-        return Project.objects.get_project(self)
+        return Project.objects.get_project(self.id)
 
     class Meta:
         proxy=True
