@@ -216,7 +216,7 @@ def project_detail_serializer(object):
 def progress_serializer(project, year):
     data = []
     if year:
-        plannings = project.plannings.filter(Q(year=(int(year) - 1), month__gt=3) | Q(year=year, month__lte=3))
+        plannings = project.plannings.in_financial_year(year)
         for p in plannings:
             try:
                 monthly_submission = project.monthly_submissions.get(month=p.month, year=p.year)

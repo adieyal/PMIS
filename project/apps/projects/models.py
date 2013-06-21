@@ -1,8 +1,10 @@
 import datetime
+from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
 import reversion
@@ -37,6 +39,25 @@ class PMISUser(User):
     class Meta:
         proxy=True
 
+class FinancialYearQuerySet(QuerySet):
+    def in_financial_year(self, year):
+        return self.filter(Q(year=(int(year) - 1), month__gt=3) | Q(year=year, month__lte=3))
+
+class FinancialYearManager(models.Manager):
+    """
+    Apply to any model that is time based
+    Defines the financial year which starts in April of the previous year and ends in March of the current year
+    """
+
+    def get_query_set(self):
+        return FinancialYearQuerySet(self.model)
+
+    def __getattr__(self, name):
+        """
+        Any method defined on our queryset is now available in our manager
+        """
+        return getattr(self.get_query_set(), name)
+        
 class Versioned(models.Model):
     revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
     update_date = models.DateTimeField(auto_now=True)
@@ -173,6 +194,8 @@ class Planning(models.Model):
     planned_progress = models.FloatField(blank=True, null=True)
     project = models.ForeignKey(Project, related_name='plannings')
 
+    objects = FinancialYearManager()
+
     def __unicode__(self):
         return u'Planning for project %s for month %s' % (self.project.name, self.month)
 
@@ -222,6 +245,8 @@ class MonthlySubmission(models.Model):
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
+
+    objects = FinancialYearManager()
 
     def __unicode__(self):
         return "Submission for %s for %s/%s" % (self.project, self.year, self.month)
