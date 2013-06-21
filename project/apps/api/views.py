@@ -34,11 +34,13 @@ class ScopeCodeViewSet(generics.ListAPIView):
 class ProjectsView(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         data = {}
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
     def post(self, request, *args, **kwargs):
@@ -156,11 +158,13 @@ class MunicipalityViewSet(generics.ListAPIView):
 class ProgrammeOfClientViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Client.objects.get(id=pk).programmes.all()
         except Client.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -169,6 +173,8 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id).filter(programme__client__id=pk)
             if phase:
@@ -177,7 +183,7 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -185,12 +191,14 @@ class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
+        condensed = request.GET.get('condensed', None)
+
         data = {}
         try:
             queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -199,6 +207,8 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id).filter(municipality__district__id=pk).distinct()
             if phase:
@@ -207,7 +217,7 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -216,6 +226,8 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id).filter(municipality__id=pk).distinct()
             if phase:
@@ -224,7 +236,7 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -233,6 +245,8 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id).filter(programme__id=pk).distinct()
             if phase:
@@ -241,7 +255,7 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -249,6 +263,7 @@ class ProjectDetailView(generics.SingleObjectAPIView):
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         data = {}
+
         try:
             object = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
@@ -421,6 +436,7 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
+        condensed = request.GET.get('condensed', None)
         num = request.GET.get('num', None)
         data = {}
         try:
@@ -429,25 +445,39 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
             return Response(data)
 
         year = datetime.datetime.now().year
-        month = datetime.datetime.now().month - 1
-        # print queryset.values_list('id', )
+        if datetime.datetime.now().month == 1:
+            month = 12
+            year -= 1
+        else:
+            month = datetime.datetime.now().month - 1
+
         projects = []
-        for x in queryset:
+        for obj in queryset:
             try:
-                print x
-                print x.plannings.values_list('id', 'month', 'year')
-                print x.monthly_submissions.values_list('id', 'month', 'year')
-                y = x.plannings.get(year=year, month=month)
-                print getattr(y, 'planned_progress', '')
-                print '--------monthly_submissions-----------'
-                z = x.monthly_submissions.get(year=year, month=month)
-                print getattr(z, 'actual_progress', '')
+                planning = obj.plannings.get(year=year, month=month)
+                planned_progress = getattr(planning, 'planned_progress', '')
+                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
+                actual_progress = getattr(monthly_submission, 'actual_progress', '')
+                if planning and monthly_submission:
+                    projects += [{'value': actual_progress / planned_progress, 'id': obj.id}]
             except:
-                print 'except'
+                pass
 
+        projects = sorted(projects, key=lambda k: k['value'])
+        print num
 
+        try:
+            if int(num) > 0:
+                projects = projects[0:int(num)]
+        except:
+            pass
 
-        data = project_serializer(queryset)
+        project_ids = [item['id'] for item in projects]
+
+        queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
+        print queryset.values_list('id', 'name')
+
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -455,6 +485,7 @@ class ProjectWorstPerformingViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
+        condensed = request.GET.get('condensed', None)
         num = request.GET.get('num', None)
         data = {}
         try:
@@ -462,7 +493,39 @@ class ProjectWorstPerformingViewSet(generics.ListAPIView):
         except Project.DoesNotExist:
             return Response(data)
 
-        data = project_serializer(queryset)
+        year = datetime.datetime.now().year
+        if datetime.datetime.now().month == 1:
+            month = 12
+            year -= 1
+        else:
+            month = datetime.datetime.now().month - 1
+
+        projects = []
+        for obj in queryset:
+            try:
+                planning = obj.plannings.get(year=year, month=month)
+                planned_progress = getattr(planning, 'planned_progress', '')
+                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
+                actual_progress = getattr(monthly_submission, 'actual_progress', '')
+                if planning and monthly_submission:
+                    projects += [{'value': actual_progress / planned_progress, 'id': obj.id}]
+            except:
+                pass
+
+        projects = sorted(projects, key=lambda k: -k['value'])
+        print num
+
+        try:
+            if int(num) > 0:
+                projects = projects[0:int(num)]
+        except:
+            pass
+
+        project_ids = [item['id'] for item in projects]
+
+        queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
+
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -471,11 +534,37 @@ class ProjectOverallProgressViewSet(generics.ListAPIView):
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
         year = request.GET.get('year', None)
-        data = {}
+        res = {}
         try:
             queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
-            return Response(data)
+            return Response(res)
 
-        data = project_serializer(queryset)
-        return Response(data)
+        if not year:
+            year = datetime.datetime.now().year
+            if datetime.datetime.now().month == 1:
+                month = 12
+                year -= 1
+            else:
+                month = datetime.datetime.now().month - 1
+        else:
+            month = 3
+
+        projects = []
+        for obj in queryset:
+            try:
+                planning = obj.plannings.get(year=year, month=month)
+                planned_progress = getattr(planning, 'planned_progress', '')
+                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
+                actual_progress = getattr(monthly_submission, 'actual_progress', '')
+                if planning and monthly_submission:
+                    projects += [{'actual_progress': actual_progress, 'planned_progress': planned_progress}]
+            except:
+                pass
+
+        sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
+        length = len(projects)
+        if length:
+            res = {'actual_progress': sum_data['actual_progress'] / length, 'planned_progress': sum_data['planned_progress'] / length}
+
+        return Response(res)

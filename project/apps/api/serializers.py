@@ -53,69 +53,72 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', )
 
 
-def project_serializer(queryset):
+def project_serializer(queryset, condensed=None):
     data = []
-    for item in queryset:
-        scope = []
-        for s in item.scope_of_works.all():
-            scope += [{
-                'id': getattr(s, 'id', ''),
-                'quantity': getattr(s, 'quantity', ''),
-                'description': getattr(s, 'description', ''),
-                'scope_code': {
-                    'id': getattr(s.scope_code, 'id', ''),
-                    'name': getattr(s.scope_code, 'name', ''),
+    if condensed != 'true':
+        for item in queryset:
+            scope = []
+            for s in item.scope_of_works.all():
+                scope += [{
+                    'id': getattr(s, 'id', ''),
+                    'quantity': getattr(s, 'quantity', ''),
+                    'description': getattr(s, 'description', ''),
+                    'scope_code': {
+                        'id': getattr(s.scope_code, 'id', ''),
+                        'name': getattr(s.scope_code, 'name', ''),
+                    }
+                }]
+            try:
+                budget = item.budgets.get(year=datetime.datetime.now().year)
+                allocated_budget = getattr(budget, 'allocated_budget', '')
+            except:
+                allocated_budget = ''
+            try:
+                project_role = item.project_roles.get(role__name=u'Consultant')
+                consultant = {
+                    'id': getattr(project_role.entity, 'id', ''),
+                    'name': getattr(project_role.entity, 'name', ''),
                 }
-            }]
-        try:
-            budget = item.budgets.get(year=datetime.datetime.now().year)
-            allocated_budget = getattr(budget, 'allocated_budget', '')
-        except:
-            allocated_budget = ''
-        try:
-            project_role = item.project_roles.get(role__name=u'Consultant')
-            consultant = {
-                'id': getattr(project_role.entity, 'id', ''),
-                'name': getattr(project_role.entity, 'name', ''),
-            }
-        except:
-            consultant = {}
+            except:
+                consultant = {}
 
-        try:
-            project_role = item.project_roles.get(role__name=u'Contractor')
-            contractor = {
-                'id': getattr(project_role.entity, 'id', ''),
-                'name': getattr(project_role.entity, 'name', ''),
-            }
-        except:
-            contractor = {}
+            try:
+                project_role = item.project_roles.get(role__name=u'Contractor')
+                contractor = {
+                    'id': getattr(project_role.entity, 'id', ''),
+                    'name': getattr(project_role.entity, 'name', ''),
+                }
+            except:
+                contractor = {}
 
-        data += [{
-                 'id': item.id,
-                 'name': item.name,
-                 'project_number': item.project_number,
-                 'description': item.description,
-                 'programme': {
-                     'id': getattr(item.programme, 'id', ''),
-                     'name': getattr(item.programme, 'name', ''),
-                 },
-                 'client': {
-                     'id': getattr(item.programme.client, 'id', ''),
-                     'name': getattr(item.programme.client, 'name', ''),
-                 },
-                 'municipality': {
-                     'id': getattr(item.municipality, 'id', ''),
-                     'name': getattr(item.municipality, 'name', ''),
-                 },
-                 'district':{
-                     'id': getattr(item.municipality.district, 'id', ''),
-                     'name': getattr(item.municipality.district, 'name', ''),
-                 },
-                 'scope': scope,
-                 'consultant': consultant,
-                 'contractor': contractor,
-                 'allocated_budget': allocated_budget
-                 }]
+            data += [{
+                     'id': item.id,
+                     'name': item.name,
+                     'project_number': item.project_number,
+                     'description': item.description,
+                     'programme': {
+                         'id': getattr(item.programme, 'id', ''),
+                         'name': getattr(item.programme, 'name', ''),
+                     },
+                     'client': {
+                         'id': getattr(item.programme.client, 'id', ''),
+                         'name': getattr(item.programme.client, 'name', ''),
+                     },
+                     'municipality': {
+                         'id': getattr(item.municipality, 'id', ''),
+                         'name': getattr(item.municipality, 'name', ''),
+                     },
+                     'district':{
+                         'id': getattr(item.municipality.district, 'id', ''),
+                         'name': getattr(item.municipality.district, 'name', ''),
+                     },
+                     'scope': scope,
+                     'consultant': consultant,
+                     'contractor': contractor,
+                     'allocated_budget': allocated_budget
+                     }]
+    else:
+        data = [{'id': obj.id, 'name': obj.name} for obj in queryset]
     return data
 
 
@@ -235,11 +238,7 @@ def progress_serializer(project, year):
             except:
                 actual_progress = ''
 
-            data += [{
-                        'year': p.year,
-                        'month': p.get_month_display(),
-                        'planned': getattr(p, 'planned_progress', ''),
-                        'actual': actual_progress
-                    }]
+            data += [{'year': p.year, 'month': p.get_month_display(), 'planned': getattr(p, 'planned_progress', ''),
+                      'actual': actual_progress}]
 
     return data
