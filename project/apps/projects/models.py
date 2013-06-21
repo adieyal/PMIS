@@ -25,6 +25,13 @@ MONTHS = (
 
 YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
+class PMISUser(User):
+    @property
+    def projects(self):
+        return Project.objects.get_project(self)
+
+    class Meta:
+        proxy=True
 
 class Versioned(models.Model):
     revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
