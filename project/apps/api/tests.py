@@ -74,7 +74,7 @@ class MunicipalityViewSetTest(ParentTest):
     def setUp(self):
         super(MunicipalityViewSetTest, self).setUp()
 
-        self.district = factories.DistrictFactory.create(id=1)
+        self.district = factories.DistrictFactory.create()
         self.municipality = factories.MunicipalityFactory.create(district=self.district)
 
         self.data = {
@@ -98,7 +98,7 @@ class MunicipalityViewSetTest(ParentTest):
 class ProgrammeViewSetTest(ParentTest):
     def setUp(self):
         super(ProgrammeViewSetTest, self).setUp()
-        self.clients = factories.ClientFactory.create(id=100)
+        self.clients = factories.ClientFactory.create()
         self.programme = factories.ProgrammeFactory.create(client=self.clients)
 
         self.data = {}
@@ -118,7 +118,7 @@ class ProgrammeViewSetTest(ParentTest):
 class ProjectViewSetTest(ParentTest):
     def setUp(self):
         super(ProjectViewSetTest, self).setUp()
-        self.programme = factories.ProgrammeFactory.create(id=100)
+        self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
 
         self.data = {}
@@ -138,13 +138,14 @@ class ProjectViewSetTest(ParentTest):
 
 class ScopeCodeViewSetTest(ParentTest):
     def setUp(self):
+        super(ScopeCodeViewSetTest, self).setUp()
         self.scope_code = factories.ScopeCodeFactory.create()
+        self.data = {}
+        self.view_name = "api:scope_codes_view"
 
-    def tearDown(self):
-        super(ScopeCodeViewSetTest, self).tearDown()
-        models.ScopeCode.objects.all().delete()
+    def test_auth(self):
+        self._testauth(self.view_name, self.data)
 
     def test_get_project_list(self):
-        data = {}
-        response = self.client.get(reverse('api:scope_codes_view', kwargs=data), )
-        self.assertEqual(response.status_code, 401)
+        result = self._get_json_response(self.view_name, self.data)
+        self.assertEqual(models.ScopeCode.objects.count(), len(result))
