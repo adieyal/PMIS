@@ -26,6 +26,10 @@ MONTHS = (
 YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
 class PMISUser(User):
+    @classmethod
+    def from_user(cls, user):
+        return PMISUser.objects.get(id=user.id)
+
     @property
     def projects(self):
         return Project.objects.get_project(self.id)
