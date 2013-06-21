@@ -427,10 +427,13 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
             return Response(data)
         data = []
         for monthly_submission in project.monthly_submissions.all():
-            data += [{'month': monthly_submission.month, 'year': monthly_submission.year,
-                      'comment': monthly_submission.comment, 'remedial_action': monthly_submission.remedial_action}]
+            data += [{
+                'month': monthly_submission.month,
+                'year': monthly_submission.year,
+                'comment': monthly_submission.comment,
+                'remedial_action': monthly_submission.remedial_action
+            }]
         return Response(data)
-
 
 class ProjectTopPerformingViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
