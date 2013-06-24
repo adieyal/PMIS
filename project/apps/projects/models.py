@@ -121,6 +121,35 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
+    def get_progress(self, year=None, month=None):
+        if not year:
+            year = datetime.datetime.now().year
+            if datetime.datetime.now().month == 1:
+                month = 12
+                year -= 1
+            else:
+                month = datetime.datetime.now().month - 1
+        else:
+            month = 3
+        try:
+            planning = self.plannings.get(year=year, month=month)
+            planned_progress = getattr(planning, 'planned_progress', '')
+            monthly_submission = self.monthly_submissions.get(year=year, month=month)
+            actual_progress = getattr(monthly_submission, 'actual_progress', '')
+            if planning and monthly_submission:
+                return {'actual_progress': actual_progress, 'planned_progress': planned_progress}
+            else:
+                return None
+        except:
+            return None
+
+    def get_performing(self, year=None, month=None):
+        try:
+            progress = self.get_progress(year, month)
+            return progress['actual_progress'] / progress['planned_progress']
+        except:
+            return None
+
 
 class Entity(models.Model):
     name = models.CharField(max_length=255)

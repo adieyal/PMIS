@@ -15,7 +15,7 @@ urlpatterns = patterns('',
                        url(r'^entities/$', views.EntitiesViewSet.as_view(), name='entities_view'),
                        url(r'^milestones/$', views.MilestonesViewSet.as_view(), name='milestones_view'),
                        url(r'^districts/(?P<pk>\d+)/municipalities/$', views.MunicipalityViewSet.as_view(), name='municipalities_view'),
-                       url(r'^clients/(?P<pk>\d+)/programmes/$', views.ProgrammeOfClientViewSet.as_view({'get': 'retrieve'}), name='programmes_of_client_view'),
+                       url(r'^clients/(?P<pk>\d+)/programmes/$', views.ProgrammeOfClientViewSet.as_view(), name='programmes_of_client_view'),
                        url(r'^clients/(?P<pk>\d+)/projects/$', views.ProjectOfClientViewSet.as_view({'get': 'retrieve'}), name='project_of_client_view'),
                        url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/$', views.ProjectOfClientOfDistrictViewSet.as_view(), name='project_of_client_of_district_view'),
 

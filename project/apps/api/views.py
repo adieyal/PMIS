@@ -155,17 +155,15 @@ class MunicipalityViewSet(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ProgrammeOfClientViewSet(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):
-        data = {}
-        condensed = request.GET.get('condensed', None)
-
+class ProgrammeOfClientViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         try:
             queryset = Client.objects.get(id=pk).programmes.all()
-        except Client.DoesNotExist:
-            return Response(data)
-        data = project_serializer(queryset, condensed)
-        return Response(data)
+        except District.DoesNotExist:
+            queryset = {}
+        serializer = ProgrammeSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ProjectOfClientViewSet(viewsets.ViewSet):
@@ -447,24 +445,8 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
             queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
-        year = datetime.datetime.now().year
-        if datetime.datetime.now().month == 1:
-            month = 12
-            year -= 1
-        else:
-            month = datetime.datetime.now().month - 1
 
-        projects = []
-        for obj in queryset:
-            try:
-                planning = obj.plannings.get(year=year, month=month)
-                planned_progress = getattr(planning, 'planned_progress', '')
-                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
-                actual_progress = getattr(monthly_submission, 'actual_progress', '')
-                if planning and monthly_submission:
-                    projects += [{'value': actual_progress / planned_progress, 'id': obj.id}]
-            except:
-                pass
+        projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
 
         projects = sorted(projects, key=lambda k: k['value'])
 
@@ -494,24 +476,7 @@ class ProjectWorstPerformingViewSet(generics.ListAPIView):
         except Project.DoesNotExist:
             return Response(data)
 
-        year = datetime.datetime.now().year
-        if datetime.datetime.now().month == 1:
-            month = 12
-            year -= 1
-        else:
-            month = datetime.datetime.now().month - 1
-
-        projects = []
-        for obj in queryset:
-            try:
-                planning = obj.plannings.get(year=year, month=month)
-                planned_progress = getattr(planning, 'planned_progress', '')
-                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
-                actual_progress = getattr(monthly_submission, 'actual_progress', '')
-                if planning and monthly_submission:
-                    projects += [{'value': actual_progress / planned_progress, 'id': obj.id}]
-            except:
-                pass
+        projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
 
         projects = sorted(projects, key=lambda k: -k['value'])
 
@@ -540,31 +505,11 @@ class ProjectOverallProgressViewSet(generics.ListAPIView):
         except Project.DoesNotExist:
             return Response(res)
 
-        if not year:
-            year = datetime.datetime.now().year
-            if datetime.datetime.now().month == 1:
-                month = 12
-                year -= 1
-            else:
-                month = datetime.datetime.now().month - 1
-        else:
-            month = 3
+        projects = [obj.get_progress(year=year) for obj in queryset if obj.get_progress(year=year)]
 
-        projects = []
-        for obj in queryset:
-            try:
-                planning = obj.plannings.get(year=year, month=month)
-                planned_progress = getattr(planning, 'planned_progress', '')
-                monthly_submission = obj.monthly_submissions.get(year=year, month=month)
-                actual_progress = getattr(monthly_submission, 'actual_progress', '')
-                if planning and monthly_submission:
-                    projects += [{'actual_progress': actual_progress, 'planned_progress': planned_progress}]
-            except:
-                pass
-
-        sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
         length = len(projects)
         if length:
+            sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
             res = {'actual_progress': sum_data['actual_progress'] / length, 'planned_progress': sum_data['planned_progress'] / length}
 
         return Response(res)
