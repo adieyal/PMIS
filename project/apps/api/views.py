@@ -435,6 +435,7 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
             }]
         return Response(data)
 
+
 class ProjectTopPerformingViewSet(generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         client_id = kwargs.get('client_id')
@@ -446,7 +447,6 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
             queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
-
         year = datetime.datetime.now().year
         if datetime.datetime.now().month == 1:
             month = 12
@@ -467,7 +467,6 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
                 pass
 
         projects = sorted(projects, key=lambda k: k['value'])
-        print num
 
         try:
             if int(num) > 0:
@@ -478,7 +477,6 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
         project_ids = [item['id'] for item in projects]
 
         queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
-        print queryset.values_list('id', 'name')
 
         data = project_serializer(queryset, condensed)
         return Response(data)
@@ -516,7 +514,6 @@ class ProjectWorstPerformingViewSet(generics.ListAPIView):
                 pass
 
         projects = sorted(projects, key=lambda k: -k['value'])
-        print num
 
         try:
             if int(num) > 0:

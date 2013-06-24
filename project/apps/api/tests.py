@@ -1,9 +1,11 @@
 import json
+import datetime
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from rest_framework.authtoken.models import Token
 from project.apps.projects import factories, models
+
 
 class ParentTest(TestCase):
     def setUp(self):
@@ -19,24 +21,27 @@ class ParentTest(TestCase):
         self.token, create = Token.objects.get_or_create(user=self.user)
 
     def tearDown(self):
-        Token.objects.all().delete() 
-        User.objects.all().delete()
+        # Token.objects.all().delete()
+        # User.objects.all().delete()
+        pass
 
-    def _get_response(self, view_name, data, with_auth=True):
+    def _get_response(self, view_name, data, get_data=None, with_auth=True):
+        if not get_data: get_data = {}
         if with_auth:
             auth = 'Token %s' % self.token.key
-            response = self.client.get(reverse(view_name, kwargs=data), HTTP_AUTHORIZATION=auth)
+            response = self.client.get(reverse(view_name, kwargs=data), get_data, HTTP_AUTHORIZATION=auth)
         else:
             response = self.client.get(reverse(view_name, kwargs=data))
-            
+
         return response
 
-    def _get_json_response(self, view_name, data):
-        response = self._get_response(view_name, data)
+    def _get_json_response(self, view_name, data, get_data=None):
+        if not get_data: get_data = {}
+        response = self._get_response(view_name, data, get_data)
         return json.loads(response.content)
 
     def _testauth(self, view_name, data):
-        response = self._get_response(view_name, data, False)
+        response = self._get_response(view_name, data, {}, False)
         self.assertEqual(response.status_code, 401)
 
         response = self._get_response(view_name, data)
@@ -44,7 +49,6 @@ class ParentTest(TestCase):
 
 
 class ClientViewSetTest(ParentTest):
-
     def setUp(self):
         super(ClientViewSetTest, self).setUp()
         self.data = {}
@@ -56,6 +60,7 @@ class ClientViewSetTest(ParentTest):
     def test_get_clients_list(self):
         result = self._get_json_response(self.view_name, self.data)
         self.assertEqual(models.Client.objects.count(), len(result))
+
 
 class DistrictViewSetTest(ParentTest):
     def setUp(self):
@@ -69,6 +74,7 @@ class DistrictViewSetTest(ParentTest):
     def test_get_districts_list(self):
         result = self._get_json_response(self.view_name, self.data)
         self.assertEqual(models.District.objects.count(), len(result))
+
 
 class MunicipalityViewSetTest(ParentTest):
     def setUp(self):
@@ -108,12 +114,12 @@ class ProgrammeViewSetTest(ParentTest):
         self._testauth(self.view_name, self.data)
 
     def test_get_programme_list(self):
-
         result = self._get_json_response(self.view_name, self.data)
         self.assertEqual(
             models.Programme.objects.count(),
             len(result)
         )
+
 
 class ProjectViewSetTest(ParentTest):
     def setUp(self):
@@ -128,12 +134,17 @@ class ProjectViewSetTest(ParentTest):
         self._testauth(self.view_name, self.data)
 
     # This test doesn't work - possibly due to project permissions
-    #def test_get_project_list(self):
-    #    result = self._get_json_response(self.view_name, self.data)
-    #    self.assertEqual(
-    #        models.Project.objects.count(),
-    #        len(result)
-    #    )
+    def test_get_project_list(self):
+        for group_perm_obj in self.project.group_perm_objs.all():
+            for group_perm in group_perm_obj.group_perm.all():
+                group_perm.user.add(self.user)
+                group_perm.save()
+
+        result = self._get_json_response(self.view_name, self.data)
+        self.assertEqual(
+            models.Project.objects.count(),
+            len(result)
+        )
 
 
 class ScopeCodeViewSetTest(ParentTest):
@@ -149,3 +160,39 @@ class ScopeCodeViewSetTest(ParentTest):
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
         self.assertEqual(models.ScopeCode.objects.count(), len(result))
+
+
+class ProjectTopPerformingViewSetTest(ParentTest):
+    def setUp(self):
+        super(ProjectTopPerformingViewSetTest, self).setUp()
+        self.programme = factories.ProgrammeFactory.create()
+        self.project = factories.ProjectFactory.create(programme=self.programme)
+        year = datetime.datetime.now().year
+        if datetime.datetime.now().month == 1:
+            month = 12
+            year -= 1
+        else:
+            month = datetime.datetime.now().month - 1
+        self.planning = factories.PlanningFactory.create(project=self.project, year=year, month=month)
+        self.monthly_submission = factories.MonthlySubmissionFactory(project=self.project, year=year, month=month)
+
+        self.data = {
+            'client_id': self.programme.client.id,
+            'district_id': self.project.municipality.district.id
+        }
+        self.view_name = "api:project_top_performing_view"
+        self.get_data = {
+            'num': 5
+        }
+
+    def test_auth(self):
+        self._testauth(self.view_name, self.data)
+
+    def test_get_top_performing_project_list(self):
+        for group_perm_obj in self.project.group_perm_objs.all():
+            for group_perm in group_perm_obj.group_perm.all():
+                group_perm.user.add(self.user)
+                group_perm.save()
+        result = self._get_json_response(self.view_name, self.data, self.get_data)
+        self.assertEqual(models.Project.objects.count(), len(result))
+

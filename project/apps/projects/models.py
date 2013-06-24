@@ -27,6 +27,7 @@ MONTHS = (
 
 YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
 
+
 class PMISUser(User):
     @classmethod
     def from_user(cls, user):
@@ -37,11 +38,13 @@ class PMISUser(User):
         return Project.objects.get_project(self.id)
 
     class Meta:
-        proxy=True
+        proxy = True
+
 
 class FinancialYearQuerySet(QuerySet):
     def in_financial_year(self, year):
         return self.filter(Q(year=(int(year) - 1), month__gt=3) | Q(year=year, month__lte=3))
+
 
 class FinancialYearManager(models.Manager):
     """
@@ -57,7 +60,8 @@ class FinancialYearManager(models.Manager):
         Any method defined on our queryset is now available in our manager
         """
         return getattr(self.get_query_set(), name)
-        
+
+
 class Versioned(models.Model):
     revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
     update_date = models.DateTimeField(auto_now=True)

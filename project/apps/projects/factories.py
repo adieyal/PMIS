@@ -202,4 +202,4 @@ class VarianceOrderFactory(factory.DjangoModelFactory):
     def description(self):
         return lorem_ipsum.words(200, False).capitalize()
 
-    amount = random.random()*1000
+    amount = random.random() * 1000
