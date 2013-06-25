@@ -435,6 +435,8 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
 
 
 class ProjectTopPerformingViewSet(generics.ListAPIView):
+    order = 1
+
     def get(self, request, *args, **kwargs):
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
@@ -448,7 +450,7 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
 
         projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
 
-        projects = sorted(projects, key=lambda k: k['value'])
+        projects = sorted(projects, key=lambda k: self.order * k['value'])
 
         try:
             if int(num) > 0:
@@ -464,34 +466,8 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
         return Response(data)
 
 
-class ProjectWorstPerformingViewSet(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
-        client_id = kwargs.get('client_id')
-        district_id = kwargs.get('district_id')
-        condensed = request.GET.get('condensed', None)
-        num = request.GET.get('num', None)
-        data = {}
-        try:
-            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
-        except Project.DoesNotExist:
-            return Response(data)
-
-        projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
-
-        projects = sorted(projects, key=lambda k: -k['value'])
-
-        try:
-            if int(num) > 0:
-                projects = projects[0:int(num)]
-        except:
-            pass
-
-        project_ids = [item['id'] for item in projects]
-
-        queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
-
-        data = project_serializer(queryset, condensed)
-        return Response(data)
+class ProjectWorstPerformingViewSet(ProjectTopPerformingViewSet):
+    order = -1
 
 
 class ProjectOverallProgressViewSet(generics.ListAPIView):
