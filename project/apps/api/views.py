@@ -477,7 +477,10 @@ class ProjectOverallProgressViewSet(generics.ListAPIView):
         year = request.GET.get('year', None)
         res = {}
         try:
-            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+            queryset = Project.objects.get_project(request.user.id)\
+                .district(district_id)\
+                .client(client_id)\
+                .distinct()
         except Project.DoesNotExist:
             return Response(res)
 

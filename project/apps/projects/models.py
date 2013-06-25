@@ -43,7 +43,9 @@ class PMISUser(User):
 
 class FinancialYearQuerySet(QuerySet):
     def in_financial_year(self, year):
-        return self.filter(Q(year=(int(year) - 1), month__gt=3) | Q(year=year, month__lte=3))
+        year = year
+        previous_year = year - 1
+        return self.filter(Q(year=previous_year, month__gt=3) | Q(year=year, month__lte=3))
 
 
 class FinancialYearManager(models.Manager):
@@ -102,12 +104,45 @@ class Programme(models.Model):
     def __unicode__(self):
         return self.name
 
+class ProjectManagerQuerySet(QuerySet):
+    def client(self, client):
+        if type(client) == int:
+            return self.filter(programme__client__id=client)
+        else:
+            return self.filter(programme__client=client)
+
+    def municipality(self, municipality):
+        if type(municipality) == int:
+            return self.filter(municipality__id=municipality)
+        else:
+            return self.filter(municipality=municipality)
+
+    def district(self, district):
+        if type(district) == int:
+            return self.filter(municipality__district__id=district)
+        else:
+            return self.filter(municipality__district=district)
+
+    def programme(self, programme):
+        if type(programme) == int:
+            return self.filter(programme__id=programme)
+        else:
+            return self.filter(programme__id=programme)
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
         return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
             group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
             c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
+
+    def get_query_set(self):
+        return ProjectManagerQuerySet(self.model)
+
+    def __getattr__(self, name):
+        """
+        Any method defined on our queryset is now available in our manager
+        """
+        return getattr(self.get_query_set(), name)
 
 
 class Project(models.Model):
