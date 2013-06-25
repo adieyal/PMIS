@@ -1,13 +1,9 @@
-import decimal
-import datetime
 import dateutil.parser
-from rest_framework import viewsets, generics, permissions, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 import reversion
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial, Versioned
+from project.apps.api.forms import ProjectTestForm, ProjectRoleTestForm, BudgetTestForm, PlanningTestForm, ProjectMilestoneTestForm, ScopeOfWorkTestForm, ProjectFinancialTestForm
+from project.apps.projects.models import Client, District, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial, Versioned
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
 
 
@@ -263,137 +259,118 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         data = {}
 
         try:
-            object = Project.objects.get_project(request.user.id).get(id=pk)
+            obj = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-        data = project_detail_serializer(object)
+        data = project_detail_serializer(obj)
         return Response(data)
 
     def put(self, request, *args, **kwargs):
+
         project_id = request.DATA.get('project', {}).get('id', '')
         project = request.DATA.get('project', {})
         instance = Project.objects.get(id=project_id)
-        for item in instance._meta.fields:
-            if item.rel:
-                if getattr(instance, item.name).id != project.get(item.name, {}).get('id', ''):
-                    setattr(instance, '%s_id' % item.name, project.get(item.name, {}).get('id', ''))
-            else:
-                if getattr(instance, item.name) != project.get(item.name):
-                    setattr(instance, item.name, project.get(item.name))
-        project_role = project.get('project_role', {})
+        project_data = {
+            'id': project.get('id', ''),
+            'name': project.get('name', ''),
+            'programme': project.get('programme', {}).get('id', ''),
+            'project_number': project.get('project_number', ''),
+            'description': project.get('description', ''),
+            'municipality': project.get('municipality', {}).get('id', '')
+
+        }
+
+        project_form = ProjectTestForm(project_data)
+        if project_form.is_valid():
+            project_form.save()
+            instance = project_form.instance
+
+        project_role = project.get('project_role', [])
         for pr in project_role:
             pr_id = pr.get('id', '')
-            role_id = pr.get('role', {}).get('id', '')
-            entity_id = pr.get('entity', {}).get('id', '')
-            try:
-                if pr_id:
-                    project_role_obj = ProjectRole.objects.get(id=pr_id)
-                    if project_role_obj.role_id != role_id:
-                        project_role_obj.role_id = role_id
-                        project_role_obj.save()
-                    if project_role_obj.entity_id != entity_id:
-                        project_role_obj.entity_id = entity_id
-                        project_role_obj.save()
-                else:
-                    project_role_obj = ProjectRole(role_id=role_id, entity_id=entity_id, project_id=instance.id)
-                    project_role_obj.save()
-            except ProjectRole.DoesNotExist:
-                pass
+
+            project_role_data = {
+                'id': pr_id,
+                'role': pr.get('role', {}).get('id', ''),
+                'entity': pr.get('entity', {}).get('id', ''),
+                'project': instance.id
+            }
+
+            project_role_form = ProjectRoleTestForm(project_role_data)
+            if project_role_form.is_valid():
+                project_role_form.save()
+
         planning = project.get('planning', [])
         for p in planning:
             year = dateutil.parser.parse(p.get('name', '')).year
             month = p.get('month', [])
-            allocated_budget = p.get('allocated_budget', '')
-            allocated_planning_budget = p.get('allocated_planning_budget', '')
-            p_id = p.get('id', '')
-            if year:
-                if p_id:
-                    p_obj = Budget.objects.get(id=p_id)
-                    if p_obj.allocated_budget != allocated_budget:
-                        p_obj.allocated_budget = allocated_budget
-                        p_obj.save()
-                    if p_obj.allocated_planning_budget != allocated_planning_budget:
-                        p_obj.allocated_planning_budget = allocated_planning_budget
-                        p_obj.save()
-                else:
-                    p_obj = Budget(year=year, project_id=instance.id)
-                    if allocated_budget:
-                        p_obj.allocated_budget = allocated_budget
-                    if allocated_planning_budget:
-                        p_obj.allocated_planning_budget = allocated_planning_budget
-                    p_obj.save()
+
+            budget_data = {
+                'id': p.get('id', ''),
+                'year': dateutil.parser.parse(p.get('name', '')).year,
+                'allocated_budget': p.get('allocated_budget', ''),
+                'allocated_planning_budget': p.get('allocated_planning_budget', ''),
+                'project': instance.id
+            }
+
+            budget_form = BudgetTestForm(budget_data)
+            if budget_form.is_valid():
+                budget_form.save()
 
             for m in month:
-                planning_id = m.get('id', '')
-                planned_expenses = m.get('planning', {}).get('planned_expenses', '')
-                planned_progress = m.get('planning', {}).get('planned_progress', '')
-                month_id = m.get('month_id', '')
-                if planning_id:
-                    planning_obj = Planning.objects.get(id=planning_id)
-                    if planning_obj.planned_expenses != planned_expenses:
-                        planning_obj.planned_expenses = planned_expenses
-                        planning_obj.save()
-                    if planning_obj.planned_progress != planned_progress:
-                        planning_obj.planned_progress = planned_progress
-                        planning_obj.save()
-                else:
-                    if year and month_id:
-                        planning_obj = Planning(month=month_id, year=year, project_id=instance.id)
-                        if planned_expenses:
-                            planning_obj.planned_expenses = planned_expenses
-                        if planned_progress:
-                            planning_obj.planned_progress = planned_progress
-                        planning_obj.save()
+                planning_data = {
+                    'id': m.get('id', ''),
+                    'month': m.get('month_id', ''),
+                    'year': year,
+                    'planned_expenses': m.get('planning', {}).get('planned_expenses', ''),
+                    'planned_progress': m.get('planning', {}).get('planned_progress', ''),
+                    'project': instance.id
+                }
+
+                planning_form = PlanningTestForm(planning_data)
+                if planning_form.is_valid():
+                    planning_form.save()
 
         project_milestones = project.get('project_milestones', [])
         for pm in project_milestones:
-            pm_id = pm.get('id', '')
             completion_date = pm.get('completion_date', '')
-            milestone_id = pm.get('milestone_id', '')
-            if pm_id:
-                pm_obj = ProjectMilestone.objects.get(id=pm_id)
-                if completion_date and pm_obj.completion_date != dateutil.parser.parse(completion_date):
-                    pm_obj.completion_date = dateutil.parser.parse(completion_date)
-                    pm_obj.save()
-            else:
-                pm_obj = ProjectMilestone(milestone_id=milestone_id, project_id=instance.id)
-                if completion_date:
-                    pm_obj.completion_date = dateutil.parser.parse(completion_date)
-                else:
-                    pm_obj.completion_date = None
-                pm_obj.save()
+            project_milestone_data = {
+                'id': pm.get('id', ''),
+                'completion_date': dateutil.parser.parse(completion_date) if completion_date else None,
+                'milestone': pm.get('milestone_id', ''),
+                'project': instance.id
+            }
+
+            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
+            if project_milestone_form.is_valid():
+                project_milestone_form.save()
+
         scope_of_work = project.get('scope_of_work')
         for sow in scope_of_work:
-            sow_id = sow.get('id', '')
-            quantity = sow.get('quantity', '')
-            scope_code_id = sow.get('scope_code', {}).get('id', '')
-            if sow_id:
-                sow_obj = ScopeOfWork.objects.get(id=sow_id)
-                if sow_obj.quantity != quantity:
-                    sow_obj.quantity = quantity
-                    sow_obj.save()
-                if scope_code_id and sow_obj.scope_code_id != scope_code_id:
-                    sow_obj.scope_code_id = scope_code_id
-                    sow_obj.save()
-            else:
-                if scope_code_id:
-                    sow_obj = ScopeOfWork(project_id=instance.id, scope_code_id=scope_code_id)
-                    if quantity:
-                        sow_obj.quantity = quantity
-                    sow_obj.save()
+
+            scope_of_work_data = {
+                'id': sow.get('id', ''),
+                'quantity': sow.get('quantity', ''),
+                'scope_code': sow.get('scope_code', {}).get('id', ''),
+                'project': instance.id
+            }
+
+            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
+            if scope_of_work_form.is_valid():
+                scope_of_work_form.save()
+
         project_financial = project.get('project_financial', {})
-        project_financial_id = project_financial.get('id', '')
-        project_financial_total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
-        if project_financial_id:
-            pf_obj = ProjectFinancial.objects.get(id=project_financial_id)
-            if pf_obj.total_anticipated_cost != project_financial_total_anticipated_cost:
-                pf_obj.total_anticipated_cost = project_financial_total_anticipated_cost
-                pf_obj.save()
-        else:
-            pf_obj = ProjectFinancial(project_id=instance.id)
-            if project_financial_total_anticipated_cost:
-                pf_obj.total_anticipated_cost = project_financial_total_anticipated_cost
-            pf_obj.save()
+
+        project_financial_data = {
+            'id': project_financial.get('id', ''),
+            'total_anticipated_cost': project_financial.get('total_anticipated_cost', ''),
+            'project': instance.id
+        }
+
+        project_financial_form = ProjectFinancialTestForm(project_financial_data)
+
+        if project_financial_form.is_valid():
+            project_financial_form.save()
 
         with reversion.create_revision():
             instance.save()
