@@ -20,3 +20,29 @@ class FinancialYearTest(TestCase):
 
         for p in planning_2014:
             self.assertTrue(p.month in ["4", "5", "6", "7", "8", "9", "10", "11", "12"])
+
+class ProjectManagerTest(TestCase):
+    def setUp(self):
+        self.client = factories.ClientFactory.create()
+        self.programme = factories.ProgrammeFactory.create(client=self.client)
+        self.district = factories.DistrictFactory.create()
+        self.municipality = factories.MunicipalityFactory.create(district=self.district)
+        self.project = factories.ProjectFactory.create(municipality=self.municipality, programme=self.programme)
+
+    def test_client(self):
+        projects = self.project.objects.client(self.client)
+        self.assertEquals(len(projects), 1)
+        self.assertEquals(projects[0].programme.client, self.client)
+
+    def test_municipality(self):
+        projects = models.Project.objects.municipality(self.municipality)
+        self.assertEquals(len(projects), 1)
+        self.assertEquals(projects[0].municipality.district, self.district)
+
+    def test_district(self):
+        projects = models.Project.objects.district(self.district)
+        self.assertEquals(len(projects), 1)
+        
+    def test_client(self):
+        projects = models.Project.objects.client(self.client)
+        self.assertEquals(len(projects), 1)
