@@ -124,6 +124,7 @@ def project_serializer(queryset, condensed=None):
 
 def project_detail_serializer(object):
     project_role = []
+    project_roles_test = []
     for pr in object.project_roles.all():
         project_role += [{
                          'id': pr.id,
@@ -135,6 +136,12 @@ def project_detail_serializer(object):
                              'id': pr.entity_id,
                          }
                          }]
+        project_roles_test += [{
+            'id': pr.id,
+            'role': pr.role.id,
+            'role_name': pr.role.name,
+            'entity': pr.entity_id,
+        }]
     scope_of_work = []
     for sow in object.scope_of_works.all():
         scope_of_work += [{
@@ -146,6 +153,7 @@ def project_detail_serializer(object):
                           }
                           }]
     planning = []
+    budgets_test = []
     for b in object.budgets.all():
         month = []
         for p in object.plannings.filter(year=b.year):
@@ -164,6 +172,12 @@ def project_detail_serializer(object):
                      'allocated_planning_budget': b.allocated_planning_budget,
                      'month': month
                      }]
+        budgets_test += [{
+            'id': b.id,
+            'year': b.year,
+            'allocated_budget': b.allocated_budget,
+            'allocated_planning_budget': b.allocated_planning_budget,
+        }]
     project_milestones = []
     for pm in object.project_milestone.all():
         project_milestones += [{
@@ -181,6 +195,20 @@ def project_detail_serializer(object):
         total_anticipated_cost = ''
         id = ''
     data = {
+        'project_test': {
+            'id': object.id,
+            'name': object.name,
+            'description': object.description,
+            'project_number': object.project_number,
+            'programme': object.programme.id,
+            'municipality': object.municipality.id
+        },
+        'project_roles_test': project_roles_test,
+        'budgets_test': budgets_test,
+        'project_financial_test': {
+            'id': id,
+            'total_anticipated_cost': total_anticipated_cost
+        },
         'project': {
             'id': object.id,
             'name': object.name,

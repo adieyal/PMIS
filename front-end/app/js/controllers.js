@@ -492,7 +492,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
             $http.get(HOST+'/api/districts/'+$scope.wizard.project.district.id+'/municipalities/', {})
                 .success(function(data, status, headers, config) {
                     $scope.municipalities = data
-                    $scope.wizard.project.municipality = {}
+                    $scope.wizard.project_test.municipality = ''
                 })
                 .error(function(data, status, headers, config) {
                     $scope.status = status;

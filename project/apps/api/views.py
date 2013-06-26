@@ -1,3 +1,4 @@
+import copy
 import dateutil.parser
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
@@ -280,32 +281,17 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         project_id = request.DATA.get('project', {}).get('id', '')
         project = request.DATA.get('project', {})
         instance = Project.objects.get(id=project_id)
-        project_data = {
-            'id': project.get('id', ''),
-            'name': project.get('name', ''),
-            'programme': project.get('programme', {}).get('id', ''),
-            'project_number': project.get('project_number', ''),
-            'description': project.get('description', ''),
-            'municipality': project.get('municipality', {}).get('id', '')
 
-        }
-
+        project_data = request.DATA.get('project_test', {})
         project_form = ProjectTestForm(project_data)
         if project_form.is_valid():
             project_form.save()
             instance = project_form.instance
 
-        project_role = project.get('project_role', [])
+        project_role = request.DATA.get('project_roles_test', [])
+
         for pr in project_role:
-            pr_id = pr.get('id', '')
-
-            project_role_data = {
-                'id': pr_id,
-                'role': pr.get('role', {}).get('id', ''),
-                'entity': pr.get('entity', {}).get('id', ''),
-                'project': instance.id
-            }
-
+            project_role_data = pr.update({u'project': instance.id}) or pr
             project_role_form = ProjectRoleTestForm(project_role_data)
             if project_role_form.is_valid():
                 project_role_form.save()
@@ -369,13 +355,8 @@ class ProjectDetailView(generics.SingleObjectAPIView):
             if scope_of_work_form.is_valid():
                 scope_of_work_form.save()
 
-        project_financial = project.get('project_financial', {})
-
-        project_financial_data = {
-            'id': project_financial.get('id', ''),
-            'total_anticipated_cost': project_financial.get('total_anticipated_cost', ''),
-            'project': instance.id
-        }
+        project_financial = request.DATA.get('project_financial_test', {})
+        project_financial_data = project_financial.update({u'project': instance.id}) or project_financial
 
         project_financial_form = ProjectFinancialTestForm(project_financial_data)
 
