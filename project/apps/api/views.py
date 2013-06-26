@@ -45,82 +45,88 @@ class ProjectsView(generics.ListAPIView):
             'name': data_project.get('name', ''),
             'project_number': data_project.get('project_number', ''),
             'description': data_project.get('description', ''),
-            'programme_id': data_project.get('programme', {}).get('id', ''),
-            'municipality_id': data_project.get('municipality', {}).get('id', '')
+            'programme': data_project.get('programme', {}).get('id', ''),
+            'municipality': data_project.get('municipality', {}).get('id', '')
         }
-        if new_project['name'] == "" or new_project['programme_id'] == '' or new_project['municipality_id'] == '':
+        project_form = ProjectTestForm(new_project)
+        if project_form.is_valid():
+            project_form.save()
+            project = project_form.instance
+        else:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-        project = Project(name=new_project['name'], project_number=new_project['project_number'],
-                          description=new_project['description'], programme_id=new_project['programme_id'],
-                          municipality_id=new_project['municipality_id'])
-        project.save()
 
         data_scope_of_work = request.DATA.get('scope_of_work', [])
-
         for scope in data_scope_of_work:
             scope_code_id = scope.get('scope_code', {})
             if scope_code_id != '':
                 scope_code_id = scope_code_id.get('id', '')
-            quantity = scope.get('quantity', None)
-            if scope_code_id:
-                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id,  project_id=project.id)
-                scope_of_work.save()
-            if quantity:
-                scope_of_work.quantity = quantity
-                scope_of_work.save()
+            scope_of_work_data = {
+                'quantity': scope.get('quantity', None),
+                'scope_code': scope_code_id,
+                'project': project.id
+            }
+            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
+            if scope_of_work_form.is_valid():
+                scope_of_work_form.save()
 
         data_project_role = request.DATA.get('project_role', [])
         for project_role_item in data_project_role:
-            role_id = project_role_item.get('role', {}).get('id', '')
-            entity_id = project_role_item.get('entity', {}).get('id', '')
-
-            if role_id and entity_id:
-                project_role = ProjectRole(project_id=project.id, entity_id=entity_id, role_id=role_id)
-                project_role.save()
+            project_role_data = {
+                'role': project_role_item.get('role', {}).get('id', ''),
+                'entity': project_role_item.get('entity', {}).get('id', ''),
+                'project': project.id
+            }
+            project_role_form = ProjectRoleTestForm(project_role_data)
+            if project_role_form.is_valid():
+                project_role_form.save()
 
         data_project_milestones = request.DATA.get('project_milestones', [])
         for project_milestone in data_project_milestones:
             completion_date = project_milestone.get('completion_date', '')
-            milestone_id = project_milestone.get('id', '')
-            if completion_date and milestone_id:
-                pm = ProjectMilestone(completion_date=dateutil.parser.parse(completion_date), milestone_id=milestone_id,
-                                      project_id=project.id)
-                pm.save()
+
+            project_milestone_data = {
+                'completion_date': dateutil.parser.parse(completion_date) if completion_date else None,
+                'milestone': project_milestone.get('id', ''),
+                'project': project.id
+            }
+            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
+            if project_milestone_form.is_valid():
+                project_milestone_form.save()
 
         data_planning = request.DATA.get('planning', [])
         for planning in data_planning:
             year = dateutil.parser.parse(planning.get('name', '')).year
-            allocated_budget = planning.get('allocated_budget', '')
-            allocated_planning_budget = planning.get('allocated_planning_budget', '')
-
-            budget = Budget(year=year, project_id=project.id)
-            budget.save()
-            if allocated_budget:
-                budget.allocated_budget = allocated_budget
-                budget.save()
-
-            if allocated_planning_budget:
-                budget.allocated_planning_budget = allocated_planning_budget
-                budget.save()
+            budget_data = {
+                'year': year,
+                'allocated_budget': planning.get('allocated_budget', ''),
+                'allocated_planning_budget': planning.get('allocated_planning_budget', ''),
+                'project': project.id
+            }
+            budget_form = BudgetTestForm(budget_data)
+            if budget_form.is_valid():
+                budget_form.save()
 
             if year:
                 for month in planning.get('month', []):
-                    planned_expenses = month.get('planning', {}).get('planned_expenses', '')
-                    planned_progress = month.get('planning', {}).get('planned_progress', '')
-                    month_id = month.get('id', '')
-                    if month_id:
-                        p = Planning(month=month_id, year=year, project_id=project.id)
-                        if planned_expenses:
-                            p.planned_expenses = planned_expenses
-                        if planned_progress:
-                            p.planned_progress = planned_progress
-                        p.save()
+                    planning_data = {
+                        'month': month.get('id', ''),
+                        'year': year,
+                        'planned_expenses': month.get('planning', {}).get('planned_expenses', ''),
+                        'planned_progress': month.get('planning', {}).get('planned_progress', ''),
+                        'project': project.id
+                    }
+                    planning_form = PlanningTestForm(planning_data)
+                    if planning_form.is_valid():
+                        planning_form.save()
 
         project_financial = request.DATA.get('project_financial', {})
-        total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
-        if total_anticipated_cost:
-            pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
-            pf.save()
+        project_financial_data = {
+            'total_anticipated_cost': project_financial.get('total_anticipated_cost', ''),
+            'project': project.id
+        }
+        project_financial_form = ProjectFinancialTestForm(project_financial_data)
+        if project_financial_form.is_valid():
+            project_financial_form.save()
 
         return Response({'status': status.HTTP_201_CREATED})
 
