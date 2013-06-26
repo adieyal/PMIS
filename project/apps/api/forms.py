@@ -6,7 +6,6 @@ class UpdateModelForm(forms.ModelForm):
     id = forms.IntegerField(required=False)
 
     def clean_id(self):
-        # print dir(self)
         id_ = self.cleaned_data['id']
         if id_:
             if self._meta.model.objects.filter(id=id_).exists():

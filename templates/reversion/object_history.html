@@ -30,9 +30,11 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{% url 'admin:projects_versioned_change' action.revision.versioned.id %}">
-                                    {{action.revision.versioned.update_comment|linebreaksbr|default:""}}
-                                </a>
+                                {% if action.revision.versioned.update_user %}
+                                    <a href="{% url 'admin:projects_versioned_change' action.revision.versioned.id %}">
+                                        {{action.revision.versioned.update_comment|linebreaksbr|default:""}}
+                                    </a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

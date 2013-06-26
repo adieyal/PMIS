@@ -3,7 +3,7 @@ from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
 import reversion
 from project.apps.api.forms import ProjectTestForm, ProjectRoleTestForm, BudgetTestForm, PlanningTestForm, ProjectMilestoneTestForm, ScopeOfWorkTestForm, ProjectFinancialTestForm
-from project.apps.projects.models import Client, District, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial, Versioned
+from project.apps.projects.models import Client, District, Project, Programme, ScopeCode, Role, Entity, Milestone, Versioned
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
 
 
@@ -127,7 +127,10 @@ class ProjectsView(generics.ListAPIView):
         project_financial_form = ProjectFinancialTestForm(project_financial_data)
         if project_financial_form.is_valid():
             project_financial_form.save()
-
+        with reversion.create_revision():
+            project.save()
+            reversion.set_user(request.user)
+            reversion.add_meta(Versioned, update_user=request.user, update_comment='Initialization of the project.')
         return Response({'status': status.HTTP_201_CREATED})
 
 
@@ -195,7 +198,8 @@ class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
 
         data = {}
         try:
-            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id,
+                                                                           municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
         data = project_serializer(queryset, condensed)
@@ -409,11 +413,11 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
         data = []
         for monthly_submission in project.monthly_submissions.all():
             data += [{
-                'month': monthly_submission.month,
-                'year': monthly_submission.year,
-                'comment': monthly_submission.comment,
-                'remedial_action': monthly_submission.remedial_action
-            }]
+                         'month': monthly_submission.month,
+                         'year': monthly_submission.year,
+                         'comment': monthly_submission.comment,
+                         'remedial_action': monthly_submission.remedial_action
+                     }]
         return Response(data)
 
 
@@ -427,7 +431,8 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
         num = request.GET.get('num', None)
         data = {}
         try:
-            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id, municipality__district_id=district_id).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id,
+                                                                           municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
 
@@ -460,9 +465,9 @@ class ProjectOverallProgressViewSet(generics.ListAPIView):
         year = request.GET.get('year', None)
         res = {}
         try:
-            queryset = Project.objects.get_project(request.user.id)\
-                .district(district_id)\
-                .client(client_id)\
+            queryset = Project.objects.get_project(request.user.id) \
+                .district(district_id) \
+                .client(client_id) \
                 .distinct()
         except Project.DoesNotExist:
             return Response(res)
@@ -472,6 +477,7 @@ class ProjectOverallProgressViewSet(generics.ListAPIView):
         length = len(projects)
         if length:
             sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
-            res = {'actual_progress': sum_data['actual_progress'] / length, 'planned_progress': sum_data['planned_progress'] / length}
+            res = {'actual_progress': sum_data['actual_progress'] / length,
+                   'planned_progress': sum_data['planned_progress'] / length}
 
         return Response(res)

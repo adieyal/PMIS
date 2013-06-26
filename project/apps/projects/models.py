@@ -1,5 +1,4 @@
 import datetime
-from django.db.models import Q
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
@@ -7,7 +6,6 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
-import reversion
 
 
 MONTHS = (
@@ -104,6 +102,7 @@ class Programme(models.Model):
     def __unicode__(self):
         return self.name
 
+
 class ProjectManagerQuerySet(QuerySet):
     def client(self, client):
         if type(client) == int:
@@ -128,6 +127,7 @@ class ProjectManagerQuerySet(QuerySet):
             return self.filter(programme__id=programme)
         else:
             return self.filter(programme__id=programme)
+
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
