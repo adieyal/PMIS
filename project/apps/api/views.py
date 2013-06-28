@@ -41,95 +41,61 @@ class ProjectsView(generics.ListAPIView):
         return Response(data)
 
     def post(self, request, *args, **kwargs):
-        data_project = request.DATA.get('project')
-        new_project = {
-            'name': data_project.get('name', ''),
-            'project_number': data_project.get('project_number', ''),
-            'description': data_project.get('description', ''),
-            'programme': data_project.get('programme', {}).get('id', ''),
-            'municipality': data_project.get('municipality', {}).get('id', '')
-        }
-        project_form = ProjectTestForm(new_project)
+        project_data = request.DATA.get('project', {})
+        project_form = ProjectTestForm(project_data)
         if project_form.is_valid():
             project_form.save()
-            project = project_form.instance
+            instance = project_form.instance
         else:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
 
-        data_scope_of_work = request.DATA.get('scope_of_work', [])
-        for scope in data_scope_of_work:
-            scope_code_id = scope.get('scope_code', {})
-            if scope_code_id != '':
-                scope_code_id = scope_code_id.get('id', '')
-            scope_of_work_data = {
-                'quantity': scope.get('quantity', None),
-                'scope_code': scope_code_id,
-                'project': project.id
-            }
-            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
-            if scope_of_work_form.is_valid():
-                scope_of_work_form.save()
+        project_roles = request.DATA.get('project_roles', [])
 
-        data_project_role = request.DATA.get('project_role', [])
-        for project_role_item in data_project_role:
-            project_role_data = {
-                'role': project_role_item.get('role', {}).get('id', ''),
-                'entity': project_role_item.get('entity', {}).get('id', ''),
-                'project': project.id
-            }
+        for pr in project_roles:
+            project_role_data = pr.update({u'project': instance.id}) or pr
             project_role_form = ProjectRoleTestForm(project_role_data)
             if project_role_form.is_valid():
                 project_role_form.save()
 
-        data_project_milestones = request.DATA.get('project_milestones', [])
-        for project_milestone in data_project_milestones:
-            completion_date = project_milestone.get('completion_date', '')
+        budgets = request.DATA.get('budgets', [])
+        for p in budgets:
+            budget_data = p.update({'project': instance.id}) or p
 
-            project_milestone_data = {
-                'completion_date': dateutil.parser.parse(completion_date) if completion_date else None,
-                'milestone': project_milestone.get('id', ''),
-                'project': project.id
-            }
-            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
-            if project_milestone_form.is_valid():
-                project_milestone_form.save()
-
-        data_planning = request.DATA.get('planning', [])
-        for planning in data_planning:
-            year = dateutil.parser.parse(planning.get('name', '')).year
-            budget_data = {
-                'year': year,
-                'allocated_budget': planning.get('allocated_budget', ''),
-                'allocated_planning_budget': planning.get('allocated_planning_budget', ''),
-                'project': project.id
-            }
             budget_form = BudgetTestForm(budget_data)
             if budget_form.is_valid():
                 budget_form.save()
 
-            if year:
-                for month in planning.get('month', []):
-                    planning_data = {
-                        'month': month.get('id', ''),
-                        'year': year,
-                        'planned_expenses': month.get('planning', {}).get('planned_expenses', ''),
-                        'planned_progress': month.get('planning', {}).get('planned_progress', ''),
-                        'project': project.id
-                    }
-                    planning_form = PlanningTestForm(planning_data)
-                    if planning_form.is_valid():
-                        planning_form.save()
+            plannings = p.get('plannings', [])
+            for planning in plannings:
+                planning_data = planning.update({'project': instance.id}) or planning
+                planning_form = PlanningTestForm(planning_data)
+                if planning_form.is_valid():
+                    planning_form.save()
+
+        project_milestones = request.DATA.get('project_milestones', [])
+        for pm in project_milestones:
+            project_milestone_data = pm.update({'project': instance.id}) or pm
+
+            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
+            if project_milestone_form.is_valid():
+                project_milestone_form.save()
+
+        scope_of_works = request.DATA.get('scope_of_works', [])
+        for sow in scope_of_works:
+            scope_of_work_data = sow.update({'project': instance.id}) or sow
+            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
+            if scope_of_work_form.is_valid():
+                scope_of_work_form.save()
 
         project_financial = request.DATA.get('project_financial', {})
-        project_financial_data = {
-            'total_anticipated_cost': project_financial.get('total_anticipated_cost', ''),
-            'project': project.id
-        }
+        project_financial_data = project_financial.update({u'project': instance.id}) or project_financial
+
         project_financial_form = ProjectFinancialTestForm(project_financial_data)
+
         if project_financial_form.is_valid():
             project_financial_form.save()
         with reversion.create_revision():
-            project.save()
+            instance.save()
             reversion.set_user(request.user)
             reversion.add_meta(Versioned, update_user=request.user, update_comment='Initialization of the project.')
         return Response({'status': status.HTTP_201_CREATED})
