@@ -28,19 +28,8 @@ class ScopeCodeViewSet(generics.ListAPIView):
     serializer_class = ScopeCodeSerializer
 
 
-class ProjectsView(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
-        data = {}
-        condensed = request.GET.get('condensed', None)
-
-        try:
-            queryset = Project.objects.get_project(request.user.id)
-        except Project.DoesNotExist:
-            return Response(data)
-        data = project_serializer(queryset, condensed)
-        return Response(data)
-
-    def post(self, request, *args, **kwargs):
+class ProcessDataProjectMixin(object):
+    def process_data(self, request):
         project_data = request.DATA.get('project', {})
         project_form = ProjectTestForm(project_data)
         if project_form.is_valid():
@@ -48,7 +37,6 @@ class ProjectsView(generics.ListAPIView):
             instance = project_form.instance
         else:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-
         project_roles = request.DATA.get('project_roles', [])
 
         for pr in project_roles:
@@ -94,10 +82,29 @@ class ProjectsView(generics.ListAPIView):
 
         if project_financial_form.is_valid():
             project_financial_form.save()
+
         with reversion.create_revision():
             instance.save()
             reversion.set_user(request.user)
-            reversion.add_meta(Versioned, update_user=request.user, update_comment='Initialization of the project.')
+            reversion.add_meta(Versioned, update_user=request.user, update_comment=request.DATA.get("update_comment", 'Initialization of the project.'))
+
+
+class ProjectsView(ProcessDataProjectMixin, generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        data = {}
+        condensed = request.GET.get('condensed', None)
+
+        try:
+            queryset = Project.objects.get_project(request.user.id)
+        except Project.DoesNotExist:
+            return Response(data)
+        data = project_serializer(queryset, condensed)
+        return Response(data)
+
+    def post(self, request, *args, **kwargs):
+
+        self.process_data(request)
+
         return Response({'status': status.HTTP_201_CREATED})
 
 
@@ -230,7 +237,7 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
         return Response(data)
 
 
-class ProjectDetailView(generics.SingleObjectAPIView):
+class ProjectDetailView(ProcessDataProjectMixin, generics.SingleObjectAPIView):
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         data = {}
@@ -244,65 +251,7 @@ class ProjectDetailView(generics.SingleObjectAPIView):
 
     def put(self, request, *args, **kwargs):
 
-        project_id = request.DATA.get('project', {}).get('id', '')
-        instance = Project.objects.get(id=project_id)
-
-        project_data = request.DATA.get('project', {})
-        project_form = ProjectTestForm(project_data)
-        if project_form.is_valid():
-            project_form.save()
-            instance = project_form.instance
-
-        project_roles = request.DATA.get('project_roles', [])
-
-        for pr in project_roles:
-            project_role_data = pr.update({u'project': instance.id}) or pr
-            project_role_form = ProjectRoleTestForm(project_role_data)
-            if project_role_form.is_valid():
-                project_role_form.save()
-
-        budgets = request.DATA.get('budgets', [])
-        for p in budgets:
-            budget_data = p.update({'project': instance.id}) or p
-
-            budget_form = BudgetTestForm(budget_data)
-            if budget_form.is_valid():
-                budget_form.save()
-
-            plannings = p.get('plannings', [])
-            for planning in plannings:
-                planning_data = planning.update({'project': instance.id}) or planning
-                planning_form = PlanningTestForm(planning_data)
-                if planning_form.is_valid():
-                    planning_form.save()
-
-        project_milestones = request.DATA.get('project_milestones', [])
-        for pm in project_milestones:
-            project_milestone_data = pm.update({'project': instance.id}) or pm
-
-            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
-            if project_milestone_form.is_valid():
-                project_milestone_form.save()
-
-        scope_of_works = request.DATA.get('scope_of_works', [])
-        for sow in scope_of_works:
-            scope_of_work_data = sow.update({'project': instance.id}) or sow
-            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
-            if scope_of_work_form.is_valid():
-                scope_of_work_form.save()
-
-        project_financial = request.DATA.get('project_financial', {})
-        project_financial_data = project_financial.update({u'project': instance.id}) or project_financial
-
-        project_financial_form = ProjectFinancialTestForm(project_financial_data)
-
-        if project_financial_form.is_valid():
-            project_financial_form.save()
-
-        with reversion.create_revision():
-            instance.save()
-            reversion.set_user(request.user)
-            reversion.add_meta(Versioned, update_user=request.user, update_comment=request.DATA.get("update_comment", ""))
+        self.process_data(request)
 
         return Response({'status': status.HTTP_200_OK})
 
