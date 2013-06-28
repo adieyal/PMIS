@@ -123,71 +123,51 @@ def project_serializer(queryset, condensed=None):
 
 
 def project_detail_serializer(object):
-    project_role = []
-    project_roles_test = []
+    project_roles = []
     for pr in object.project_roles.all():
-        project_role += [{
-                         'id': pr.id,
-                         'role': {
-                             'id': pr.role.id,
-                             'name': pr.role.name
-                         },
-                         'entity': {
-                             'id': pr.entity_id,
-                         }
-                         }]
-        project_roles_test += [{
+        project_roles += [{
             'id': pr.id,
             'role': pr.role.id,
             'role_name': pr.role.name,
             'entity': pr.entity_id,
         }]
-    scope_of_work = []
+    scope_of_works = []
     for sow in object.scope_of_works.all():
-        scope_of_work += [{
-                          'id': sow.id,
-                          'quantity': sow.quantity,
-                          'scope_code': {
-                              'id': sow.scope_code.id,
-                              'name': sow.scope_code.name
-                          }
-                          }]
-    planning = []
-    budgets_test = []
+        scope_of_works += [{
+            'id': sow.id,
+            'quantity': sow.quantity,
+            'scope_code': sow.scope_code.id
+        }]
+    budgets = []
     for b in object.budgets.all():
-        month = []
+        plannings = []
         for p in object.plannings.filter(year=b.year):
-            month += [{
-                      'id': p.id,
-                      'name': p.get_month_display(),
-                      'month_id': p.month,
-                      'planning': {
-                          'planned_expenses': p.planned_expenses,
-                          'planned_progress': p.planned_progress,
-                      }}]
-        planning += [{
-                     'id': b.id,
-                     'name': b.year,
-                     'allocated_budget': b.allocated_budget,
-                     'allocated_planning_budget': b.allocated_planning_budget,
-                     'month': month
-                     }]
-        budgets_test += [{
+            plannings += [{
+                'id': p.id,
+                'month_display': p.get_month_display(),
+                'month': p.month,
+                'year': p.year,
+                'planned_expenses': p.planned_expenses,
+                'planned_progress': p.planned_progress,
+            }]
+
+        budgets += [{
             'id': b.id,
             'year': b.year,
             'allocated_budget': b.allocated_budget,
             'allocated_planning_budget': b.allocated_planning_budget,
+            'plannings': plannings
         }]
     project_milestones = []
     for pm in object.project_milestone.all():
         project_milestones += [{
-                                   'id': pm.id,
-                                   'milestone_id': pm.milestone.id,
-                                   'name': pm.milestone.name,
-                                   'phase': pm.milestone.phase,
-                                   'order': pm.milestone.order,
-                                   'completion_date': pm.completion_date
-                               }]
+            'id': pm.id,
+            'milestone': pm.milestone.id,
+            'name': pm.milestone.name,
+            'phase': pm.milestone.phase,
+            'order': pm.milestone.order,
+            'completion_date': pm.completion_date
+        }]
     try:
         total_anticipated_cost = object.project_financial.total_anticipated_cost
         id = object.project_financial.id
@@ -195,47 +175,26 @@ def project_detail_serializer(object):
         total_anticipated_cost = ''
         id = ''
     data = {
-        'project_test': {
-            'id': object.id,
-            'name': object.name,
-            'description': object.description,
-            'project_number': object.project_number,
-            'programme': object.programme.id,
-            'municipality': object.municipality.id
-        },
-        'project_roles_test': project_roles_test,
-        'budgets_test': budgets_test,
-        'project_financial_test': {
-            'id': id,
-            'total_anticipated_cost': total_anticipated_cost
-        },
         'project': {
             'id': object.id,
             'name': object.name,
             'description': object.description,
             'project_number': object.project_number,
-            'project_financial': {
-                'id': id,
-                'total_anticipated_cost': total_anticipated_cost
-            },
-            'district': {
-                'id': object.municipality.district.id,
-                'name': object.municipality.district.name
-            },
-            'programme': {
-                'id': object.programme.id,
-                'name': object.programme.name
-            },
-            'municipality': {
-                'id': getattr(object.municipality, 'id', ''),
-                'name': getattr(object.municipality, 'name', '')
-            },
-            'project_role': project_role,
-            'scope_of_work': scope_of_work,
-            'planning': planning,
-            'project_milestones': project_milestones
-
-        }
+            'programme': object.programme.id,
+            'programme_name': object.programme.name,
+            'municipality': object.municipality.id,
+            'municipality_name': object.municipality.name,
+            'district': object.municipality.district.id,
+            'district_name': object.municipality.district.name
+        },
+        'project_roles': project_roles,
+        'budgets': budgets,
+        'project_financial': {
+            'id': id,
+            'total_anticipated_cost': total_anticipated_cost
+        },
+        'scope_of_works': scope_of_works,
+        'project_milestones': project_milestones,
     }
 
     return data

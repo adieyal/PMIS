@@ -279,83 +279,53 @@ class ProjectDetailView(generics.SingleObjectAPIView):
     def put(self, request, *args, **kwargs):
 
         project_id = request.DATA.get('project', {}).get('id', '')
-        project = request.DATA.get('project', {})
         instance = Project.objects.get(id=project_id)
 
-        project_data = request.DATA.get('project_test', {})
+        project_data = request.DATA.get('project', {})
         project_form = ProjectTestForm(project_data)
         if project_form.is_valid():
             project_form.save()
             instance = project_form.instance
 
-        project_role = request.DATA.get('project_roles_test', [])
+        project_roles = request.DATA.get('project_roles', [])
 
-        for pr in project_role:
+        for pr in project_roles:
             project_role_data = pr.update({u'project': instance.id}) or pr
             project_role_form = ProjectRoleTestForm(project_role_data)
             if project_role_form.is_valid():
                 project_role_form.save()
 
-        planning = project.get('planning', [])
-        for p in planning:
-            year = dateutil.parser.parse(p.get('name', '')).year
-            month = p.get('month', [])
-
-            budget_data = {
-                'id': p.get('id', ''),
-                'year': dateutil.parser.parse(p.get('name', '')).year,
-                'allocated_budget': p.get('allocated_budget', ''),
-                'allocated_planning_budget': p.get('allocated_planning_budget', ''),
-                'project': instance.id
-            }
+        budgets = request.DATA.get('budgets', [])
+        for p in budgets:
+            budget_data = p.update({'project': instance.id}) or p
 
             budget_form = BudgetTestForm(budget_data)
             if budget_form.is_valid():
                 budget_form.save()
 
-            for m in month:
-                planning_data = {
-                    'id': m.get('id', ''),
-                    'month': m.get('month_id', ''),
-                    'year': year,
-                    'planned_expenses': m.get('planning', {}).get('planned_expenses', ''),
-                    'planned_progress': m.get('planning', {}).get('planned_progress', ''),
-                    'project': instance.id
-                }
-
+            plannings = p.get('plannings', [])
+            for planning in plannings:
+                planning_data = planning.update({'project': instance.id}) or planning
                 planning_form = PlanningTestForm(planning_data)
                 if planning_form.is_valid():
                     planning_form.save()
 
-        project_milestones = project.get('project_milestones', [])
+        project_milestones = request.DATA.get('project_milestones', [])
         for pm in project_milestones:
-            completion_date = pm.get('completion_date', '')
-            project_milestone_data = {
-                'id': pm.get('id', ''),
-                'completion_date': dateutil.parser.parse(completion_date) if completion_date else None,
-                'milestone': pm.get('milestone_id', ''),
-                'project': instance.id
-            }
+            project_milestone_data = pm.update({'project': instance.id}) or pm
 
             project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
             if project_milestone_form.is_valid():
                 project_milestone_form.save()
 
-        scope_of_work = project.get('scope_of_work')
-        for sow in scope_of_work:
-
-            scope_of_work_data = {
-                'id': sow.get('id', ''),
-                'quantity': sow.get('quantity', ''),
-                'scope_code': sow.get('scope_code', {}).get('id', ''),
-                'project': instance.id
-            }
-
+        scope_of_works = request.DATA.get('scope_of_works', [])
+        for sow in scope_of_works:
+            scope_of_work_data = sow.update({'project': instance.id}) or sow
             scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
             if scope_of_work_form.is_valid():
                 scope_of_work_form.save()
 
-        project_financial = request.DATA.get('project_financial_test', {})
+        project_financial = request.DATA.get('project_financial', {})
         project_financial_data = project_financial.update({u'project': instance.id}) or project_financial
 
         project_financial_form = ProjectFinancialTestForm(project_financial_data)
@@ -366,7 +336,7 @@ class ProjectDetailView(generics.SingleObjectAPIView):
         with reversion.create_revision():
             instance.save()
             reversion.set_user(request.user)
-            reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
+            reversion.add_meta(Versioned, update_user=request.user, update_comment=request.DATA.get("update_comment", ""))
 
         return Response({'status': status.HTTP_200_OK})
 

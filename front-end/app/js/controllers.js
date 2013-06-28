@@ -302,7 +302,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         $scope.project_id = $routeParams.projectId;
         $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
-                $scope.project = data;
+                $scope.data = data;
             })
             .error(function(data, status, headers, config) {
                 $scope.status = status;
@@ -343,7 +343,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         $http.get(HOST+'/api/projects/'+$scope.project_id+'/', {})
             .success(function(data, status, headers, config) {
                 $scope.wizard = data;
-                $http.get(HOST+'/api/districts/'+$scope.wizard.project.district.id+'/municipalities/', {})
+                $http.get(HOST+'/api/districts/'+$scope.wizard.project.district+'/municipalities/', {})
                     .success(function(data, status, headers, config) {
                         $scope.municipalities = data
                     })
@@ -388,13 +388,13 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                     var is_enter = false;
                     for (var i=0; i<l; i++){
                         is_enter = false;
-                        $.each($scope.wizard.project.project_role, function(index, value){
-                            if (value.role.id==data[i].id){
+                        $.each($scope.wizard.project_roles, function(index, value){
+                            if (value.role==data[i].id){
                                 is_enter = true;
                             }
                         });
                         if (!is_enter){
-                            $scope.wizard.project.project_role.push({'role': data[i], 'id':'', 'entity': {'id': ''}});
+                            $scope.wizard.project_roles.push({'role': data[i].id, 'id':'', 'entity': ""});
                         }
                     }
                 })
@@ -423,15 +423,15 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
                             $scope.phases.push(data[i].phase)
                         }
                         is_enter = false;
-                        $.each($scope.wizard.project.project_milestones, function(index, value){
-                            if (value.milestone_id==data[i].id){
+                        $.each($scope.wizard.project_milestones, function(index, value){
+                            if (value.milestone==data[i].id){
                                 is_enter = true;
                             }
                         });
                         if (!is_enter){
-                            data[i].milestone_id=data[i].id
-                            delete data[i].id
-                            $scope.wizard.project.project_milestones.push(data[i])
+                            data[i].milestone=data[i].id;
+                            delete data[i].id;
+                            $scope.wizard.project_milestones.push(data[i])
                         }
                     }
 //                    $scope.wizard.project.project_milestones = data;
@@ -448,38 +448,39 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
 
         ];
         $scope.month = [
-            {'name': 'Apr', 'month_id': 4},
-            {'name': 'May', 'month_id': 5},
-            {'name': 'Jun', 'month_id': 6},
-            {'name': 'Jul', 'month_id': 7},
-            {'name': 'Aug', 'month_id': 8},
-            {'name': 'Sep', 'month_id': 9},
-            {'name': 'Oct', 'month_id': 10},
-            {'name': 'Nov', 'month_id': 11},
-            {'name': 'Dec', 'month_id': 12},
-            {'name': 'Jan', 'month_id': 1},
-            {'name': 'Feb', 'month_id': 2},
-            {'name': 'Mar', 'month_id': 3}
+            {'month_display': 'Apr', 'month': 4},
+            {'month_display': 'May', 'month': 5},
+            {'month_display': 'Jun', 'month': 6},
+            {'month_display': 'Jul', 'month': 7},
+            {'month_display': 'Aug', 'month': 8},
+            {'month_display': 'Sep', 'month': 9},
+            {'month_display': 'Oct', 'month': 10},
+            {'month_display': 'Nov', 'month': 11},
+            {'month_display': 'Dec', 'month': 12},
+            {'month_display': 'Jan', 'month': 1},
+            {'month_display': 'Feb', 'month': 2},
+            {'month_display': 'Mar', 'month': 3}
         ];
 
         $scope.planning = [];
         $scope.update_years_record = function(){
             var l2 = $scope.month.length;
-            var l3 = $scope.wizard.project.planning.length;
+            var l3 = $scope.wizard.budgets.length;
             var is_enter = false;
             for(var i=0; i<l3; i++){
                 for (var j=0; j<l2; j++){
                     is_enter = false;
-                    $.each($scope.wizard.project.planning[i].month, function(index, value){
-                        if ($scope.month[j].id == value.month_id){
+                    $.each($scope.wizard.budgets[i].plannings, function(index, value){
+                        if ($scope.month[j].month == value.month){
                             is_enter = true
                         }
                     });
                     if (!is_enter){
-                        $scope.wizard.project.planning[i].month.push($.extend({},$scope.month[j],{'planning': {
+                        $scope.wizard.budgets[i].plannings.push($.extend({},$scope.month[j],{
                             'planned_expenses': "",
-                            'planned_progress': ""
-                        }}))
+                            'planned_progress': "",
+                            'year': $scope.wizard.budgets[i].year
+                        }))
                     }
                 }
             }
@@ -489,10 +490,10 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
 
         $scope.get_municipality = function(){
 
-            $http.get(HOST+'/api/districts/'+$scope.wizard.project.district.id+'/municipalities/', {})
+            $http.get(HOST+'/api/districts/'+$scope.wizard.project.district+'/municipalities/', {})
                 .success(function(data, status, headers, config) {
                     $scope.municipalities = data
-                    $scope.wizard.project_test.municipality = ''
+                    $scope.wizard.project.municipality = ''
                 })
                 .error(function(data, status, headers, config) {
                     $scope.status = status;
@@ -509,34 +510,35 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         $scope.addYear = function(year, is_valid){
             if (is_valid){
                 $scope.default.year = '';
-                $scope.year_list.push({'name': year });
+                $scope.year_list.push({'year': year });
                 var l2 = $scope.month.length;
                 var months = [];
                 for(var j=0; j<l2; j++){
-                    months.push($.extend({},$scope.month[j],{'planning': {
+                    months.push($.extend({},$scope.month[j],{
                         'planned_expenses': "",
-                        'planned_progress': ""
-                    }}));
+                        'planned_progress': "",
+                        'year': year
+                    }));
                 }
-                $scope.wizard.project.planning.push($.extend({},
-                    {'name': year},
+                $scope.wizard.budgets.push($.extend({},
+                    {'year': year},
                     {
                         allocated_planning_budget: "",
                         allocated_budget: "",
-                        month: months
+                        plannings: months
                     }
                 ));
             }
         };
 
         $scope.addScopeOfWork = function(){
-            $scope.wizard.project.scope_of_work.push({'quantity': "", 'scope_code': {}});
+            $scope.wizard.scope_of_works.push({'quantity': '', 'scope_code': ''});
         };
 
         $scope.removeScopeOfWork = function(s){
-            for (var i = 0, ii = $scope.wizard.project.scope_of_work.length; i < ii; i++) {
-                if (s === $scope.wizard.project.scope_of_work[i]) {
-                    $scope.wizard.project.scope_of_work.splice(i, 1);
+            for (var i = 0, ii = $scope.wizard.scope_of_works.length; i < ii; i++) {
+                if (s === $scope.wizard.scope_of_works[i]) {
+                    $scope.wizard.scope_of_works.splice(i, 1);
                 }
             }
         };
@@ -567,9 +569,9 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         $scope.handlePrevious = function() {
             $scope.step -= ($scope.isFirstStep()) ? 0 : 1;
         };
-        $scope.wizard.project.update_comment = '';
+        $scope.wizard.update_comment = '';
         $scope.submitForm = function(is_valid){
-            if (!$scope.wizard.project.update_comment){
+            if (!$scope.wizard.update_comment){
                 $scope.openDialog();
             }else{
                 if (is_valid) {
@@ -585,7 +587,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
         };
 
         $scope.handleNext = function(dismiss, is_valid) {
-            if (!$scope.wizard.project.update_comment){
+            if (!$scope.wizard.update_comment){
                 $scope.openDialog();
             }else{
                 if (is_valid) {
@@ -625,7 +627,7 @@ angular.module('myApp.controllers', ['ngCookies', 'ui.bootstrap', 'localytics.di
             d.open().then(function(result){
                 if(result)
                 {
-                    $scope.wizard.project.update_comment = result;
+                    $scope.wizard.update_comment = result;
                     $scope.submitForm(true);
                 }
             });
