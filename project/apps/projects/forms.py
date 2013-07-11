@@ -1,7 +1,5 @@
 from django import forms
-# from django.forms import inlineformset_factory
 from django.forms.formsets import formset_factory
-from django.forms.models import inlineformset_factory
 from django.contrib.auth.models import User
 from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork, ProjectRole
 from project.apps.projects.form_container import FormContainer
@@ -87,7 +85,6 @@ class LocationForm(forms.Form):
         required=False
     )
     # municipality = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, choices=Municipality.objects.all().values_list('id', 'name',))
-
 
 
 class LocationAndScopeFormContainer(FormContainer):

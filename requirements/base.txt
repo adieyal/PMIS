@@ -10,3 +10,4 @@ markdown==2.3.1
 django-filter==0.6
 django-reversion==1.7
 hg+https://bitbucket.org/crazymath/django-registration#egg=django-registration
+python-dateutil==2.1

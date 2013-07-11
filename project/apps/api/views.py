@@ -1,12 +1,10 @@
-import decimal
+import copy
 import dateutil.parser
-from rest_framework import viewsets, generics, permissions, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 import reversion
-from project.apps.projects.models import Client, District, Municipality, Project, Programme, ScopeCode, Role, Entity, Milestone, ScopeOfWork, ProjectRole, ProjectMilestone, Planning, Budget, ProjectFinancial, Versioned
+from project.apps.api.forms import ProjectTestForm, ProjectRoleTestForm, BudgetTestForm, PlanningTestForm, ProjectMilestoneTestForm, ScopeOfWorkTestForm, ProjectFinancialTestForm
+from project.apps.projects.models import Client, District, Project, Programme, ScopeCode, Role, Entity, Milestone, Versioned
 from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
 
 
@@ -30,96 +28,82 @@ class ScopeCodeViewSet(generics.ListAPIView):
     serializer_class = ScopeCodeSerializer
 
 
-class ProjectsView(generics.ListAPIView):
+class ProcessDataProjectMixin(object):
+    def process_data(self, request):
+        project_data = request.DATA.get('project', {})
+        project_form = ProjectTestForm(project_data)
+        if project_form.is_valid():
+            project_form.save()
+            instance = project_form.instance
+        else:
+            return Response({'status': status.HTTP_400_BAD_REQUEST})
+        project_roles = request.DATA.get('project_roles', [])
+
+        for pr in project_roles:
+            project_role_data = pr.update({u'project': instance.id}) or pr
+            project_role_form = ProjectRoleTestForm(project_role_data)
+            if project_role_form.is_valid():
+                project_role_form.save()
+
+        budgets = request.DATA.get('budgets', [])
+        for p in budgets:
+            budget_data = p.update({'project': instance.id}) or p
+
+            budget_form = BudgetTestForm(budget_data)
+            if budget_form.is_valid():
+                budget_form.save()
+
+            plannings = p.get('plannings', [])
+            for planning in plannings:
+                planning_data = planning.update({'project': instance.id}) or planning
+                planning_form = PlanningTestForm(planning_data)
+                if planning_form.is_valid():
+                    planning_form.save()
+
+        project_milestones = request.DATA.get('project_milestones', [])
+        for pm in project_milestones:
+            project_milestone_data = pm.update({'project': instance.id}) or pm
+
+            project_milestone_form = ProjectMilestoneTestForm(project_milestone_data)
+            if project_milestone_form.is_valid():
+                project_milestone_form.save()
+
+        scope_of_works = request.DATA.get('scope_of_works', [])
+        for sow in scope_of_works:
+            scope_of_work_data = sow.update({'project': instance.id}) or sow
+            scope_of_work_form = ScopeOfWorkTestForm(scope_of_work_data)
+            if scope_of_work_form.is_valid():
+                scope_of_work_form.save()
+
+        project_financial = request.DATA.get('project_financial', {})
+        project_financial_data = project_financial.update({u'project': instance.id}) or project_financial
+
+        project_financial_form = ProjectFinancialTestForm(project_financial_data)
+
+        if project_financial_form.is_valid():
+            project_financial_form.save()
+
+        with reversion.create_revision():
+            instance.save()
+            reversion.set_user(request.user)
+            reversion.add_meta(Versioned, update_user=request.user, update_comment=request.DATA.get("update_comment", 'Initialization of the project.'))
+
+
+class ProjectsView(ProcessDataProjectMixin, generics.ListAPIView):
     def get(self, request, *args, **kwargs):
         data = {}
+        condensed = request.GET.get('condensed', None)
+
         try:
             queryset = Project.objects.get_project(request.user.id)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
     def post(self, request, *args, **kwargs):
-        data_project = request.DATA.get('project')
-        new_project = {
-            'name': data_project.get('name', ''),
-            'project_number': data_project.get('project_number', ''),
-            'description': data_project.get('description', ''),
-            'programme_id': data_project.get('programme', {}).get('id', ''),
-            'municipality_id': data_project.get('municipality', {}).get('id', '')
-        }
-        if new_project['name'] == "" or new_project['programme_id'] == '' or new_project['municipality_id'] == '':
-            return Response({'status': status.HTTP_400_BAD_REQUEST})
-        project = Project(name=new_project['name'], project_number=new_project['project_number'],
-                          description=new_project['description'], programme_id=new_project['programme_id'],
-                          municipality_id=new_project['municipality_id'])
-        project.save()
 
-        data_scope_of_work = request.DATA.get('scope_of_work', [])
-
-        for scope in data_scope_of_work:
-            scope_code_id = scope.get('scope_code', {})
-            if scope_code_id != '':
-                scope_code_id = scope_code_id.get('id', '')
-            quantity = scope.get('quantity', None)
-            if scope_code_id:
-                scope_of_work = ScopeOfWork(scope_code_id=scope_code_id,  project_id=project.id)
-                scope_of_work.save()
-            if quantity:
-                scope_of_work.quantity = quantity
-                scope_of_work.save()
-
-        data_project_role = request.DATA.get('project_role', [])
-        for project_role_item in data_project_role:
-            role_id = project_role_item.get('role', {}).get('id', '')
-            entity_name = project_role_item.get('entity_name', '')
-
-            if role_id and entity_name:
-                entity, create = Entity.objects.get_or_create(name=entity_name)
-                project_role = ProjectRole(project_id=project.id, entity_id=entity.id, role_id=role_id)
-                project_role.save()
-
-        data_project_milestones = request.DATA.get('project_milestones', [])
-        for project_milestone in data_project_milestones:
-            completion_date = project_milestone.get('completion_date', '')
-            milestone_id = project_milestone.get('id', '')
-            if completion_date and milestone_id:
-                pm = ProjectMilestone(completion_date=dateutil.parser.parse(completion_date), milestone_id=milestone_id,
-                                      project_id=project.id)
-                pm.save()
-
-        data_planning = request.DATA.get('planning', [])
-        for planning in data_planning:
-            year = dateutil.parser.parse(planning.get('name', '')).year
-            allocated_budget = planning.get('allocated_budget', '')
-            allocated_planning_budget = planning.get('allocated_planning_budget', '')
-
-            budget = Budget(year=year, project_id=project.id)
-            budget.save()
-            if allocated_budget:
-                budget.allocated_budget = allocated_budget
-                budget.save()
-
-            if allocated_planning_budget:
-                budget.allocated_planning_budget = allocated_planning_budget
-                budget.save()
-
-            if year:
-                for month in planning.get('month', []):
-                    planned_expenses = month.get('planning', {}).get('amount', '')
-                    planned_progress = month.get('planning', {}).get('progress', '')
-                    month_id = month.get('id', '')
-                    if planned_expenses and planned_progress and month_id:
-                        p = Planning(month=month_id, year=year, planned_expenses=planned_expenses,
-                                     planned_progress=planned_progress, project_id=project.id)
-                        p.save()
-
-        project_financial = request.DATA.get('project_financial', {})
-        total_anticipated_cost = project_financial.get('total_anticipated_cost', '')
-        if total_anticipated_cost:
-            pf = ProjectFinancial(total_anticipated_cost=total_anticipated_cost, project_id=project.id)
-            pf.save()
+        self.process_data(request)
 
         return Response({'status': status.HTTP_201_CREATED})
 
@@ -150,15 +134,15 @@ class MunicipalityViewSet(generics.ListAPIView):
         return Response(serializer.data)
 
 
-class ProgrammeOfClientViewSet(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):
-        data = {}
+class ProgrammeOfClientViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        pk = kwargs.get('pk')
         try:
             queryset = Client.objects.get(id=pk).programmes.all()
-        except Client.DoesNotExist:
-            return Response(data)
-        data = project_serializer(queryset)
-        return Response(data)
+        except District.DoesNotExist:
+            queryset = {}
+        serializer = ProgrammeSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class ProjectOfClientViewSet(viewsets.ViewSet):
@@ -166,15 +150,33 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
-            queryset = Project.objects.filter(programme__client__id=pk)
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client__id=pk)
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
+        return Response(data)
+
+
+class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        condensed = request.GET.get('condensed', None)
+
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id,
+                                                                           municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -183,15 +185,17 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
-            queryset = Project.objects.filter(municipality__district__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(municipality__district__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -200,15 +204,17 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
-            queryset = Project.objects.filter(municipality__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(municipality__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -217,78 +223,49 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
         data = {}
         phase = request.GET.get('phase', None)
         milestone = request.GET.get('milestone', None)
+        condensed = request.GET.get('condensed', None)
+
         try:
-            queryset = Project.objects.filter(programme__id=pk).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(programme__id=pk).distinct()
             if phase:
                 queryset = queryset.filter(project_milestone__milestone__phase=phase)
             if milestone:
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset)
+        data = project_serializer(queryset, condensed)
         return Response(data)
 
 
-class ProjectDetailView(generics.SingleObjectAPIView):
+class ProjectDetailView(ProcessDataProjectMixin, generics.SingleObjectAPIView):
     def get(self, request, *args, **kwargs):
         pk = kwargs.get('pk')
         data = {}
+
         try:
-            object = Project.objects.get_project(request.user.id).get(id=pk)
+            obj = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-        data = project_detail_serializer(object)
+        data = project_detail_serializer(obj)
         return Response(data)
 
     def put(self, request, *args, **kwargs):
-        print request.user
-        print request.DATA.get('project', {})
-        project_id = request.DATA.get('project', {}).get('id', '')
-        project = request.DATA.get('project', {})
-        print project
-        instance = Project.objects.get(id=project_id)
-        for item in instance._meta.fields:
-            if item.rel:
-                if getattr(instance, item.name).id == project.get(item.name, {}).get('id', ''):
-                    print "Don't change field: %s" % item.name
-                else:
-                    print '----------------------'
-                    print getattr(instance, item.name)
-                    print project.get(item.name)
-                    print "Change field: %s" % item.name
-                    print '----------------------'
-                    setattr(instance, '%s_id' % item.name, project.get(item.name, {}).get('id', ''))
-            else:
-                if getattr(instance, item.name) == project.get(item.name):
-                    print "Don't change field: %s" % item.name
-                else:
-                    print '----------------------'
-                    print getattr(instance, item.name)
-                    print project.get(item.name)
-                    print "Change field: %s" % item.name
-                    print '----------------------'
-                    setattr(instance, item.name, project.get(item.name))
-        with reversion.create_revision():
-            instance.save()
-            reversion.set_user(request.user)
-            print reversion.add_meta(Versioned, update_user=request.user, update_comment=project.get("update_comment", ""))
-            # versioned = Versioned(reversion=reversion)
-            # print versioned.revision.id
-            # reversion.set_comment("Comment text...")
-        # instance.save()
-        print project_id
-        print instance
+
+        self.process_data(request)
+
         return Response({'status': status.HTTP_200_OK})
 
 
-class ProgressView(viewsets.ViewSet):
-    def retrieve(self, request, pk=None):
+class ProgressView(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
         data = {}
+        year = request.GET.get('year', None)
+        pk = kwargs.get('pk')
         try:
-            project = Project.objects.get(id=pk)
+            project = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
-        data = progress_serializer(project)
+        data = progress_serializer(project, year)
         return Response(data)
 
 
@@ -296,11 +273,77 @@ class ProjectCommentsViewSet(viewsets.ViewSet):
     def retrieve(self, request, pk=None):
         data = {}
         try:
-            project = Project.objects.get(id=pk)
+            project = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
         data = []
         for monthly_submission in project.monthly_submissions.all():
-            data += [{'month': monthly_submission.month, 'year': monthly_submission.year,
-                      'comment': monthly_submission.comment, 'remedial_action': monthly_submission.remedial_action}]
+            data += [{
+                         'month': monthly_submission.month,
+                         'year': monthly_submission.year,
+                         'comment': monthly_submission.comment,
+                         'remedial_action': monthly_submission.remedial_action
+                     }]
         return Response(data)
+
+
+class ProjectTopPerformingViewSet(generics.ListAPIView):
+    order = 1
+
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        condensed = request.GET.get('condensed', None)
+        num = request.GET.get('num', None)
+        data = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id,
+                                                                           municipality__district_id=district_id).distinct()
+        except Project.DoesNotExist:
+            return Response(data)
+
+        projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
+
+        projects = sorted(projects, key=lambda k: self.order * k['value'])
+
+        try:
+            if int(num) > 0:
+                projects = projects[0:int(num)]
+        except:
+            pass
+
+        project_ids = [item['id'] for item in projects]
+
+        queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
+
+        data = project_serializer(queryset, condensed)
+        return Response(data)
+
+
+class ProjectWorstPerformingViewSet(ProjectTopPerformingViewSet):
+    order = -1
+
+
+class ProjectOverallProgressViewSet(generics.ListAPIView):
+    def get(self, request, *args, **kwargs):
+        client_id = kwargs.get('client_id')
+        district_id = kwargs.get('district_id')
+        year = request.GET.get('year', None)
+        res = {}
+        try:
+            queryset = Project.objects.get_project(request.user.id) \
+                .district(district_id) \
+                .client(client_id) \
+                .distinct()
+        except Project.DoesNotExist:
+            return Response(res)
+
+        projects = [obj.get_progress(year=year) for obj in queryset if obj.get_progress(year=year)]
+
+        length = len(projects)
+        if length:
+            sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
+            res = {'actual_progress': sum_data['actual_progress'] / length,
+                   'planned_progress': sum_data['planned_progress'] / length}
+
+        return Response(res)

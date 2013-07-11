@@ -3,8 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.query import QuerySet
+from django.db.models import Q, F, Count
 from reversion.models import Revision
-import reversion
 
 
 MONTHS = (
@@ -22,7 +23,43 @@ MONTHS = (
     ('12', 'December'),
 )
 
-YEARS = tuple(map(lambda x: (str(x), x), range(1960, 2060)))
+YEARS = tuple(map(lambda x: (str(x), x), range(2010, 2060)))
+
+
+class PMISUser(User):
+    @classmethod
+    def from_user(cls, user):
+        return PMISUser.objects.get(id=user.id)
+
+    @property
+    def projects(self):
+        return Project.objects.get_project(self.id)
+
+    class Meta:
+        proxy = True
+
+
+class FinancialYearQuerySet(QuerySet):
+    def in_financial_year(self, year):
+        year = year
+        previous_year = year - 1
+        return self.filter(Q(year=previous_year, month__gt=3) | Q(year=year, month__lte=3))
+
+
+class FinancialYearManager(models.Manager):
+    """
+    Apply to any model that is time based
+    Defines the financial year which starts in April of the previous year and ends in March of the current year
+    """
+
+    def get_query_set(self):
+        return FinancialYearQuerySet(self.model)
+
+    def __getattr__(self, name):
+        """
+        Any method defined on our queryset is now available in our manager
+        """
+        return getattr(self.get_query_set(), name)
 
 
 class Versioned(models.Model):
@@ -66,9 +103,46 @@ class Programme(models.Model):
         return self.name
 
 
+class ProjectManagerQuerySet(QuerySet):
+    def client(self, client):
+        if type(client) == int:
+            return self.filter(programme__client__id=client)
+        else:
+            return self.filter(programme__client=client)
+
+    def municipality(self, municipality):
+        if type(municipality) == int:
+            return self.filter(municipality__id=municipality)
+        else:
+            return self.filter(municipality=municipality)
+
+    def district(self, district):
+        if type(district) == int:
+            return self.filter(municipality__district__id=district)
+        else:
+            return self.filter(municipality__district=district)
+
+    def programme(self, programme):
+        if type(programme) == int:
+            return self.filter(programme__id=programme)
+        else:
+            return self.filter(programme__id=programme)
+
+
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
-        return self.filter(group_perm_objs__group_perm__user__id=user_id).distinct()
+        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
+            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
+            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
+
+    def get_query_set(self):
+        return ProjectManagerQuerySet(self.model)
+
+    def __getattr__(self, name):
+        """
+        Any method defined on our queryset is now available in our manager
+        """
+        return getattr(self.get_query_set(), name)
 
 
 class Project(models.Model):
@@ -79,8 +153,41 @@ class Project(models.Model):
     municipality = models.ForeignKey(Municipality, related_name='projects', null=True)
     objects = ProjectManager()
 
+    @property
+    def district(self):
+        return self.municipality.district
+
     def __unicode__(self):
         return self.name
+
+    def get_progress(self, year=None, month=None):
+        if not year:
+            year = datetime.datetime.now().year
+            if datetime.datetime.now().month == 1:
+                month = 12
+                year -= 1
+            else:
+                month = datetime.datetime.now().month - 1
+        else:
+            month = 3
+        try:
+            planning = self.plannings.get(year=year, month=month)
+            planned_progress = getattr(planning, 'planned_progress', '')
+            monthly_submission = self.monthly_submissions.get(year=year, month=month)
+            actual_progress = getattr(monthly_submission, 'actual_progress', '')
+            if planning and monthly_submission:
+                return {'actual_progress': actual_progress, 'planned_progress': planned_progress}
+            else:
+                return None
+        except:
+            return None
+
+    def get_performing(self, year=None, month=None):
+        try:
+            progress = self.get_progress(year, month)
+            return progress['actual_progress'] / progress['planned_progress']
+        except:
+            return None
 
 
 class Entity(models.Model):
@@ -110,7 +217,7 @@ class ProjectRole(models.Model):
 
 
 class ProjectFinancial(models.Model):
-    total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2)
+    total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     project = models.OneToOneField(Project, related_name='project_financial')
 
     def __unicode__(self):
@@ -155,9 +262,11 @@ class ScopeOfWork(models.Model):
 class Planning(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
-    planned_expenses = models.FloatField()
-    planned_progress = models.FloatField()
+    planned_expenses = models.FloatField(blank=True, null=True)
+    planned_progress = models.FloatField(blank=True, null=True)
     project = models.ForeignKey(Project, related_name='plannings')
+
+    objects = FinancialYearManager()
 
     def __unicode__(self):
         return u'Planning for project %s for month %s' % (self.project.name, self.month)
@@ -208,6 +317,8 @@ class MonthlySubmission(models.Model):
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
+
+    objects = FinancialYearManager()
 
     def __unicode__(self):
         return "Submission for %s for %s/%s" % (self.project, self.year, self.month)

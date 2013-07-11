@@ -9,7 +9,7 @@
                 <p>Programme:</p>
             </div>
             <div class="span6">
-                <p>{{ project.project.programme.name }}</p>
+                <p>{{ data.project.programme_name }}</p>
             </div>
         </div>
         <div class="row-fluid">
@@ -17,7 +17,7 @@
                 <p>Project number:</p>
             </div>
             <div class="span6">
-                <p>{{ project.project.project_number }}</p>
+                <p>{{ data.project.project_number }}</p>
             </div>
         </div>
         <div class="row-fluid">
@@ -25,7 +25,15 @@
                 <p>Description:</p>
             </div>
             <div class="span6">
-                <p>{{ project.project.description }}</p>
+                <p>{{ data.project.description }}</p>
+            </div>
+        </div>
+        <div class="row-fluid">
+            <div class="span6">
+                <p>District:</p>
+            </div>
+            <div class="span6">
+                <p>{{ data.project.district_name }}</p>
             </div>
         </div>
         <div class="row-fluid">
@@ -33,14 +41,10 @@
                 <p>Municipality:</p>
             </div>
             <div class="span6">
-                <p>{{ project.project.municipality.name }}</p>
+                <p>{{ data.project.municipality_name }}</p>
             </div>
         </div>
-        <div class="row-fluid">
-            <div class="span12">
-                {{ project }}
-            </div>
-        </div>
+
     </div>
 </div>
 <div class="row-fluid" ng-show="project.status==400">
