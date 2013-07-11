@@ -153,6 +153,10 @@ class Project(models.Model):
     municipality = models.ForeignKey(Municipality, related_name='projects', null=True)
     objects = ProjectManager()
 
+    @property
+    def district(self):
+        return self.municipality.district
+
     def __unicode__(self):
         return self.name
 
