@@ -23,6 +23,8 @@ MONTHS = (
     ('12', 'December'),
 )
 
+financial_year = range(4, 13) + range(1,4)
+
 YEARS = tuple(map(lambda x: (str(x), x), range(2010, 2060)))
 
 
@@ -185,6 +187,11 @@ class Project(models.Model):
         except:
             return None
 
+    @property
+    def district(self):
+        return self.municipality.district
+
+
 
 class Entity(models.Model):
     name = models.CharField(max_length=255)
@@ -269,6 +276,7 @@ class Planning(models.Model):
 
     class Meta:
         verbose_name_plural = "Project planning"
+        unique_together = ('project', 'month', 'year')
 
 
 class Milestone(models.Model):
@@ -318,6 +326,9 @@ class MonthlySubmission(models.Model):
 
     def __unicode__(self):
         return "Submission for %s for %s/%s" % (self.project, self.year, self.month)
+
+    class Meta:
+        unique_together = ('project', 'month', 'year')
 
 
 class ProjectStatus(models.Model):
