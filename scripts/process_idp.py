@@ -8,6 +8,12 @@ letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 re_cell = re.compile("([A-Z]+)([0-9]+)", re.I)
 
+def to_float(x):
+    try:
+        return float(x)
+    except ValueError:
+        return 0
+
 class Spreadsheet(object):
     def __init__(self, sheet, datemode=0):
         self.sheet = sheet
@@ -95,6 +101,46 @@ def process_sheet(sheet):
         pass
     return projects
 
+def parse_progress(sheet, current_row):
+    planned_expenditure_row = current_row
+    planned_progress_row = current_row + 1
+    actual_progress_row = current_row + 4
+    actual_expenditure_row = current_row + 5
+
+    month_cols = "KLMNOPQRSTUV"
+
+    planned_expenditure = [
+        to_float(sheet.cell("%s%s" % (col, planned_expenditure_row))) * 1000
+        for col in month_cols
+    ]
+
+    planned_progress = [
+        to_float(sheet.cell("%s%s" % (col, planned_progress_row))) 
+        for col in month_cols
+    ]
+
+    actual_expenditure = [
+        to_float(sheet.cell("%s%s" % (col, actual_expenditure_row))) * 1000
+        for col in month_cols
+    ]
+
+    actual_progress = [
+        to_float(sheet.cell("%s%s" % (col, actual_progress_row))) 
+        for col in month_cols
+    ]
+
+    progress = []
+    for (yy, mm), pe, pp, ae, ap in zip(months, planned_expenditure, planned_progress, actual_expenditure, actual_progress):
+        progress.append({
+            "year" : yy,
+            "month" : mm,
+            "planned_expenditure" : pe,
+            "planned_progress" : pp,
+            "actual_expenditure" : ae,
+            "actual_progress" : ap,
+        })
+    return progress
+
 def process_project(sheet, start_cell, district, programme):
     col, row = re_cell.search(start_cell).groups()
     row = int(row)
@@ -114,32 +160,7 @@ def process_project(sheet, start_cell, district, programme):
     if sheet.cell("B%s" % (row + 3)) in ["Revised Completion Date", "Actual Practical Completion Date"]:
         revised_completion = sheet.cell_as_date("C%s" % (row + 3))
 
-    planned_expenditure_row = row
-    planned_progress_row = row + 1
-    actual_progress_row = row + 4
-    actual_expenditure_row = row + 5
-
-    month_cols = "KLMNOPQRSTUV"
-    planned_expenditure = [
-        sheet.cell("%s%s" % (col, planned_expenditure_row)) 
-        for col in month_cols
-    ]
-
-    planned_progress = [
-        sheet.cell("%s%s" % (col, planned_progress_row)) 
-        for col in month_cols
-    ]
-
-    actual_expenditure = [
-        sheet.cell("%s%s" % (col, actual_expenditure_row)) 
-        for col in month_cols
-    ]
-
-    actual_progress = [
-        sheet.cell("%s%s" % (col, actual_progress_row)) 
-        for col in month_cols
-    ]
-
+    progress = parse_progress(sheet, row)
 
     completion_row = row + 2
     revised_completion_row = row + 3
@@ -175,18 +196,16 @@ def process_project(sheet, start_cell, district, programme):
         "project" : project_name,
         "district" : district,
         "programme" : programme,
-        "total_anticipated_cost" : total_anticipated_cost,
-        "prev_year_expenditure" : prev_year_expenditure,
-        "allocated_budget" : allocated_budget,
-        "expenditure_to_date_current" : expenditure_to_date_current,
-        "expenditure_to_date" : expenditure_to_date,
+        "total_anticipated_cost" : total_anticipated_cost * 1000,
+        "prev_year_expenditure" : prev_year_expenditure * 1000,
+        "allocated_budget" : allocated_budget * 1000,
+        "allocated_planning_budget" : 0 * 1000,
+        "expenditure_to_date_current" : expenditure_to_date_current * 1000,
+        "expenditure_to_date" : expenditure_to_date * 1000,
         "start_date" : start_date,
         "completion_date" : completion_date,
         "revised_completion" : revised_completion,
-        "planned_expenditure" : planned_expenditure,
-        "planned_progress" : planned_progress,
-        "actual_expenditure" : actual_expenditure,
-        "actual_progress" : actual_progress,
+        "progress" : progress,
         "comment" : comment,
         "mitigation" : mitigation,
         "completion_dates" : completion_dates,
@@ -195,10 +214,13 @@ def process_project(sheet, start_cell, district, programme):
         "contractor" : contractor,
     }
 
-filename = sys.argv[1]
-year = sys.argv[2]
-month = sys.argv[3]
-process_file(filename)
+if __name__ == "__main__":
+    filename = sys.argv[1]
+    year = int(sys.argv[2])
+    month = int(sys.argv[3])
+    financial_year_months = range(4, 13) + range(1, 4)
+    months = zip([year - 1] * 9 + [year] * 3, financial_year_months)
+    process_file(filename)
 #sheet = self.workbook.sheet_by_name(sheet_name)
 #data = ftypes.list(*self._load_data())
 
