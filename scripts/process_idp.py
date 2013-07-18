@@ -172,7 +172,7 @@ class ProjectProcessor(object):
             "start_date" : self.start_date(row),
             "completion_date" : self.completion_date(row),
             "revised_completion" : self.revised_completion_date(row),
-            "progress" : self.progress(row),
+            "progress" : self.parse_progress(row),
             "comment" : self.comment(row),
             "mitigation" : self.mitigation(row),
             "completion_dates" : self.completion_dates(row),
