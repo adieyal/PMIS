@@ -145,6 +145,7 @@ def process_project(sheet, start_cell, district, programme):
     col, row = re_cell.search(start_cell).groups()
     row = int(row)
     project_name = sheet.cell("B%s" % row)
+    project_code = sheet.cell("C%s" % row)
     total_anticipated_cost = sheet.cell("D%s" % row)
     prev_year_expenditure = sheet.cell("E%s" % row)
     allocated_budget = sheet.cell("F%s" % row)
@@ -194,6 +195,7 @@ def process_project(sheet, start_cell, district, programme):
         "year" : year,
         "month" : month,
         "project" : project_name,
+        "project_code" : project_code,
         "district" : district,
         "programme" : programme,
         "total_anticipated_cost" : total_anticipated_cost * 1000,
