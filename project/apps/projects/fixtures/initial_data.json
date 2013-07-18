@@ -1,5 +1,12 @@
 [
 {
+    "pk": 1, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Implementing Agent"
+    }
+},
+{
   "pk": 1, 
   "model": "projects.client", 
   "fields": {
@@ -727,10 +734,31 @@
     }
 },
 {
+    "pk": 2, 
+    "model": "projects.entity", 
+    "fields": {
+        "name": "IDT"
+    }
+},
+{
     "pk": 1, 
     "model": "projects.role", 
     "fields": {
         "name": "Implementing Agent"
+    }
+},
+{
+    "pk": 2, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Consultant"
+    }
+},
+{
+    "pk": 3, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Contractor"
     }
 }
 ]
