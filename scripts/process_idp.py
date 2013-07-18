@@ -68,6 +68,7 @@ def process_file(filename):
         #yesno = raw_input("Process this sheet? ")
         #if yesno.lower() == "y":
         if "(ONGOING)" in sheet.name or "(COMPLETE" in sheet.name:
+        #if "(ONGOING)" in sheet.name:
             projects = process_sheet(sheet)
             all_projects.extend(projects)
         else:
@@ -92,7 +93,8 @@ def process_sheet(sheet):
                     current_district = "GERT SIBANDE"
 
                 num = int(sheet.cell(cell))
-                project = process_project(sheet, cell, current_district, programme)
+                processor = BasicProcessor(sheet)
+                project = processor.process_project(cell, current_district, programme)
                 projects.append(project)
             except ValueError:
                 pass
@@ -101,120 +103,262 @@ def process_sheet(sheet):
         pass
     return projects
 
-def parse_progress(sheet, current_row):
-    planned_expenditure_row = current_row
-    planned_progress_row = current_row + 1
-    actual_progress_row = current_row + 4
-    actual_expenditure_row = current_row + 5
+class ProjectProcessor(object):
+    def __init__(self, sheet):
+        self.sheet = sheet
 
-    month_cols = "KLMNOPQRSTUV"
+    def municipality(self, row):
+        return ""
 
-    planned_expenditure = [
-        to_float(sheet.cell("%s%s" % (col, planned_expenditure_row))) * 1000
-        for col in month_cols
-    ]
 
-    planned_progress = [
-        to_float(sheet.cell("%s%s" % (col, planned_progress_row))) 
-        for col in month_cols
-    ]
+    def scope_of_work(self, row):
+        return []
 
-    actual_expenditure = [
-        to_float(sheet.cell("%s%s" % (col, actual_expenditure_row))) * 1000
-        for col in month_cols
-    ]
 
-    actual_progress = [
-        to_float(sheet.cell("%s%s" % (col, actual_progress_row))) 
-        for col in month_cols
-    ]
+    def parse_progress(self, current_row):
 
-    progress = []
-    for (yy, mm), pe, pp, ae, ap in zip(months, planned_expenditure, planned_progress, actual_expenditure, actual_progress):
-        progress.append({
-            "year" : yy,
-            "month" : mm,
-            "planned_expenditure" : pe,
-            "planned_progress" : pp,
-            "actual_expenditure" : ae,
-            "actual_progress" : ap,
-        })
-    return progress
+        month_cols = self.activity_month_cols
 
-def process_project(sheet, start_cell, district, programme):
-    col, row = re_cell.search(start_cell).groups()
-    row = int(row)
-    project_name = sheet.cell("B%s" % row)
-    project_code = sheet.cell("C%s" % row)
-    total_anticipated_cost = sheet.cell("D%s" % row)
-    prev_year_expenditure = sheet.cell("E%s" % row)
-    allocated_budget = sheet.cell("F%s" % row)
-    expenditure_to_date_current = sheet.cell("G%s" % row)
-    expenditure_to_date = sheet.cell("H%s" % row)
+        planned_expenditure = [
+            to_float(self.sheet.cell("%s%s" % (col, self.planned_expenditure_row))) * 1000
+            for col in month_cols
+        ]
 
-    if sheet.cell("B%s" % (row + 1)) == "Start Date":
-        start_date = sheet.cell_as_date("C%s" % (row + 1))
+        planned_progress = [
+            to_float(self.sheet.cell("%s%s" % (col, self.planned_progress_row))) 
+            for col in month_cols
+        ]
 
-    if sheet.cell("B%s" % (row + 2)) == "Completion Date":
-        completion_date = sheet.cell_as_date("C%s" % (row + 2))
+        actual_expenditure = [
+            to_float(self.sheet.cell("%s%s" % (col, self.actual_expenditure_row))) * 1000
+            for col in month_cols
+        ]
 
-    if sheet.cell("B%s" % (row + 3)) in ["Revised Completion Date", "Actual Practical Completion Date"]:
-        revised_completion = sheet.cell_as_date("C%s" % (row + 3))
+        actual_progress = [
+            to_float(self.sheet.cell("%s%s" % (col, self.actual_progress_row))) 
+            for col in month_cols
+        ]
 
-    progress = parse_progress(sheet, row)
+        progress = []
+        for (yy, mm), pe, pp, ae, ap in zip(months, planned_expenditure, planned_progress, actual_expenditure, actual_progress):
+            progress.append({
+                "year" : yy,
+                "month" : mm,
+                "planned_expenditure" : pe,
+                "planned_progress" : pp,
+                "actual_expenditure" : ae,
+                "actual_progress" : ap,
+            })
+        return progress
 
-    completion_row = row + 2
-    revised_completion_row = row + 3
-    date_cols = "WXY"
-    completion_dates = [
-        sheet.cell_as_date("%s%s" % (col, completion_row))
-        for col in date_cols
-    ]
+    def process_project(self, start_cell, district, programme):
+        col, row = re_cell.search(start_cell).groups()
+        row = int(row)
 
-    revised_completion_dates = [
-        sheet.cell_as_date("%s%s" % (col, revised_completion_row))
-        for col in date_cols
-    ]
+        return {
+            "year" : year,
+            "month" : month,
+            "project" : self.project_name(row),
+            "project_code" : self.project_code(row),
+            "district" : district,
+            "municipality" : self.municipality(row),
+            "programme" : programme,
+            "total_anticipated_cost" : self.total_anticipated_cost(row),
+            "prev_year_expenditure" : self.prev_year_expenditure(row),
+            "allocated_budget" : self.allocated_budget(row),
+            "allocated_planning_budget" : 0,
+            "expenditure_to_date_current" : self.expenditure_to_date_current(row),
+            "expenditure_to_date" : self.expenditure_to_date(row),
+            "start_date" : self.start_date(row),
+            "completion_date" : self.completion_date(row),
+            "revised_completion" : self.revised_completion_date(row),
+            "progress" : self.progress(row),
+            "comment" : self.comment(row),
+            "mitigation" : self.mitigation(row),
+            "completion_dates" : self.completion_dates(row),
+            "revised_completion_dates" : self.revised_completion_dates(row),
+            "consultant" : self.consultant(row),
+            "contractor" : self.contractor(row),
+            "scope_of_work" : self.scope_of_work(row),
+        }
 
-    comment = sheet.cell("Z%s" % row)
-    mitigation = sheet.cell("AA%s" % row)
+class BasicProcessor(ProjectProcessor):
 
-    consultant = str(sheet.cell("AB%s" % row))
-    if ":" in consultant:
-        consultant = consultant.split(":")[1].strip()
-    else:
-        consultant = ""
+    @property
+    def activity_month_cols(self):
+        return "KLMNOPQRSTUV"
 
-    contractor = str(sheet.cell("AB%s" % (row + 3)))
-    if ":" in contractor:
-        contractor = contractor.split(":")[1].strip()
-    else:
-        contractor = ""
+    @property
+    def planned_expenditure_row(self):
+        return 0
 
-    return {
-        "year" : year,
-        "month" : month,
-        "project" : project_name,
-        "project_code" : project_code,
-        "district" : district,
-        "programme" : programme,
-        "total_anticipated_cost" : total_anticipated_cost * 1000,
-        "prev_year_expenditure" : prev_year_expenditure * 1000,
-        "allocated_budget" : allocated_budget * 1000,
-        "allocated_planning_budget" : 0 * 1000,
-        "expenditure_to_date_current" : expenditure_to_date_current * 1000,
-        "expenditure_to_date" : expenditure_to_date * 1000,
-        "start_date" : start_date,
-        "completion_date" : completion_date,
-        "revised_completion" : revised_completion,
-        "progress" : progress,
-        "comment" : comment,
-        "mitigation" : mitigation,
-        "completion_dates" : completion_dates,
-        "revised_completion_dates" : revised_completion_dates,
-        "consultant" : consultant,
-        "contractor" : contractor,
-    }
+    @property
+    def planned_progress_row(self):
+        return 1
+        
+    @property
+    def actual_progress_row(self):
+        return 4
+
+    @property
+    def actual_expenditure_row(self):
+        return 5
+
+    def project_name(self, row):
+        return self.sheet.cell("B%s" % row)
+
+    def project_code(self, row):
+        return self.sheet.cell("C%s" % row)
+
+    def total_anticipated_cost(self, row):
+        return float(self.sheet.cell("D%s" % row)) * 1000
+
+    def prev_year_expenditure(self, row):
+        return float(self.sheet.cell("E%s" % row)) * 1000
+
+    def allocated_budget(self, row):
+        return float(self.sheet.cell("F%s" % row)) * 1000
+
+    def expenditure_to_date_current(self, row):
+        return float(self.sheet.cell("G%s" % row)) * 1000
+
+    def expenditure_to_date(self, row):
+        return float(self.sheet.cell("H%s" % row)) * 1000
+
+    def _date(self, row, string):
+        date = None
+        if self.sheet.cell("B%s" % row) == string:
+            date = self.sheet.cell_as_date("C%s" % row)
+        return date
+        
+    def start_date(self, row):
+        return self._date(row + 1, "Start Date")
+
+    def completion_date(self, row):
+        return self._date(row + 2, "Completion Date")
+
+    def revised_completion_date(self, row):
+        return self._date(row + 3, "Revised Completion Date") or self._date(row + 3, "Actual Practical Completion Date")
+
+    def _dates(self, row):
+        date_cols = "WXY"
+        dates = [
+            self.sheet.cell_as_date("%s%s" % (col, row))
+            for col in date_cols
+        ]
+        return dates
+        
+    def completion_dates(self, row):
+        return self._dates(row + 2)
+
+    def revised_completion_dates(self, row):
+        return self._dates(row + 3)
+
+    def comment(self, row):
+        return self.sheet.cell("Z%s" % row)
+        
+    def mitigation(self, row):
+        return self.sheet.cell("AA%s" % row)
+
+    def consultant(self, row):
+        consultant = str(self.sheet.cell("AB%s" % row))
+        if ":" in consultant:
+            consultant = consultant.split(":")[1].strip()
+        return consultant
+
+    def contractor(self, row):
+        contractor = str(self.sheet.cell("AB%s" % (row + 3)))
+        if ":" in contractor:
+            contractor = contractor.split(":")[1].strip()
+        return contractor
+
+class ModernProcess(BasicProcessor):
+
+    @property
+    def activity_month_cols(self):
+        return "NOPQRSTUVWXY"
+
+    @property
+    def planned_expenditure_row(self):
+        return 0
+
+    @property
+    def planned_progress_row(self):
+        return 2
+        
+    @property
+    def actual_progress_row(self):
+        return 5
+
+    @property
+    def actual_expenditure_row(self):
+        return 6
+
+    def municipality(self, row):
+        return self.sheet.cell("C%s" % row)
+    
+    def project_code(self, row):
+        return self.sheet.cell("D%s" % row)
+
+    def total_anticipated_cost(self, row):
+        return float(self.sheet.cell("E%s" % row)) * 1000
+
+    def prev_year_expenditure(self, row):
+        return float(self.sheet.cell("F%s" % row)) * 1000
+
+    def allocated_budget(self, row):
+        return float(self.sheet.cell("G%s" % row)) * 1000
+
+    def expenditure_to_date_current(self, row):
+        return float(self.sheet.cell("J%s" % row)) * 1000
+
+    def expenditure_to_date(self, row):
+        return float(self.sheet.cell("K%s" % row)) * 1000
+
+    def _date(self, row, string):
+        date = None
+        if self.sheet.cell("B%s" % row) == string:
+            date = self.sheet.cell_as_date("D%s" % row)
+        return date
+        
+    def start_date(self, row):
+        return self._date(row + 2, "Start Date")
+
+    def completion_date(self, row):
+        return self._date(row + 3, "Completion Date")
+
+    def revised_completion_date(self, row):
+        return self.completion_date(row)
+
+    def _dates(self, row):
+        date_cols = ["Z", "AA", "AB"]
+        dates = [
+            self.sheet.cell_as_date("%s%s" % (col, row))
+            for col in date_cols
+        ]
+        return dates
+        
+    def completion_dates(self, row):
+        return self._dates(row + 3)
+
+    def revised_completion_dates(self, row):
+        return self.completion_dates(row)
+
+    def comment(self, row):
+        return self.sheet.cell("AC%s" % row)
+        
+    def mitigation(self, row):
+        return self.sheet.cell("AD%s" % row)
+
+    def consultant(self, row):
+        return self.sheet.cell("F%s" % (row + 4))
+
+    def contractor(self, row):
+        return self.sheet.cell("F%s" % (row + 5))
+
+    def scope_of_work(self, row):
+        scope_str = self.sheet.cell("F%s" % (row + 6))
+        return scope_str.split(",")
 
 if __name__ == "__main__":
     filename = sys.argv[1]
