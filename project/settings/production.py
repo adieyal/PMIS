@@ -20,6 +20,7 @@ def get_env_setting(setting):
 
 INSTALLED_APPS += ('gunicorn',)
 
+DEBUG = True
 ########## EMAIL CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
@@ -52,8 +53,8 @@ DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
             'NAME': 'pmis_production',
-            'USER': 'pmis',
-            'PASSWORD': 'pass',
+            'USER': 'pmis_production',
+            'PASSWORD': '551*main*Florida*suffix*various*348',
             'HOST': '/var/run/mysqld/mysqld.sock',
         }
 }
