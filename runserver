@@ -1,0 +1,4 @@
+python manage.py syncdb
+python manage.py migrate
+python manage.py loaddata production.json
+python manage.py runserver
