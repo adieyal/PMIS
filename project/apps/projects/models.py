@@ -28,6 +28,9 @@ financial_year = range(4, 13) + range(1,4)
 YEARS = tuple(map(lambda x: (str(x), x), range(2010, 2060)))
 
 
+class ProjectException(Exception):
+    pass
+
 class PMISUser(User):
     @classmethod
     def from_user(cls, user):
@@ -233,9 +236,15 @@ class ProjectFinancial(models.Model):
     project = models.OneToOneField(Project, related_name='project_financial')
 
     def percentage_expenditure(self, year, month):
-        actual = self.project.monthly_submissions.get(year=year, month=month)
-        
-        return float(actual.actual_expenditure) / float(self.total_anticipated_cost) * 100
+        try:
+            actual = self.project.monthly_submissions.get(year=year, month=month)
+            
+            return float(actual.actual_expenditure) / float(self.total_anticipated_cost) * 100
+        except MonthlySubmission.DoesNotExist:
+            raise ProjectException("No submission exists for %s/%s" % (year, month))
+        except ZeroDivisionError:
+            raise ProjectException("Missing project budget - cannot calculate percentage expenditure")
+            
 
     def __unicode__(self):
         return u'Financial for %s' % self.project.name

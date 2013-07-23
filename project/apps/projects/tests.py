@@ -1,6 +1,7 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
-import factories, models
+import factories
+import project.apps.projects.models as models
 
 class FinancialYearTest(TestCase):
     def setUp(self):
@@ -48,3 +49,17 @@ class ProjectManagerTest(TestCase):
     def test_client(self):
         projects = models.Project.objects.client(self.client)
         self.assertEquals(len(projects), 1)
+
+class ProjectFinancialTest(TestCase):
+    def test_percentage_expenditure(self):
+        project = factories.ProjectFactory()
+        financial = factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
+        actual = factories.MonthlySubmissionFactory(
+            project=project, actual_expenditure=25, year=2013, month=6
+        )
+        self.assertEquals(financial.percentage_expenditure(2013, 6), 25)
+        self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 7)
+
+        financial.total_anticipated_cost = 0
+        financial.save()
+        self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 6)
