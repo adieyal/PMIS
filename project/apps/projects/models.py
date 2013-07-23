@@ -232,6 +232,11 @@ class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     project = models.OneToOneField(Project, related_name='project_financial')
 
+    def percentage_expenditure(self, year, month):
+        actual = self.project.monthly_submissions.get(year=year, month=month)
+        
+        return float(actual.actual_expenditure) / float(self.total_anticipated_cost) * 100
+
     def __unicode__(self):
         return u'Financial for %s' % self.project.name
 
