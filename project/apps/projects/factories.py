@@ -114,7 +114,7 @@ class ProjectRoleFactory(factory.DjangoModelFactory):
 class ProjectFinancialFactory(factory.DjangoModelFactory):
     FACTORY_FOR = ProjectFinancial
     total_anticipated_cost = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
-    project_planning_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
+    #project_planning_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
     project = factory.SubFactory(Project)
 
 
