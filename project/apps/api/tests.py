@@ -5,6 +5,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from rest_framework.authtoken.models import Token
 from project.apps.projects import factories, models
+from reports_test import *
 
 
 class ParentTest(TestCase):
