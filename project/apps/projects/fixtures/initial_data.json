@@ -79,6 +79,14 @@
   }
 },
 {
+  "pk": 5, 
+  "model": "projects.district", 
+  "fields": {
+    "name": "Unknown", 
+    "description": ""
+  }
+},
+{
   "pk": 3, 
   "model": "projects.municipality", 
   "fields": {
@@ -238,6 +246,15 @@
     "name": "Bushbuckridge", 
     "district": 4, 
     "description": ""
+  }
+},
+{
+  "pk": 21, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Unknown", 
+    "district": 5, 
+    "description": "Used as a placeholder for unknown municipalities"
   }
 },
 {
