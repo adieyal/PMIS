@@ -6,7 +6,9 @@ class FinancialYearTest(TestCase):
     def setUp(self):
         self.project = factories.ProjectFactory.create()
         for i in range(1, 13):
-            self.planning = factories.PlanningFactory.create(year="2013", month=str(i), project=self.project)
+            self.planning = factories.PlanningFactory.create(
+                year="2013", month=str(i), project=self.project
+            )
 
     def test_financial_year(self):
         

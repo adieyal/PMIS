@@ -43,9 +43,14 @@ class PMISUser(User):
 
 class FinancialYearQuerySet(QuerySet):
     def in_financial_year(self, year):
-        year = year
+        year = int(year)
         previous_year = year - 1
-        return self.filter(Q(year=previous_year, month__gt=3) | Q(year=year, month__lte=3))
+        previous_months = ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
+        current_months = ["1", "2", "3"]
+        return self.filter(
+            Q(year=previous_year, month__in=previous_months) 
+            | Q(year=year, month__in=current_months)
+        )
 
 
 class FinancialYearManager(models.Manager):
