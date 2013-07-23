@@ -67,12 +67,14 @@ def process_file(filename):
     for sheet in workbook.sheets():
         #yesno = raw_input("Process this sheet? ")
         #if yesno.lower() == "y":
-        if "(ONGOING)" in sheet.name or "(COMPLETE" in sheet.name:
-        #if "(ONGOING)" in sheet.name:
-            projects = process_sheet(sheet)
-            all_projects.extend(projects)
-        else:
-            print sheet.name
+        #if "(ONGOING)" in sheet.name or "(COMPLETE" in sheet.name:
+        for label in ["ONGOING", "ON GOING", "ON-GOING", "ON-GO"]:
+            if label in sheet.name.upper():
+                projects = process_sheet(sheet)
+                all_projects.extend(projects)
+                break
+        #else:
+        #    print sheet.name
     print dump_to_json(all_projects)
 
 def process_sheet(sheet):
@@ -93,11 +95,12 @@ def process_sheet(sheet):
                     current_district = "GERT SIBANDE"
 
                 num = int(sheet.cell(cell))
-                processor = BasicProcessor(sheet)
-                project = processor.process_project(cell, current_district, programme)
-                projects.append(project)
             except ValueError:
-                pass
+                continue
+
+            processor = ModernProcessor(sheet)
+            project = processor.process_project(cell, current_district, programme)
+            projects.append(project)
             
     except IndexError:
         pass
@@ -120,22 +123,22 @@ class ProjectProcessor(object):
         month_cols = self.activity_month_cols
 
         planned_expenditure = [
-            to_float(self.sheet.cell("%s%s" % (col, self.planned_expenditure_row))) * 1000
+            to_float(self.sheet.cell("%s%s" % (col, current_row + self.planned_expenditure_row))) * 1000
             for col in month_cols
         ]
 
         planned_progress = [
-            to_float(self.sheet.cell("%s%s" % (col, self.planned_progress_row))) 
+            to_float(self.sheet.cell("%s%s" % (col, current_row + self.planned_progress_row))) 
             for col in month_cols
         ]
 
         actual_expenditure = [
-            to_float(self.sheet.cell("%s%s" % (col, self.actual_expenditure_row))) * 1000
+            to_float(self.sheet.cell("%s%s" % (col, current_row + self.actual_expenditure_row))) * 1000
             for col in month_cols
         ]
 
         actual_progress = [
-            to_float(self.sheet.cell("%s%s" % (col, self.actual_progress_row))) 
+            to_float(self.sheet.cell("%s%s" % (col, current_row + self.actual_progress_row))) 
             for col in month_cols
         ]
 
@@ -272,7 +275,7 @@ class BasicProcessor(ProjectProcessor):
             contractor = contractor.split(":")[1].strip()
         return contractor
 
-class ModernProcess(BasicProcessor):
+class ModernProcessor(BasicProcessor):
 
     @property
     def activity_month_cols(self):
@@ -301,24 +304,27 @@ class ModernProcess(BasicProcessor):
         return self.sheet.cell("D%s" % row)
 
     def total_anticipated_cost(self, row):
-        return float(self.sheet.cell("E%s" % row)) * 1000
+        return to_float(self.sheet.cell("E%s" % row)) * 1000
 
     def prev_year_expenditure(self, row):
-        return float(self.sheet.cell("F%s" % row)) * 1000
+        return to_float(self.sheet.cell("F%s" % row)) * 1000
 
     def allocated_budget(self, row):
-        return float(self.sheet.cell("G%s" % row)) * 1000
+        return to_float(self.sheet.cell("G%s" % row)) * 1000
 
     def expenditure_to_date_current(self, row):
-        return float(self.sheet.cell("J%s" % row)) * 1000
+        return to_float(self.sheet.cell("J%s" % row)) * 1000
 
     def expenditure_to_date(self, row):
-        return float(self.sheet.cell("K%s" % row)) * 1000
+        return to_float(self.sheet.cell("K%s" % row)) * 1000
 
     def _date(self, row, string):
         date = None
-        if self.sheet.cell("B%s" % row) == string:
-            date = self.sheet.cell_as_date("D%s" % row)
+        try:
+            if self.sheet.cell("B%s" % row) == string:
+                date = self.sheet.cell_as_date("D%s" % row)
+        except ValueError:
+            pass
         return date
         
     def start_date(self, row):
@@ -339,7 +345,10 @@ class ModernProcess(BasicProcessor):
         return dates
         
     def completion_dates(self, row):
-        return self._dates(row + 3)
+        try:
+            return self._dates(row + 3)
+        except ValueError:
+            return []
 
     def revised_completion_dates(self, row):
         return self.completion_dates(row)
@@ -365,7 +374,8 @@ if __name__ == "__main__":
     year = int(sys.argv[2])
     month = int(sys.argv[3])
     financial_year_months = range(4, 13) + range(1, 4)
-    months = zip([year - 1] * 9 + [year] * 3, financial_year_months)
+    calc_year = (year + 1) if month > 3 else year 
+    months = zip([calc_year - 1] * 9 + [calc_year] * 3, financial_year_months)
     process_file(filename)
 #sheet = self.workbook.sheet_by_name(sheet_name)
 #data = ftypes.list(*self._load_data())
