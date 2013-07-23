@@ -1,5 +1,12 @@
 [
 {
+    "pk": 1, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Implementing Agent"
+    }
+},
+{
   "pk": 1, 
   "model": "projects.client", 
   "fields": {
@@ -68,6 +75,14 @@
   "model": "projects.district", 
   "fields": {
     "name": "Ehlanzeni", 
+    "description": ""
+  }
+},
+{
+  "pk": 5, 
+  "model": "projects.district", 
+  "fields": {
+    "name": "Unknown", 
     "description": ""
   }
 },
@@ -231,6 +246,15 @@
     "name": "Bushbuckridge", 
     "district": 4, 
     "description": ""
+  }
+},
+{
+  "pk": 21, 
+  "model": "projects.municipality", 
+  "fields": {
+    "name": "Unknown", 
+    "district": 5, 
+    "description": "Used as a placeholder for unknown municipalities"
   }
 },
 {
@@ -693,6 +717,33 @@
     }
 },
 {
+    "pk": 19, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Current", 
+        "description": ""
+    }
+},
+{
+    "pk": 20, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "IDT Mud Schools", 
+        "description": ""
+    }
+},
+{
+    "pk": 21, 
+    "model": "projects.programme", 
+    "fields": {
+        "client": 3, 
+        "name": "Intervention", 
+        "description": ""
+    }
+},
+{
     "pk": 1, 
     "model": "projects.entity", 
     "fields": {
@@ -700,10 +751,31 @@
     }
 },
 {
+    "pk": 2, 
+    "model": "projects.entity", 
+    "fields": {
+        "name": "IDT"
+    }
+},
+{
     "pk": 1, 
     "model": "projects.role", 
     "fields": {
         "name": "Implementing Agent"
+    }
+},
+{
+    "pk": 2, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Consultant"
+    }
+},
+{
+    "pk": 3, 
+    "model": "projects.role", 
+    "fields": {
+        "name": "Contractor"
     }
 }
 ]

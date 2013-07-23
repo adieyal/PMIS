@@ -80,6 +80,12 @@ class ProjectAdmin(CustomVersionAdmin):
     list_display = ('name', 'municipality', 'district', 'programme')
     list_filter = ('municipality__district', 'municipality', 'programme')
     inlines = (ScopeOfWorkInlineAdmin, ProjectFinancialInlineAdmin, BudgetInlineAdmin, PlanningInlineAdmin, ProjectMilestoneInlineAdmin, ProjectRoleInlineAdmin, MonthlySubmissionInlineAdmin)
+    list_filter = ("programme", "municipality__district")
+    list_display = ('name', 'programme', 'municipality', 'district')
+
+    @property
+    def district(self, instance):
+        return instance.municipality.district
 
 
 class MunicipalityAdmin(admin.TabularInline):
