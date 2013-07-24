@@ -297,12 +297,17 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
         num = request.GET.get('num', None)
         data = {}
         try:
-            queryset = Project.objects.get_project(request.user.id).filter(programme__client_id=client_id,
-                                                                           municipality__district_id=district_id).distinct()
+            queryset = Project.objects.get_project(request.user.id).filter(
+                programme__client_id=client_id,
+                municipality__district_id=district_id
+            ).distinct()
         except Project.DoesNotExist:
             return Response(data)
 
-        projects = [{'value': obj.get_performing(), 'id': obj.id} for obj in queryset if obj.get_performing()]
+        projects = [
+            {'value': obj.get_performing(), 'id': obj.id} 
+            for obj in queryset if obj.get_performing()
+        ]
 
         projects = sorted(projects, key=lambda k: self.order * k['value'])
 
