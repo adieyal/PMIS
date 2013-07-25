@@ -5,27 +5,27 @@ from rest_framework.response import Response
 import reversion
 from project.apps.api.forms import ProjectTestForm, ProjectRoleTestForm, BudgetTestForm, PlanningTestForm, ProjectMilestoneTestForm, ScopeOfWorkTestForm, ProjectFinancialTestForm
 from project.apps.projects.models import Client, District, Project, Programme, ScopeCode, Role, Entity, Milestone, Versioned
-from serializers import ClientSerializer, DistrictSerializer, MunicipalitySerializer, ProgrammeSerializer, progress_serializer, project_serializer, ScopeCodeSerializer, RoleSerializer, EntitySerializer, MilestoneSerializer, project_detail_serializer
+import serializers
 
 
 class ClientViewSet(generics.ListAPIView):
     queryset = Client.objects.all()
-    serializer_class = ClientSerializer
+    serializer_class = serializers.ClientSerializer
 
 
 class DistrictViewSet(viewsets.ModelViewSet):
     queryset = District.objects.all()
-    serializer_class = DistrictSerializer
+    serializer_class = serializers.DistrictSerializer
 
 
 class ProgrammeViewSet(generics.ListAPIView):
     queryset = Programme.objects.all()
-    serializer_class = ProgrammeSerializer
+    serializer_class = serializers.ProgrammeSerializer
 
 
 class ScopeCodeViewSet(generics.ListAPIView):
     queryset = ScopeCode.objects.all()
-    serializer_class = ScopeCodeSerializer
+    serializer_class = serializers.ScopeCodeSerializer
 
 
 class ProcessDataProjectMixin(object):
@@ -98,7 +98,7 @@ class ProjectsView(ProcessDataProjectMixin, generics.ListAPIView):
             queryset = Project.objects.get_project(request.user.id)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
     def post(self, request, *args, **kwargs):
@@ -110,17 +110,17 @@ class ProjectsView(ProcessDataProjectMixin, generics.ListAPIView):
 
 class RolesViewSet(generics.ListAPIView):
     queryset = Role.objects.all()
-    serializer_class = RoleSerializer
+    serializer_class = serializers.RoleSerializer
 
 
 class EntitiesViewSet(generics.ListAPIView):
     queryset = Entity.objects.all()
-    serializer_class = EntitySerializer
+    serializer_class = serializers.EntitySerializer
 
 
 class MilestonesViewSet(generics.ListAPIView):
     queryset = Milestone.objects.all()
-    serializer_class = MilestoneSerializer
+    serializer_class = serializers.MilestoneSerializer
 
 
 class MunicipalityViewSet(generics.ListAPIView):
@@ -130,7 +130,7 @@ class MunicipalityViewSet(generics.ListAPIView):
             queryset = District.objects.get(id=pk).municipalities.all()
         except District.DoesNotExist:
             queryset = {}
-        serializer = MunicipalitySerializer(queryset, many=True)
+        serializer = serializers.MunicipalitySerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -141,7 +141,7 @@ class ProgrammeOfClientViewSet(generics.ListAPIView):
             queryset = Client.objects.get(id=pk).programmes.all()
         except District.DoesNotExist:
             queryset = {}
-        serializer = ProgrammeSerializer(queryset, many=True)
+        serializer = serializers.ProgrammeSerializer(queryset, many=True)
         return Response(serializer.data)
 
 
@@ -160,7 +160,7 @@ class ProjectOfClientViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -176,7 +176,7 @@ class ProjectOfClientOfDistrictViewSet(generics.ListAPIView):
                                                                            municipality__district_id=district_id).distinct()
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -195,7 +195,7 @@ class ProjectInDistrictViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -214,7 +214,7 @@ class ProjectInMunicipalityViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -233,7 +233,7 @@ class ProjectInProgrammeViewSet(viewsets.ViewSet):
                 queryset = queryset.filter(project_milestone__milestone__name=milestone)
         except Project.DoesNotExist:
             return Response(data)
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 
@@ -246,7 +246,7 @@ class ProjectDetailView(ProcessDataProjectMixin, generics.SingleObjectAPIView):
             obj = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response({'status': status.HTTP_400_BAD_REQUEST})
-        data = project_detail_serializer(obj)
+        data = serializers.project_detail_serializer(obj)
         return Response(data)
 
     def put(self, request, *args, **kwargs):
@@ -265,7 +265,7 @@ class ProgressView(generics.ListAPIView):
             project = Project.objects.get_project(request.user.id).get(id=pk)
         except Project.DoesNotExist:
             return Response(data)
-        data = progress_serializer(project, year)
+        data = serializers.progress_serializer(project, year)
         return Response(data)
 
 
@@ -321,7 +321,7 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
 
         queryset = Project.objects.get_project(request.user.id).filter(id__in=project_ids).distinct()
 
-        data = project_serializer(queryset, condensed)
+        data = serializers.project_serializer(queryset, condensed)
         return Response(data)
 
 

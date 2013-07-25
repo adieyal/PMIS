@@ -2,54 +2,54 @@ import datetime
 from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
-from project.apps.projects.models import Client, District, Municipality, Programme, Project, ScopeCode, Role, Entity, Milestone, MonthlySubmission
+from project.apps.projects import models
 
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Client
+        model = models.Client
         fields = ('id', 'name', )
 
 
 class DistrictSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = District
+        model = models.District
         fields = ('id', 'name', )
 
 
 class RoleSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Role
+        model = models.Role
         fields = ('id', 'name', )
 
 
 class EntitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Entity
+        model = models.Entity
         fields = ('id', 'name', )
 
 
 class MilestoneSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Milestone
+        model = models.Milestone
         fields = ('id', 'name', 'phase', 'order', )
 
 
 class MunicipalitySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Municipality
+        model = models.Municipality
         fields = ('id', 'name', )
 
 
 class ProgrammeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = Programme
+        model = models.Programme
         fields = ('id', 'name', )
 
 
 class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = ScopeCode
+        model = models.ScopeCode
         fields = ('id', 'name', )
 
 
