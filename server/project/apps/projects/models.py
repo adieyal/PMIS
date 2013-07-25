@@ -159,13 +159,6 @@ class ProjectManagerQuerySet(QuerySet):
         else:
             return self.filter(programme__id=programme)
 
-
-class ProjectManager(models.Manager):
-    def get_project(self, user_id=None):
-        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
-            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
-            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
-
     def _sort_by_performance(self, year, month, reverse):
         return sorted(self.all(), key=lambda x : x.performance(year, month), reverse=reverse)
 
@@ -175,6 +168,13 @@ class ProjectManager(models.Manager):
     def worst_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, False)[0:count]
 
+
+class ProjectManager(models.Manager):
+    def get_project(self, user_id=None):
+        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
+            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
+            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
+
     def get_query_set(self):
         return ProjectManagerQuerySet(self.model)
 
@@ -183,7 +183,6 @@ class ProjectManager(models.Manager):
         Any method defined on our queryset is now available in our manager
         """
         return getattr(self.get_query_set(), name)
-
 
 class Project(models.Model):
     name = models.CharField(max_length=255)

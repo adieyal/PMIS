@@ -88,9 +88,11 @@ class ProjectTest(TestCase):
         performance = range(0, 100, 10)
         self.projects = []
         self.year, self.month = 2013, 6
-        
-        for p in performance:
-            project = factories.ProjectFactory()
+        self.munic1 = factories.MunicipalityFactory() 
+        self.munic2 = factories.MunicipalityFactory() 
+
+        for idx, p in enumerate(performance):
+            project = factories.ProjectFactory(municipality=self.munic1 if idx < 5 else self.munic2)
             self.projects.append(project)
             factories.PlanningFactory(project=project, planned_progress=50, year=self.year, month=self.month)
             factories.MonthlySubmissionFactory(project=project, actual_progress=p, year=self.year, month=self.month)
@@ -132,3 +134,24 @@ class ProjectTest(TestCase):
             project = worst[i]
             expected_performance = actual / 50.
             self.assertEquals(project.performance(self.year, self.month), expected_performance)
+
+    def test_best_and_worst_can_work_on_filter(self):
+        best = models.Project.objects.municipality(self.munic1).best_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(40, 0, -10)[0:5]):
+            project = best[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+        
+        best = models.Project.objects.municipality(self.munic2).best_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(90, 0, -10)[0:5]):
+            project = best[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+
+        worst = models.Project.objects.municipality(self.munic1).worst_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(0, 50, 10)[0:5]):
+            project = worst[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+        
+        worst = models.Project.objects.municipality(self.munic2).worst_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(50, 100, 10)[0:5]):
+            project = worst[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
