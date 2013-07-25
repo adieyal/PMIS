@@ -19,9 +19,24 @@ class ParentTest(TestCase):
         self.user.save()
         self.token, create = Token.objects.get_or_create(user=self.user)
         self.project = None
+        self._data = {}
+        self._view = ""
 
     def tearDown(self):
         pass
+
+    def test_auth(self):
+        if self.__class__ != ParentTest:
+            self._testauth(self.view_name, self.data)
+
+    @property
+    def view_name(self):
+        raise NotImplementedError()
+
+    
+    @property
+    def data(self):
+        raise NotImplementedError()
 
     def _set_user_perm(self):
         if self.project:
@@ -58,11 +73,14 @@ class ParentTest(TestCase):
 class ClientViewSetTest(ParentTest):
     def setUp(self):
         super(ClientViewSetTest, self).setUp()
-        self.data = {}
-        self.view_name = "api:clients_view"
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return {}
+
+    @property
+    def view_name(self):
+        return "api:clients_view"
 
     def test_get_clients_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -72,11 +90,14 @@ class ClientViewSetTest(ParentTest):
 class DistrictViewSetTest(ParentTest):
     def setUp(self):
         super(DistrictViewSetTest, self).setUp()
-        self.data = {}
-        self.view_name = "api:districts_view"
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return{}
+
+    @property
+    def view_name(self):
+        return "api:districts_view"
 
     def test_get_districts_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -90,13 +111,14 @@ class MunicipalityViewSetTest(ParentTest):
         self.district = factories.DistrictFactory.create()
         self.municipality = factories.MunicipalityFactory.create(district=self.district)
 
-        self.data = {
-            'pk': self.municipality.district.pk,
-        }
-        self.view_name = "api:municipalities_view"
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.municipality.district.pk }
+
+    @property
+    def view_name(self):
+        return "api:municipalities_view"
 
     def test_municipalities_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -110,11 +132,13 @@ class ProgrammeViewSetTest(ParentTest):
         self.clients = factories.ClientFactory.create()
         self.programme = factories.ProgrammeFactory.create(client=self.clients)
 
-        self.data = {}
-        self.view_name = "api:programme_view"
+    @property
+    def data(self):
+        return {}
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:programme_view"
 
     def test_get_programme_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -127,13 +151,14 @@ class ProgrammeOfClientViewSetTest(ParentTest):
         self.clients = factories.ClientFactory.create()
         self.programme = factories.ProgrammeFactory.create(client=self.clients)
 
-        self.data = {
-            'pk': self.clients.id
-        }
-        self.view_name = "api:programmes_of_client_view"
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.clients.id }
+
+    @property
+    def view_name(self):
+        return "api:programmes_of_client_view"
 
     def test_get_programme_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -145,13 +170,15 @@ class ProjectViewSetTest(ParentTest):
         super(ProjectViewSetTest, self).setUp()
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
-
-        self.data = {}
-        self.view_name = "api:projects_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:projects_view"
+    
+    @property
+    def data(self):
+        return {}
 
     # This test doesn't work - possibly due to project permissions
     def test_get_project_list(self):
@@ -168,14 +195,17 @@ class ProjectOfClientViewSetTest(ParentTest):
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
 
-        self.data = {
-            'pk': self.project.programme.client.id
-        }
-        self.view_name = "api:project_of_client_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:project_of_client_view"
+
+    @property
+    def data(self):
+        return {
+            'pk': self.project.programme.client.id
+        }
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -187,16 +217,18 @@ class ProjectOfClientOfDistrictViewSetTest(ParentTest):
         super(ProjectOfClientOfDistrictViewSetTest, self).setUp()
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
+        self._set_user_perm()
 
-        self.data = {
+    @property
+    def data(self):
+        return {
             'client_id': self.project.programme.client.id,
             'district_id': self.project.municipality.district.id
         }
-        self.view_name = "api:project_of_client_of_district_view"
-        self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:project_of_client_of_district_view"
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -208,15 +240,15 @@ class ProjectInDistrictViewSetTest(ParentTest):
         super(ProjectInDistrictViewSetTest, self).setUp()
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
-
-        self.data = {
-            'pk': self.project.municipality.district.id
-        }
-        self.view_name = "api:project_in_district_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.project.municipality.district.id }
+
+    @property
+    def view_name(self):
+        return "api:project_in_district_view"
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -228,35 +260,34 @@ class ProjectInMunicipalityViewSetTest(ParentTest):
         super(ProjectInMunicipalityViewSetTest, self).setUp()
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
-
-        self.data = {
-            'pk': self.project.municipality.id
-        }
-        self.view_name = "api:project_in_municipality_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.project.municipality.id }
+
+    @property
+    def view_name(self):
+        return "api:project_in_municipality_view"
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
         self.assertEqual(models.Project.objects.count(), len(result))
-
 
 class ProjectInProgrammeViewSetTest(ParentTest):
     def setUp(self):
         super(ProjectInProgrammeViewSetTest, self).setUp()
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
-
-        self.data = {
-            'pk': self.project.programme.id
-        }
-        self.view_name = "api:project_in_programme_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.project.programme.id }
+
+    @property
+    def view_name(self):
+        return "api:project_in_programme_view"
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -269,15 +300,15 @@ class ProgressViewTest(ParentTest):
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
         self.planning = factories.PlanningFactory.create(project=self.project)
-
-        self.data = {
-            'pk': self.project.id
-        }
-        self.view_name = "api:progress_view"
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def data(self):
+        return { 'pk': self.project.id }
+
+    @property
+    def view_name(self):
+        return "api:progress_view"
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -288,11 +319,14 @@ class ScopeCodeViewSetTest(ParentTest):
     def setUp(self):
         super(ScopeCodeViewSetTest, self).setUp()
         self.scope_code = factories.ScopeCodeFactory.create()
-        self.data = {}
-        self.view_name = "api:scope_codes_view"
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:scope_codes_view"
+
+    @property
+    def data(self):
+        return {}
 
     def test_get_project_list(self):
         result = self._get_json_response(self.view_name, self.data)
@@ -306,27 +340,26 @@ class ProjectTopPerformingViewSetTest(ParentTest):
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
 
-        year = datetime.datetime.now().year
-        if datetime.datetime.now().month == 1:
-            month = 12
-            year -= 1
-        else:
-            month = datetime.datetime.now().month - 1
+        year, month = 2013, 6
         self.planning = factories.PlanningFactory.create(project=self.project, year=year, month=month)
         self.monthly_submission = factories.MonthlySubmissionFactory(project=self.project, year=year, month=month)
 
-        self.data = {
-            'client_id': self.programme.client.id,
-            'district_id': self.project.municipality.district.id
-        }
-        self.view_name = "api:project_top_performing_view"
         self.get_data = {
             'num': 5
         }
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:project_top_performing_view"
+
+    @property
+    def data(self):
+        return {
+            'client_id': self.programme.client.id,
+            'district_id': self.project.municipality.district.id
+        }
+
 
     def test_get_top_performing_project_list(self):
         result = self._get_json_response(self.view_name, self.data, self.get_data)
@@ -347,18 +380,21 @@ class ProjectWorstPerformingViewSetTest(ParentTest):
         self.planning = factories.PlanningFactory.create(project=self.project, year=year, month=month)
         self.monthly_submission = factories.MonthlySubmissionFactory(project=self.project, year=year, month=month)
 
-        self.data = {
-            'client_id': self.programme.client.id,
-            'district_id': self.project.municipality.district.id
-        }
-        self.view_name = "api:project_worst_performing_view"
         self.get_data = {
             'num': 5
         }
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:project_worst_performing_view"
+
+    @property
+    def data(self):
+        return {
+            'client_id': self.programme.client.id,
+            'district_id': self.project.municipality.district.id
+        }
 
     def test_get_worst_performing_project_list(self):
         result = self._get_json_response(self.view_name, self.data, self.get_data)
@@ -379,18 +415,21 @@ class ProjectOverallProgressViewSetTest(ParentTest):
         self.planning = factories.PlanningFactory.create(project=self.project, year=year, month=month)
         self.monthly_submission = factories.MonthlySubmissionFactory(project=self.project, year=year, month=month)
 
-        self.data = {
-            'client_id': self.programme.client.id,
-            'district_id': self.project.municipality.district.id
-        }
-        self.view_name = "api:project_overall_progress_view"
         self.get_data = {
             # 'year': year
         }
         self._set_user_perm()
 
-    def test_auth(self):
-        self._testauth(self.view_name, self.data)
+    @property
+    def view_name(self):
+        return "api:project_overall_progress_view"
+
+    @property
+    def data(self):
+        return {
+            'client_id': self.programme.client.id,
+            'district_id': self.project.municipality.district.id
+        }
 
     def test_project_overall_progress_view(self):
         result = self._get_json_response(self.view_name, self.data, self.get_data)
