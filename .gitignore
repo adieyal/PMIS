@@ -26,3 +26,9 @@ build
 
 #test coverage
 coverage/
+
+# Generated json files
+*.json
+
+# Any backups of anything
+*.bak
