@@ -302,8 +302,10 @@ class ScopeCodeViewSetTest(ParentTest):
 class ProjectTopPerformingViewSetTest(ParentTest):
     def setUp(self):
         super(ProjectTopPerformingViewSetTest, self).setUp()
+
         self.programme = factories.ProgrammeFactory.create()
         self.project = factories.ProjectFactory.create(programme=self.programme)
+
         year = datetime.datetime.now().year
         if datetime.datetime.now().month == 1:
             month = 12

@@ -1,4 +1,5 @@
 import datetime
+from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
 from django.contrib.contenttypes import generic
 from django.contrib.contenttypes.models import ContentType
@@ -43,7 +44,6 @@ class PMISUser(User):
     class Meta:
         proxy = True
 
-
 class FinancialYearQuerySet(QuerySet):
     def in_financial_year(self, year):
         year = int(year)
@@ -55,6 +55,27 @@ class FinancialYearQuerySet(QuerySet):
             | Q(year=year, month__in=current_months)
         )
 
+class CalendarFunctions(object):
+    onemonth = relativedelta(months=1)
+    @staticmethod
+    def previous_year(year, month):
+        return (year - 1, month)
+
+    @staticmethod
+    def next_year(year, month):
+        return (year + 1, month)
+
+    @staticmethod
+    def previous_month(year, month):
+        dt = datetime.datetime(year=year, month=month, day=1)
+        dt2 = dt - CalendarFunctions.onemonth
+        return (dt2.year, dt2.month)
+
+    @staticmethod
+    def next_month(year, month):
+        dt = datetime.datetime(year=year, month=month, day=1)
+        dt2 = dt + CalendarFunctions.onemonth
+        return (dt2.year, dt2.month)
 
 class FinancialYearManager(models.Manager):
     """

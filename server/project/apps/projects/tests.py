@@ -3,6 +3,25 @@ from django.test import TestCase, Client
 import factories
 import project.apps.projects.models as models
 
+class CalendarFunctionsTest(TestCase):
+    def setUp(self):
+        self.year = 2013
+        self.month = 5
+    def test_previous_year(self):
+        self.assertEquals(models.CalendarFunctions.previous_year(self.year, self.month), (2012, 5))
+
+    def test_next_year(self):
+        self.assertEquals(models.CalendarFunctions.next_year(self.year, self.month), (2014, 5))
+
+    def test_previous_month(self):
+        self.assertEquals(models.CalendarFunctions.previous_month(self.year, self.month), (2013, 4))
+        self.assertEquals(models.CalendarFunctions.previous_month(self.year, 1), (2012, 12))
+
+    def test_next_month(self):
+        self.assertEquals(models.CalendarFunctions.next_month(self.year, self.month), (2013, 6))
+        self.assertEquals(models.CalendarFunctions.next_month(self.year, 12), (2014, 1))
+        
+
 class FinancialYearTest(TestCase):
     def setUp(self):
         self.project = factories.ProjectFactory.create()
