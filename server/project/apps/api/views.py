@@ -1,4 +1,5 @@
 import copy
+import datetime
 import dateutil.parser
 from rest_framework import viewsets, generics, status
 from rest_framework.response import Response
@@ -291,10 +292,13 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
     order = 1
 
     def get(self, request, *args, **kwargs):
+        dt = datetime.datetime.now()
         client_id = kwargs.get('client_id')
         district_id = kwargs.get('district_id')
         condensed = request.GET.get('condensed', None)
         num = request.GET.get('num', None)
+        year = int(request.GET.get('year', dt.year))
+        month = int(request.GET.get('month', dt.month))
         data = {}
         try:
             queryset = Project.objects.get_project(request.user.id).filter(
@@ -305,8 +309,11 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
             return Response(data)
 
         projects = [
-            {'value': obj.get_performing(), 'id': obj.id} 
-            for obj in queryset if obj.get_performing()
+            {
+                'value': obj.performance(year=year, month=month), 
+                'id': obj.id
+            } 
+            for obj in queryset if obj.performance(year=year, month=month)
         ]
 
         projects = sorted(projects, key=lambda k: self.order * k['value'])
@@ -325,30 +332,34 @@ class ProjectTopPerformingViewSet(generics.ListAPIView):
         return Response(data)
 
 
-class ProjectWorstPerformingViewSet(ProjectTopPerformingViewSet):
-    order = -1
+# TODO remove this crap code
+#class ProjectWorstPerformingViewSet(ProjectTopPerformingViewSet):
+#    order = -1
 
 
-class ProjectOverallProgressViewSet(generics.ListAPIView):
-    def get(self, request, *args, **kwargs):
-        client_id = kwargs.get('client_id')
-        district_id = kwargs.get('district_id')
-        year = request.GET.get('year', None)
-        res = {}
-        try:
-            queryset = Project.objects.get_project(request.user.id) \
-                .district(district_id) \
-                .client(client_id) \
-                .distinct()
-        except Project.DoesNotExist:
-            return Response(res)
-
-        projects = [obj.get_progress(year=year) for obj in queryset if obj.get_progress(year=year)]
-
-        length = len(projects)
-        if length:
-            sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
-            res = {'actual_progress': sum_data['actual_progress'] / length,
-                   'planned_progress': sum_data['planned_progress'] / length}
-
-        return Response(res)
+# TODO remove this crap code
+#class ProjectOverallProgressViewSet(generics.ListAPIView):
+#    def get(self, request, *args, **kwargs):
+#        dt = datetime.datetime.now()
+#        client_id = kwargs.get('client_id')
+#        district_id = kwargs.get('district_id')
+#        year = request.GET.get('year', dt.year)
+#        month = request.GET.get('month', dt.month)
+#        res = {}
+#        try:
+#            queryset = Project.objects.get_project(request.user.id) \
+#                .district(district_id) \
+#                .client(client_id) \
+#                .distinct()
+#        except Project.DoesNotExist:
+#            return Response(res)
+#
+#        projects = [obj.get_progress(year=year) for obj in queryset if obj.get_progress(year=year)]
+#
+#        length = len(projects)
+#        if length:
+#            sum_data = reduce(lambda x, y: dict((k, v + y[k]) for k, v in x.iteritems()), projects)
+#            res = {'actual_progress': sum_data['actual_progress'] / length,
+#                   'planned_progress': sum_data['planned_progress'] / length}
+#
+#        return Response(res)

@@ -166,6 +166,15 @@ class ProjectManager(models.Manager):
             group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
             c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
 
+    def _sort_by_performance(self, year, month, reverse):
+        return sorted(self.all(), key=lambda x : x.performance(year, month), reverse=reverse)
+
+    def best_performing(self, year, month, count=5):
+        return self._sort_by_performance(year, month, True)[0:count]
+
+    def worst_performing(self, year, month, count=5):
+        return self._sort_by_performance(year, month, False)[0:count]
+
     def get_query_set(self):
         return ProjectManagerQuerySet(self.model)
 
@@ -191,34 +200,26 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
-    def get_progress(self, year=None, month=None):
-        if not year:
-            year = datetime.datetime.now().year
-            if datetime.datetime.now().month == 1:
-                month = 12
-                year -= 1
-            else:
-                month = datetime.datetime.now().month - 1
-        else:
-            month = 3
+    def actual_progress(self, year, month):
         try:
-            planning = self.plannings.get(year=year, month=month)
-            planned_progress = getattr(planning, 'planned_progress', '')
-            monthly_submission = self.monthly_submissions.get(year=year, month=month)
-            actual_progress = getattr(monthly_submission, 'actual_progress', '')
-            if planning and monthly_submission:
-                return {'actual_progress': actual_progress, 'planned_progress': planned_progress}
-            else:
-                return None
-        except:
-            return None
+            s = MonthlySubmission.objects.get(year=year, month=month, project=self)
+            return s.actual_progress
+        except MonthlySubmission.DoesNotExist:
+            raise ProjectException("Could not find actual progress for %s/%s" % (year, month))
 
-    def get_performing(self, year=None, month=None):
+    def planned_progress(self, year, month):
         try:
-            progress = self.get_progress(year, month)
-            return progress['actual_progress'] / progress['planned_progress']
-        except:
-            return None
+            s = Planning.objects.get(year=year, month=month, project=self)
+            return s.planned_progress
+        except Planning.DoesNotExist:
+            raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+            
+        
+    def performance(self, year, month):
+        try:
+            return self.actual_progress(year, month) / self.planned_progress(year, month)
+        except ZeroDivisionError:
+            return 0
 
     @property
     def district(self):

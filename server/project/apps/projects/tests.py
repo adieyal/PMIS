@@ -82,3 +82,53 @@ class ProjectFinancialTest(TestCase):
         financial.total_anticipated_cost = 0
         financial.save()
         self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 6)
+
+class ProjectTest(TestCase):
+    def setUp(self):
+        performance = range(0, 100, 10)
+        self.projects = []
+        self.year, self.month = 2013, 6
+        
+        for p in performance:
+            project = factories.ProjectFactory()
+            self.projects.append(project)
+            factories.PlanningFactory(project=project, planned_progress=50, year=self.year, month=self.month)
+            factories.MonthlySubmissionFactory(project=project, actual_progress=p, year=self.year, month=self.month)
+
+        
+    def test_project_actual_progress(self):
+        project = self.projects[2]
+        self.assertEquals(project.actual_progress(self.year, self.month), 20)
+        self.assertRaises(models.ProjectException, project.actual_progress, 2012, 3)
+
+    def test_project_planned_progress(self):
+        project = self.projects[2]
+        self.assertEquals(project.planned_progress(self.year, self.month), 50)
+        self.assertRaises(models.ProjectException, project.planned_progress, 2012, 3)
+
+    def test_project_performance(self):
+        project = self.projects[2]
+        self.assertEquals(project.performance(self.year, self.month), 20/50.)
+
+
+        zero_planning_project = factories.ProjectFactory()
+        factories.PlanningFactory(project=zero_planning_project, planned_progress=0, year=self.year, month=self.month)
+        factories.MonthlySubmissionFactory(project=zero_planning_project, actual_progress=0, year=self.year, month=self.month)
+        self.assertEquals(zero_planning_project.performance(self.year, self.month), 0)
+
+    def test_best_performing(self):
+        best = models.Project.objects.best_performing(self.year, self.month, count=5)
+        self.assertEquals(len(best), 5)
+        for i, actual in enumerate(range(90, 0, -10)[0:5]):
+            project = best[i]
+            expected_performance = actual / 50.
+            self.assertEquals(project.performance(self.year, self.month), expected_performance)
+        
+    
+    def test_worst_performing(self):
+        worst = models.Project.objects.worst_performing(self.year, self.month, count=5)
+        self.assertEquals(len(worst), 5)
+        for i, actual in enumerate(range(0, 100, -10)[0:5]):
+            project = worst[i]
+            expected_performance = actual / 50.
+            self.assertEquals(project.performance(self.year, self.month), expected_performance)
