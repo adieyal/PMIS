@@ -30,7 +30,4 @@ urlpatterns = patterns('',
    url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/implementation/overall_progress/$', views.ProjectOverallProgressViewSet.as_view(), name='project_overall_progress_view'),
 )
 
-# Add report apis
-urlpatterns += patterns('',
-    url(r'^reports/district/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', reports.district_report, name='reports_district'),
-)
+urlpatterns += reports.urls.urlpatterns
