@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url, include
 import views
-import reports
+import district_report
 
 
 # Wire up our API using automatic URL routing.
@@ -32,6 +32,5 @@ urlpatterns = patterns('',
 
 # Add report apis
 urlpatterns += patterns('',
-    #url(r'^reports/district/(?P<district_id>\w+)/$', reports.district_report, name='reports_district'),
-    url(r'^reports/district/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', reports.district_report, name='reports_district'),
+    url(r'^reports/district/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', district_report.district_report, name='reports_district'),
 )
