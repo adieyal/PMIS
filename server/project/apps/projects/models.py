@@ -232,6 +232,7 @@ class Project(models.Model):
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
 
     # TODO implement
+    @property
     def jobs(self):
         return 434343
             
