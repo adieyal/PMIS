@@ -2,6 +2,7 @@ from django.http import HttpResponse, Http404
 from django.shortcuts import get_object_or_404
 import json
 import project.apps.projects.models as models
+import project.apps.api.serializers as serializers
 
 """
 JSON views to product reports
@@ -13,7 +14,6 @@ def avg(lst):
     return sum(lst) / len(lst)
 
 def district_client_json(district, client, year, month):
-    #projects = models.Project.objects.filter(programme__client=client)
     project_financials = models.ProjectFinancial.objects.filter(
         project__programme__client=client, project__municipality__district=district
     )
@@ -45,11 +45,23 @@ def district_client_json(district, client, year, month):
 
 def district_report(request, district_id, year, month):
     district = get_object_or_404(models.District, pk=district_id)
+    best_projects = models.Project.objects.best_performing(year, month)
+    worst_projects = models.Project.objects.worst_performing(year, month)
     js = {
         "name" : district.name,
         "clients" : {
             c.name : district_client_json(district, c, year, month) for c in models.Client.objects.all()
         },
+        "projects" : {
+            "best_performing" : [
+                serializers.condensed_project_serializer(project, year, month)
+                for project in best_projects
+            ],
+            "worst_performing" : [
+                serializers.condensed_project_serializer(project, year, month)
+                for project in worst_projects
+            ],
+        }
     }
-    return HttpResponse(json.dumps(js), mimetype="application/json")
+    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder), mimetype="application/json")
 
