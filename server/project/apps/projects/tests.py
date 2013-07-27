@@ -21,6 +21,35 @@ class CalendarFunctionsTest(TestCase):
         self.assertEquals(models.CalendarFunctions.next_month(self.year, self.month), (2013, 6))
         self.assertEquals(models.CalendarFunctions.next_month(self.year, 12), (2014, 1))
         
+class TestMilestone(TestCase):
+    def test_milestones_loaded(self):
+        self.assertEquals(models.Milestone.objects.count(), 9)
+
+    def test_milestone_names(self):
+        self.assertEquals(models.Milestone.start_milestone().name, "Project Identification")
+        self.assertEquals(models.Milestone.practical_completion().name, "Practical Completion")
+        self.assertEquals(models.Milestone.final_completion().name, "Final Completion")
+        self.assertEquals(models.Milestone.final_accounts().name, "Final Accounts")
+
+class TestProjectMilestone(TestCase):
+    def setUp(self):
+        self.project = factories.ProjectFactory.create()
+        self.start_milestone = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.start_milestone())
+        self.practical_completion = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.practical_completion())
+        self.final_completion = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.final_completion())
+        self.final_accounts = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.final_accounts())
+
+    def test_project_start_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_start(self.project), self.start_milestone)
+
+    def test_project_practical_completion_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_practical_completion(self.project), self.practical_completion)
+
+    def test_project_final_completion_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_final_completion(self.project), self.final_completion)
+
+    def test_project_final_accounts_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_final_accounts(self.project), self.final_accounts)
 
 class FinancialYearTest(TestCase):
     def setUp(self):
@@ -96,6 +125,10 @@ class ProjectTest(TestCase):
             self.projects.append(project)
             factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), year=self.year, month=self.month)
             factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), year=self.year, month=self.month)
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.start_milestone())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.final_completion())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.final_accounts())
 
         
     def test_project_actual_progress(self):
@@ -179,3 +212,19 @@ class ProjectTest(TestCase):
 
         project = self.projects[1]
         self.assertEquals(project.planned_expenditure(self.year, self.month), 100)
+
+    def test_start_date(self):
+        project = self.projects[0]
+        self.assertEquals(project.start_milestone, models.ProjectMilestone.objects.project_start(project))
+
+    def test_practical_completion(self):
+        project = self.projects[0]
+        self.assertEquals(project.practical_completion_milestone, models.ProjectMilestone.objects.project_practical_completion(project))
+
+    def test_final_completion(self):
+        project = self.projects[0]
+        self.assertEquals(project.final_completion_milestone, models.ProjectMilestone.objects.project_final_completion(project))
+
+    def test_final_accounts(self):
+        project = self.projects[0]
+        self.assertEquals(project.final_accounts_milestone, models.ProjectMilestone.objects.project_final_accounts(project))
