@@ -94,8 +94,8 @@ class ProjectTest(TestCase):
         for idx, p in enumerate(performance):
             project = factories.ProjectFactory(municipality=self.munic1 if idx < 5 else self.munic2)
             self.projects.append(project)
-            factories.PlanningFactory(project=project, planned_progress=50, year=self.year, month=self.month)
-            factories.MonthlySubmissionFactory(project=project, actual_progress=p, year=self.year, month=self.month)
+            factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), year=self.year, month=self.month)
+            factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), year=self.year, month=self.month)
 
         
     def test_project_actual_progress(self):
@@ -155,3 +155,17 @@ class ProjectTest(TestCase):
         for idx, actual in enumerate(range(50, 100, 10)[0:5]):
             project = worst[idx]
             self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+
+    def test_actual_expenditure(self):
+        project = self.projects[0]
+        self.assertEquals(project.actual_expenditure(self.year, self.month), 0)
+
+        project = self.projects[1]
+        self.assertEquals(project.actual_expenditure(self.year, self.month), 200)
+        
+    def test_planned_expenditure(self):
+        project = self.projects[0]
+        self.assertEquals(project.planned_expenditure(self.year, self.month), 0)
+
+        project = self.projects[1]
+        self.assertEquals(project.planned_expenditure(self.year, self.month), 100)

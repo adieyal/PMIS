@@ -212,6 +212,24 @@ class Project(models.Model):
             return s.planned_progress
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+
+    def actual_expenditure(self, year, month):
+        try:
+            s = MonthlySubmission.objects.get(year=year, month=month, project=self)
+            return s.actual_expenditure
+        except MonthlySubmission.DoesNotExist:
+            raise ProjectException("Could not find actual expenditure for %s/%s" % (year, month))
+            
+    def planned_expenditure(self, year, month):
+        try:
+            s = Planning.objects.get(year=year, month=month, project=self)
+            return s.planned_expenses
+        except Planning.DoesNotExist:
+            raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+
+    # TODO implement
+    def jobs(self):
+        return 434343
             
         
     def performance(self, year, month):
