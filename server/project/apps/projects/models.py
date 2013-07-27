@@ -160,7 +160,11 @@ class ProjectManagerQuerySet(QuerySet):
             return self.filter(programme__id=programme)
 
     def _sort_by_performance(self, year, month, reverse):
-        return sorted(self.all(), key=lambda x : x.performance(year, month), reverse=reverse)
+        projects_with_plannings_for_date = self.filter(
+            plannings__year__exact=year, plannings__month__exact=month
+        )
+        performance = lambda x : x.performance(year, month)
+        return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
 
     def best_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, True)[0:count]
@@ -208,7 +212,7 @@ class Project(models.Model):
 
     def planned_progress(self, year, month):
         try:
-            s = Planning.objects.get(year=year, month=month, project=self)
+            s = self.plannings.get(year=year, month=month)
             return s.planned_progress
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))

@@ -135,6 +135,16 @@ class ProjectTest(TestCase):
             expected_performance = actual / 50.
             self.assertEquals(project.performance(self.year, self.month), expected_performance)
 
+    def test_worst_performing_with_different_months(self):
+        new_project = factories.ProjectFactory(municipality=self.munic1)
+        factories.PlanningFactory(project=new_project, planned_progress=100, year=(self.year + 1), month=self.month)
+        factories.MonthlySubmissionFactory(project=new_project, actual_progress=10, year=(self.year + 1), month=self.month)
+
+        worst = models.Project.objects.worst_performing(self.year, self.month, count=100)
+        self.assertEquals(len(worst), 10)
+        for p in worst:
+            self.assertNotEquals(new_project, worst)
+
     def test_best_and_worst_can_work_on_filter(self):
         best = models.Project.objects.municipality(self.munic1).best_performing(self.year, self.month, count=5)
         for idx, actual in enumerate(range(40, 0, -10)[0:5]):
