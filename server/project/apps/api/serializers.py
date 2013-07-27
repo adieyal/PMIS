@@ -3,7 +3,16 @@ from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
 from project.apps.projects import models
+from decimal import Decimal
+import json
 
+# TODO not sure if this should go here or not
+class ModelEncoder(json.JSONEncoder):
+     def default(self, obj):
+         if isinstance(obj, Decimal):
+             return float(obj)
+         # Let the base class default method raise the TypeError
+         return json.JSONEncoder.default(self, obj)
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
