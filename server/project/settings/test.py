@@ -18,6 +18,7 @@ DATABASES = {
 }
 INSTALLED_APPS += (
     'django_coverage',
+    'django_jenkins',
 )
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))
