@@ -52,6 +52,29 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
         model = models.ScopeCode
         fields = ('id', 'name', )
 
+def condensed_project_serializer(project, year, month):
+    return {
+        "name" : project.name,
+        "municipality" : {
+            "id" : project.municipality.id,
+            "name" : project.municipality.name,
+        },
+        "district" : {
+            "id" : project.municipality.district.id,
+            "name" : project.municipality.district.name,
+        },
+        "budget" : project.project_financial.total_anticipated_cost,
+        "progress" : {
+            "actual" : project.actual_progress(year, month),
+            "planned" : project.planned_progress(year, month),
+        },
+        "jobs" : project.jobs,
+        "expenditure" : {
+            "ratio" : project.project_financial.percentage_expenditure(year, month),
+            "actual" : project.actual_expenditure(year, month),
+            "planned" : project.planned_expenditure(year, month),
+        }
+    }
 
 def project_serializer(queryset, condensed=None):
     data = []
