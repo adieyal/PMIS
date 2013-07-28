@@ -64,6 +64,7 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
 def condensed_project_serializer(project, year, month):
     return {
         "name" : project.name,
+        "client" : project.programme.client.name,
         "municipality" : {
             "id" : project.municipality.id,
             "name" : project.municipality.name,
@@ -84,6 +85,29 @@ def condensed_project_serializer(project, year, month):
             "planned" : project.planned_expenditure(year, month),
         }
     }
+
+def expanded_project_serializer(project, year, month):
+    js = condensed_project_serializer(project, year, month)
+    js["milestones"] = {
+        "start_date" : project.start_milestone.completion_date,
+        "practical_completion" : project.practical_completion_milestone.completion_date,
+        "final_completion" : project.final_completion_milestone.completion_date,
+        "final_accounts" : project.final_accounts_milestone.completion_date
+    }
+
+    pyear, pmonth = models.CalendarFunctions.previous_month(year, month) 
+    last_month_submission = project.monthly_submissions.get(year=pyear, month=pmonth)
+    current_month_submission = project.monthly_submissions.get(year=year, month=month)
+
+    js["last_month"] = {
+        "comment" : last_month_submission.comment,
+        "mitigation" : last_month_submission.remedial_action,
+    }
+    js["current_month"] = {
+        "comment" : current_month_submission.comment,
+        "mitigation" : current_month_submission.remedial_action,
+    }
+    return js
 
 def project_serializer(queryset, condensed=None):
     data = []
