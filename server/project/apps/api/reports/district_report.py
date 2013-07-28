@@ -14,6 +14,9 @@ def avg(lst):
     return sum(lst) / len(lst)
 
 def district_client_json(district, client, year, month):
+    financial_year = models.FinancialYearManager.financial_year(year, month)
+    infinyear = lambda dt : models.FinancialYearManager.date_in_financial_year(financial_year, dt)
+
     projects = models.Project.objects.client(client).district(district)
     project_financials = models.ProjectFinancial.objects.filter(
         project__programme__client=client, project__municipality__district=district
@@ -42,10 +45,16 @@ def district_client_json(district, client, year, month):
             "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
 
         },
-        "total_projects" : projects.count()
+        "total_projects" : projects.count(),
+        "projects" : {
+            "completed_in_fye" : sum([1 for p in projects if infinyear(p.practical_completion_milestone.completion_date)])
+        }
     }
 
 def district_report(request, district_id, year, month):
+    year = int(year)
+    month = int(month)
+
     district = get_object_or_404(models.District, pk=district_id)
     best_projects = models.Project.objects.best_performing(year, month)
     worst_projects = models.Project.objects.worst_performing(year, month)
