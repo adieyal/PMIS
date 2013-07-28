@@ -11,7 +11,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DCSR", 
-    "description": ""
+    "description": "Department of Culture, Sport and Recreation"
   }
 },
 {
@@ -19,7 +19,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DEDET", 
-    "description": ""
+    "description": "Department of Economic Development and Planning"
   }
 },
 {
@@ -43,7 +43,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DSD", 
-    "description": ""
+    "description": "Department of Social Development"
   }
 },
 {
@@ -51,7 +51,7 @@
   "model": "projects.client", 
   "fields": {
     "name": "DSSL", 
-    "description": ""
+    "description": "Department of Safety, Security and Liaison"
   }
 },
 {

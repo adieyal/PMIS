@@ -1,16 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="/static/reports/css/style.css" rel="stylesheet" type="text/css">
-<title>The Dpwrt</title>
-</head>
-<body>
+{% extends "reports/district/base.html" %}
+
+{% block body %}
     <div class="container">
     <div class="logo-area cf">
         	<div class="logo-left-area cf">
             	<div class="logo"><a href="index.html#"><img src="/static/reports/images/logo.png" width="269px" height="81" alt=""></a></div><!-- .logo -->
-                <div class="district-text">District Report | <span class="font-weight">July (2012/2013)</span><br /><span class="nkangala-text">NKANGALA</span></div><!-- .district-text -->
+                <div class="district-text">District Report | <span class="font-weight date">July (2012/2013)</span><br /><span class="district-name">NKANGALA</span></div><!-- .district-text -->
                 <div class="nav-area cf">
                 	<ul>
                     	<li class="dash active"><a href="/reports/district/dashboard/">Dashboard</a></li>
@@ -25,11 +20,11 @@
     <div class="project-main-area">
     	<div class="container">
         	<div  id="department-projects" class="cf">
-            	<div class="department-projects-1">
+            	<div class="department department-projects-1">
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="project-name">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -51,11 +46,11 @@
                     </div><!-- .border -->
                 </div><!-- .project-brdr -->
                 </div><!-- .department-projects-1 -->
-            	<div class="department-projects-2">
+            	<div class="department department-projects-2">
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="project-name col-2">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name col-2">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -77,11 +72,11 @@
                     </div><!-- .border -->
                 </div><!-- .project-brdr -->
                 </div><!-- .department-projects-2 -->
-            	<div class="department-projects-3">
+            	<div class="department department-projects-3">
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="project-name col-3">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name col-3">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -103,11 +98,11 @@
                     </div><!-- .border -->
                 </div><!-- .project-brdr -->
                 </div><!-- .department-projects-3 -->
-            	<div class="department-projects-4">
+            	<div class="department department-projects-4">
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="project-name col-4">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name col-4">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -129,11 +124,11 @@
                     </div><!-- .border -->
                 </div><!-- .project-brdr -->
                 </div><!-- .department-projects-4 -->
-            	<div class="department-projects-5">
+            	<div class="department department-projects-5">
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="project-name col-5">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name col-5">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -155,11 +150,11 @@
                     </div><!-- .border -->
                 </div><!-- .project-brdr -->
                 </div><!-- .department-projects-5 -->
-            	<div class="department-projects-6">
+            	<div class="department department-projects-6">
             	<div class="project-brdr">
                 	<div class="border brdr">
                         <div class="project-main">
-                            <div class="project-name col-6">Department of<br>Department Name</div><!-- .project-name -->
+                            <div class="department-name col-6">Department of<br>Department Name</div><!-- .project-name -->
                             <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
@@ -385,5 +380,4 @@
             <div class="map-image"><img src="/static/reports/images/map-image.png" alt=""></div><!-- .map-image -->
         </div><!-- .department-main-row -->
     </div><!-- .container -->
-</body>
-</html>
+{% endblock %}

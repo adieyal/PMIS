@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link href="/static/reports/css/style.css" rel="stylesheet" type="text/css">
+    <title>The Dpwrt</title>
+    <script src="/static/reports/js/d3.v3.min.js" charset="utf-8"></script>
+
+    <script>
+    var district_id = {{ district_id }}
+    var year = {{ year }}
+    var month = {{ month }}
+    var dt_format = d3.time.format("%B %Y");
+    var num_format = function(n) { return "R" + d3.format(",")(n)};
+
+    d3.json("/api/reports/district/" + district_id + "/" + year + "/" + month + "/", function(error, json) {
+        js = json;
+        console.log(json["clients"])
+        d3.select(".district-name").text(json["name"])
+        d3.select(".district-text .date").text(dt_format(new Date(year, month - 1, 1)));
+
+        console.log(d3.selectAll("#department-projects .department .project-name"))
+        //d3.selectAll("#department-projects .department .project-name").data(json["clients"]).text(String);
+        d3.selectAll("#department-projects .department .department-name")
+            .data(json["clients"])
+            .text(function(el) {
+                return el["fullname"]
+            });
+
+        d3.selectAll("#department-projects .department .project-budget span")
+            .data(json["clients"])
+            .text(function(el) {
+                return num_format(454343)
+            });
+
+    
+    });
+
+
+    </script>
+
+    {% block extraheader %}
+    {% endblock %}
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>
