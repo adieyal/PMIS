@@ -14,6 +14,7 @@ def avg(lst):
     return sum(lst) / len(lst)
 
 def district_client_json(district, client, year, month):
+    projects = models.Project.objects.client(client).district(district)
     project_financials = models.ProjectFinancial.objects.filter(
         project__programme__client=client, project__municipality__district=district
     )
@@ -40,7 +41,8 @@ def district_client_json(district, client, year, month):
             ]),
             "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
 
-        }
+        },
+        "total_projects" : projects.count()
     }
 
 def district_report(request, district_id, year, month):

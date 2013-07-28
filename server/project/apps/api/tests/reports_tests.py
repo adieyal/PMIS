@@ -163,3 +163,7 @@ class DistrictTest(TestCase):
             js2 = worst_performing[i] 
             self.assertEquals(js, js2)
 
+    def test_projects_per_department(self):
+        js = self.js
+        self.assertTrue("total_projects" in js["clients"][self.client1.name])
+        self.assertEquals(js["clients"][self.client1.name]["total_projects"], 2)
