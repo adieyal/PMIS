@@ -3,4 +3,5 @@
 createdatabase:
 	python manage.py syncdb --noinput
 	python manage.py migrate
+	python manage.py loaddata production
 	python manage.py createsuperuser
