@@ -2,6 +2,7 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 import factories
 import project.apps.projects.models as models
+from datetime import datetime
 
 class CalendarFunctionsTest(TestCase):
     def setUp(self):
@@ -75,6 +76,15 @@ class FinancialYearTest(TestCase):
     def test_which_year(self):
         self.assertEqual(models.FinancialYearManager.financial_year(2013, 2), 2013)
         self.assertEqual(models.FinancialYearManager.financial_year(2013, 4), 2014)
+
+    def test_date_in_financial_year(self):
+        dt = datetime(2013, 6, 1)
+
+        self.assertTrue(models.FinancialYearManager.date_in_financial_year(2014, dt))
+        self.assertFalse(models.FinancialYearManager.date_in_financial_year(2013, dt))
+
+        self.assertTrue(models.FinancialYearManager.yearmonth_in_financial_year(2014, 2013, 6))
+        self.assertFalse(models.FinancialYearManager.yearmonth_in_financial_year(2013, 2013, 6))
 
 class ProjectManagerTest(TestCase):
     def setUp(self):

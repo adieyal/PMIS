@@ -79,15 +79,14 @@ class FinancialYearQuerySet(QuerySet):
             | Q(year=year, month__in=FinancialYearQuerySet.current_months)
         )
 
-    @classmethod
-    def financial_year(cls, year, month):
-        return year if str(month) in FinancialYearQuerySet.current_months else year + 1
-
 class FinancialYearManager(models.Manager):
     """
     Apply to any model that is time based
     Defines the financial year which starts in April of the previous year and ends in March of the current year
     """
+
+    previous_months = FinancialYearQuerySet.previous_months
+    current_months = FinancialYearQuerySet.current_months
 
     def get_query_set(self):
         return FinancialYearQuerySet(self.model)
@@ -100,7 +99,16 @@ class FinancialYearManager(models.Manager):
 
     @classmethod
     def financial_year(cls, year, month):
-        return FinancialYearQuerySet.financial_year(year, month)
+        return year if str(month) in FinancialYearQuerySet.current_months else year + 1
+
+    @classmethod
+    def date_in_financial_year(cls, year, dt):
+        return (dt.year == year and str(dt.month) in FinancialYearManager.current_months) \
+            or (dt.year + 1 == year and str(dt.month) in FinancialYearManager.previous_months)
+
+    @classmethod
+    def yearmonth_in_financial_year(cls, year, year2, month2):
+        return FinancialYearManager.date_in_financial_year(year, datetime.datetime(year2, month2, 1))
 
 class Versioned(models.Model):
     revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
