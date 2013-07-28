@@ -17,13 +17,15 @@ class DistrictTest(TestCase):
         self.year, self.month = 2013, 6
 
         # Both in the same municipality and programme/client
-        self.project1 = factories.ProjectFactory()
+        self.project1 = factories.ProjectFactory(current_step=models.Milestone.tendering_milestone())
         self.project2 = factories.ProjectFactory(
-            programme=self.project1.programme, municipality=self.project1.municipality
+            programme=self.project1.programme,
+            municipality=self.project1.municipality,
+            current_step=models.Milestone.final_completion()
         )
 
         # Same municipality but different programme/client
-        self.project3 = factories.ProjectFactory(municipality=self.project1.municipality)
+        self.project3 = factories.ProjectFactory(municipality=self.project1.municipality, current_step=models.Milestone.practical_completion())
 
         # Same programme different district - doesn't affect total
         self.project4 = factories.ProjectFactory(programme=self.project1.programme)
@@ -40,7 +42,6 @@ class DistrictTest(TestCase):
         factories.PlanningFactory(project=self.project2, year=self.year, month=self.month, planned_progress=50)
         factories.PlanningFactory(project=self.project3, year=self.year, month=self.month, planned_progress=25)
 
-
         factories.MonthlySubmissionFactory(
             project=self.project1, year=self.year, month=self.month, actual_expenditure=100, actual_progress=80
         ) 
@@ -54,16 +55,18 @@ class DistrictTest(TestCase):
             project=self.project4, year=self.year, month=self.month, actual_expenditure=400, actual_progress=20
         ) 
 
-        dt = datetime(year=2013, month=6, day=1) 
-        dt2 = datetime(year=2014, month=6, day=1) 
-        factories.ProjectMilestoneFactory(project=self.project1, milestone=models.Milestone.practical_completion(), completion_date=dt)
-        factories.ProjectMilestoneFactory(project=self.project2, milestone=models.Milestone.practical_completion(), completion_date=dt2)
-        factories.ProjectMilestoneFactory(project=self.project3, milestone=models.Milestone.practical_completion(), completion_date=dt2)
-        factories.ProjectMilestoneFactory(project=self.project4, milestone=models.Milestone.practical_completion(), completion_date=dt)
+        self.dt = datetime(year=2013, month=6, day=1) 
+        self.dt2 = datetime(year=2014, month=6, day=1) 
+        factories.ProjectMilestoneFactory(project=self.project1, milestone=models.Milestone.practical_completion(), completion_date=self.dt)
+        factories.ProjectMilestoneFactory(project=self.project2, milestone=models.Milestone.practical_completion(), completion_date=self.dt2)
+        factories.ProjectMilestoneFactory(project=self.project3, milestone=models.Milestone.practical_completion(), completion_date=self.dt2)
+        factories.ProjectMilestoneFactory(project=self.project4, milestone=models.Milestone.practical_completion(), completion_date=self.dt)
 
 
         self.response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         self.js = json.loads(self.response.content)
+        self.client1js = self.js["clients"][self.client1.name]
+        self.client2js = self.js["clients"][self.client2.name]
 
 
     def test_district_validates_factory(self):
@@ -178,8 +181,7 @@ class DistrictTest(TestCase):
         self.assertEqual(js["clients"][self.client1.name]["total_projects"], 2)
 
     def test_completed_in_fye(self):
-        js = self.js
-        client = js["clients"][self.client1.name]
+        client = self.client1js
         self.assertIn("projects", client)
 
         projects = client["projects"]
@@ -187,18 +189,79 @@ class DistrictTest(TestCase):
 
         self.assertEqual(projects["completed_in_fye"], 1)
 
-        projects = js["clients"][self.client2.name]["projects"]
+        projects = self.client2js["projects"]
         self.assertEqual(projects["completed_in_fye"], 0)
 
     def test_completed_in_fye(self):
-        js = self.js
-        client = js["clients"][self.client1.name]
-        self.assertIn("projects", client)
+        self.assertIn("projects", self.client1js)
 
-        projects = client["projects"]
+        projects = self.client1js["projects"]
         self.assertIn("completed_in_fye", projects)
 
         self.assertEqual(projects["completed_in_fye"], 1)
 
-        projects = js["clients"][self.client2.name]["projects"]
+        projects = self.client2js["projects"]
         self.assertEqual(projects["completed_in_fye"], 0)
+
+    def test_currently_in_planning(self):
+        projects = self.client1js["projects"]
+        self.assertEqual(projects["currently_in_planning"], 1)
+
+        projects = self.client2js["projects"]
+        self.assertEqual(projects["currently_in_planning"], 0)
+
+    def create_project(self, **kwargs):
+        project = factories.ProjectFactory(**kwargs)
+        factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=self.dt)
+        return project
+        
+    def test_currently_in_implementation(self):
+        project5 = self.create_project(
+            programme=self.project1.programme,
+            municipality=self.project1.municipality,
+            current_step=models.Milestone.practical_completion()
+        )
+
+        response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
+        js = json.loads(response.content)
+
+        projects = js["clients"][self.client1.name]["projects"]
+        self.assertEqual(projects["currently_in_implementation"], 1)
+
+        projects = js["clients"][self.client2.name]["projects"]
+        self.assertEqual(projects["currently_in_implementation"], 1)
+
+    def test_currently_in_practical_completion(self):
+        project5 = self.create_project(
+            programme=self.project1.programme,
+            municipality=self.project1.municipality,
+            current_step=models.Milestone.final_completion()
+        )
+
+        project6 = self.create_project(
+            programme=self.project3.programme,
+            municipality=self.project1.municipality,
+            current_step=models.Milestone.final_completion()
+        )
+
+        response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
+        js = json.loads(response.content)
+
+        self.assertEqual(js["clients"][self.client1.name]["projects"]["currently_in_practical_completion"], 2)
+        self.assertEqual(js["clients"][self.client2.name]["projects"]["currently_in_practical_completion"], 1)
+
+    def test_completed_in_final_completion(self):
+        project5 = factories.ProjectFactory(
+            programme=self.project1.programme,
+            municipality=self.project1.municipality,
+            current_step=models.Milestone.final_accounts()
+        )
+        factories.ProjectMilestoneFactory(project=project5, milestone=models.Milestone.practical_completion(), completion_date=self.dt)
+
+        response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
+        js = json.loads(response.content)
+        client1js = js["clients"][self.client1.name]
+        client2js = js["clients"][self.client2.name]
+
+        self.assertEqual(client1js["projects"]["currently_in_final_completion"], 1)
+        self.assertEqual(client2js["projects"]["currently_in_final_completion"], 0)
