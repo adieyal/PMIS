@@ -65,8 +65,8 @@ class DistrictTest(TestCase):
 
         self.response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         self.js = json.loads(self.response.content)
-        self.client1js = self.js["clients"][self.client1.name]
-        self.client2js = self.js["clients"][self.client2.name]
+        self.client1js = self.js["clients"][0]
+        self.client2js = self.js["clients"][1]
 
 
     def test_district_validates_factory(self):
@@ -87,64 +87,47 @@ class DistrictTest(TestCase):
         js = self.js
 
         self.assertTrue("clients" in js)
-        self.assertEqual(type(js["clients"]), dict)
+        self.assertEqual(type(js["clients"]), list)
 
         self.assertEqual(len(js["clients"]), 2)
-        self.assertTrue(client1.name in js["clients"])
-        self.assertTrue(client3.name in js["clients"])
-        self.assertEqual(type(js["clients"][client1.name]), dict)
+        self.assertEqual(type(self.client1js), dict)
 
-        self.assertEqual(js["clients"][client1.name]["fullname"], client1.description)
+        self.assertEqual(self.client1js["fullname"], client1.description)
         
     def test_district_returns_total_budget_per_client(self):
 
-        client1 = self.project1.programme.client
-        client2 = self.project3.programme.client
-        js = self.js
-
-        client1 = js["clients"][client1.name]
-        client2 = js["clients"][client2.name]
-
-        self.assertTrue("total_budget" in client1)
-        self.assertEqual(client1["total_budget"], 150)
-        self.assertEqual(client2["total_budget"], 60)
+        self.assertTrue("total_budget" in self.client1js)
+        self.assertEqual(self.client1js["total_budget"], 150)
+        self.assertEqual(self.client2js["total_budget"], 60)
 
     def test_overall_planned_progress(self):
         js = self.js
 
-        client1 = js["clients"][self.client1.name]
-        self.assertTrue("overall_progress" in client1)
-        self.assertTrue("planned" in client1["overall_progress"])
-        self.assertEqual(client1["overall_progress"]["planned"], 125)
+        self.assertTrue("overall_progress" in self.client1js)
+        self.assertTrue("planned" in self.client1js["overall_progress"])
+        self.assertEqual(self.client1js["overall_progress"]["planned"], 125)
 
-        client2 = js["clients"][self.client2.name]
-        self.assertEqual(client2["overall_progress"]["planned"], 25)
+        self.assertEqual(self.client2js["overall_progress"]["planned"], 25)
 
     def test_overall_actual_progress(self):
         js = self.js
 
-        client1 = js["clients"][self.client1.name]
-        self.assertTrue("actual" in client1["overall_progress"])
-        self.assertEqual(client1["overall_progress"]["actual"], 60)
+        self.assertTrue("actual" in self.client1js["overall_progress"])
+        self.assertEqual(self.client1js["overall_progress"]["actual"], 60)
 
-        client2 = js["clients"][self.client2.name]
-        self.assertEqual(client2["overall_progress"]["actual"], 100)
+        self.assertEqual(self.client2js["overall_progress"]["actual"], 100)
 
     def test_implementation_expenditure(self):
         
-        client1 = self.js["clients"][self.client1.name]
-        self.assertTrue("overall_expenditure" in client1)
-        self.assertTrue("perc_expenditure" in client1["overall_expenditure"])
-        self.assertEqual(client1["overall_expenditure"]["perc_expenditure"], 60)
+        self.assertTrue("overall_expenditure" in self.client1js)
+        self.assertTrue("perc_expenditure" in self.client1js["overall_expenditure"])
+        self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], 60)
 
-        client2 = self.js["clients"][self.client2.name]
-        self.assertEqual(client2["overall_expenditure"]["perc_expenditure"], 500)
+        self.assertEqual(self.client2js["overall_expenditure"]["perc_expenditure"], 500)
 
     def test_actual_expenditure(self):
-        js = self.js 
-        client1 = self.js["clients"][self.client1.name]
-        self.assertTrue("actual_expenditure" in client1["overall_expenditure"])
-        self.assertEqual(client1["overall_expenditure"]["actual_expenditure"], 110)
+        self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])
+        self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 110)
 
     def test_best_performing(self):
         js = self.js
@@ -179,8 +162,8 @@ class DistrictTest(TestCase):
 
     def test_projects_per_department(self):
         js = self.js
-        self.assertTrue("total_projects" in js["clients"][self.client1.name])
-        self.assertEqual(js["clients"][self.client1.name]["total_projects"], 2)
+        self.assertTrue("total_projects" in self.client1js)
+        self.assertEqual(self.client1js["total_projects"], 2)
 
     def test_completed_in_fye(self):
         client = self.client1js
@@ -227,11 +210,8 @@ class DistrictTest(TestCase):
         response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         js = json.loads(response.content)
 
-        projects = js["clients"][self.client1.name]["projects"]
-        self.assertEqual(projects["currently_in_implementation"], 1)
-
-        projects = js["clients"][self.client2.name]["projects"]
-        self.assertEqual(projects["currently_in_implementation"], 1)
+        self.assertEqual(js["clients"][0]["projects"]["currently_in_implementation"], 1)
+        self.assertEqual(js["clients"][1]["projects"]["currently_in_implementation"], 1)
 
     def test_currently_in_practical_completion(self):
         project5 = self.create_project(
@@ -249,8 +229,8 @@ class DistrictTest(TestCase):
         response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         js = json.loads(response.content)
 
-        self.assertEqual(js["clients"][self.client1.name]["projects"]["currently_in_practical_completion"], 2)
-        self.assertEqual(js["clients"][self.client2.name]["projects"]["currently_in_practical_completion"], 1)
+        self.assertEqual(js["clients"][0]["projects"]["currently_in_practical_completion"], 2)
+        self.assertEqual(js["clients"][1]["projects"]["currently_in_practical_completion"], 1)
 
     def test_completed_in_final_completion(self):
         project5 = factories.ProjectFactory(
@@ -262,8 +242,8 @@ class DistrictTest(TestCase):
 
         response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         js = json.loads(response.content)
-        client1js = js["clients"][self.client1.name]
-        client2js = js["clients"][self.client2.name]
+        client1js = js["clients"][0]
+        client2js = js["clients"][1]
 
         self.assertEqual(client1js["projects"]["currently_in_final_completion"], 1)
         self.assertEqual(client2js["projects"]["currently_in_final_completion"], 0)

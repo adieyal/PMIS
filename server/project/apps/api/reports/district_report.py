@@ -65,9 +65,9 @@ def district_report(request, district_id, year, month):
     worst_projects = models.Project.objects.worst_performing(year, month)
     js = {
         "name" : district.name,
-        "clients" : {
-            c.name : district_client_json(district, c, year, month) for c in models.Client.objects.all()
-        },
+        "clients" : [
+            district_client_json(district, c, year, month) for c in models.Client.objects.all()
+        ],
         "projects" : {
             "best_performing" : [
                 serializers.condensed_project_serializer(project, year, month)
