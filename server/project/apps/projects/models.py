@@ -44,17 +44,6 @@ class PMISUser(User):
     class Meta:
         proxy = True
 
-class FinancialYearQuerySet(QuerySet):
-    def in_financial_year(self, year):
-        year = int(year)
-        previous_year = year - 1
-        previous_months = ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
-        current_months = ["1", "2", "3"]
-        return self.filter(
-            Q(year=previous_year, month__in=previous_months) 
-            | Q(year=year, month__in=current_months)
-        )
-
 class CalendarFunctions(object):
     onemonth = relativedelta(months=1)
     @staticmethod
@@ -77,6 +66,23 @@ class CalendarFunctions(object):
         dt2 = dt + CalendarFunctions.onemonth
         return (dt2.year, dt2.month)
 
+
+class FinancialYearQuerySet(QuerySet):
+    previous_months = ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
+    current_months = ["1", "2", "3"]
+
+    def in_financial_year(self, year):
+        year = int(year)
+        previous_year = year - 1
+        return self.filter(
+            Q(year=previous_year, month__in=FinancialYearQuerySet.previous_months) 
+            | Q(year=year, month__in=FinancialYearQuerySet.current_months)
+        )
+
+    @classmethod
+    def financial_year(cls, year, month):
+        return year if str(month) in FinancialYearQuerySet.current_months else year + 1
+
 class FinancialYearManager(models.Manager):
     """
     Apply to any model that is time based
@@ -92,6 +98,9 @@ class FinancialYearManager(models.Manager):
         """
         return getattr(self.get_query_set(), name)
 
+    @classmethod
+    def financial_year(cls, year, month):
+        return FinancialYearQuerySet.financial_year(year, month)
 
 class Versioned(models.Model):
     revision = models.OneToOneField(Revision, related_name='versioned')  # This is required
