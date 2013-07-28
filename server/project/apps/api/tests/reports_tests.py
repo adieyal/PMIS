@@ -189,3 +189,16 @@ class DistrictTest(TestCase):
 
         projects = js["clients"][self.client2.name]["projects"]
         self.assertEqual(projects["completed_in_fye"], 0)
+
+    def test_completed_in_fye(self):
+        js = self.js
+        client = js["clients"][self.client1.name]
+        self.assertIn("projects", client)
+
+        projects = client["projects"]
+        self.assertIn("completed_in_fye", projects)
+
+        self.assertEqual(projects["completed_in_fye"], 1)
+
+        projects = js["clients"][self.client2.name]["projects"]
+        self.assertEqual(projects["completed_in_fye"], 0)
