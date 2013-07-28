@@ -21,4 +21,9 @@ INSTALLED_APPS += (
     'django_jenkins',
 )
 
+PROJECT_APPS = (
+    'project.apps.project',
+    'project.apps.api',
+)
+
 COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))
