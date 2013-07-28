@@ -93,6 +93,8 @@ class DistrictTest(TestCase):
         self.assertTrue(client1.name in js["clients"])
         self.assertTrue(client3.name in js["clients"])
         self.assertEqual(type(js["clients"][client1.name]), dict)
+
+        self.assertEqual(js["clients"][client1.name]["fullname"], client1.description)
         
     def test_district_returns_total_budget_per_client(self):
 
