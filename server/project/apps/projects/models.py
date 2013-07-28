@@ -150,6 +150,53 @@ class Programme(models.Model):
     def __unicode__(self):
         return self.name
 
+class Milestone(models.Model):
+    PHASE = (
+        ('planning', 'Planning'),
+        ('implementation', 'Implementation'),
+        ('completed', 'Completed')
+    )
+    phase = models.CharField(choices=PHASE, max_length=255)
+    name = models.CharField(max_length=255)
+    order = models.PositiveSmallIntegerField()
+
+    @classmethod
+    def start_milestone(cls):
+        return Milestone.objects.get(name="Project Identification")
+
+    @classmethod
+    def consultant_milestone(cls):
+        return Milestone.objects.get(name="Consultant appointment")
+
+    @classmethod
+    def design_milestone(cls):
+        return Milestone.objects.get(name="Design and Costing")
+
+    @classmethod
+    def documentation_milestone(cls):
+        return Milestone.objects.get(name="Documentation")
+
+    @classmethod
+    def tendering_milestone(cls):
+        return Milestone.objects.get(name="Tendering")
+ 
+    @classmethod
+    def practical_completion(cls):
+        return Milestone.objects.get(name="Practical Completion")
+
+    @classmethod
+    def final_completion(cls):
+        return Milestone.objects.get(name="Final Completion")
+
+    @classmethod
+    def final_accounts(cls):
+        return Milestone.objects.get(name="Final Accounts")
+
+    def __unicode__(self):
+        return "%s - %s" % (self.phase, self.name)
+
+    class Meta:
+        unique_together = ('phase', 'order',)
 
 class ProjectManagerQuerySet(QuerySet):
     def client(self, client):
@@ -211,6 +258,7 @@ class Project(models.Model):
     description = models.TextField(blank=True)
     programme = models.ForeignKey(Programme, related_name='projects', null=True)
     municipality = models.ForeignKey(Municipality, related_name='projects', null=True)
+    current_step = models.ForeignKey(Milestone, null=True, help_text="Next milestone that this project must meet")
     objects = ProjectManager()
 
     @property
@@ -377,39 +425,6 @@ class Planning(models.Model):
     class Meta:
         verbose_name_plural = "Project planning"
         unique_together = ('project', 'month', 'year')
-
-
-class Milestone(models.Model):
-    PHASE = (
-        ('planning', 'Planning'),
-        ('implementation', 'Implementation'),
-        ('completed', 'Completed')
-    )
-    phase = models.CharField(choices=PHASE, max_length=255)
-    name = models.CharField(max_length=255)
-    order = models.PositiveSmallIntegerField()
-
-    @classmethod
-    def start_milestone(cls):
-        return Milestone.objects.get(name="Project Identification")
-
-    @classmethod
-    def practical_completion(cls):
-        return Milestone.objects.get(name="Practical Completion")
-
-    @classmethod
-    def final_completion(cls):
-        return Milestone.objects.get(name="Final Completion")
-
-    @classmethod
-    def final_accounts(cls):
-        return Milestone.objects.get(name="Final Accounts")
-
-    def __unicode__(self):
-        return "%s - %s" % (self.phase, self.name)
-
-    class Meta:
-        unique_together = ('phase', 'order',)
 
 
 class ProjectMilestoneManager(models.Manager):
