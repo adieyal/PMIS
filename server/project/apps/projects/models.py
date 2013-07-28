@@ -159,21 +159,25 @@ class ProjectManagerQuerySet(QuerySet):
         else:
             return self.filter(programme__id=programme)
 
-
-class ProjectManager(models.Manager):
-    def get_project(self, user_id=None):
-        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
-            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
-            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
-
     def _sort_by_performance(self, year, month, reverse):
-        return sorted(self.all(), key=lambda x : x.performance(year, month), reverse=reverse)
+        projects_with_plannings_for_date = self.filter(
+            plannings__year__exact=year, plannings__month__exact=month
+        )
+        performance = lambda x : x.performance(year, month)
+        return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
 
     def best_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, True)[0:count]
 
     def worst_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, False)[0:count]
+
+
+class ProjectManager(models.Manager):
+    def get_project(self, user_id=None):
+        return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
+            group_perm_objs__group_perm__in=GroupPerm.objects.filter(user__id=user_id)).annotate(
+            c=Count('group_perm_objs')).distinct().filter(~Q(c=F('cl'))).distinct()
 
     def get_query_set(self):
         return ProjectManagerQuerySet(self.model)
@@ -183,7 +187,6 @@ class ProjectManager(models.Manager):
         Any method defined on our queryset is now available in our manager
         """
         return getattr(self.get_query_set(), name)
-
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
@@ -209,10 +212,45 @@ class Project(models.Model):
 
     def planned_progress(self, year, month):
         try:
-            s = Planning.objects.get(year=year, month=month, project=self)
+            s = self.plannings.get(year=year, month=month)
             return s.planned_progress
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+
+    def actual_expenditure(self, year, month):
+        try:
+            s = MonthlySubmission.objects.get(year=year, month=month, project=self)
+            return s.actual_expenditure
+        except MonthlySubmission.DoesNotExist:
+            raise ProjectException("Could not find actual expenditure for %s/%s" % (year, month))
+            
+    def planned_expenditure(self, year, month):
+        try:
+            s = Planning.objects.get(year=year, month=month, project=self)
+            return s.planned_expenses
+        except Planning.DoesNotExist:
+            raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+
+    @property
+    def start_milestone(self):
+        return ProjectMilestone.objects.project_start(self)
+
+    @property
+    def practical_completion_milestone(self):
+        return ProjectMilestone.objects.project_practical_completion(self)
+
+    @property
+    def final_completion_milestone(self):
+        return ProjectMilestone.objects.project_final_completion(self)
+
+    @property
+    def final_accounts_milestone(self):
+        return ProjectMilestone.objects.project_final_accounts(self)
+
+    # TODO implement
+    @property
+    def jobs(self):
+        return 434343
             
         
     def performance(self, year, month):
@@ -334,6 +372,22 @@ class Milestone(models.Model):
     name = models.CharField(max_length=255)
     order = models.PositiveSmallIntegerField()
 
+    @classmethod
+    def start_milestone(cls):
+        return Milestone.objects.get(name="Project Identification")
+
+    @classmethod
+    def practical_completion(cls):
+        return Milestone.objects.get(name="Practical Completion")
+
+    @classmethod
+    def final_completion(cls):
+        return Milestone.objects.get(name="Final Completion")
+
+    @classmethod
+    def final_accounts(cls):
+        return Milestone.objects.get(name="Final Accounts")
+
     def __unicode__(self):
         return "%s - %s" % (self.phase, self.name)
 
@@ -341,10 +395,25 @@ class Milestone(models.Model):
         unique_together = ('phase', 'order',)
 
 
+class ProjectMilestoneManager(models.Manager):
+    def project_start(self, project):
+        return project.milestones.get(milestone=Milestone.start_milestone())
+
+    def project_practical_completion(self, project):
+        return project.milestones.get(milestone=Milestone.practical_completion())
+    
+    def project_final_completion(self, project):
+        return project.milestones.get(milestone=Milestone.final_completion())
+
+    def project_final_accounts(self, project):
+        return project.milestones.get(milestone=Milestone.final_accounts())
+
 class ProjectMilestone(models.Model):
     completion_date = models.DateField(default=datetime.datetime.now, blank=True, null=True)
-    project = models.ForeignKey(Project, related_name='project_milestone')
+    project = models.ForeignKey(Project, related_name='milestones')
     milestone = models.ForeignKey(Milestone, related_name='project_milestone')
+
+    objects = ProjectMilestoneManager()
 
     def __unicode__(self):
         return "%s - %s" % (self.project, self.milestone)

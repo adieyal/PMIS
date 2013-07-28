@@ -21,6 +21,35 @@ class CalendarFunctionsTest(TestCase):
         self.assertEquals(models.CalendarFunctions.next_month(self.year, self.month), (2013, 6))
         self.assertEquals(models.CalendarFunctions.next_month(self.year, 12), (2014, 1))
         
+class TestMilestone(TestCase):
+    def test_milestones_loaded(self):
+        self.assertEquals(models.Milestone.objects.count(), 9)
+
+    def test_milestone_names(self):
+        self.assertEquals(models.Milestone.start_milestone().name, "Project Identification")
+        self.assertEquals(models.Milestone.practical_completion().name, "Practical Completion")
+        self.assertEquals(models.Milestone.final_completion().name, "Final Completion")
+        self.assertEquals(models.Milestone.final_accounts().name, "Final Accounts")
+
+class TestProjectMilestone(TestCase):
+    def setUp(self):
+        self.project = factories.ProjectFactory.create()
+        self.start_milestone = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.start_milestone())
+        self.practical_completion = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.practical_completion())
+        self.final_completion = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.final_completion())
+        self.final_accounts = factories.ProjectMilestoneFactory(project=self.project, milestone=models.Milestone.final_accounts())
+
+    def test_project_start_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_start(self.project), self.start_milestone)
+
+    def test_project_practical_completion_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_practical_completion(self.project), self.practical_completion)
+
+    def test_project_final_completion_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_final_completion(self.project), self.final_completion)
+
+    def test_project_final_accounts_milestone(self):
+        self.assertEquals(models.ProjectMilestone.objects.project_final_accounts(self.project), self.final_accounts)
 
 class FinancialYearTest(TestCase):
     def setUp(self):
@@ -88,12 +117,18 @@ class ProjectTest(TestCase):
         performance = range(0, 100, 10)
         self.projects = []
         self.year, self.month = 2013, 6
-        
-        for p in performance:
-            project = factories.ProjectFactory()
+        self.munic1 = factories.MunicipalityFactory() 
+        self.munic2 = factories.MunicipalityFactory() 
+
+        for idx, p in enumerate(performance):
+            project = factories.ProjectFactory(municipality=self.munic1 if idx < 5 else self.munic2)
             self.projects.append(project)
-            factories.PlanningFactory(project=project, planned_progress=50, year=self.year, month=self.month)
-            factories.MonthlySubmissionFactory(project=project, actual_progress=p, year=self.year, month=self.month)
+            factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), year=self.year, month=self.month)
+            factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), year=self.year, month=self.month)
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.start_milestone())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.final_completion())
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.final_accounts())
 
         
     def test_project_actual_progress(self):
@@ -132,3 +167,64 @@ class ProjectTest(TestCase):
             project = worst[i]
             expected_performance = actual / 50.
             self.assertEquals(project.performance(self.year, self.month), expected_performance)
+
+    def test_worst_performing_with_different_months(self):
+        new_project = factories.ProjectFactory(municipality=self.munic1)
+        factories.PlanningFactory(project=new_project, planned_progress=100, year=(self.year + 1), month=self.month)
+        factories.MonthlySubmissionFactory(project=new_project, actual_progress=10, year=(self.year + 1), month=self.month)
+
+        worst = models.Project.objects.worst_performing(self.year, self.month, count=100)
+        self.assertEquals(len(worst), 10)
+        for p in worst:
+            self.assertNotEquals(new_project, worst)
+
+    def test_best_and_worst_can_work_on_filter(self):
+        best = models.Project.objects.municipality(self.munic1).best_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(40, 0, -10)[0:5]):
+            project = best[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+        
+        best = models.Project.objects.municipality(self.munic2).best_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(90, 0, -10)[0:5]):
+            project = best[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+
+        worst = models.Project.objects.municipality(self.munic1).worst_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(0, 50, 10)[0:5]):
+            project = worst[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+        
+        worst = models.Project.objects.municipality(self.munic2).worst_performing(self.year, self.month, count=5)
+        for idx, actual in enumerate(range(50, 100, 10)[0:5]):
+            project = worst[idx]
+            self.assertEquals(project.performance(self.year, self.month), actual / 50.)
+
+    def test_actual_expenditure(self):
+        project = self.projects[0]
+        self.assertEquals(project.actual_expenditure(self.year, self.month), 0)
+
+        project = self.projects[1]
+        self.assertEquals(project.actual_expenditure(self.year, self.month), 200)
+        
+    def test_planned_expenditure(self):
+        project = self.projects[0]
+        self.assertEquals(project.planned_expenditure(self.year, self.month), 0)
+
+        project = self.projects[1]
+        self.assertEquals(project.planned_expenditure(self.year, self.month), 100)
+
+    def test_start_date(self):
+        project = self.projects[0]
+        self.assertEquals(project.start_milestone, models.ProjectMilestone.objects.project_start(project))
+
+    def test_practical_completion(self):
+        project = self.projects[0]
+        self.assertEquals(project.practical_completion_milestone, models.ProjectMilestone.objects.project_practical_completion(project))
+
+    def test_final_completion(self):
+        project = self.projects[0]
+        self.assertEquals(project.final_completion_milestone, models.ProjectMilestone.objects.project_final_completion(project))
+
+    def test_final_accounts(self):
+        project = self.projects[0]
+        self.assertEquals(project.final_accounts_milestone, models.ProjectMilestone.objects.project_final_accounts(project))

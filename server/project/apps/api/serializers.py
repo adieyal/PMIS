@@ -3,7 +3,16 @@ from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
 from project.apps.projects import models
+from decimal import Decimal
+import json
 
+# TODO not sure if this should go here or not
+class ModelEncoder(json.JSONEncoder):
+     def default(self, obj):
+         if isinstance(obj, Decimal):
+             return float(obj)
+         # Let the base class default method raise the TypeError
+         return json.JSONEncoder.default(self, obj)
 
 class ClientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
@@ -52,6 +61,53 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
         model = models.ScopeCode
         fields = ('id', 'name', )
 
+def condensed_project_serializer(project, year, month):
+    return {
+        "name" : project.name,
+        "client" : project.programme.client.name,
+        "municipality" : {
+            "id" : project.municipality.id,
+            "name" : project.municipality.name,
+        },
+        "district" : {
+            "id" : project.municipality.district.id,
+            "name" : project.municipality.district.name,
+        },
+        "budget" : project.project_financial.total_anticipated_cost,
+        "progress" : {
+            "actual" : project.actual_progress(year, month),
+            "planned" : project.planned_progress(year, month),
+        },
+        "jobs" : project.jobs,
+        "expenditure" : {
+            "ratio" : project.project_financial.percentage_expenditure(year, month),
+            "actual" : project.actual_expenditure(year, month),
+            "planned" : project.planned_expenditure(year, month),
+        }
+    }
+
+def expanded_project_serializer(project, year, month):
+    js = condensed_project_serializer(project, year, month)
+    js["milestones"] = {
+        "start_date" : project.start_milestone.completion_date,
+        "practical_completion" : project.practical_completion_milestone.completion_date,
+        "final_completion" : project.final_completion_milestone.completion_date,
+        "final_accounts" : project.final_accounts_milestone.completion_date
+    }
+
+    pyear, pmonth = models.CalendarFunctions.previous_month(year, month) 
+    last_month_submission = project.monthly_submissions.get(year=pyear, month=pmonth)
+    current_month_submission = project.monthly_submissions.get(year=year, month=month)
+
+    js["last_month"] = {
+        "comment" : last_month_submission.comment,
+        "mitigation" : last_month_submission.remedial_action,
+    }
+    js["current_month"] = {
+        "comment" : current_month_submission.comment,
+        "mitigation" : current_month_submission.remedial_action,
+    }
+    return js
 
 def project_serializer(queryset, condensed=None):
     data = []
