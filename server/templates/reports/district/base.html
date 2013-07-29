@@ -8,6 +8,12 @@
     <script type="text/javascript" data-main="/static/reports/widgets/js/widgets" src="/static/reports/widgets/js/require.js"></script>
 
     <script>
+        require.config({
+        baseUrl: "/static/reports/widgets/js",
+        deps: ["widgets"]
+        });
+    </script>
+    <script>
     var district_id = {{ district_id }}
     var year = {{ year }}
     var month = {{ month }}
@@ -16,9 +22,27 @@
     var perc_format = d3.format(",.0%");
     var cur_format = function(n) { return "R " + num_format(n); }
 
+    fn_slider = function(position1, position2, text1, text2) {
+        return [ 
+            {
+                "position": position1,
+                "bar-color": "#e5b744",
+                "marker-color": "#656263",
+                "marker-style": "short",
+                "marker-text": text1 || "Actual"
+            },
+            {
+                "position": position2,
+                "bar-color": "#f04338",
+                "marker-color": "#f04338",
+                "marker-style": "long",
+                "marker-text": text2 || "Planned"
+            },
+        ]
+    }
+
     d3.json("/api/reports/district/" + district_id + "/" + year + "/" + month + "/", function(error, json) {
-        js = json;
-        console.log(json["clients"])
+        console.log(json);
         d3.select(".district-name").text(json["name"])
         d3.select(".district-text .date").text(dt_format(new Date(year, month - 1, 1)));
 
@@ -59,7 +83,52 @@
             .text(function(el) {
                 return cur_format(el["overall_expenditure"]["actual_expenditure"])
             });
-    
+
+        d3.selectAll("#department-projects .department .client-slider")
+            .data(json["clients"])
+            .each(function(el) {
+                a = el["overall_expenditure"]["actual_expenditure"]
+                p = el["overall_expenditure"]["planned_expenditure"]
+                b = el["total_budget"]
+                w = $(this).data('widget-instance');
+                w.data = fn_slider(a/b, p/b);
+                w.draw();
+            });
+
+
+        populate_school = function(data, project_node) {
+            node = d3.select(project_node);
+            node.select(".project-location").text(function(el2) { return data["municipality"]["name"]; })
+            node.select(".pname").text(function(el2) { return data["name"]; })
+            node.select(".project-department").text(function(el2) { return data["client"]; })
+            node.select(".total-budget .price").text(function(el2) { return cur_format(data["budget"]); })
+            node.select(".overall-progress .progress").text(function(el2) { return perc_format(data["progress"]["actual"]); })
+            node.select(".num-jobs .jobs").text(function(el2) { return num_format(data["jobs"]); })
+            node.select(".implementation-expenditure .expenditure").text(function(el2) { return perc_format(data["expenditure"]["ratio"]); })
+            node.select(".actual-expenditure .expenditure").text(function(el2) { return cur_format(data["expenditure"]["actual"]); })
+            node.select(".actual-expenditure .expenditure").text(function(el2) { return cur_format(data["expenditure"]["actual"]); })
+            node.select(".client-slider").text(function(el2) {
+                a = data["progress"]["actual"] * 100
+                p = data["progress"]["planned"] * 100
+                a = 20; p = 50;
+                w = $(this).data('widget-instance');
+                console.log(a); console.log(p);
+                w.data = fn_slider(a, p);
+                w.draw();
+            })
+        }
+
+        d3.selectAll("#top-performing-projects .project")
+            .data(json["projects"]["best_performing"])
+            .each(function(el) {
+                populate_school(el, this);
+            })
+
+        d3.selectAll("#worst-performing-projects .project")
+            .data(json["projects"]["worst_performing"])
+            .each(function(el) {
+                populate_school(el, this);
+            })
     });
 
     </script>
@@ -68,9 +137,6 @@
     {% endblock %}
 </head>
 <body>
-    <h1>sdfsdfsd</h1>
-    <div id="slider-demo" data-widget="slider" data-src="/static/reports/widgets/demo.json"></div>
-    <h1>232323</h1>
     {% block body %}{% endblock %}
 </body>
 </html>

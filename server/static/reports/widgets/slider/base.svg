@@ -1,5 +1,5 @@
 <?xml version="1.0" standalone="no"?>
-<svg width="100%" height="100%" version="1.1" viewBox="0 0 144 30" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="100%" height="100%" version="1.1" viewBox="0 0 94 30" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <linearGradient id="inner-gradient" x1="0" x2="0" y1="0" y2="1">
       <stop offset="0%" stop-color="#b1b3b2"/>
@@ -58,7 +58,7 @@
       .marker-text { font-family:Arial,sans-seriff; font-size:6px; }
     ]]></style>
   </defs>
-  <rect class="outer-bar" x="2" y="4" rx="4" ry="4" width="140" height="8"/>
-  <rect class="inner-bar" x="4" y="6" rx="2" ry="2" width="136" height="4"/>
+  <rect class="outer-bar" x="2" y="4" rx="4" ry="4" width="90" height="8"/>
+  <rect class="inner-bar" x="4" y="6" rx="2" ry="2" width="86" height="4"/>
   <g class="dynamic"/>
 </svg>

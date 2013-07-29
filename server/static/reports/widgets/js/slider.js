@@ -25,12 +25,13 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	    var markers = [];
 	    
 	    if (!me.data) { me.load(); }
+	    if (!me.data) { return; }
 	    d.children().remove()
 	    for (i=0; i<me.data.length; i++) {
 		var data = me.data[i];
 		var m = svg.find('#tpl-marker-'+(data['marker-style'] || 'short')).clone();
 		var b = svg.find('#tpl-inner-bar').clone();
-		var x = 136*(data['position'] || 0);
+		var x = 86*(data['position'] || 0);
 		
 		m.attr('id', 'marker'+i);
 		m.attr('transform', 'translate('+x+',0)');
@@ -79,13 +80,14 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	load: function() {
 	    var me = this;
 	    var node = $(me.node);
-	    var src = node.data('src').split('#')[0];
-	    var sel = node.data('src').split('#')[1];
+	    var src = node.data('src');
 
 	    if (src) {
+		var url = src.split('#')[0];
+		var sel = src.split('#')[1];
 		$.ajax({
 		    type: 'get',
-		    url: src,
+		    url: url,
 		    dataType: 'json',
 		    async: false,
 		    success: function(d) {

@@ -1,7 +1,3 @@
-require.config({
-    baseUrl: '../js'
-});
-
 require(['jquery'], function($) {
     /* Set variable when done rendering. */
     (function() {
