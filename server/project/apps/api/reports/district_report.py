@@ -34,6 +34,7 @@ def district_client_json(district, client, year, month):
 
     return {
         "fullname" : client.description,
+        "num_jobs" : 999,
         "total_budget" : float(sum([fin.total_anticipated_cost for fin in project_financials])),
         "overall_progress" : {
             "planned" : avg([p.planned_progress for p in planning]),
@@ -79,5 +80,5 @@ def district_report(request, district_id, year, month):
             ],
         }
     }
-    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder), mimetype="application/json")
+    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4), mimetype="application/json")
 
