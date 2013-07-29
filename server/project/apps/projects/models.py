@@ -364,7 +364,7 @@ class ProjectFinancial(models.Model):
         try:
             actual = self.project.monthly_submissions.get(year=year, month=month)
             
-            return float(actual.actual_expenditure) / float(self.total_anticipated_cost) * 100
+            return float(actual.actual_expenditure) / float(self.total_anticipated_cost)
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("No submission exists for %s/%s" % (year, month))
         except ZeroDivisionError:

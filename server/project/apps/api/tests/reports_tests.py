@@ -121,9 +121,9 @@ class DistrictTest(TestCase):
         
         self.assertTrue("overall_expenditure" in self.client1js)
         self.assertTrue("perc_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], 60)
+        self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], 0.60)
 
-        self.assertEqual(self.client2js["overall_expenditure"]["perc_expenditure"], 500)
+        self.assertEqual(self.client2js["overall_expenditure"]["perc_expenditure"], 5)
 
     def test_actual_expenditure(self):
         self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])

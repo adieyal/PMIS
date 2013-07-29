@@ -119,7 +119,7 @@ class ProjectFinancialTest(TestCase):
         actual = factories.MonthlySubmissionFactory(
             project=project, actual_expenditure=25, year=2013, month=6
         )
-        self.assertEqual(financial.percentage_expenditure(2013, 6), 25)
+        self.assertEqual(financial.percentage_expenditure(2013, 6), 0.25)
         self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 7)
 
         financial.total_anticipated_cost = 0
