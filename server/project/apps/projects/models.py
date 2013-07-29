@@ -271,14 +271,14 @@ class Project(models.Model):
     def actual_progress(self, year, month):
         try:
             s = MonthlySubmission.objects.get(year=year, month=month, project=self)
-            return s.actual_progress
+            return s.actual_progress / 100
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual progress for %s/%s" % (year, month))
 
     def planned_progress(self, year, month):
         try:
             s = self.plannings.get(year=year, month=month)
-            return s.planned_progress
+            return s.planned_progress / 100
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
 

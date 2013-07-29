@@ -147,12 +147,12 @@ class ProjectTest(TestCase):
         
     def test_project_actual_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.actual_progress(self.year, self.month), 20)
+        self.assertEqual(project.actual_progress(self.year, self.month), 0.2)
         self.assertRaises(models.ProjectException, project.actual_progress, 2012, 3)
 
     def test_project_planned_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.planned_progress(self.year, self.month), 50)
+        self.assertEqual(project.planned_progress(self.year, self.month), 0.5)
         self.assertRaises(models.ProjectException, project.planned_progress, 2012, 3)
 
     def test_project_performance(self):
