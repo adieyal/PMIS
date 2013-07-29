@@ -38,8 +38,8 @@ class DistrictTest(TestCase):
         factories.ProjectFinancialFactory(project=self.project3, total_anticipated_cost=60)
         factories.ProjectFinancialFactory(project=self.project4, total_anticipated_cost=200)
 
-        factories.PlanningFactory(project=self.project1, year=self.year, month=self.month, planned_progress=200)
-        factories.PlanningFactory(project=self.project2, year=self.year, month=self.month, planned_progress=50)
+        factories.PlanningFactory(project=self.project1, year=self.year, month=self.month, planned_progress=200, planned_expenses="50")
+        factories.PlanningFactory(project=self.project2, year=self.year, month=self.month, planned_progress=50, planned_expenses="70")
         factories.PlanningFactory(project=self.project3, year=self.year, month=self.month, planned_progress=25)
 
         factories.MonthlySubmissionFactory(
@@ -128,6 +128,10 @@ class DistrictTest(TestCase):
     def test_actual_expenditure(self):
         self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])
         self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 110)
+
+    def test_planned_expenditure(self):
+        self.assertTrue("planned_expenditure" in self.client1js["overall_expenditure"])
+        self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 120)
 
     def test_best_performing(self):
         js = self.js

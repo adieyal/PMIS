@@ -45,6 +45,7 @@ def district_client_json(district, client, year, month):
                 fin.percentage_expenditure(year, month) for fin in project_financials
             ]),
             "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
+            "planned_expenditure" : sum([p.planned_expenses for p in planning]),
 
         },
         "total_projects" : projects.count(),
