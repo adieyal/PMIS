@@ -5,13 +5,16 @@
     <link href="/static/reports/css/style.css" rel="stylesheet" type="text/css">
     <title>The Dpwrt</title>
     <script src="/static/reports/js/d3.v3.min.js" charset="utf-8"></script>
+    <script type="text/javascript" data-main="/static/reports/widgets/js/widgets" src="/static/reports/widgets/js/require.js"></script>
 
     <script>
     var district_id = {{ district_id }}
     var year = {{ year }}
     var month = {{ month }}
     var dt_format = d3.time.format("%B %Y");
-    var num_format = function(n) { return "R" + d3.format(",")(n)};
+    var num_format = d3.format(",");
+    var perc_format = d3.format(",.0%");
+    var cur_format = function(n) { return "R " + num_format(n); }
 
     d3.json("/api/reports/district/" + district_id + "/" + year + "/" + month + "/", function(error, json) {
         js = json;
@@ -19,8 +22,8 @@
         d3.select(".district-name").text(json["name"])
         d3.select(".district-text .date").text(dt_format(new Date(year, month - 1, 1)));
 
-        console.log(d3.selectAll("#department-projects .department .project-name"))
-        //d3.selectAll("#department-projects .department .project-name").data(json["clients"]).text(String);
+        var departments = d3.selectAll("#department-projects .department")
+
         d3.selectAll("#department-projects .department .department-name")
             .data(json["clients"])
             .text(function(el) {
@@ -30,12 +33,34 @@
         d3.selectAll("#department-projects .department .project-budget span")
             .data(json["clients"])
             .text(function(el) {
-                return num_format(454343)
+                return cur_format(el["total_budget"])
             });
 
+        d3.selectAll("#department-projects .department .num-of-job span")
+            .data(json["clients"])
+            .text(function(el) {
+                return num_format(el["num_jobs"])
+            });
+
+        d3.selectAll("#department-projects .department .overall span")
+            .data(json["clients"])
+            .text(function(el) {
+                return perc_format(el["overall_progress"]["actual"] / 100)
+            });
+
+        d3.selectAll("#department-projects .department .implementation-text span")
+            .data(json["clients"])
+            .text(function(el) {
+                return perc_format(el["overall_expenditure"]["perc_expenditure"])
+            });
+
+        d3.selectAll("#department-projects .department .actual-text span")
+            .data(json["clients"])
+            .text(function(el) {
+                return cur_format(el["overall_expenditure"]["actual_expenditure"])
+            });
     
     });
-
 
     </script>
 
@@ -43,6 +68,9 @@
     {% endblock %}
 </head>
 <body>
+    <h1>sdfsdfsd</h1>
+    <div id="slider-demo" data-widget="slider" data-src="/static/reports/widgets/demo.json"></div>
+    <h1>232323</h1>
     {% block body %}{% endblock %}
 </body>
 </html>
