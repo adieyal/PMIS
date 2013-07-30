@@ -34,6 +34,7 @@ def district_client_json(district, client, year, month):
 
     return {
         "fullname" : client.description,
+        "name" : client.name,
         "num_jobs" : 999,
         "total_budget" : float(sum([fin.total_anticipated_cost for fin in project_financials])),
         "overall_progress" : {
@@ -63,8 +64,8 @@ def district_report(request, district_id, year, month):
     month = int(month)
 
     district = get_object_or_404(models.District, pk=district_id)
-    best_projects = models.Project.objects.best_performing(year, month)
-    worst_projects = models.Project.objects.worst_performing(year, month)
+    best_projects = models.Project.objects.best_performing(year, month, count=3)
+    worst_projects = models.Project.objects.worst_performing(year, month, count=3)
     js = {
         "name" : district.name,
         "clients" : [

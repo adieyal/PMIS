@@ -9,11 +9,15 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	},
 	init: function() {
 	    var node = $(this.node);
-	    var src = node.data('src');
+	    node.html(svg);
+
 	    this.src = node.data('src');
 	    this.svg = node.find('svg');
-	    
-	    node.html(svg);
+	    this.aspect = (parseFloat(node.data('aspect')) || 1) * 90;
+	    this.svg[0].setAttribute('viewBox', '0 0 '+(this.aspect+4)+' 30');
+	    this.svg.find('.outer-bar').attr('width', this.aspect);
+	    this.svg.find('.inner-bar').attr('width', this.aspect-4);	    
+
 	    this.draw();
 	},
 	draw: function() {
@@ -31,7 +35,7 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 		var data = me.data[i];
 		var m = svg.find('#tpl-marker-'+(data['marker-style'] || 'short')).clone();
 		var b = svg.find('#tpl-inner-bar').clone();
-		var x = 86*(data['position'] || 0);
+		var x = (me.aspect-4)*(data['position'] || 0);
 		
 		m.attr('id', 'marker'+i);
 		m.attr('transform', 'translate('+x+',0)');

@@ -22,113 +22,248 @@
     var perc_format = d3.format(",.0%");
     var cur_format = function(n) { return "R " + num_format(n); }
 
-    fn_slider = function(position1, position2, text1, text2) {
-        return [ 
-            {
+    client_colors = {
+        "DoE"  : "client-doe",
+        "DCSR" : "client-dcsr",
+        "DEDET": "client-dedet",
+        "DoH"  : "client-doh",
+        "DSD"  : "client-dsd",
+        "DSSL" : "client-dssl",
+    }
+
+    client_colors2 = {
+        "DoE" :"#9792b3",
+        "DCSR" :"#e7bb5e",
+        "DEDET" :"#e4cfbf",
+        "DoH" :"#8cc6ec",
+        "DSD" :"#b9b387",
+        "DSSL" :"#bd7794"
+    }
+
+    var fn_slider = function(client, position1, position2, text1, text2) {
+        if (position1 < 0.1) position1 = 0.1
+        if (position2 < 0.1) position2 = 0.1
+        if (position1 > 0.9) position1 = 0.8
+        if (position2 > 0.9) position2 = 0.8
+
+        threshold = 0.2;
+        text1 = text1 || "Actual"
+        text2 = text2 || "Planned"
+
+        barcolor2 = client_colors2[client];
+        if (position2 - position1 > threshold) {
+            barcolor2 = "#f04338";
+        }
+
+        barcolor1 = client_colors2[client];
+        if (position1 - position2 > threshold) {
+            barcolor1 = "#f04338";
+        }
+        if (Math.abs(position1 - position2) < 0.1) {
+            //text2 = text1 + "/" + text2
+            text1 = " ";
+        }
+        el1 = {
                 "position": position1,
-                "bar-color": "#e5b744",
+                "bar-color": barcolor1,
                 "marker-color": "#656263",
                 "marker-style": "short",
-                "marker-text": text1 || "Actual"
-            },
-            {
+                "marker-text": text1
+        } 
+
+        el2 = {
                 "position": position2,
-                "bar-color": "#f04338",
+                "bar-color": barcolor2,
                 "marker-color": "#f04338",
                 "marker-style": "long",
-                "marker-text": text2 || "Planned"
-            },
-        ]
+                "marker-text": text2
+        }  
+
+        if (position1 > position2)
+            return [el2, el1]
+        else
+            return [el1, el2]
+    }
+
+    var fn_gauge = function(position1, position2, text1, text2) {
+        if (Math.abs(position1 - position2) < 0.05)
+            text1 = " "
+
+        return [{
+            "position": position1,
+            "text": text1 || "Planned",
+            "needle-style": "dashed"
+        },
+        {
+            "position": position2,
+            "text": text2 || "Actual",
+            "needle-color": ["#86bf53", "#cce310"],
+            "needle-style": "plain"
+        }]
+    }
+
+    populate_general = function(json) {
+        $(".district-name").text(json["name"]);
+        $(".district-text .date").text(dt_format(new Date(year, month - 1, 1)))
+    }
+
+    populate_clients = function(json) {
+
+        $("#department-projects").each(function() {
+            
+            me = jQuery(this);
+            clients = json["clients"]
+            me.find(".department-name div").each(function(id) {
+                $(this).text(clients[id]["fullname"]);
+            });
+
+            me.find(".project-budget span").each(function(id) {
+                $(this).text(cur_format(clients[id]["total_budget"]));
+            });
+
+            me.find(".num-of-job span").each(function(id) {
+                $(this).text(num_format(clients[id]["num_jobs"]));
+            });
+
+            me.find(".overall span").each(function(id) {
+                val = clients[id]["overall_progress"]["actual"] / 100;
+                $(this).text(perc_format(val));
+            });
+
+            me.find(".implementation-text span").each(function(id) {
+                val = clients[id]["overall_expenditure"]["perc_expenditure"]
+                $(this).text(perc_format(val));
+            });
+
+            me.find(".actual-text span").each(function(id) {
+                val = clients[id]["overall_expenditure"]["actual_expenditure"]
+                $(this).text(cur_format(val));
+            });
+
+            me.find(".client-slider").each(function(id) {
+                var a = clients[id]["overall_expenditure"]["actual_expenditure"]
+                var p = clients[id]["overall_expenditure"]["planned_expenditure"]
+                var b = clients[id]["total_budget"]
+
+                var w = $(this).data('widget-instance');
+                if (b == 0) {
+                    w.data = fn_slider(clients[id]["name"],0.0, 0.0);
+                } else {
+                    w.data = fn_slider(clients[id]["name"],a/b, p/b);
+                }
+                w.draw();
+            });
+        });
+        $(".progress-gauge").each(function(id) {
+            actual = json["clients"][id]["overall_progress"]["actual"] / 100
+            planned = json["clients"][id]["overall_progress"]["planned"] / 100
+
+            var w = $(this).data('widget-instance');
+            w.data = fn_gauge(actual, planned);
+            w.draw();
+        });
+    }
+
+    populate_project = function(json) {
+        populate_item = function(datum, project_node) {
+            var client_name = datum["client"]
+            project_node.find(".project-name").each(function(id) {
+                cls = client_colors[client_name];
+                $(this).addClass("client-doe");
+            });
+
+            project_node.find(".project-location").each(function(id) {
+                var val = datum["municipality"]["name"];
+                $(this).text(val);
+            });
+
+            project_node.find(".pname").each(function(id) {
+                var val = datum["name"];
+                $(this).text(val);
+            });
+
+            project_node.find(".project-department").each(function(id) {
+                var val = datum["client"];
+                $(this).text(val);
+            });
+
+            project_node.find(".total-budget .price").each(function(id) {
+                var val = cur_format(datum["budget"]);
+                $(this).text(val);
+            });
+
+            project_node.find(".overall-progress .progress").each(function(id) {
+                var val = perc_format(datum["progress"]["actual"]);
+                $(this).text(val);
+            });
+
+            project_node.find(".num-jobs .jobs").each(function(id) {
+                var val = num_format(datum["jobs"]);
+                $(this).text(val);
+            });
+
+            project_node.find(".implementation-expenditure .expenditure").each(function(id) {
+                var val = perc_format(datum["expenditure"]["ratio"]);
+                $(this).text(val);
+            });
+
+            project_node.find(".actual-expenditure .expenditure").each(function(id) {
+                var val = cur_format(datum["expenditure"]["actual"]);
+                $(this).text(val);
+            });
+
+            project_node.find(".progress-slider").each(function(id) {
+                var a = datum["progress"]["actual"];
+                var p = datum["progress"]["planned"];
+                w = $(this).data('widget-instance');
+                w.data = fn_slider(datum["client"], a, p);
+                w.draw();
+            });
+
+            project_node.find(".expenditure-slider").each(function(id) {
+                var a = datum["expenditure"]["actual"];
+                var p = datum["expenditure"]["planned"];
+                w = $(this).data('widget-instance');
+                w.data = fn_slider(datum["client"], a, p);
+                w.draw();
+            });
+        }
+
+        $(".top-performing-projects .project").each(function(id) {
+            var me = jQuery(this);
+            var data = json["projects"]["best_performing"]
+            populate_item(data[id], me);
+        });
+
+        $(".worst-performing-projects .project").each(function(id) {
+            var me = jQuery(this);
+            var data = json["projects"]["worst_performing"]
+            populate_item(data[id], me);
+        });
+    };
+
+    var populate_department_projects = function(json) {
+        $("#department-projects-counts .department").each(function(id) {
+            var me = jQuery(this);
+            var datum = json["clients"][id]
+            me.find(".department-name").each(function() {
+                $(this).text(datum["fullname"])
+            });
+
+            me.find(".department-num").each(function() {
+                $(this).text(datum["total_projects"])
+            });
+        });
+        //    populate_item(data[id], me);
+        //});
     }
 
     d3.json("/api/reports/district/" + district_id + "/" + year + "/" + month + "/", function(error, json) {
-        console.log(json);
-        d3.select(".district-name").text(json["name"])
-        d3.select(".district-text .date").text(dt_format(new Date(year, month - 1, 1)));
-
-        var departments = d3.selectAll("#department-projects .department")
-
-        d3.selectAll("#department-projects .department .department-name")
-            .data(json["clients"])
-            .text(function(el) {
-                return el["fullname"]
-            });
-
-        d3.selectAll("#department-projects .department .project-budget span")
-            .data(json["clients"])
-            .text(function(el) {
-                return cur_format(el["total_budget"])
-            });
-
-        d3.selectAll("#department-projects .department .num-of-job span")
-            .data(json["clients"])
-            .text(function(el) {
-                return num_format(el["num_jobs"])
-            });
-
-        d3.selectAll("#department-projects .department .overall span")
-            .data(json["clients"])
-            .text(function(el) {
-                return perc_format(el["overall_progress"]["actual"] / 100)
-            });
-
-        d3.selectAll("#department-projects .department .implementation-text span")
-            .data(json["clients"])
-            .text(function(el) {
-                return perc_format(el["overall_expenditure"]["perc_expenditure"])
-            });
-
-        d3.selectAll("#department-projects .department .actual-text span")
-            .data(json["clients"])
-            .text(function(el) {
-                return cur_format(el["overall_expenditure"]["actual_expenditure"])
-            });
-
-        d3.selectAll("#department-projects .department .client-slider")
-            .data(json["clients"])
-            .each(function(el) {
-                a = el["overall_expenditure"]["actual_expenditure"]
-                p = el["overall_expenditure"]["planned_expenditure"]
-                b = el["total_budget"]
-                w = $(this).data('widget-instance');
-                w.data = fn_slider(a/b, p/b);
-                w.draw();
-            });
-
-
-        populate_school = function(data, project_node) {
-            node = d3.select(project_node);
-            node.select(".project-location").text(function(el2) { return data["municipality"]["name"]; })
-            node.select(".pname").text(function(el2) { return data["name"]; })
-            node.select(".project-department").text(function(el2) { return data["client"]; })
-            node.select(".total-budget .price").text(function(el2) { return cur_format(data["budget"]); })
-            node.select(".overall-progress .progress").text(function(el2) { return perc_format(data["progress"]["actual"]); })
-            node.select(".num-jobs .jobs").text(function(el2) { return num_format(data["jobs"]); })
-            node.select(".implementation-expenditure .expenditure").text(function(el2) { return perc_format(data["expenditure"]["ratio"]); })
-            node.select(".actual-expenditure .expenditure").text(function(el2) { return cur_format(data["expenditure"]["actual"]); })
-            node.select(".actual-expenditure .expenditure").text(function(el2) { return cur_format(data["expenditure"]["actual"]); })
-            node.select(".client-slider").text(function(el2) {
-                a = data["progress"]["actual"] * 100
-                p = data["progress"]["planned"] * 100
-                a = 20; p = 50;
-                w = $(this).data('widget-instance');
-                console.log(a); console.log(p);
-                w.data = fn_slider(a, p);
-                w.draw();
-            })
-        }
-
-        d3.selectAll("#top-performing-projects .project")
-            .data(json["projects"]["best_performing"])
-            .each(function(el) {
-                populate_school(el, this);
-            })
-
-        d3.selectAll("#worst-performing-projects .project")
-            .data(json["projects"]["worst_performing"])
-            .each(function(el) {
-                populate_school(el, this);
-            })
+        populate_general(json);
+        populate_clients(json);
+        populate_project(json);
+        populate_department_projects(json);
+        
     });
 
     </script>

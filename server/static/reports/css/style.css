@@ -1,4 +1,6 @@
 /* reset */
+
+
 /* do not reset any global table / input / form / ul / li as these break CMS */
 p {margin-top: 0px;}
 p:last-child { margin-bottom:0; }
@@ -63,10 +65,14 @@ a:hover {text-decoration:underline; }
 	.project-main-area #department-projects .project-brdr .border.brdr{ border:none;}
 	
 	.project-main-area #department-projects .project-brdr .border .project-main{ width:158px; float:left;}
+	.project-main-area #department-projects .project-brdr .border .project-main .department-name div{ padding : 2px; }
 	.project-main-area #department-projects .project-brdr .border .project-main .department-name{ height:37px; background:#e7bb5e; font-size:14px; font-family:Arial, Helvetica, sans-serif; color:#404041; text-align:center; padding:3px 0 0 0;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-2{ background:#84c4bf;}
+	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-2{ background:#84c4bf; font-size:12px}
+	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-2 div{ padding-top:2px; }
 	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-3{ background:#9792b3;}
+	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-3 div{ padding-top:3px; }
 	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-4{ background:#8cc6ec;}
+	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-4 div{ padding-top:9px; }
 	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-5{ background:#b9b387;}
 	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-6{ background:#bd7794;}
 	.project-main-area #department-projects .project-brdr .border .project-main .total_projects{ font-size:12px; color:#fff; text-align:center; background:#58585a; height:25px; line-height:25px; margin:0 0 5px 0;}
@@ -159,152 +165,152 @@ a:hover {text-decoration:underline; }
 	.project-main-area #department-projects .project-brdr .border .project-main .implementation-bg .actual-bg .actual.marg-5{ margin:0 0 0 65px;}
 	.project-main-area #department-projects .project-brdr .border .project-main .implementation-bg .actual-bg .actual.marg-6{ margin:0 0 0 119px;}
 	
-/* #top-performing-projects */
-#top-performing-projects{ clear:both; padding:12px 0 10px 0;}
-	#top-performing-projects .top-performing-projects{ width:500px; float:left;}
-	#top-performing-projects .top-performing-projects .top-performing-title h3{ height:43px; font-size:20px; color:#fff; background:#91b965 url(../images/top-bg.png) left center no-repeat; background-size:43px 43px; line-height:43px; padding:0 0 0 53px; margin:0 0 7px 0;}
-	#top-performing-projects .top-performing-projects .top-performing-title h3 .font-whight{ font-weight:700;}
+/* #project-performance */
+#project-performance{ clear:both; padding:12px 0 10px 0;}
+	#project-performance .top-performing-projects{ width:500px; float:left;}
+	#project-performance .top-performing-projects .top-performing-title h3{ height:43px; font-size:20px; color:#fff; background:#91b965 url(../images/top-bg.png) left center no-repeat; background-size:43px 43px; line-height:43px; padding:0 0 0 53px; margin:0 0 7px 0;}
+	#project-performance .top-performing-projects .top-performing-title h3 .font-whight{ font-weight:700;}
 	
-	#top-performing-projects .top-performing-projects .project-1{ width:455px; float:right; clear:both;}
-	#top-performing-projects .top-performing-projects .project-1 .project-name{ height:22px; background:#e7bb5e; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .top-performing-projects .project-1 .project-name a{ color:#fff;}
+	#project-performance .top-performing-projects .project-1{ width:455px; float:right; clear:both;}
+	#project-performance .top-performing-projects .project-1 .project-name{ height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .top-performing-projects .project-1 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row{ clear:both;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-1.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row{ clear:both;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-1.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-2.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-2.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 	/* project-2 */
-	#top-performing-projects .top-performing-projects .project-2{ width:455px; float:right; clear:both;}
-	#top-performing-projects .top-performing-projects .project-2 .project-name{ height:22px; background:#be7794; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .top-performing-projects .project-2 .project-name a{ color:#fff;}
+	#project-performance .top-performing-projects .project-2{ width:455px; float:right; clear:both;}
+	#project-performance .top-performing-projects .project-2 .project-name{ height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .top-performing-projects .project-2 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row{ clear:both;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-3.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row{ clear:both;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-3.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-4.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-4.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 	/* project-3 */
-	#top-performing-projects .top-performing-projects .project-3{ width:455px; float:right; clear:both;}
-	#top-performing-projects .top-performing-projects .project-3 .project-name{ height:22px; background:#85c4bf; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .top-performing-projects .project-3 .project-name a{ color:#fff;}
+	#project-performance .top-performing-projects .project-3{ width:455px; float:right; clear:both;}
+	#project-performance .top-performing-projects .project-3 .project-name{ height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .top-performing-projects .project-3 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row{ clear:both;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-5.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row{ clear:both;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-5.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-6.png) center center no-repeat; height:52px;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-6.png) center center no-repeat; height:52px;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .top-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 	/* Worst */
-	#top-performing-projects .worst-performing-projects{ width:500px; float:right;}
-	#top-performing-projects .worst-performing-projects .top-performing-title h3{ height:43px; font-size:20px; color:#fff; background:#f25947 url(../images/worst-bg.png) left center no-repeat; background-size:43px 43px; line-height:43px; padding:0 0 0 53px; margin:0 0 7px 0;}
-	#top-performing-projects .worst-performing-projects .top-performing-title h3 .font-whight{ font-weight:700;}
+	#project-performance .worst-performing-projects{ width:500px; float:right;}
+	#project-performance .worst-performing-projects .top-performing-title h3{ height:43px; font-size:20px; color:#fff; background:#f25947 url(../images/worst-bg.png) left center no-repeat; background-size:43px 43px; line-height:43px; padding:0 0 0 53px; margin:0 0 7px 0;}
+	#project-performance .worst-performing-projects .top-performing-title h3 .font-whight{ font-weight:700;}
 	
-	#top-performing-projects .worst-performing-projects .project-1{ width:455px; float:right; clear:both;}
-	#top-performing-projects .worst-performing-projects .project-1 .project-name{ height:22px; background:#9792b3; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .worst-performing-projects .project-1 .project-name a{ color:#fff;}
+	#project-performance .worst-performing-projects .project-1{ width:455px; float:right; clear:both;}
+	#project-performance .worst-performing-projects .project-1 .project-name{ height:22px; background:#9792b3; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .worst-performing-projects .project-1 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row{ clear:both;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-7.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row{ clear:both;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-7.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-8.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-8.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-1 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 	/* project-2 */
-	#top-performing-projects .worst-performing-projects .project-2{ width:455px; float:right; clear:both;}
-	#top-performing-projects .worst-performing-projects .project-2 .project-name{ height:22px; background:#9a9a66; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .worst-performing-projects .project-2 .project-name a{ color:#fff;}
+	#project-performance .worst-performing-projects .project-2{ width:455px; float:right; clear:both;}
+	#project-performance .worst-performing-projects .project-2 .project-name{ height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .worst-performing-projects .project-2 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row{ clear:both;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-9.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row{ clear:both;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-9.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-10.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-10.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-2 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 	/* project-3 */
-	#top-performing-projects .worst-performing-projects .project-3{ width:455px; float:right; clear:both;}
-	#top-performing-projects .worst-performing-projects .project-3 .project-name{ height:22px; background:#8cc6ec; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
-	#top-performing-projects .worst-performing-projects .project-3 .project-name a{ color:#fff;}
+	#project-performance .worst-performing-projects .project-3{ width:455px; float:right; clear:both;}
+	#project-performance .worst-performing-projects .project-3 .project-name{ height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; padding:0 0 0 10px; line-height:22px; margin:0 0 3px 0;}
+	#project-performance .worst-performing-projects .project-3 .project-name a{ color:#fff;}
 	
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row{ clear:both;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main{ width:220px; float:left;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main.float{ float:right;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-11.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row{ clear:both;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main{ width:220px; float:left;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main.float{ float:right;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget{ height:20px; line-height:20px; font-size:12px; color:#58585a; padding:0 0 0 10px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .total-budget .price{ font-weight:700;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .num-jobs{ width:211px; height:15px; line-height:15px; background:#d1d2d4; border:1px #a0a1a2 solid; font-size:10px; color:#767779; text-align:center; margin:0 0 4px 3px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg{ height:93px; background:url(../images/progress-bg.png) repeat-x;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress{ width:212px; height:15px; line-height:15px; text-align:center; border:1px #a6a6a7 solid; font-size:12px; color:#757577; margin:3px 0 16px 3px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .overall-progress.marg{ margin:3px 0 0 3px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-expenditure{ height:16px; line-height:16px; width:214px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 0 0 3px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area{ background:url(../images/prg-11.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .planned{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-planned-area .actual{ margin:0 0 0 40px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-12.png) center center no-repeat; height:52px;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
-	#top-performing-projects .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area{ background:url(../images/prg-12.png) center center no-repeat; height:52px;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .budget{ margin:30px 0 0 90px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
+	#project-performance .worst-performing-projects .project-3 .perform-area-row .perform-area-main .progress-bg .actual-budget-area .actual{ margin:0 0 0 130px; width:40px; height:12px; line-height:12px; font-size:9px; color:#6b6b6d; text-align:center;}
 	
 
 /**/
@@ -658,3 +664,26 @@ a:hover {text-decoration:underline; }
 .client-slider {
     height: 54px;
 }
+.progress-slider {
+    height: 54px;
+    width: 220px;
+}
+.expenditure-slider {
+    width: 220px;
+    height: 56px;
+}
+
+.progress-gauge {
+    width: 158px;
+    height: 85px;
+}
+
+svg .gauge-marker-text {
+}
+
+.client-doe { background-color: #9792b3; }
+.client-dscr { background-color: #e7bb5e; }
+.client-dedet { background-color: #e4cfbf; }
+.client-doh { background-color: #8cc6ec; }
+.client-dsd { background-color: #b9b387; }
+.client-dssl { background-color: #bd7794; }
