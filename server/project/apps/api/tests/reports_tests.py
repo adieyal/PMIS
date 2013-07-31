@@ -62,7 +62,9 @@ class DistrictTest(TestCase):
         factories.ProjectMilestoneFactory(project=self.project3, milestone=models.Milestone.practical_completion(), completion_date=self.dt2)
         factories.ProjectMilestoneFactory(project=self.project4, milestone=models.Milestone.practical_completion(), completion_date=self.dt)
 
+        self.reloadjs()
 
+    def reloadjs(self):
         self.response = client.get(self.url % (self.project1.municipality.district.id, self.year, self.month))
         self.js = json.loads(self.response.content)
         self.client1js = self.js["clients"][0]
@@ -134,7 +136,16 @@ class DistrictTest(TestCase):
         self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 120)
 
     def test_best_performing(self):
+        brilliant_project_from_another_district = factories.ProjectFactory(name="good project")
+        factories.ProjectFinancialFactory(project=brilliant_project_from_another_district, total_anticipated_cost=100)
+        factories.PlanningFactory(project=brilliant_project_from_another_district, year=self.year, month=self.month, planned_progress=1)
+        factories.MonthlySubmissionFactory(
+            project=brilliant_project_from_another_district, year=self.year, month=self.month, actual_progress=100
+        ) 
+
+        self.reloadjs()
         js = self.js
+
         self.assertTrue("projects" in self.js)
         projects = self.js["projects"]
         self.assertTrue("best_performing" in projects)
@@ -145,24 +156,31 @@ class DistrictTest(TestCase):
         self.assertEqual(len(best_performing), 3)
         projects = [self.project3, self.project2, self.project1]
         for i, project in enumerate(projects):
-            js = serializers.condensed_project_serializer(project, self.year, self.month)
-            js2 = best_performing[i] 
-            self.assertEqual(js, js2)
+            self.assertEquals(project.name, best_performing[i]["name"])
 
     def test_worst_performing(self):
+        terrible_project_from_another_district = factories.ProjectFactory(name="bad project")
+        factories.ProjectFinancialFactory(project=terrible_project_from_another_district, total_anticipated_cost=100)
+        factories.PlanningFactory(project=terrible_project_from_another_district, year=self.year, month=self.month, planned_progress=100)
+        factories.MonthlySubmissionFactory(
+            project=terrible_project_from_another_district, year=self.year, month=self.month, actual_progress=0
+        ) 
+
+        self.reloadjs()
         js = self.js
         projects = self.js["projects"]
+
         self.assertTrue("worst_performing" in projects)
         
         worst_performing = projects["worst_performing"]
         self.assertEqual(type(worst_performing), list)
 
         self.assertEqual(len(worst_performing), 3)
+
+        projects = [self.project3, self.project2, self.project1]
         projects = [self.project1, self.project2, self.project3]
         for i, project in enumerate(projects):
-            js = serializers.condensed_project_serializer(project, self.year, self.month)
-            js2 = worst_performing[i] 
-            self.assertEqual(js, js2)
+            self.assertEquals(project.name, worst_performing[i]["name"])
 
     def test_projects_per_department(self):
         js = self.js

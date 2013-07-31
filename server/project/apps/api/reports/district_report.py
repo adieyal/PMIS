@@ -64,8 +64,8 @@ def district_report(request, district_id, year, month):
     month = int(month)
 
     district = get_object_or_404(models.District, pk=district_id)
-    best_projects = models.Project.objects.best_performing(year, month, count=3)
-    worst_projects = models.Project.objects.worst_performing(year, month, count=3)
+    best_projects = models.Project.objects.district(district).best_performing(year, month, count=3)
+    worst_projects = models.Project.objects.district(district).worst_performing(year, month, count=3)
     js = {
         "name" : district.name,
         "clients" : [
