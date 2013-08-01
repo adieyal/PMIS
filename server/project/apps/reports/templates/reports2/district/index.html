@@ -1,6 +1,8 @@
-{% extends "reports/district/base.html" %}
+{% extends "reports2/district/base.html" %}
 
 {% block body %}
+
+
     <div class="container">
     <div class="logo-area cf">
         	<div class="logo-left-area cf">
@@ -25,9 +27,9 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="department-name"><div>{{ clients.0.fullname }}</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="project-budget">Budget: <span>{{ clients.0.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.0.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge1" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -44,10 +46,10 @@
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="department-name col-2"><div>Department of<br>Department Name</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="department-name col-2"><div>{{ clients.1.fullname }}</div></div><!-- .project-name -->
+                            <div class="project-budget">Budget: <span>{{ clients.1.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.1.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge2" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -64,10 +66,11 @@
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="department-name col-3"><div>Department of<br>Department Name</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="department-name col-3"><div> {{ clients.2.fullname }} </div></div><!-- .project-name -->
+                            <div class="project-budget">Budget: <span> {{ clients.2.total_budget }}</span></div><!-- .project-budget -->
+			<!-- <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget --> 
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.2.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge3" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -84,10 +87,10 @@
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="department-name col-4"><div>Department of<br>Department Name</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="department-name col-4"><div> {{ clients.3.fullname }}</div></div><!-- .project-name -->
+                            <div class="project-budget">Budget: <span>{{ clients.3.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.3.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge4" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -104,10 +107,10 @@
             	<div class="project-brdr marg">
                 	<div class="border">
                         <div class="project-main">
-                            <div class="department-name col-5"><div>Department of<br>Department Name</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="department-name col-5"><div> {{ clients.4.fullname }}</div></div><!-- .project-name -->
+                            <div class="project-budget">Budget: <span>{{ clients.4.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.4.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge5" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -124,10 +127,10 @@
             	<div class="project-brdr">
                 	<div class="border brdr">
                         <div class="project-main">
-                            <div class="department-name col-6"><div>Department of<br>Department Name</div></div><!-- .project-name -->
-                            <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget -->
+                            <div class="department-name col-6"><div> {{ clients.5.fullname }}</div></div><!-- .project-name -->
+                            <div class="project-budget">Budget: <span>{{ clients.5.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
-                                <div class="num-of-job cf">Number of jobs created: <span>6,532</span></div><!-- .num-of-job -->
+                                <div class="num-of-job cf">Number of jobs created: <span> {{ clients.5.num_jobs }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
                                 <div id="gauge6" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
@@ -281,27 +284,27 @@
         <div id="department-projects-counts" class="department-main-row cf">
         	<div class="department-main">
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name"> {{ clients.0.fullname }}</div><!-- .department-name -->
                     <div class="department-num">12</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name">{{ clients.1.fullname }}</div><!-- .department-name -->
                     <div class="department-num">10</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name">{{ clients.2.fullname }}</div><!-- .department-name -->
                     <div class="department-num">5</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name">{{ clients.3.fullname }}</div><!-- .department-name -->
                     <div class="department-num">3</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name">{{ clients.4.fullname }}</div><!-- .department-name -->
                     <div class="department-num">3</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
-                	<div class="department-name">Department of [department name]</div><!-- .department-name -->
+                	<div class="department-name">{{ clients.5.fullname }}</div><!-- .department-name -->
                     <div class="department-num">3</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             </div><!-- .department-main -->
