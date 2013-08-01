@@ -59,7 +59,8 @@ def district_client_json(district, client, year, month):
         }
     }
 
-def district_report(request, district_id, year, month):
+
+def district_report_json(district_id, year, month):
     year = int(year)
     month = int(month)
 
@@ -82,5 +83,9 @@ def district_report(request, district_id, year, month):
             ],
         }
     }
+    return js
+    
+def district_report(request, district_id, year, month):
+    js = district_report_json(district_id, year, month)
     return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4), mimetype="application/json")
 

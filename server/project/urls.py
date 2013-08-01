@@ -28,5 +28,8 @@ urlpatterns = patterns('',
     url(r'^reports/district/progress/$', TemplateView.as_view(template_name='reports/district/progress.html'), name='district_progress'),
     url(r'^reports/district/perform/$', TemplateView.as_view(template_name='reports/district/perform.html'), name='district_perform'),
 
+    url(r'^reports2/district/dashboard/$', 'project.apps.reports.views.district_dashboard', name='district_dashboard_report'),
+    url(r'^reports2/district/progress/$', 'project.apps.reports.views.district_progress', name='district_progress_report'),
+    url(r'^reports2/district/perform/$', 'project.apps.reports.views.district_perform', name='district_perform_report'),
     # url(r'^', include(router.urls)),
 )
