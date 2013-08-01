@@ -687,3 +687,5 @@ svg .gauge-marker-text {
 .client-doh { background-color: #8cc6ec; }
 .client-dsd { background-color: #b9b387; }
 .client-dssl { background-color: #bd7794; }
+
+.spg-arc-text { fill: #58585a !important; }
