@@ -7,14 +7,13 @@ define(["lib/jquery", "lib/jquery.number", "widgets/js/widgets"], function($, ig
     district.prototype = {
         dt_format : function(dt) {
             months = [
-                "",
-                "January", "February", "March", "April", "May", "Jun",
+                "January", "February", "March", "April", "May", "June",
                 "July", "August", "September", "October", "November", "December",
             ];
 
             month = months[dt.getMonth()];
             year = dt.getYear();
-            return month + " " + year;
+            return month + " " + (1900 + year);
                         
         },
         num_format : $.number,
@@ -106,8 +105,7 @@ define(["lib/jquery", "lib/jquery.number", "widgets/js/widgets"], function($, ig
             $(".district-text .date").text(this.dt_format(new Date(this.year, this.month - 1, 1)))
         },
 
-        populate_clients : function(json) {
-            var dist = this;
+        populate_client_names : function(json) {
             $("#department-projects").each(function() {
                 
                 me = jQuery(this);
@@ -115,6 +113,63 @@ define(["lib/jquery", "lib/jquery.number", "widgets/js/widgets"], function($, ig
                 me.find(".department-name div").each(function(id) {
                     $(this).text(clients[id]["fullname"]);
                 });
+            })
+        },
+
+        populate_total_projects : function(json) {
+            $("#department-projects").each(function() {
+                
+                me = jQuery(this);
+                clients = json["clients"]
+                me.find(".total_projects span").each(function(id) {
+                    $(this).text(clients[id]["total_projects"]);
+                });
+
+                me.find(".cfye .right").each(function(id) {
+                    $(this).text(clients[id]["projects"]["completed_in_fye"])
+                });
+
+                me.find(".cipl .right").each(function(id) {
+                    $(this).text(clients[id]["projects"]["currently_in_planning"])
+                });
+
+                me.find(".inimpl .right").each(function(id) {
+                    $(this).text(clients[id]["projects"]["currently_in_implementation"])
+                });
+
+                me.find(".fincom .right").each(function(id) {
+                    $(this).text(clients[id]["projects"]["currently_in_final_completion"])
+                });
+
+                me.find(".praccom .right").each(function(id) {
+                    $(this).text(clients[id]["projects"]["currently_in_practical_completion"])
+                });
+
+                me.find(".project-pie").each(function(id) {
+
+                    var w = $(this).data('widget-instance');
+                    w.data = new Array();
+                    prdata = clients[id]["projects"]
+
+                    for (var key in prdata) {
+                        w.data.push(prdata[key]);
+                    }
+                    w.draw();
+                });
+            })
+        },
+
+        populate_clients : function(json) {
+            var dist = this;
+            $("#department-projects").each(function() {
+                
+                /*
+                me = jQuery(this);
+                clients = json["clients"]
+                me.find(".department-name div").each(function(id) {
+                    $(this).text(clients[id]["fullname"]);
+                });
+                */
 
                 me.find(".project-budget span").each(function(id) {
                     $(this).text(dist.cur_format(clients[id]["total_budget"]));
@@ -256,11 +311,18 @@ define(["lib/jquery", "lib/jquery.number", "widgets/js/widgets"], function($, ig
             });
         },
 
-        populate_all : function(json) {
+        populate_dashboard : function(json) {
             this.populate_general(json);
+            this.populate_client_names(json);
             this.populate_clients(json);
             this.populate_project(json);
             this.populate_department_projects(json);
+        },
+
+        populate_progress : function(json) {
+            this.populate_general(json);
+            this.populate_client_names(json);
+            this.populate_total_projects(json);
         }
     }
     return district
