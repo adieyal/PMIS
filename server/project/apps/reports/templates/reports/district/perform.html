@@ -1,27 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="css/sytle.css" rel="stylesheet" type="text/css">
-<title>The Dpwrt</title>
-</head>
-<body>
-	<div class="logo-area cf">
-    	<div class="container">
-        	<div class="logo-left-area cf">
-            	<div class="logo"><a href="perform.html#"><img src="images/logo.png" width="269px" height="81" alt="" /></a></div><!-- .logo -->
-                <div class="district-text">District Report | <span class="font-weight">July (2012/2013)</span><br /><span class="nkangala-text">NKANGALA</span></div><!-- .district-text -->
-                <div class="nav-area cf">
-                	<ul class="hover-performance-bg">
-                    	<li class="dash"><a href="index.html">Dashboard</a></li>
-                    	<li class="progress"><a href="progress.html">Progress</a></li>
-                    	<li class="perform active"><a href="perform.html">Performance</a></li>
-                    </ul>
-                </div><!-- .nav-area -->
-            </div><!-- .logo-left-area -->
-            <div class="projects-title height cf"></div><!-- .projects-title -->
-        </div><!-- .container -->
-    </div><!-- .logo-area -->
+{% extends "reports/district/base.html" %}
+{% block performactive %}active{% endblock performactive %}
+{% block body %}
     <div class="container">
     	<div class="client-area"><span class="font-weight">WORST</span> performing projects in implementation / client</div><!-- .client-area -->
         <div class="client-worst-project-1 cf">
@@ -295,5 +274,4 @@ New contractor to be appointed</div><!-- .comment-text -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-6 -->
     </div><!-- .container -->
-</body>
-</html>
+{% endblock %}

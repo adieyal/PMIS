@@ -1,27 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="css/sytle.css" rel="stylesheet" type="text/css">
-<title>The Dpwrt</title>
-</head>
-<body>
-	<div class="container">
-    	<div class="logo-area cf">
-        	<div class="logo-left-area cf">
-            	<div class="logo"><a href="progress.html#"><img src="images/logo.png" width="269px" height="81" alt="" /></a></div><!-- .logo -->
-                <div class="district-text">District Report | <span class="font-weight">July (2012/2013)</span><br /><span class="nkangala-text">NKANGALA</span></div><!-- .district-text -->
-                <div class="nav-area cf">
-                	<ul class="hover-progress-bg">
-                    	<li class="dash"><a href="index.html">Dashboard</a></li>
-                    	<li class="progress active"><a href="progress.html">Progress<div class="hover-bg"></div></a></li>
-                    	<li class="perform"><a href="perform.html">Performance</a></li>
-                    </ul>
-                </div><!-- .nav-area -->
-            </div><!-- .logo-left-area -->
-            <div class="projects-title cf"><h3>Heading to go here</h3></div><!-- .projects-title -->
-        </div><!-- .logo-area -->
-    </div><!-- .container -->
+{% extends "reports/district/base.html" %}
+{% block progressactive %}active{% endblock progressactive %}
+{% block body %}
     <div class="project-main-area cf">
     	<div class="container">
         	<div id="department-projects" class="cf">
@@ -521,5 +500,4 @@
             </div><!-- .job-main -->
         </div><!-- .jobs-main-row -->
     </div><!-- .container -->
-</body>
-</html>
+{% endblock %}
