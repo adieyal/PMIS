@@ -211,6 +211,18 @@ class ProjectManagerQuerySet(QuerySet):
         else:
             return self.filter(municipality=municipality)
 
+    def actual_progress_between(self, progress_start, progress_end):
+        return self.filter(
+            monthly_submissions__actual_progress__gte=progress_start * 100,
+            monthly_submissions__actual_progress__lt=progress_end * 100
+        )
+
+    def planned_progress_between(self, progress_start, progress_end):
+        return self.filter(
+            monthly_submissions__actual_progress__gte=progress_start * 100,
+            monthly_submissions__actual_progress__lt=progress_end * 100
+        )
+        
     def district(self, district):
         if type(district) == int:
             return self.filter(municipality__district__id=district)
