@@ -30,12 +30,12 @@
                             <div class="project-budget">Budget: <span>{{ clients.0.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.0.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span>{{ clients.0.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge1" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>80%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span> {{ clients.0.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -50,12 +50,12 @@
                             <div class="project-budget">Budget: <span>{{ clients.1.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.1.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span> {{ clients.1.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge2" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>130%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span>{{ clients.1.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -71,12 +71,12 @@
 			<!-- <div class="project-budget">Budget: <span>R1,000,000</span></div><!-- .project-budget --> 
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.2.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span> {{ clients.2.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge3" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>105%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span>{{ clients.2.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -91,12 +91,12 @@
                             <div class="project-budget">Budget: <span>{{ clients.3.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.3.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span> {{ clients.3.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge4" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>30%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span>{{ clients.3.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -111,12 +111,12 @@
                             <div class="project-budget">Budget: <span>{{ clients.4.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.4.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span> {{ clients.4.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge5" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>90%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span>{{ clients.4.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -131,12 +131,12 @@
                             <div class="project-budget">Budget: <span>{{ clients.5.total_budget }}</span></div><!-- .project-budget -->
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Number of jobs created: <span> {{ clients.5.num_jobs }}</span></div><!-- .num-of-job -->
-                                <div class="overall">Overall Progress: <span>76%</span></div><!-- .overall -->
+                                <div class="overall">Overall Progress: <span>{{ clients.5.overall_progress.actual }}</span></div><!-- .overall -->
                                 <div id="gauge6" class="progress-gauge" data-widget="gauge"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>140%</span></div><!-- .implementation-text -->
-                                <div class="actual-text">Actual Expenditure: <span>R800,000</span></div><!-- .actual-text -->
+                                <div class="actual-text">Actual Expenditure: <span>{{ clients.5.overall_expenditure.actual_expenditure }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
@@ -152,60 +152,60 @@
         	<div class="top-performing-projects">
             	<div class="top-performing-title"><h3><span class="font-whight">TOP</span> performing projects</h3></div><!-- .top-performing-title -->
                 <div class="project project-1">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{projects.best_performing.0.client|lower }}"><span class="pname"> {{ projects.best_performing.0.name }} </span> (<a class="project-department" href="index.html#"> {{ projects.best_performing.0.client }}</a> | <a class="project-location" href="index.html#"> {{ projects.best_performing.0.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price"> {{ projects.best_performing.0.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress"> {{ projects.best_performing.0.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs"> {{ projects.best_performing.0.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.best_performing.0.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.0.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     </div><!-- .perform-area-row -->
                 </div><!-- .project-1 -->
                 <div class="project project-2">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{projects.best_performing.1.client|lower }}"><span class="pname">{{ projects.best_performing.1.name }}</span> (<a class="project-department" href="index.html#">{{ projects.best_performing.1.client }}</a> | <a class="project-location" href="index.html#">{{ projects.best_performing.1.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price">{{ projects.best_performing.1.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress">{{ projects.best_performing.1.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs">{{ projects.best_performing.1.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.best_performing.1.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.1.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     </div><!-- .perform-area-row -->
                 </div><!-- .project-2 -->
                 <div class="project project-3">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name  client-{{projects.best_performing.2.client|lower }}"><span class="pname">{{ projects.best_performing.2.name }}</span> (<a class="project-department" href="index.html#">{{ projects.best_performing.2.client }}</a> | <a class="project-location" href="index.html#">{{ projects.best_performing.2.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price">{{ projects.best_performing.2.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress">{{ projects.best_performing.2.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs">{{ projects.best_performing.2.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.best_performing.2.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.2.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
@@ -216,60 +216,60 @@
         	<div id="worst-performing-projects" class="worst-performing-projects">
             	<div class="top-performing-title"><h3><span class="font-whight">WORST</span> performing projects</h3></div><!-- .top-performing-title -->
                 <div class="project project-1">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{ projects.worst_performing.0.client |lower }}"> {{ projects.worst_performing.0.name }} <span class="pname">{{ projects.worst_performing.0.name }}</span> (<a class="project-department" href="index.html#">{{ projects.worst_performing.0.client}}</a> | <a class="project-location" href="index.html#">{{ projects.worst_performing.0.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price">{{ projects.worst_performing.0.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress">{{ projects.worst_performing.0.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs">{{ projects.best_performing.0.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.worst_performing.0.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.0.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     </div><!-- .perform-area-row -->
                 </div><!-- .project-1 -->
                 <div class="project project-2">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{ projects.worst_performing.1.client |lower }}"><span class="pname "> {{ projects.worst_performing.1.name }}</span> (<a class="project-department" href="index.html#">{{ projects.worst_performing.1.client }}</a> | <a class="project-location" href="index.html#">{{ projects.worst_performing.1.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price">{{ projects.worst_performing.1.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress">{{ projects.worst_performing.1.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs">{{ projects.worst_performing.1.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.worst_performing.1.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.1.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     </div><!-- .perform-area-row -->
                 </div><!-- .project-2 -->
                 <div class="project project-3">
-                	<div class="project-name"><span class="pname">Project Name</span> (<a class="project-department" href="index.html#">Department</a> | <a class="project-location" href="index.html#">Location</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{ projects.worst_performing.2.client |lower }}"><span class="pname">{{ projects.worst_performing.2.name }}</span> (<a class="project-department" href="index.html#">{{ projects.worst_performing.2.client }}</a> | <a class="project-location" href="index.html#">{{ projects.worst_performing.2.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
-                        	<div class="total-budget">Total Budget: <span class="price">R1500,000</span></div><!-- .total-price -->
+                        	<div class="total-budget">Total Budget: <span class="price">{{ projects.worst_performing.2.budget }}</span></div><!-- .total-price -->
                             <div class="progress-bg cf">
-                            	<div class="overall-progress">Overall Progress: <span class="progress">35%</span></div><!-- .progress-text -->
+                            	<div class="overall-progress">Overall Progress: <span class="progress">{{ projects.worst_performing.2.progress.actual }}</span></div><!-- .progress-text -->
                                 <div class="progress-slider" data-widget="slider" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
                     	<div class="perform-area-main float">
-                        	<div class="num-jobs">Number of jobs created: <span class="jobs">6,532</span></div>
+                        	<div class="num-jobs">Number of jobs created: <span class="jobs">{{ projects.worst_performing.2.jobs }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">130%</span></div><!-- .progress-text -->
-                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R1,600,000</span></div><!-- .actual-price -->
+                            	<div class="overall-progress marg implementation-expenditure">Implementation Expenditure: <span class="expenditure">{{ projects.worst_performing.2.expenditure.actual }}</span></div><!-- .progress-text -->
+                                <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.2.expenditure.actual }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
                             </div><!-- .progress-bg -->
                         </div><!-- .perform-area-main -->
@@ -285,27 +285,27 @@
         	<div class="department-main">
             	<div class="department department-brdr cf">
                 	<div class="department-name"> {{ clients.0.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">12</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.0.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
                 	<div class="department-name">{{ clients.1.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">10</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.1.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
                 	<div class="department-name">{{ clients.2.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">5</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.2.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
                 	<div class="department-name">{{ clients.3.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">3</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.3.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
                 	<div class="department-name">{{ clients.4.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">3</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.4.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             	<div class="department department-brdr cf">
                 	<div class="department-name">{{ clients.5.fullname }}</div><!-- .department-name -->
-                    <div class="department-num">3</div><!-- .department-num -->
+                    <div class="department-num">{{ clients.5.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             </div><!-- .department-main -->
             <div class="map-image"><img src="/static/reports/images/map-image.png" alt=""></div><!-- .map-image -->
