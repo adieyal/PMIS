@@ -269,3 +269,26 @@ class DistrictTest(TestCase):
 
         self.assertEqual(client1js["projects"]["currently_in_final_completion"], 1)
         self.assertEqual(client2js["projects"]["currently_in_final_completion"], 0)
+
+    def test_actual_progress(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+        programme = factories.ProgrammeFactory()
+        
+        for i in range(10):
+            project = factories.ProjectFactory(programme=programme)
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+
+        print len(models.Project.objects.actual_progress_between(0, 0.5))
+        self.reloadjs()
+        js = self.js
+
+        client = programme.client
+
+        print json.dumps(js, indent=4)
+        self.assertTrue("between_0_and_50" in js["clients"][0]["projects"])
+        #self.assertEqual(js["clients"][0]["projects"]["between_0_and_50"], 5)
+        self.assertTrue("between_51_and_75" in js["clients"][0]["projects"])
+        self.assertTrue("between_76_and_99" in js["clients"][0]["projects"])
+
