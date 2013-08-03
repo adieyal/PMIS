@@ -19,6 +19,7 @@ DATABASES = {
 INSTALLED_APPS += (
     'django_coverage',
     'django_jenkins',
+    'django_hudson',
 )
 
 PROJECT_APPS = (
