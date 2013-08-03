@@ -8,6 +8,6 @@ createdatabase:
 	python manage.py createsuperuser
 
 loaddata:
-	python scripts/process_idp.py "/home/adi/Dropbox/IDIP Reports/2013/DoE/June.xls" 2013 6 > /tmp/projects.json
-	python manage load_projects /tmp/projects.json
+	python scripts/process_idp.py ../data/June.xls 2013 6 > /tmp/projects.json
+	python manage.py load_projects /tmp/projects.json
 

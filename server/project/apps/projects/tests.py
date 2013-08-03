@@ -112,6 +112,28 @@ class ProjectManagerTest(TestCase):
         projects = models.Project.objects.client(self.client)
         self.assertEqual(len(projects), 1)
 
+    def test_projects_by_progress(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+        for i in range(10):
+            project = factories.ProjectFactory()
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+
+        low_performance_projects = models.Project.objects.actual_progress_between(0, 0.5)
+        
+        self.assertEquals(len(low_performance_projects), 5)
+        for project in low_performance_projects:
+            self.assertTrue(project.actual_progress(year, month) >= 0)
+            self.assertTrue(project.actual_progress(year, month) < 0.5)
+
+        low_performance_projects = models.Project.objects.planned_progress_between(0, 0.5)
+        self.assertEquals(len(low_performance_projects), 5)
+        for project in low_performance_projects:
+            self.assertTrue(project.planned_progress(year, month) >= 0)
+            self.assertTrue(project.planned_progress(year, month) < 0.5)
+            
+
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
         project = factories.ProjectFactory()
