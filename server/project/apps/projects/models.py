@@ -248,6 +248,17 @@ class ProjectManagerQuerySet(QuerySet):
     def worst_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, False)[0:count]
 
+    def completed_by_fye(self, year):
+        # TODO gross method but I wasn't sure how to not violate DRY
+        # while simulateously calculating in_financial_year in the
+        # database. I chose to take the performance hit
+        projectids = [
+            m.project.id for m in ProjectMilestone.objects.all()
+            if FinancialYearManager.date_in_financial_year(year, m.completion_date)
+        ]
+        
+        return self.filter(id__in=projectids)
+
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
