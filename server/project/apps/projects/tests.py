@@ -132,7 +132,18 @@ class ProjectManagerTest(TestCase):
         for project in low_performance_projects:
             self.assertTrue(project.planned_progress(year, month) >= 0)
             self.assertTrue(project.planned_progress(year, month) < 50)
-            
+
+        high_performance_projects = models.Project.objects.actual_progress_between(50, 100)
+        self.assertEquals(len(high_performance_projects), 5)
+        for project in high_performance_projects:
+            self.assertTrue(project.actual_progress(year, month) >= 50)
+            self.assertTrue(project.actual_progress(year, month) < 100)
+
+        high_performance_projects = models.Project.objects.planned_progress_between(50, 100)
+        self.assertEquals(len(high_performance_projects), 5)
+        for project in high_performance_projects:
+            self.assertTrue(project.planned_progress(year, month) >= 50)
+            self.assertTrue(project.planned_progress(year, month) < 100)
 
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
