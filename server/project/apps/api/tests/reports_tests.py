@@ -285,9 +285,6 @@ class DistrictTest(TestCase):
 
         js = self.reloadjs(self.project1.municipality.district.id)
 
-        #response = client.get(self.dashboard_url % (self.project1.municipality.district.id, self.year, self.month))
-        #js = json.loads(response.content)
-
         self.assertEqual(js["clients"][0]["projects"]["currently_in_practical_completion"], 2)
         self.assertEqual(js["clients"][1]["projects"]["currently_in_practical_completion"], 1)
 
@@ -309,29 +306,27 @@ class DistrictTest(TestCase):
 
     def test_actual_progress(self):
         models.Project.objects.all().delete()
-        #year, month = 2013, 6
-        #programme = factories.ProgrammeFactory()
-        #municipality = factories.MunicipalityFactory()
+        year, month = 2013, 6
+        programme = factories.ProgrammeFactory()
+        municipality = factories.MunicipalityFactory()
 
-        #
-        #for i in range(10):
-        #    project = factories.ProjectFactory(programme=programme, municipality=municipality)
-        #    print project.programme.client.name
-        #    planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
-        #    submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+        
+        for i in range(10):
+            project = factories.ProjectFactory(programme=programme, municipality=municipality)
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+            financial = factories.ProjectFinancialFactory(project=project)
 
-        #print "My district %s" % municipality.district
-        #print project.municipality.district
-        #print models.Project.objects.district(municipality.district).actual_progress_between(0, 50)
-        #district = project.municipality.district
-        #self.reloadjs(district.id)
-        #js = self.js
+        district = project.municipality.district
+        js = self.reloadjs(district.id)
 
-        #client = programme.client
+        client = programme.client
 
-        ##print json.dumps(js, indent=4)
-        #self.assertTrue("between_0_and_50" in js["clients"][0]["projects"])
-        #self.assertEqual(js["clients"][0]["projects"]["between_0_and_50"], 5)
-        #self.assertTrue("between_51_and_75" in js["clients"][0]["projects"])
-        #self.assertTrue("between_76_and_99" in js["clients"][0]["projects"])
+        #print json.dumps(js, indent=4)
+        self.assertTrue("between_0_and_50" in js["clients"][2]["projects"])
+        self.assertEqual(js["clients"][2]["projects"]["between_0_and_50"], 5)
+        self.assertTrue("between_51_and_75" in js["clients"][2]["projects"])
+        self.assertEqual(js["clients"][2]["projects"]["between_51_and_75"], 2)
+        self.assertTrue("between_76_and_99" in js["clients"][2]["projects"])
+        self.assertEqual(js["clients"][2]["projects"]["between_76_and_99"], 2)
 

@@ -53,15 +53,14 @@ def district_client_json(district, client, year, month):
         "total_projects" : projects.count(),
         # TODO - might need to check project status - i.e. projects completed in previous financial years don't count
         "projects" : {
-            #"completed_in_fye" : sum([1 for p in projects if infinyear(p.practical_completion_milestone.completion_date)]),
             "completed_in_fye" : len(projects.completed_by_fye(financial_year)),
-            "currently_in_planning" : sum([1 for p in projects.filter(current_step__phase="planning")]),
-            "currently_in_implementation" : sum([1 for p in projects.filter(current_step__phase="implementation")]),
-            "currently_in_final_completion" : sum([1 for p in projects.filter(current_step=models.Milestone.final_accounts())]),
-            "currently_in_practical_completion" : sum([1 for p in projects.filter(current_step=models.Milestone.final_completion())]),
+            "currently_in_planning" : len(projects.filter(current_step__phase="planning")),
+            "currently_in_implementation" : len(projects.filter(current_step__phase="implementation")),
+            "currently_in_final_completion" : len(projects.filter(current_step=models.Milestone.final_accounts())),
+            "currently_in_practical_completion" : len(projects.filter(current_step=models.Milestone.final_completion())),
             "between_0_and_50": len(projects.actual_progress_between(0, 50)),
-            "between_51_and_75": 0,
-            "between_76_and_99": 0,
+            "between_51_and_75": len(projects.actual_progress_between(51, 75)),
+            "between_76_and_99": len(projects.actual_progress_between(76, 99)),
         }
     }
 
