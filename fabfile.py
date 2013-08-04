@@ -1,21 +1,25 @@
-from fabric.api import run, local, settings, cd, env, sudo
+from fabric import api
 from fabric.contrib.console import confirm
+from fabric import operations
+import urllib2
 
-env.hosts = ["adi@pmis.burgercom.co.za:2224"]
+api.env.hosts = ["adi@pmis.burgercom.co.za:2224"]
+trigger_url = "http://hudson.burgercom.co.za/job/PMIS/build"
+
 def host_type():
-    run('uname -s')
+    api.run('uname -s')
 
 def commit():
-    with settings(warn_only=True):
-        result = local("git add -p && git commit", capture=True)
+    with api.settings(warn_only=True):
+        result = api.local("git add -p && git commit", capture=True)
     if result.failed and not confirm("Error with commit. Continue anyway?"):
         abort("Aborting at user request.")
 
 def test():
-    local("server/manage.py test api projects")
+    api.local("server/manage.py test api projects")
 
 def push():
-    local("git push")
+    api.local("git push")
 
 def prepare_deploy():
     test()
@@ -23,9 +27,16 @@ def prepare_deploy():
     push()
 
 def deploy():
+    """
+    Deploy code and run tests in hudson
+    """
     code_dir = "/var/www/pmis.burgercom.co.za"
-    with cd(code_dir):
-        run("git pull origin master")
-    with cd(code_dir + "/server"):
-        run("/home/adi/.virtualenvs/pmis/bin/pip install -r requirements/test.txt")
-        sudo("supervisorctl restart pmis")
+    with api.cd(code_dir):
+        api.run("git pull origin master")
+    with api.cd(code_dir + "/server"):
+        api.run("/home/adi/.virtualenvs/pmis/bin/pip install -r requirements/test.txt")
+        api.sudo("supervisorctl restart pmis")
+    trigger_hudson()
+
+def trigger_hudson():
+    urllib2.urlopen(trigger_url)
