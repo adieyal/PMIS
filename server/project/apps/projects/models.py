@@ -213,14 +213,14 @@ class ProjectManagerQuerySet(QuerySet):
 
     def actual_progress_between(self, progress_start, progress_end):
         return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start * 100,
-            monthly_submissions__actual_progress__lt=progress_end * 100
+            monthly_submissions__actual_progress__gte=progress_start,
+            monthly_submissions__actual_progress__lt=progress_end,
         )
 
     def planned_progress_between(self, progress_start, progress_end):
         return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start * 100,
-            monthly_submissions__actual_progress__lt=progress_end * 100
+            monthly_submissions__actual_progress__gte=progress_start,
+            monthly_submissions__actual_progress__lt=progress_end,
         )
         
     def district(self, district):
@@ -283,14 +283,14 @@ class Project(models.Model):
     def actual_progress(self, year, month):
         try:
             s = MonthlySubmission.objects.get(year=year, month=month, project=self)
-            return s.actual_progress / 100
+            return s.actual_progress
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual progress for %s/%s" % (year, month))
 
     def planned_progress(self, year, month):
         try:
             s = self.plannings.get(year=year, month=month)
-            return s.planned_progress / 100
+            return s.planned_progress
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
 

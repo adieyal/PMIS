@@ -280,13 +280,13 @@ class DistrictTest(TestCase):
             planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
             submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
 
-        print len(models.Project.objects.actual_progress_between(0, 0.5))
+        #print len(models.Project.objects.actual_progress_between(0, 0.5))
         self.reloadjs()
         js = self.js
 
         client = programme.client
 
-        print json.dumps(js, indent=4)
+        #print json.dumps(js, indent=4)
         self.assertTrue("between_0_and_50" in js["clients"][0]["projects"])
         #self.assertEqual(js["clients"][0]["projects"]["between_0_and_50"], 5)
         self.assertTrue("between_51_and_75" in js["clients"][0]["projects"])

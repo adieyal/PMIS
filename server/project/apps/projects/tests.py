@@ -120,18 +120,18 @@ class ProjectManagerTest(TestCase):
             planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
             submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
 
-        low_performance_projects = models.Project.objects.actual_progress_between(0, 0.5)
+        low_performance_projects = models.Project.objects.actual_progress_between(0, 50)
         
         self.assertEquals(len(low_performance_projects), 5)
         for project in low_performance_projects:
             self.assertTrue(project.actual_progress(year, month) >= 0)
-            self.assertTrue(project.actual_progress(year, month) < 0.5)
+            self.assertTrue(project.actual_progress(year, month) < 50)
 
-        low_performance_projects = models.Project.objects.planned_progress_between(0, 0.5)
+        low_performance_projects = models.Project.objects.planned_progress_between(0, 50)
         self.assertEquals(len(low_performance_projects), 5)
         for project in low_performance_projects:
             self.assertTrue(project.planned_progress(year, month) >= 0)
-            self.assertTrue(project.planned_progress(year, month) < 0.5)
+            self.assertTrue(project.planned_progress(year, month) < 50)
             
 
 class ProjectFinancialTest(TestCase):
@@ -169,12 +169,12 @@ class ProjectTest(TestCase):
         
     def test_project_actual_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.actual_progress(self.year, self.month), 0.2)
+        self.assertEqual(project.actual_progress(self.year, self.month), 20)
         self.assertRaises(models.ProjectException, project.actual_progress, 2012, 3)
 
     def test_project_planned_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.planned_progress(self.year, self.month), 0.5)
+        self.assertEqual(project.planned_progress(self.year, self.month), 50)
         self.assertRaises(models.ProjectException, project.planned_progress, 2012, 3)
 
     def test_project_performance(self):
