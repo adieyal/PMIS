@@ -5,31 +5,36 @@ from django.db.models.signals import post_save, m2m_changed
 from project.apps.projects.models import Client, District, GroupPerm, Project, GroupPermObj
 
 
-@receiver(post_save, sender=Client)
+@receiver(post_save, sender=Client, dispatch_uid="project.apps.projects.signals.add_client_to_groups")
 def add_client_to_groups(**kwargs):
     instance = kwargs['instance']
 
     instance_type = ContentType.objects.get_for_model(instance)
 
-    t, create = GroupPerm.objects.get_or_create(content_type_id=instance_type.id,
-                                                object_id=instance.id)
+    t, create = GroupPerm.objects.get_or_create(
+        content_type_id=instance_type.id,
+        object_id=instance.id
+    )
     t.name = instance.name
     t.save()
 
 
-@receiver(post_save, sender=District)
+@receiver(post_save, sender=District, dispatch_uid="project.apps.projects.signals.add_district_to_groups")
 def add_district_to_groups(**kwargs):
     instance = kwargs['instance']
 
     instance_type = ContentType.objects.get_for_model(instance)
 
-    t, create = GroupPerm.objects.get_or_create(content_type_id=instance_type.id,
-                                                object_id=instance.id)
+    t, create = GroupPerm.objects.get_or_create(
+        content_type_id=instance_type.id,
+        object_id=instance.id
+    )
+
     t.name = instance.name
     t.save()
 
 
-@receiver(post_save, sender=Project)
+@receiver(post_save, sender=Project, dispatch_uid="project.apps.projects.signals.create_group_perms_obj")
 def create_group_perms_obj(**kwargs):
     instance = kwargs['instance']
     g1 = GroupPerm.objects.get(name=instance.programme.client.name)

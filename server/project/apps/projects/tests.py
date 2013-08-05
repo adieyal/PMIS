@@ -21,7 +21,7 @@ class CalendarFunctionsTest(TestCase):
     def test_next_month(self):
         self.assertEqual(models.CalendarFunctions.next_month(self.year, self.month), (2013, 6))
         self.assertEqual(models.CalendarFunctions.next_month(self.year, 12), (2014, 1))
-        
+
 class TestMilestone(TestCase):
     def test_milestones_loaded(self):
         self.assertEqual(models.Milestone.objects.count(), 9)
@@ -112,6 +112,87 @@ class ProjectManagerTest(TestCase):
         projects = models.Project.objects.client(self.client)
         self.assertEqual(len(projects), 1)
 
+    def test_projects_by_progress(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+        for i in range(10):
+            project = factories.ProjectFactory()
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+
+        low_performance_projects = models.Project.objects.actual_progress_between(0, 50)
+        
+        self.assertEquals(len(low_performance_projects), 5)
+        for project in low_performance_projects:
+            self.assertTrue(project.actual_progress(year, month) >= 0)
+            self.assertTrue(project.actual_progress(year, month) < 50)
+
+        low_performance_projects = models.Project.objects.planned_progress_between(0, 50)
+        self.assertEquals(len(low_performance_projects), 5)
+        for project in low_performance_projects:
+            self.assertTrue(project.planned_progress(year, month) >= 0)
+            self.assertTrue(project.planned_progress(year, month) < 50)
+
+        high_performance_projects = models.Project.objects.actual_progress_between(50, 100)
+        self.assertEquals(len(high_performance_projects), 5)
+        for project in high_performance_projects:
+            self.assertTrue(project.actual_progress(year, month) >= 50)
+            self.assertTrue(project.actual_progress(year, month) < 100)
+
+        high_performance_projects = models.Project.objects.planned_progress_between(50, 100)
+        self.assertEquals(len(high_performance_projects), 5)
+        for project in high_performance_projects:
+            self.assertTrue(project.planned_progress(year, month) >= 50)
+            self.assertTrue(project.planned_progress(year, month) < 100)
+
+    def test_projects_completed_in_fye(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(2013, 6, 1))
+
+            project = factories.ProjectFactory()
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(2014, 6, 1))
+
+        completed_2014 = models.Project.objects.completed_by_fye(2014)
+        self.assertEquals(len(completed_2014), 5)
+        for p in completed_2014:
+            self.assertEquals(p.practical_completion_milestone.completion_date.year, 2013)
+            self.assertEquals(p.practical_completion_milestone.completion_date.month, 6)
+
+        completed_2015 = models.Project.objects.completed_by_fye(2015)
+        self.assertEquals(len(completed_2015), 5)
+        for p in completed_2015:
+            self.assertEquals(p.practical_completion_milestone.completion_date.year, 2014)
+            self.assertEquals(p.practical_completion_milestone.completion_date.month, 6)
+
+    def test_projects_completed_in_fye_different_clients(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+
+        prog1 = factories.ProgrammeFactory()
+        prog2 = factories.ProgrammeFactory()
+
+        for i in range(5):
+            project = factories.ProjectFactory(programme=prog1)
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(year, month, 1))
+
+            project = factories.ProjectFactory(programme=prog2)
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(year, month, 1))
+
+        completed_client1 = models.Project.objects.client(prog1.client).completed_by_fye(2014)
+        self.assertEquals(len(completed_client1), 5)
+        for p in completed_client1:
+            self.assertEquals(p.practical_completion_milestone.completion_date.year, year)
+            self.assertEquals(p.practical_completion_milestone.completion_date.month, month)
+
+        completed_client2 = models.Project.objects.client(prog2.client).completed_by_fye(2014)
+        self.assertEquals(len(completed_client2), 5)
+        for p in completed_client2:
+            self.assertEquals(p.practical_completion_milestone.completion_date.year, year)
+            self.assertEquals(p.practical_completion_milestone.completion_date.month, month)
+
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
         project = factories.ProjectFactory()
@@ -147,12 +228,12 @@ class ProjectTest(TestCase):
         
     def test_project_actual_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.actual_progress(self.year, self.month), 0.2)
+        self.assertEqual(project.actual_progress(self.year, self.month), 20)
         self.assertRaises(models.ProjectException, project.actual_progress, 2012, 3)
 
     def test_project_planned_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.planned_progress(self.year, self.month), 0.5)
+        self.assertEqual(project.planned_progress(self.year, self.month), 50)
         self.assertRaises(models.ProjectException, project.planned_progress, 2012, 3)
 
     def test_project_performance(self):

@@ -211,6 +211,18 @@ class ProjectManagerQuerySet(QuerySet):
         else:
             return self.filter(municipality=municipality)
 
+    def actual_progress_between(self, progress_start, progress_end):
+        return self.filter(
+            monthly_submissions__actual_progress__gte=progress_start,
+            monthly_submissions__actual_progress__lt=progress_end,
+        )
+
+    def planned_progress_between(self, progress_start, progress_end):
+        return self.filter(
+            monthly_submissions__actual_progress__gte=progress_start,
+            monthly_submissions__actual_progress__lt=progress_end,
+        )
+        
     def district(self, district):
         if type(district) == int:
             return self.filter(municipality__district__id=district)
@@ -235,6 +247,17 @@ class ProjectManagerQuerySet(QuerySet):
 
     def worst_performing(self, year, month, count=5):
         return self._sort_by_performance(year, month, False)[0:count]
+
+    def completed_by_fye(self, year):
+        # TODO gross method but I wasn't sure how to not violate DRY
+        # while simulateously calculating in_financial_year in the
+        # database. I chose to take the performance hit
+        projectids = [
+            m.project.id for m in ProjectMilestone.objects.all()
+            if FinancialYearManager.date_in_financial_year(year, m.completion_date)
+        ]
+        
+        return self.filter(id__in=projectids)
 
 
 class ProjectManager(models.Manager):
@@ -271,14 +294,14 @@ class Project(models.Model):
     def actual_progress(self, year, month):
         try:
             s = MonthlySubmission.objects.get(year=year, month=month, project=self)
-            return s.actual_progress / 100
+            return s.actual_progress
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual progress for %s/%s" % (year, month))
 
     def planned_progress(self, year, month):
         try:
             s = self.plannings.get(year=year, month=month)
-            return s.planned_progress / 100
+            return s.planned_progress
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
 

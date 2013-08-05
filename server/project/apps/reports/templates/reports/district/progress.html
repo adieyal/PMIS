@@ -1,27 +1,6 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="css/sytle.css" rel="stylesheet" type="text/css">
-<title>The Dpwrt</title>
-</head>
-<body>
-	<div class="container">
-    	<div class="logo-area cf">
-        	<div class="logo-left-area cf">
-            	<div class="logo"><a href="progress.html#"><img src="images/logo.png" width="269px" height="81" alt="" /></a></div><!-- .logo -->
-                <div class="district-text">District Report | <span class="font-weight">July (2012/2013)</span><br /><span class="nkangala-text">NKANGALA</span></div><!-- .district-text -->
-                <div class="nav-area cf">
-                	<ul class="hover-progress-bg">
-                    	<li class="dash"><a href="index.html">Dashboard</a></li>
-                    	<li class="progress active"><a href="progress.html">Progress<div class="hover-bg"></div></a></li>
-                    	<li class="perform"><a href="perform.html">Performance</a></li>
-                    </ul>
-                </div><!-- .nav-area -->
-            </div><!-- .logo-left-area -->
-            <div class="projects-title cf"><h3>Heading to go here</h3></div><!-- .projects-title -->
-        </div><!-- .logo-area -->
-    </div><!-- .container -->
+{% extends "reports/district/base.html" %}
+{% block progressactive %}active{% endblock progressactive %}
+{% block body %}
     <div class="project-main-area cf">
     	<div class="container">
         	<div id="department-projects" class="cf">
@@ -30,17 +9,17 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="project-name">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -51,17 +30,17 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="project-name col-2">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -72,17 +51,17 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="project-name col-3">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -93,17 +72,17 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="project-name col-4">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -114,17 +93,17 @@
                 	<div class="border">
                         <div class="project-main">
                             <div class="project-name col-5">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -135,17 +114,17 @@
                 	<div class="border brdr">
                         <div class="project-main">
                             <div class="project-name col-6">Department of<br>Department Name</div><!-- .project-name -->
-                            <div class="total_projects">Total Progects: 15</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed in FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="total_projects">Total Projects: 15</div><!-- .project-budget -->
+                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">3</span></div><!-- .in-planning -->
+                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">3</span></div><!-- .in-planning -->
                             <div class="curcle-image cf">
-                            	<div class="nine">9%</div><!-- .nine -->
-                                <div class="six">60%</div><!-- .six -->
-                                <div class="sixteen">16%</div><!-- .sixteen -->
-                                <div class="two">26%</div><!-- .two -->
+                            	<div class="nine">9</div><!-- .nine -->
+                                <div class="six">60</div><!-- .six -->
+                                <div class="sixteen">16</div><!-- .sixteen -->
+                                <div class="two">26</div><!-- .two -->
                             </div><!-- .curcle-image -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -521,5 +500,4 @@
             </div><!-- .job-main -->
         </div><!-- .jobs-main-row -->
     </div><!-- .container -->
-</body>
-</html>
+{% endblock %}
