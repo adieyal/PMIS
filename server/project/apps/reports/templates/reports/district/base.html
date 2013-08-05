@@ -17,9 +17,14 @@
                 <div class="district-text">District Report | <span class="font-weight">July (2012/2013)</span><br /><span class="nkangala-text">NKANGALA</span></div><!-- .district-text -->
                 <div class="nav-area cf">
                 	<ul class="hover-progress-bg">
+                        {% comment %}
                     	<li class="dash {% block dashactive %}{% endblock dashactive %}"><a href="{% url 'district_dashboard_report' %}">Dashboard</a></li>
                     	<li class="progress {% block progressactive %}{% endblock progressactive %}"><a href="{% url 'district_progress_report' %}">Progress<div class="hover-bg"></div></a></li>
                     	<li class="perform {% block performactive %}{% endblock performactive %}"><a href="{% url 'district_perform_report' %}">Performance</a></li>
+                        {% endcomment %}
+                    	<li class="dash {% block dashactive %}{% endblock dashactive %}"><a href="#">Dashboard</a></li>
+                    	<li class="progress {% block progressactive %}{% endblock progressactive %}"><a href="#">Progress<div class="hover-bg"></div></a></li>
+                    	<li class="perform {% block performactive %}{% endblock performactive %}"><a href="#">Performance</a></li>
                     </ul>
                 </div><!-- .nav-area -->
             </div><!-- .logo-left-area -->
