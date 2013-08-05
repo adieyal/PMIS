@@ -73,6 +73,8 @@ def district_report_json(district_id, year, month):
     best_projects = models.Project.objects.district(district).best_performing(year, month, count=3)
     worst_projects = models.Project.objects.district(district).worst_performing(year, month, count=3)
     js = {
+        "month" : month,
+        "year" : year,
         "name" : district.name,
         "clients" : [
             district_client_json(district, c, year, month) for c in models.Client.objects.all()
@@ -91,6 +93,315 @@ def district_report_json(district_id, year, month):
     return js
     
 def district_report(request, district_id, year, month):
-    js = district_report_json(district_id, year, month)
+    js = district_report_json2(district_id, year, month)
     return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4), mimetype="application/json")
 
+def district_report_json2(district_id, year, month):
+    return {
+        "month": "June",
+        "year": "2013",
+        "clients": [
+            {
+                "total_projects": 0, 
+                "overall_expenditure": {
+                    "actual_expenditure": 0, 
+                    "planned_expenditure": 0, 
+                    "perc_expenditure": 0
+                }, 
+                "name": "DCSR", 
+                "overall_progress": {
+                    "actual": 0, 
+                    "planned": 0
+                }, 
+                "fullname": "Department of Culture, Sport and Recreation", 
+                "total_budget": 0.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 0, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 0, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 0, 
+                    "completed_in_fye": 0, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }, 
+            {
+                "total_projects": 0, 
+                "overall_expenditure": {
+                    "actual_expenditure": 0, 
+                    "planned_expenditure": 0, 
+                    "perc_expenditure": 0
+                }, 
+                "name": "DEDET", 
+                "overall_progress": {
+                    "actual": 0, 
+                    "planned": 0
+                }, 
+                "fullname": "Department of Economic Development and Planning", 
+                "total_budget": 0.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 0, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 0, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 0, 
+                    "completed_in_fye": 0, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }, 
+            {
+                "total_projects": 13, 
+                "overall_expenditure": {
+                    "actual_expenditure": 9167000.0, 
+                    "planned_expenditure": 47132000.0, 
+                    "perc_expenditure": 0.12503002830533305
+                }, 
+                "name": "DoE", 
+                "overall_progress": {
+                    "actual": 51.15384615384615, 
+                    "planned": 76.46153846153847
+                }, 
+                "fullname": "Department of Education", 
+                "total_budget": 400621000.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 4, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 9, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 140, 
+                    "completed_in_fye": 10, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }, 
+            {
+                "total_projects": 0, 
+                "overall_expenditure": {
+                    "actual_expenditure": 0, 
+                    "planned_expenditure": 0, 
+                    "perc_expenditure": 0
+                }, 
+                "name": "DoH", 
+                "overall_progress": {
+                    "actual": 0, 
+                    "planned": 0
+                }, 
+                "fullname": "Department of Health", 
+                "total_budget": 0.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 0, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 0, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 0, 
+                    "completed_in_fye": 0, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }, 
+            {
+                "total_projects": 0, 
+                "overall_expenditure": {
+                    "actual_expenditure": 0, 
+                    "planned_expenditure": 0, 
+                    "perc_expenditure": 0
+                }, 
+                "name": "DSD", 
+                "overall_progress": {
+                    "actual": 0, 
+                    "planned": 0
+                }, 
+                "fullname": "Department of Social Development", 
+                "total_budget": 0.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 0, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 0, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 0, 
+                    "completed_in_fye": 0, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }, 
+            {
+                "total_projects": 0, 
+                "overall_expenditure": {
+                    "actual_expenditure": 0, 
+                    "planned_expenditure": 0, 
+                    "perc_expenditure": 0
+                }, 
+                "name": "DSSL", 
+                "overall_progress": {
+                    "actual": 0, 
+                    "planned": 0
+                }, 
+                "fullname": "Department of Safety, Security and Liaison", 
+                "total_budget": 0.0, 
+                "projects": {
+                    "currently_in_practical_completion": 0, 
+                    "between_76_and_99": 0, 
+                    "currently_in_implementation": 0, 
+                    "between_51_and_75": 0, 
+                    "currently_in_planning": 0, 
+                    "between_0_and_50": 0, 
+                    "completed_in_fye": 0, 
+                    "currently_in_final_completion": 0
+                }, 
+                "num_jobs": 999
+            }
+        ], 
+        "name": "Gert Sibande", 
+        "projects": {
+            "best_performing": [
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Harmony Park C School", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 599000.0, 
+                        "ratio": 0.2396, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 94.0, 
+                        "planned": 80.0
+                    }, 
+                    "municipality": {
+                        "id": 5, 
+                        "name": "Mkhondo"
+                    }, 
+                    "budget": 2500000.0
+                }, 
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Imizamoyethu Primary School", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 107000.0, 
+                        "ratio": 0.042868589743589744, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 92.0, 
+                        "planned": 90.0
+                    }, 
+                    "municipality": {
+                        "id": 5, 
+                        "name": "Mkhondo"
+                    }, 
+                    "budget": 2496000.0
+                }, 
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Vulingcondo Primary", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 0.0, 
+                        "ratio": 0.0, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 99.0, 
+                        "planned": 99.0
+                    }, 
+                    "municipality": {
+                        "id": 3, 
+                        "name": "Albert Luthuli"
+                    }, 
+                    "budget": 1428000.0
+                }
+            ], 
+            "worst_performing": [
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Myflower Secondary", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 0.0, 
+                        "ratio": 0.0, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 0.0, 
+                        "planned": 60.0
+                    }, 
+                    "municipality": {
+                        "id": 3, 
+                        "name": "Albert Luthuli"
+                    }, 
+                    "budget": 20608000.0
+                }, 
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Methula Secondary", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 0.0, 
+                        "ratio": 0.0, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 0.0, 
+                        "planned": 60.0
+                    }, 
+                    "municipality": {
+                        "id": 3, 
+                        "name": "Albert Luthuli"
+                    }, 
+                    "budget": 20608000.0
+                }, 
+                {
+                    "client": "DoE", 
+                    "jobs": 434343, 
+                    "name": "Ikhethelo Secondary School", 
+                    "district": {
+                        "id": 2, 
+                        "name": "Gert Sibande"
+                    }, 
+                    "expenditure": {
+                        "actual": 0.0, 
+                        "ratio": 0.0, 
+                        "planned": 0.0
+                    }, 
+                    "progress": {
+                        "actual": 0.0, 
+                        "planned": 60.0
+                    }, 
+                    "municipality": {
+                        "id": 9, 
+                        "name": "Govan Mbeki"
+                    }, 
+                    "budget": 20608000.0
+                }
+            ]
+        }
+    }
+    return  s
