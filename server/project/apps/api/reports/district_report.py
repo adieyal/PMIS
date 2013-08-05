@@ -1,4 +1,5 @@
 from django.http import HttpResponse, Http404
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 import json
 import project.apps.projects.models as models
@@ -73,9 +74,11 @@ def district_report_json(district_id, year, month):
     best_projects = models.Project.objects.district(district).best_performing(year, month, count=3)
     worst_projects = models.Project.objects.district(district).worst_performing(year, month, count=3)
     js = {
-        "month" : month,
-        "year" : year,
-        "name" : district.name,
+        "date" : datetime(year, month, 1),
+        "district" : {
+            "name" : district.name,
+            "id" : district.id,
+        },
         "clients" : [
             district_client_json(district, c, year, month) for c in models.Client.objects.all()
         ],
@@ -98,8 +101,7 @@ def district_report(request, district_id, year, month):
 
 def district_report_json2(district_id, year, month):
     return {
-        "month": "June",
-        "year": "2013",
+        "date" : datetime(int(year), int(month), 1),
         "clients": [
             {
                 "total_projects": 0, 
@@ -258,7 +260,10 @@ def district_report_json2(district_id, year, month):
                 "num_jobs": 999
             }
         ], 
-        "name": "Gert Sibande", 
+        "district" : {
+            "name": "Gert Sibande", 
+            "id" : 2
+        },
         "projects": {
             "best_performing": [
                 {
