@@ -109,7 +109,7 @@ class ProjectRoleAdmin(admin.ModelAdmin):
 
 
 class PlanningAdmin(admin.ModelAdmin):
-    fields = ('month', 'year', 'planned_expenses', 'planned_progress', 'project')
+    fields = ('date', 'planned_expenses', 'planned_progress', 'project')
 
 
 class MonthlySubmissionAdmin(CustomVersionAdmin):
