@@ -456,7 +456,7 @@ class ScopeOfWork(models.Model):
 
 
 class Planning(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=lambda : datetime.datetime.now())
     planned_expenses = models.FloatField(blank=True, null=True)
     planned_progress = models.FloatField(blank=True, null=True)
     project = models.ForeignKey(Project, related_name='plannings')
@@ -504,7 +504,7 @@ class CommentType(models.Model):
 
 
 class MonthlySubmission(models.Model):
-    date = models.DateTimeField()
+    date = models.DateTimeField(default=lambda : datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='monthly_submissions')
     actual_expenditure = models.FloatField()
     actual_progress = models.FloatField()

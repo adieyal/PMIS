@@ -268,7 +268,7 @@ def progress_serializer(project, year):
                 actual_progress = ''
 
             data += [{
-                'month': p.get_month_display(),
+                'month': p.date.month,
                 'planned': getattr(p, 'planned_progress', ''),
                 'actual': actual_progress
             }]
@@ -281,7 +281,10 @@ def progress_serializer(project, year):
             except:
                 actual_progress = ''
 
-            data += [{'year': p.date.year, 'month': p.get_month_display(), 'planned': getattr(p, 'planned_progress', ''),
-                      'actual': actual_progress}]
+            data += [{
+                'year': p.date.year, 'month': p.date.month,
+                'planned': getattr(p, 'planned_progress', ''),
+                 'actual': actual_progress
+            }]
 
     return data
