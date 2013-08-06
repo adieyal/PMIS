@@ -18,8 +18,8 @@ def avg(lst):
         return 0
     return sum(lst) / len(lst)
 
-def district_client_json(district, client, year, month):
-    financial_year = models.FinancialYearManager.financial_year(year, month)
+def district_client_json(district, client, date):
+    financial_year = models.FinancialYearManager.financial_year(date.year, date.month)
     infinyear = lambda dt : models.FinancialYearManager.date_in_financial_year(financial_year, dt)
 
     projects = models.Project.objects.client(client).district(district)
@@ -29,12 +29,12 @@ def district_client_json(district, client, year, month):
 
     planning = models.Planning.objects.filter(
         project__programme__client=client, project__municipality__district=district,
-        year=year, month=month
+        date=date
     )
 
     monthlysubmissions = models.MonthlySubmission.objects.filter(
         project__programme__client=client, project__municipality__district=district,
-        year=year, month=month
+        date=date 
     )
 
     return {
@@ -47,7 +47,7 @@ def district_client_json(district, client, year, month):
             "actual" : avg([m.actual_progress for m in monthlysubmissions]),
         },
         "overall_expenditure" : {
-            "perc_expenditure" : projects.percentage_actual_expenditure(year, month) * 100,
+            "perc_expenditure" : projects.percentage_actual_expenditure(date) * 100,
             "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
             "planned_expenditure" : sum([p.planned_expenses for p in planning]),
 
@@ -69,33 +69,35 @@ def district_client_json(district, client, year, month):
     }
 
 
-def district_report_json(district_id, year, month):
+def district_report_json(district_id, date):
+    year = date.year
+    month = date.month
+
     key = 'district_%s_%s_%s' % (district_id, year, month)
     js = cache.get(key)
     #if js: return js
         
-    year = int(year)
-    month = int(month)
+    date = datetime(year, month, 1)
 
     district = get_object_or_404(models.District, pk=district_id)
-    best_projects = models.Project.objects.district(district).best_performing(year, month, count=3)
-    worst_projects = models.Project.objects.district(district).worst_performing(year, month, count=3)
+    best_projects = models.Project.objects.district(district).best_performing(date, count=3)
+    worst_projects = models.Project.objects.district(district).worst_performing(date, count=3)
     js = {
-        "date" : datetime(year, month, 1),
+        "date" : date,
         "district" : {
             "name" : district.name,
             "id" : district.id,
         },
         "clients" : [
-            district_client_json(district, c, year, month) for c in models.Client.objects.all()
+            district_client_json(district, c, date) for c in models.Client.objects.all()
         ],
         "projects" : {
             "best_performing" : [
-                serializers.condensed_project_serializer(project, year, month)
+                serializers.condensed_project_serializer(project, date)
                 for project in best_projects
             ],
             "worst_performing" : [
-                serializers.condensed_project_serializer(project, year, month)
+                serializers.condensed_project_serializer(project, date)
                 for project in worst_projects
             ],
         }
@@ -112,12 +114,14 @@ def handler(obj):
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
 def district_report(request, district_id, year, month):
-    js = district_report_json(district_id, year, month)
+    year, month = int(year), int(month)
+    js = district_report_json(district_id, datetime(year, month, 1))
     return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
 
 
 def dashboard_graphs(request, district_id, year, month):
-    data = district_report_json(district_id, year, month)
+    year, month = int(year), int(month)
+    data = district_report_json(district_id, datetime(year, month, 1))
 
     js = OrderedDict()
     for i, client in enumerate(data["clients"]):
