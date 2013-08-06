@@ -467,8 +467,8 @@ class ScopeOfWork(models.Model):
 class Planning(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
-    planned_expenses = models.FloatField(blank=True, null=True)
-    planned_progress = models.FloatField(blank=True, null=True)
+    planned_expenses = models.FloatField(blank=True, null=True, help_text="Planned expenses for this month")
+    planned_progress = models.FloatField(blank=True, null=True, help_text="Expected progress to this point")
     project = models.ForeignKey(Project, related_name='plannings')
 
     objects = FinancialYearManager()
@@ -516,8 +516,8 @@ class MonthlySubmission(models.Model):
     month = models.CharField(max_length=255, choices=MONTHS, default=lambda: datetime.datetime.now().month)
     year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
     project = models.ForeignKey(Project, related_name='monthly_submissions')
-    actual_expenditure = models.FloatField()
-    actual_progress = models.FloatField()
+    actual_expenditure = models.FloatField(help_text="Actual expenditure this month")
+    actual_progress = models.FloatField(help_text="Actual progress at this point")
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
