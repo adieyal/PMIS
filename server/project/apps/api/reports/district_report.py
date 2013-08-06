@@ -63,6 +63,8 @@ def district_client_json(district, client, year, month):
             "between_0_and_50": len(projects.actual_progress_between(0, 50)),
             "between_51_and_75": len(projects.actual_progress_between(51, 75)),
             "between_76_and_99": len(projects.actual_progress_between(76, 99)),
+            "due_in_3_months": 5,
+            "due_this_month": 2,
         }
     }
 
