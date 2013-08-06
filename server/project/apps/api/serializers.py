@@ -80,7 +80,7 @@ def condensed_project_serializer(project, year, month):
         },
         "jobs" : project.jobs,
         "expenditure" : {
-            "ratio" : project.project_financial.percentage_expenditure(year, month),
+            "perc_spent" : project.project_financial.percentage_expenditure(year, month) * 100,
             "actual" : project.actual_expenditure(year, month),
             "planned" : project.planned_expenditure(year, month),
         }

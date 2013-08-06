@@ -29,7 +29,7 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["progress"]["actual"], self.project.actual_progress(self.year, self.month))
         self.assertEquals(js["progress"]["planned"], self.project.planned_progress(self.year, self.month))
         self.assertEquals(js["jobs"], self.project.jobs)
-        self.assertEquals(js["expenditure"]["ratio"], self.project.project_financial.percentage_expenditure(self.year, self.month))
+        self.assertEquals(js["expenditure"]["perc_spent"], self.project.project_financial.percentage_expenditure(self.year, self.month) * 100)
         self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.year, self.month))
         self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.year, self.month))
 
