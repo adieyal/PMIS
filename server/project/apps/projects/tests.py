@@ -299,26 +299,34 @@ class TestProject(TestCase):
             project = worst[idx]
             self.assertEqual(project.performance(self.date), actual / 50.)
 
-    #def test_actual_expenditure(self):
-    #    models.Project.objects.all().delete()
-    #    project = factories.ProjectFactory()
-    #    submission1 = factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=datetime(2013, 6, 1))
-    #    submission2 = factories.MonthlySubmissionFactory(project=project, actual_expenditure=200, date=datetime(2013, 7, 1))
+    def test_actual_expenditure(self):
+        date1 = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
+        factories.MonthlySubmissionFactory(project=project, actual_expenditure=200, date=date2)
 
-    #    #self.assertEqual(project.actual_expenditure(2013, 6), 100)
-    #    #self.assertEqual(project.actual_expenditure(2013, 7), 300)
-    #    project = self.projects[0]
-    #    self.assertEqual(project.actual_expenditure(self.date), 0)
-
-    #    project = self.projects[1]
-    #    self.assertEqual(project.actual_expenditure(self.year, self.month), 200)
+        self.assertEqual(project.actual_expenditure(date1), 100)
+        self.assertEqual(project.actual_expenditure(date2), 300)
         
     def test_planned_expenditure(self):
-        project = self.projects[0]
-        self.assertEqual(project.planned_expenditure(self.date), 0)
 
-        project = self.projects[1]
-        self.assertEqual(project.planned_expenditure(self.date), 100)
+        date1 = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        factories.PlanningFactory(project=project, planned_expenses=100, date=date1)
+        factories.PlanningFactory(project=project, planned_expenses=200, date=date2)
+
+        self.assertEqual(project.planned_expenditure(date1), 100)
+        self.assertEqual(project.planned_expenditure(date2), 300)
+
+        #project = self.projects[0]
+        #self.assertEqual(project.planned_expenditure(self.date), 0)
+
+        #project = self.projects[1]
+        #self.assertEqual(project.planned_expenditure(self.date), 100)
 
     def test_start_date(self):
         project = self.projects[0]

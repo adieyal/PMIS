@@ -328,15 +328,15 @@ class Project(models.Model):
 
     def actual_expenditure(self, date):
         try:
-            s = MonthlySubmission.objects.get(date__year=date.year, date__month=date.month, project=self)
-            return s.actual_expenditure
+            s = MonthlySubmission.objects.filter(date__lte=date, project=self).aggregate(Sum("actual_expenditure"))
+            return s["actual_expenditure__sum"]
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
             
     def planned_expenditure(self, date):
         try:
-            s = Planning.objects.get(date__year=date.year, date__month=date.month, project=self)
-            return s.planned_expenses
+            s = Planning.objects.filter(date__lte=date, project=self).aggregate(Sum("planned_expenses"))
+            return s["planned_expenses__sum"]
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 
