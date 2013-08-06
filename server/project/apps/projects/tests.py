@@ -220,6 +220,7 @@ class ProjectTest(TestCase):
             self.projects.append(project)
             factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), year=self.year, month=self.month)
             factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), year=self.year, month=self.month)
+            factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100 * idx)
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.start_milestone())
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion())
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.final_completion())
@@ -323,3 +324,39 @@ class ProjectTest(TestCase):
     def test_final_accounts(self):
         project = self.projects[0]
         self.assertEqual(project.final_accounts_milestone, models.ProjectMilestone.objects.project_final_accounts(project))
+
+    def test_total_budget(self):
+        projects = models.Project.objects.district(self.munic1.district)
+        total = sum([p.project_financial.total_anticipated_cost for p in projects])
+        
+        self.assertEqual(projects.total_budget(), total)
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().total_budget(), 0)
+
+    def test_actual_expenditure(self):
+        projects = models.Project.objects.district(self.munic1.district)
+        total = sum([p.actual_expenditure(self.year, self.month) for p in projects])
+        
+        self.assertEqual(projects.total_actual_expenditure(self.year, self.month), total)
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)
+        
+
+    def test_percentage_actual_expenditure(self):
+        projects = models.Project.objects.district(self.munic1.district)
+        budget = projects.total_budget()
+        actual_expenditure = projects.total_actual_expenditure(self.year, self.month)
+        self.assertEqual(projects.percentage_actual_expenditure(self.year, self.month), float(actual_expenditure) / float(budget))
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().percentage_actual_expenditure(self.year, self.month), 0)
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)

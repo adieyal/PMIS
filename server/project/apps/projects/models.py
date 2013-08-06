@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
+from django.db.models import Sum
 
 
 MONTHS = (
@@ -222,7 +223,36 @@ class ProjectManagerQuerySet(QuerySet):
             monthly_submissions__actual_progress__gte=progress_start,
             monthly_submissions__actual_progress__lt=progress_end,
         )
+
+    def total_budget(self):
         
+        val =  self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+        if val == None:
+            return 0
+        return val
+        
+    def total_actual_expenditure(self, year, month):
+        submissions = MonthlySubmission.objects.filter(project__in=self, year=year, month=month).aggregate(Sum("actual_expenditure"))
+        return submissions["actual_expenditure__sum"]
+
+    def total_actual_expenditure(self, year, month):
+        
+        expenditure = MonthlySubmission.objects\
+            .filter(project__in=self, year=year, month=month)\
+            .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
+
+        if expenditure == None:
+            return 0
+        return expenditure
+
+    def percentage_actual_expenditure(self, year, month):
+        actual_expenditure = self.total_actual_expenditure(year, month)
+        budget = self.total_budget()
+        if budget == 0:
+            return 0
+
+        return float(self.total_actual_expenditure(year, month)) / float(self.total_budget())
+
     def district(self, district):
         if type(district) == int:
             return self.filter(municipality__district__id=district)
@@ -319,6 +349,8 @@ class Project(models.Model):
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
 
+        
+
     @property
     def start_milestone(self):
         return ProjectMilestone.objects.project_start(self)
@@ -377,7 +409,6 @@ class ProjectRole(models.Model):
 
     def __unicode__(self):
         return u'%s - %s: %s' % (self.project, self.role, self.entity)
-
 
 class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)

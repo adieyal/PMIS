@@ -312,11 +312,11 @@ define(["lib/jquery", "lib/jquery.number", "widgets/js/widgets"], function($, ig
         },
 
         populate_dashboard : function(json) {
-            this.populate_general(json);
-            this.populate_client_names(json);
-            this.populate_clients(json);
-            this.populate_project(json);
-            this.populate_department_projects(json);
+            //this.populate_general(json);
+            //this.populate_client_names(json);
+            //this.populate_clients(json);
+            //this.populate_project(json);
+            //this.populate_department_projects(json);
         },
 
         populate_progress : function(json) {

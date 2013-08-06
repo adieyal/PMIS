@@ -1,7 +1,8 @@
 # Test dependencies go here.
--r base.txt
+-r local.txt
 coverage==3.6
 django-discover-runner==0.2.2
+django-debug-toolbar
 factory-boy==2.0.2
 django-coverage==1.2.2
 django_jenkins

@@ -28,6 +28,7 @@ urlpatterns = patterns('',
    #url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/top_performing/$', views.ProjectTopPerformingViewSet.as_view(), name='project_top_performing_view'),
    #url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/worst_performing/$', views.ProjectWorstPerformingViewSet.as_view(), name='project_worst_performing_view'),
    #url(r'^clients/(?P<client_id>\d+)/districts/(?P<district_id>\d+)/projects/implementation/overall_progress/$', views.ProjectOverallProgressViewSet.as_view(), name='project_overall_progress_view'),
+   url(r'^reports/', include('project.apps.api.reports.urls', namespace='reports')),
 )
 
-urlpatterns += reports.urls.urlpatterns
+#urlpatterns += reports.urls.urlpatterns

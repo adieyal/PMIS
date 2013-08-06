@@ -23,13 +23,10 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.backends.simple.urls')),
     url(r'^projects/', include('project.apps.projects.urls', namespace='projects')),
     url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
+    url(r'^reports/', include('project.apps.reports.urls', namespace='reports')),
 
     #url(r'^reports2/district/dashboard/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', TemplateView.as_view(template_name='reports/district/index.html'), name='district_dashboard'),
     #url(r'^reports2/district/progress/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', TemplateView.as_view(template_name='reports/district/progress.html'), name='district_progress'),
     #url(r'^reports2/district/perform/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', TemplateView.as_view(template_name='reports/district/perform.html'), name='district_perform'),
 
-    url(r'^reports/district/dashboard/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'project.apps.reports.views.district_dashboard', name='district_dashboard_report'),
-    url(r'^reports/district/progress/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'project.apps.reports.views.district_progress', name='district_progress_report'),
-    url(r'^reports/district/perform/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'project.apps.reports.views.district_perform', name='district_perform_report'),
-    # url(r'^', include(router.urls)),
 )
