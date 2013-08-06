@@ -57,7 +57,7 @@ class FinancialYearTest(TestCase):
         self.project = factories.ProjectFactory.create()
         for i in range(1, 13):
             self.planning = factories.PlanningFactory.create(
-                year="2013", month=str(i), project=self.project
+                date=datetime(2013, i, 1), project=self.project
             )
 
     def test_financial_year(self):
@@ -68,10 +68,10 @@ class FinancialYearTest(TestCase):
         self.assertEqual(planning_2013.count(), 3)
         self.assertEqual(planning_2014.count(), 9)
         for p in planning_2013:
-            self.assertTrue(p.month in ["1", "2", "3"])
+            self.assertTrue(p.date.month in [1, 2, 3])
 
         for p in planning_2014:
-            self.assertTrue(p.month in ["4", "5", "6", "7", "8", "9", "10", "11", "12"])
+            self.assertTrue(p.date.month in [4, 5, 6, 7, 8, 9, 10, 11, 12])
 
     def test_which_year(self):
         self.assertEqual(models.FinancialYearManager.financial_year(2013, 2), 2013)
@@ -115,39 +115,41 @@ class ProjectManagerTest(TestCase):
     def test_projects_by_progress(self):
         models.Project.objects.all().delete()
         year, month = 2013, 6
+        date = datetime(year, month, 1)
         for i in range(10):
             project = factories.ProjectFactory()
-            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
-            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, date=date)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, date=date)
 
         low_performance_projects = models.Project.objects.actual_progress_between(0, 50)
         
         self.assertEquals(len(low_performance_projects), 5)
         for project in low_performance_projects:
-            self.assertTrue(project.actual_progress(year, month) >= 0)
-            self.assertTrue(project.actual_progress(year, month) < 50)
+            self.assertTrue(project.actual_progress(date) >= 0)
+            self.assertTrue(project.actual_progress(date) < 50)
 
         low_performance_projects = models.Project.objects.planned_progress_between(0, 50)
         self.assertEquals(len(low_performance_projects), 5)
         for project in low_performance_projects:
-            self.assertTrue(project.planned_progress(year, month) >= 0)
-            self.assertTrue(project.planned_progress(year, month) < 50)
+            self.assertTrue(project.planned_progress(date) >= 0)
+            self.assertTrue(project.planned_progress(date) < 50)
 
         high_performance_projects = models.Project.objects.actual_progress_between(50, 100)
         self.assertEquals(len(high_performance_projects), 5)
         for project in high_performance_projects:
-            self.assertTrue(project.actual_progress(year, month) >= 50)
-            self.assertTrue(project.actual_progress(year, month) < 100)
+            self.assertTrue(project.actual_progress(date) >= 50)
+            self.assertTrue(project.actual_progress(date) < 100)
 
         high_performance_projects = models.Project.objects.planned_progress_between(50, 100)
         self.assertEquals(len(high_performance_projects), 5)
         for project in high_performance_projects:
-            self.assertTrue(project.planned_progress(year, month) >= 50)
-            self.assertTrue(project.planned_progress(year, month) < 100)
+            self.assertTrue(project.planned_progress(date) >= 50)
+            self.assertTrue(project.planned_progress(date) < 100)
 
     def test_projects_completed_in_fye(self):
         models.Project.objects.all().delete()
         year, month = 2013, 6
+        date = datetime(year, month, 1)
         for i in range(5):
             project = factories.ProjectFactory()
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(2013, 6, 1))
@@ -170,16 +172,17 @@ class ProjectManagerTest(TestCase):
     def test_projects_completed_in_fye_different_clients(self):
         models.Project.objects.all().delete()
         year, month = 2013, 6
+        date = datetime(2013, 6, 1)
 
         prog1 = factories.ProgrammeFactory()
         prog2 = factories.ProgrammeFactory()
 
         for i in range(5):
             project = factories.ProjectFactory(programme=prog1)
-            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(year, month, 1))
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=date)
 
             project = factories.ProjectFactory(programme=prog2)
-            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(year, month, 1))
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=date)
 
         completed_client1 = models.Project.objects.client(prog1.client).completed_by_fye(2014)
         self.assertEquals(len(completed_client1), 5)
@@ -195,31 +198,31 @@ class ProjectManagerTest(TestCase):
 
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
+        date = datetime(2013, 6, 1)
         project = factories.ProjectFactory()
         financial = factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
-        actual = factories.MonthlySubmissionFactory(
-            project=project, actual_expenditure=25, year=2013, month=6
-        )
-        self.assertEqual(financial.percentage_expenditure(2013, 6), 0.25)
-        self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 7)
+        actual = factories.MonthlySubmissionFactory(project=project, actual_expenditure=25, date=date)
+        self.assertEqual(financial.percentage_expenditure(date), 0.25)
+        self.assertRaises(models.ProjectException, financial.percentage_expenditure, datetime(2013, 7, 1))
 
         financial.total_anticipated_cost = 0
         financial.save()
-        self.assertRaises(models.ProjectException, financial.percentage_expenditure, 2013, 6)
+        self.assertRaises(models.ProjectException, financial.percentage_expenditure, date)
 
-class ProjectTest(TestCase):
+class TestProject(TestCase):
     def setUp(self):
         performance = range(0, 100, 10)
         self.projects = []
         self.year, self.month = 2013, 6
         self.munic1 = factories.MunicipalityFactory() 
         self.munic2 = factories.MunicipalityFactory() 
+        self.date = datetime(self.year, self.month, 1)
 
         for idx, p in enumerate(performance):
             project = factories.ProjectFactory(municipality=self.munic1 if idx < 5 else self.munic2)
             self.projects.append(project)
-            factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), year=self.year, month=self.month)
-            factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), year=self.year, month=self.month)
+            planning = factories.PlanningFactory(project=project, planned_progress=50, planned_expenses=(100 * idx), date=self.date)
+            factories.MonthlySubmissionFactory(project=project, actual_progress=p, actual_expenditure=(200 * idx), date=self.date)
             factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100 * idx)
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.start_milestone())
             factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion())
@@ -229,85 +232,93 @@ class ProjectTest(TestCase):
         
     def test_project_actual_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.actual_progress(self.year, self.month), 20)
-        self.assertRaises(models.ProjectException, project.actual_progress, 2012, 3)
+        self.assertEqual(project.actual_progress(self.date), 20)
+        self.assertRaises(models.ProjectException, project.actual_progress, datetime(2013, 3, 1))
 
     def test_project_planned_progress(self):
         project = self.projects[2]
-        self.assertEqual(project.planned_progress(self.year, self.month), 50)
-        self.assertRaises(models.ProjectException, project.planned_progress, 2012, 3)
+        self.assertEqual(project.planned_progress(self.date), 50)
+        self.assertRaises(models.ProjectException, project.planned_progress, datetime(2012, 3, 1))
 
     def test_project_performance(self):
         project = self.projects[2]
-        self.assertEqual(project.performance(self.year, self.month), 20/50.)
+        self.assertEqual(project.performance(self.date), 20/50.)
 
 
         zero_planning_project = factories.ProjectFactory()
-        factories.PlanningFactory(project=zero_planning_project, planned_progress=0, year=self.year, month=self.month)
-        factories.MonthlySubmissionFactory(project=zero_planning_project, actual_progress=0, year=self.year, month=self.month)
-        self.assertEqual(zero_planning_project.performance(self.year, self.month), 0)
+        factories.PlanningFactory(project=zero_planning_project, planned_progress=0, date=self.date)
+        factories.MonthlySubmissionFactory(project=zero_planning_project, actual_progress=0, date=self.date)
+        self.assertEqual(zero_planning_project.performance(self.date), 0)
 
     def test_best_performing(self):
-        best = models.Project.objects.best_performing(self.year, self.month, count=5)
+        best = models.Project.objects.best_performing(self.date, count=5)
         self.assertEqual(len(best), 5)
         for i, actual in enumerate(range(90, 0, -10)[0:5]):
             project = best[i]
             expected_performance = actual / 50.
-            self.assertEqual(project.performance(self.year, self.month), expected_performance)
+            self.assertEqual(project.performance(self.date), expected_performance)
         
     
     def test_worst_performing(self):
-        worst = models.Project.objects.worst_performing(self.year, self.month, count=5)
+        worst = models.Project.objects.worst_performing(date=self.date, count=5)
         self.assertEqual(len(worst), 5)
         for i, actual in enumerate(range(0, 100, -10)[0:5]):
             project = worst[i]
             expected_performance = actual / 50.
-            self.assertEqual(project.performance(self.year, self.month), expected_performance)
+            self.assertEqual(project.performance(self.date), expected_performance)
 
     def test_worst_performing_with_different_months(self):
+        new_date = datetime(self.year + 1, self.month, 1)
         new_project = factories.ProjectFactory(municipality=self.munic1)
-        factories.PlanningFactory(project=new_project, planned_progress=100, year=(self.year + 1), month=self.month)
-        factories.MonthlySubmissionFactory(project=new_project, actual_progress=10, year=(self.year + 1), month=self.month)
+        factories.PlanningFactory(project=new_project, planned_progress=100, date=new_date)
+        factories.MonthlySubmissionFactory(project=new_project, actual_progress=10, date=new_date)
 
-        worst = models.Project.objects.worst_performing(self.year, self.month, count=100)
+        worst = models.Project.objects.worst_performing(date=self.date, count=100)
         self.assertEqual(len(worst), 10)
         for p in worst:
             self.assertNotEquals(new_project, worst)
 
     def test_best_and_worst_can_work_on_filter(self):
-        best = models.Project.objects.municipality(self.munic1).best_performing(self.year, self.month, count=5)
+        best = models.Project.objects.municipality(self.munic1).best_performing(self.date, count=5)
         for idx, actual in enumerate(range(40, 0, -10)[0:5]):
             project = best[idx]
-            self.assertEqual(project.performance(self.year, self.month), actual / 50.)
+            self.assertEqual(project.performance(self.date), actual / 50.)
         
-        best = models.Project.objects.municipality(self.munic2).best_performing(self.year, self.month, count=5)
+        best = models.Project.objects.municipality(self.munic2).best_performing(self.date, count=5)
         for idx, actual in enumerate(range(90, 0, -10)[0:5]):
             project = best[idx]
-            self.assertEqual(project.performance(self.year, self.month), actual / 50.)
+            self.assertEqual(project.performance(self.date), actual / 50.)
 
-        worst = models.Project.objects.municipality(self.munic1).worst_performing(self.year, self.month, count=5)
+        worst = models.Project.objects.municipality(self.munic1).worst_performing(self.date, count=5)
         for idx, actual in enumerate(range(0, 50, 10)[0:5]):
             project = worst[idx]
-            self.assertEqual(project.performance(self.year, self.month), actual / 50.)
+            self.assertEqual(project.performance(self.date), actual / 50.)
         
-        worst = models.Project.objects.municipality(self.munic2).worst_performing(self.year, self.month, count=5)
+        worst = models.Project.objects.municipality(self.munic2).worst_performing(self.date, count=5)
         for idx, actual in enumerate(range(50, 100, 10)[0:5]):
             project = worst[idx]
-            self.assertEqual(project.performance(self.year, self.month), actual / 50.)
+            self.assertEqual(project.performance(self.date), actual / 50.)
 
-    def test_actual_expenditure(self):
-        project = self.projects[0]
-        self.assertEqual(project.actual_expenditure(self.year, self.month), 0)
+    #def test_actual_expenditure(self):
+    #    models.Project.objects.all().delete()
+    #    project = factories.ProjectFactory()
+    #    submission1 = factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=datetime(2013, 6, 1))
+    #    submission2 = factories.MonthlySubmissionFactory(project=project, actual_expenditure=200, date=datetime(2013, 7, 1))
 
-        project = self.projects[1]
-        self.assertEqual(project.actual_expenditure(self.year, self.month), 200)
+    #    #self.assertEqual(project.actual_expenditure(2013, 6), 100)
+    #    #self.assertEqual(project.actual_expenditure(2013, 7), 300)
+    #    project = self.projects[0]
+    #    self.assertEqual(project.actual_expenditure(self.date), 0)
+
+    #    project = self.projects[1]
+    #    self.assertEqual(project.actual_expenditure(self.year, self.month), 200)
         
     def test_planned_expenditure(self):
         project = self.projects[0]
-        self.assertEqual(project.planned_expenditure(self.year, self.month), 0)
+        self.assertEqual(project.planned_expenditure(self.date), 0)
 
         project = self.projects[1]
-        self.assertEqual(project.planned_expenditure(self.year, self.month), 100)
+        self.assertEqual(project.planned_expenditure(self.date), 100)
 
     def test_start_date(self):
         project = self.projects[0]
@@ -335,28 +346,28 @@ class ProjectTest(TestCase):
         project = factories.ProjectFactory()
         self.assertEqual(models.Project.objects.all().total_budget(), 0)
 
-    def test_actual_expenditure(self):
+    def test_actual_expenditure2(self):
         projects = models.Project.objects.district(self.munic1.district)
-        total = sum([p.actual_expenditure(self.year, self.month) for p in projects])
+        total = sum([p.actual_expenditure(self.date) for p in projects])
         
-        self.assertEqual(projects.total_actual_expenditure(self.year, self.month), total)
+        self.assertEqual(projects.total_actual_expenditure(self.date), total)
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.date), 0)
         
 
     def test_percentage_actual_expenditure(self):
         projects = models.Project.objects.district(self.munic1.district)
         budget = projects.total_budget()
-        actual_expenditure = projects.total_actual_expenditure(self.year, self.month)
-        self.assertEqual(projects.percentage_actual_expenditure(self.year, self.month), float(actual_expenditure) / float(budget))
+        actual_expenditure = projects.total_actual_expenditure(self.date)
+        self.assertEqual(projects.percentage_actual_expenditure(self.date), float(actual_expenditure) / float(budget))
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertEqual(models.Project.objects.all().percentage_actual_expenditure(self.year, self.month), 0)
+        self.assertEqual(models.Project.objects.all().percentage_actual_expenditure(self.date), 0)
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
         factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
-        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.date), 0)
