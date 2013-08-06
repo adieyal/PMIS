@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<h1>Temporary Links</h1>
+<h2>Reports</h2>
 <ul>
-<li><a href="/reports/district/dashboard/">Dashboard</a></li>
-<li><a href="/reports/district/progress/">Progress</a></li>
-<li><a href="/reports/district/perform/">Perform</a></li>
+<li><a href="{% url "reports:district_dashboard" 2 2013 6 %}">Dashboard</a></li>
+<li><a href="{% url "reports:district_progress" 2 2013 6 %}">Progress</a></li>
+<li><a href="{% url "reports:district_perform" 2 2013 6 %}">Perform</a></li>
 </ul>
+<h2>JSON</h2>
+<ul>
+<li><a href="{% url "api:reports:district" 2 2013 6 %}">District</a></li>
+<li><a href="{% url "api:reports:district_graphs" 2 2013 6 %}">District Graphs</a></li>
+</li>
 {% endblock %}

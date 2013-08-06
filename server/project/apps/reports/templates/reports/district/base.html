@@ -25,6 +25,18 @@
                 "lib/jquery.number": ['jquery'],
             },
         });
+
+        require(['lib/jquery', "reports/district"], function($, district) {
+            var district_id = {{ district.id }}
+            var year = {{ date.year }}
+            var month = {{ date.month }}
+            var d = new district(year, month);
+            url = "{% url 'api:reports:district' district.id  date.year date.month %}";
+
+            $.getJSON(url, function(json) {
+                d.populate_dashboard(json);
+            });
+        })
     </script>
 
     {% block extraheader %}
@@ -39,9 +51,9 @@
                 <div class="district-text">District Report | <span class="font-weight">{{ date|date:"M" }} {{ date.year }}</span><br /><span class="nkangala-text">{{ district.name|upper }}</span></div><!-- .district-text -->
                 <div class="nav-area cf">
                 	<ul class="hover-progress-bg">
-                    	<li class="dash {% block dashactive %}{% endblock dashactive %}"><a href="{% url 'district_dashboard_report' district.id date.year date.month %}">Dashboard</a></li>
-                    	<li class="progress {% block progressactive %}{% endblock progressactive %}"><a href="{% url 'district_progress_report' district.id date.year date.month %}">Progress<div class="hover-bg"></div></a></li>
-                    	<li class="perform {% block performactive %}{% endblock performactive %}"><a href="{% url 'district_perform_report' district.id date.year date.month %}">Performance</a></li>
+                    	<li class="dash {% block dashactive %}{% endblock dashactive %}"><a href="{% url 'reports:district_dashboard' district.id date.year date.month %}">Dashboard</a></li>
+                    	<li class="progress {% block progressactive %}{% endblock progressactive %}"><a href="{% url 'reports:district_progress' district.id date.year date.month %}">Progress<div class="hover-bg"></div></a></li>
+                    	<li class="perform {% block performactive %}{% endblock performactive %}"><a href="{% url 'reports:district_perform' district.id date.year date.month %}">Performance</a></li>
                     </ul>
                 </div><!-- .nav-area -->
             </div><!-- .logo-left-area -->

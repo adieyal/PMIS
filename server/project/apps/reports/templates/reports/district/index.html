@@ -2,19 +2,6 @@
 {% load humanize %}
 
 {% block extraheader %}
-<script>
-    require(['lib/jquery', "reports/district"], function($, district) {
-        var district_id = {{ district.id }}
-        var year = {{ date.year }}
-        var month = {{ date.month }}
-        var d = new district(year, month);
-        url = "/api/reports/district/" + district_id + "/" + year + "/" + month + "/";
-
-        $.getJSON(url, function(json) {
-            d.populate_dashboard(json);
-        });
-    });
-</script>
 {% endblock %}
 
 {% block body %}
@@ -31,12 +18,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.0.num_jobs | intcomma:0 }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>{{ clients.0.overall_progress.actual }}</span></div><!-- .overall -->
-                                <div id="gauge1" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge1"></div>
+                                <div id="gauge1" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge1"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>80%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span> {{ clients.0.overall_expenditure.actual_expenditure | intcomma }}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider1"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider1"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -51,12 +38,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.1.num_jobs| intcomma }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span> {{ clients.1.overall_progress.actual }}</span></div><!-- .overall -->
-                                <div id="gauge2" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge2"></div>
+                                <div id="gauge2" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge2"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>130%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>{{ clients.1.overall_expenditure.actual_expenditure| intcomma }}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider2"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider2"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -71,12 +58,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.2.num_jobs| intcomma }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span> {{ clients.2.overall_progress.actual|floatformat }}%</span></div><!-- .overall -->
-                                <div id="gauge3" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge3"></div>
+                                <div id="gauge3" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge3"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>105%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>{{ clients.2.overall_expenditure.actual_expenditure|intcomma }}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider3"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider3"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -91,12 +78,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.3.num_jobs | intcomma }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span> {{ clients.3.overall_progress.actual }}</span></div><!-- .overall -->
-                                <div id="gauge4" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge4"></div>
+                                <div id="gauge4" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge4"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>30%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>{{ clients.3.overall_expenditure.actual_expenditure| intcomma }}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider4"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider4"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -111,12 +98,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.4.num_jobs| intcomma }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span> {{ clients.4.overall_progress.actual }}</span></div><!-- .overall -->
-                                <div id="gauge5" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge5" ></div>
+                                <div id="gauge5" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge5" ></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>90%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>{{ clients.4.overall_expenditure.actual_expenditure | intcomma }}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider5"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider5"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->
@@ -131,12 +118,12 @@
                             <div class="project-jobs-bg cf">
                                 <div class="num-of-job cf">Jobs created: <span> {{ clients.5.num_jobs|intcomma }}</span></div><!-- .num-of-job -->
                                 <div class="overall">Overall Progress: <span>{{ clients.5.overall_progress.actual }}</span></div><!-- .overall -->
-                                <div id="gauge6" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#gauge6" ></div>
+                                <div id="gauge6" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge6" ></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
                                 <div class="implementation-text">Implementation Expenditure: <span>140%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>{{ clients.5.overall_expenditure.actual_expenditure |intcomma}}</span></div><!-- .actual-text -->
-                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports_district_graphs' district.id date.year date.month %}#slider6"> </div>
+                                <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider6"> </div>
                             </div><!-- .implementation-bg -->
                         </div><!-- .project-main -->
                     </div><!-- .border -->

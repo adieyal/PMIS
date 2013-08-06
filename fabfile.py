@@ -5,6 +5,7 @@ import urllib2
 
 api.env.hosts = ["adi@pmis.burgercom.co.za:2224"]
 trigger_url = "http://hudson.burgercom.co.za/job/PMIS/build"
+code_dir = "/var/www/pmis.burgercom.co.za"
 
 def host_type():
     api.run('uname -s')
@@ -14,6 +15,14 @@ def commit():
         result = api.local("git add -p && git commit", capture=True)
     if result.failed and not confirm("Error with commit. Continue anyway?"):
         abort("Aborting at user request.")
+
+def create_database():
+    with api.cd(code_dir):
+        api.run("rm -f project/default.db")
+        api.run("python manage.py syncdb --noinput")
+        api.run("python manage.py migrate")
+        api.run("python manage.py loaddata production")
+        api.run("python manage.py createsuperuser")
 
 def test():
     api.local("server/manage.py test api projects")
@@ -30,7 +39,6 @@ def deploy():
     """
     Deploy code and run tests in hudson
     """
-    code_dir = "/var/www/pmis.burgercom.co.za"
     with api.cd(code_dir):
         api.run("git pull origin master")
     with api.cd(code_dir + "/server"):
