@@ -1,9 +1,13 @@
 from django.http import HttpResponse, Http404
+from django.core.cache import cache
+from collections import OrderedDict
+from decimal import Decimal
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 import json
 import project.apps.projects.models as models
 import project.apps.api.serializers as serializers
+from project.apps.api.reports import graphhelpers
 
 """
 JSON views to product reports
@@ -33,7 +37,6 @@ def district_client_json(district, client, year, month):
         year=year, month=month
     )
 
-    #print "Districts: %s" % [p.district for p in projects]
     return {
         "fullname" : client.description,
         "name" : client.name,
@@ -67,6 +70,10 @@ def district_client_json(district, client, year, month):
 
 
 def district_report_json(district_id, year, month):
+    key = 'district_%s_%s_%s' % (district_id, year, month)
+    js = cache.get(key)
+    #if js: return js
+        
     year = int(year)
     month = int(month)
 
@@ -93,320 +100,44 @@ def district_report_json(district_id, year, month):
             ],
         }
     }
+    cache.set(key, js, 30)
     return js
+
+def handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    elif isinstance(obj, Decimal):
+        return float(obj)
+    else:
+        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
 def district_report(request, district_id, year, month):
-    js = district_report_json2(district_id, year, month)
-    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4), mimetype="application/json")
+    js = district_report_json(district_id, year, month)
+    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
 
-def district_report_json2(district_id, year, month):
-    return {
-        "date" : datetime(int(year), int(month), 1),
-        "clients": [
-            {
-                "total_projects": 0, 
-                "overall_expenditure": {
-                    "actual_expenditure": 0, 
-                    "planned_expenditure": 0, 
-                    "perc_expenditure": 0
-                }, 
-                "name": "DCSR", 
-                "overall_progress": {
-                    "actual": 0, 
-                    "planned": 0
-                }, 
-                "fullname": "Department of Culture, Sport and Recreation", 
-                "total_budget": 0.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 0, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 0, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 0, 
-                    "completed_in_fye": 0, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }, 
-            {
-                "total_projects": 0, 
-                "overall_expenditure": {
-                    "actual_expenditure": 0, 
-                    "planned_expenditure": 0, 
-                    "perc_expenditure": 0
-                }, 
-                "name": "DEDET", 
-                "overall_progress": {
-                    "actual": 0, 
-                    "planned": 0
-                }, 
-                "fullname": "Department of Economic Development and Planning", 
-                "total_budget": 0.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 0, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 0, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 0, 
-                    "completed_in_fye": 0, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }, 
-            {
-                "total_projects": 13, 
-                "overall_expenditure": {
-                    "actual_expenditure": 9167000.0, 
-                    "planned_expenditure": 47132000.0, 
-                    "perc_expenditure": 0.12503002830533305
-                }, 
-                "name": "DoE", 
-                "overall_progress": {
-                    "actual": 51.15384615384615, 
-                    "planned": 76.46153846153847
-                }, 
-                "fullname": "Department of Education", 
-                "total_budget": 400621000.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 4, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 9, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 140, 
-                    "completed_in_fye": 10, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }, 
-            {
-                "total_projects": 0, 
-                "overall_expenditure": {
-                    "actual_expenditure": 0, 
-                    "planned_expenditure": 0, 
-                    "perc_expenditure": 0
-                }, 
-                "name": "DoH", 
-                "overall_progress": {
-                    "actual": 0, 
-                    "planned": 0
-                }, 
-                "fullname": "Department of Health", 
-                "total_budget": 0.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 0, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 0, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 0, 
-                    "completed_in_fye": 0, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }, 
-            {
-                "total_projects": 0, 
-                "overall_expenditure": {
-                    "actual_expenditure": 0, 
-                    "planned_expenditure": 0, 
-                    "perc_expenditure": 0
-                }, 
-                "name": "DSD", 
-                "overall_progress": {
-                    "actual": 0, 
-                    "planned": 0
-                }, 
-                "fullname": "Department of Social Development", 
-                "total_budget": 0.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 0, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 0, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 0, 
-                    "completed_in_fye": 0, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }, 
-            {
-                "total_projects": 0, 
-                "overall_expenditure": {
-                    "actual_expenditure": 0, 
-                    "planned_expenditure": 0, 
-                    "perc_expenditure": 0
-                }, 
-                "name": "DSSL", 
-                "overall_progress": {
-                    "actual": 0, 
-                    "planned": 0
-                }, 
-                "fullname": "Department of Safety, Security and Liaison", 
-                "total_budget": 0.0, 
-                "projects": {
-                    "currently_in_practical_completion": 0, 
-                    "between_76_and_99": 0, 
-                    "currently_in_implementation": 0, 
-                    "between_51_and_75": 0, 
-                    "currently_in_planning": 0, 
-                    "between_0_and_50": 0, 
-                    "completed_in_fye": 0, 
-                    "currently_in_final_completion": 0
-                }, 
-                "num_jobs": 999
-            }
-        ], 
-        "district" : {
-            "name": "Gert Sibande", 
-            "id" : 2
-        },
-        "projects": {
-            "best_performing": [
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Harmony Park C School", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 599000.0, 
-                        "ratio": 0.2396, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 94.0, 
-                        "planned": 80.0
-                    }, 
-                    "municipality": {
-                        "id": 5, 
-                        "name": "Mkhondo"
-                    }, 
-                    "budget": 2500000.0
-                }, 
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Imizamoyethu Primary School", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 107000.0, 
-                        "ratio": 0.042868589743589744, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 92.0, 
-                        "planned": 90.0
-                    }, 
-                    "municipality": {
-                        "id": 5, 
-                        "name": "Mkhondo"
-                    }, 
-                    "budget": 2496000.0
-                }, 
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Vulingcondo Primary", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 0.0, 
-                        "ratio": 0.0, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 99.0, 
-                        "planned": 99.0
-                    }, 
-                    "municipality": {
-                        "id": 3, 
-                        "name": "Albert Luthuli"
-                    }, 
-                    "budget": 1428000.0
-                }
-            ], 
-            "worst_performing": [
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Myflower Secondary", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 0.0, 
-                        "ratio": 0.0, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 0.0, 
-                        "planned": 60.0
-                    }, 
-                    "municipality": {
-                        "id": 3, 
-                        "name": "Albert Luthuli"
-                    }, 
-                    "budget": 20608000.0
-                }, 
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Methula Secondary", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 0.0, 
-                        "ratio": 0.0, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 0.0, 
-                        "planned": 60.0
-                    }, 
-                    "municipality": {
-                        "id": 3, 
-                        "name": "Albert Luthuli"
-                    }, 
-                    "budget": 20608000.0
-                }, 
-                {
-                    "client": "DoE", 
-                    "jobs": 434343, 
-                    "name": "Ikhethelo Secondary School", 
-                    "district": {
-                        "id": 2, 
-                        "name": "Gert Sibande"
-                    }, 
-                    "expenditure": {
-                        "actual": 0.0, 
-                        "ratio": 0.0, 
-                        "planned": 0.0
-                    }, 
-                    "progress": {
-                        "actual": 0.0, 
-                        "planned": 60.0
-                    }, 
-                    "municipality": {
-                        "id": 9, 
-                        "name": "Govan Mbeki"
-                    }, 
-                    "budget": 20608000.0
-                }
-            ]
-        }
-    }
-    return  s
+
+def dashboard_graphs(request, district_id, year, month):
+    data = district_report_json(district_id, year, month)
+
+    js = OrderedDict()
+    for i, client in enumerate(data["clients"]):
+        val1 = client["overall_progress"]["planned"] / 100.
+        val2 = client["overall_progress"]["actual"] / 100.
+
+        js["gauge%d" % (i + 1)] = graphhelpers.dashboard_gauge(val1, val2)
+
+        
+        val1 = client["overall_expenditure"]["planned_expenditure"]
+        val2 = client["overall_expenditure"]["actual_expenditure"]
+        budget = client["total_budget"]
+        if client["total_budget"] == 0:
+            #import pdb; pdb.set_trace()
+            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(0, 0, client["name"])
+        else:
+            #import pdb; pdb.set_trace()
+            val1 = val1 / budget; val2 = val2 / budget
+            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
+
+    return HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
+
+    

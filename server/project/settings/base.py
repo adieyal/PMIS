@@ -278,3 +278,10 @@ REST_FRAMEWORK = {
 # XS_SHARING_ALLOWED_ORIGINS = '*'
 # XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept',]
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
