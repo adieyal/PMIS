@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
@@ -95,7 +95,7 @@ def expanded_project_serializer(project, date):
         "final_accounts" : project.final_accounts_milestone.completion_date
     }
 
-    pyear, pmonth = models.CalendarFunctions.previous_month(date) 
+    pyear, pmonth = models.CalendarFunctions.previous_month(date.year, date.month) 
     last_month_submission = project.monthly_submissions.get(date=datetime(pyear, pmonth, 1))
     current_month_submission = project.monthly_submissions.get(date=date)
 
