@@ -231,14 +231,36 @@ class TestProject(TestCase):
 
         
     def test_project_actual_progress(self):
-        project = self.projects[2]
-        self.assertEqual(project.actual_progress(self.date), 20)
-        self.assertRaises(models.ProjectException, project.actual_progress, datetime(2013, 3, 1))
+        date1 = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
+        date3 = datetime(2013, 8, 1)
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertRaises(models.ProjectException, project.actual_progress, datetime(2012, 3, 1))
+
+        factories.MonthlySubmissionFactory(project=project, actual_progress=54, date=date1)
+        factories.MonthlySubmissionFactory(project=project, actual_progress=82, date=date2)
+
+        self.assertEqual(project.actual_progress(date1), 54)
+        self.assertEqual(project.actual_progress(date2), 82)
+        # If a submission does not exist - assume the progress is the same as the last progress
+        self.assertEqual(project.actual_progress(date3), 82)
 
     def test_project_planned_progress(self):
-        project = self.projects[2]
-        self.assertEqual(project.planned_progress(self.date), 50)
+        date1 = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
+        date3 = datetime(2013, 8, 1)
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
         self.assertRaises(models.ProjectException, project.planned_progress, datetime(2012, 3, 1))
+
+        factories.PlanningFactory(project=project, planned_progress=54, date=date1)
+        factories.PlanningFactory(project=project, planned_progress=82, date=date2)
+
+        self.assertEqual(project.planned_progress(date1), 54)
+        self.assertEqual(project.planned_progress(date2), 82)
+        # If a submission does not exist - assume the progress is the same as the last progress
+        self.assertEqual(project.planned_progress(date3), 82)
 
     def test_project_performance(self):
         project = self.projects[2]
@@ -304,6 +326,8 @@ class TestProject(TestCase):
         date2 = datetime(2013, 7, 1)
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
+        self.assertEqual(project.actual_expenditure(date1), 0)
+
         factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
         factories.MonthlySubmissionFactory(project=project, actual_expenditure=200, date=date2)
 
@@ -316,6 +340,8 @@ class TestProject(TestCase):
         date2 = datetime(2013, 7, 1)
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
+        self.assertEqual(project.planned_expenditure(date1), 0)
+
         factories.PlanningFactory(project=project, planned_expenses=100, date=date1)
         factories.PlanningFactory(project=project, planned_expenses=200, date=date2)
 
@@ -344,6 +370,24 @@ class TestProject(TestCase):
         project = self.projects[0]
         self.assertEqual(project.final_accounts_milestone, models.ProjectMilestone.objects.project_final_accounts(project))
 
+    def test_average_progress(self):
+        models.Project.objects.all().delete()
+        date1 = datetime(2013, 5, 1)
+        date2 = datetime(2013, 6, 1)
+
+        self.assertEqual(models.Project.objects.average_actual_progress(date1), 0)
+        progress = []
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_progress=i*10, date=date1)
+            factories.PlanningFactory(project=project, planned_progress=i*20, date=date1)
+            progress.append(i * 10)
+
+        projects = models.Project.objects.all()
+        avg_progress = sum(progress) / len(progress)
+        self.assertEqual(projects.average_actual_progress(date1), avg_progress)
+        self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
+
     def test_total_budget(self):
         projects = models.Project.objects.district(self.munic1.district)
         total = sum([p.project_financial.total_anticipated_cost for p in projects])
@@ -354,16 +398,63 @@ class TestProject(TestCase):
         project = factories.ProjectFactory()
         self.assertEqual(models.Project.objects.all().total_budget(), 0)
 
-    def test_actual_expenditure2(self):
-        projects = models.Project.objects.district(self.munic1.district)
-        total = sum([p.actual_expenditure(self.date) for p in projects])
-        
-        self.assertEqual(projects.total_actual_expenditure(self.date), total)
-
+    def test_total_actual_expenditure(self):
         models.Project.objects.all().delete()
-        project = factories.ProjectFactory()
-        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.date), 0)
+        date1 = datetime(2013, 5, 1)
+        date2 = datetime(2013, 6, 1)
+
+        self.assertEqual(models.Project.objects.total_actual_expenditure(date1), 0)
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date2)
+
+        # Should include only may expenditure
+        projects = models.Project.objects.all()
+        total = sum([p.actual_expenditure(date1) for p in projects])
+        self.assertEqual(projects.total_actual_expenditure(date1), total)
+
+        # Should include both may and june expenditure
+        total = sum([p.actual_expenditure(date2) for p in projects])
+        self.assertEqual(projects.total_actual_expenditure(date2), total)
+
+        # Check that subsets are catered for - i.e. not just .all()
+        district = projects[0].municipality.district
+        projects = models.Project.objects.district(district)
+        total = sum([p.actual_expenditure(date1) for p in projects])
+        self.assertEqual(projects.total_actual_expenditure(date1), total)
+        total = sum([p.actual_expenditure(date2) for p in projects])
+        self.assertEqual(projects.total_actual_expenditure(date2), total)
         
+    def test_total_planned_expenditure(self):
+        models.Project.objects.all().delete()
+
+        date1 = datetime(2013, 5, 1)
+        date2 = datetime(2013, 6, 1)
+
+        self.assertEqual(models.Project.objects.total_planned_expenditure(date1), 0)
+
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.PlanningFactory(project=project, planned_expenses=100, date=date1)
+            factories.PlanningFactory(project=project, planned_expenses=200, date=date2)
+
+        # Should include only may expenditure
+        projects = models.Project.objects.all()
+        total = sum([p.planned_expenditure(date1) for p in projects])
+        self.assertEqual(projects.total_planned_expenditure(date1), total)
+
+        # Should include both may and june expenditure
+        total = sum([p.planned_expenditure(date2) for p in projects])
+        self.assertEqual(projects.total_planned_expenditure(date2), total)
+
+        # Check that subsets are catered for - i.e. not just .all()
+        district = projects[0].municipality.district
+        projects = models.Project.objects.district(district)
+        total = sum([p.planned_expenditure(date1) for p in projects])
+        self.assertEqual(projects.total_planned_expenditure(date1), total)
+        total = sum([p.planned_expenditure(date2) for p in projects])
+        self.assertEqual(projects.total_planned_expenditure(date2), total)
 
     def test_percentage_actual_expenditure(self):
         projects = models.Project.objects.district(self.munic1.district)

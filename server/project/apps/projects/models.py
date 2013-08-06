@@ -7,7 +7,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 
 
 financial_year = range(4, 13) + range(1,4)
@@ -221,16 +221,36 @@ class ProjectManagerQuerySet(QuerySet):
         if val == None:
             return 0
         return val
+
+    def average_actual_progress(self, date):
+        # TODO - rather than using an exact date - should get the most recent submission
+        res = MonthlySubmission.objects\
+            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .aggregate(Avg("actual_progress"))
+        return res["actual_progress__avg"] or 0
         
-    def total_actual_expenditure(self, date):
-        submissions = MonthlySubmission.objects.filter(project__in=self, date__year=date.year, date__month=date.month).aggregate(Sum("actual_expenditure"))
-        return submissions["actual_expenditure__sum"]
+    def average_planned_progress(self, date):
+        # TODO - rather than using an exact date - should get the most recent submission
+        res = Planning.objects\
+            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
 
     def total_actual_expenditure(self, date):
         
         expenditure = MonthlySubmission.objects\
-            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .filter(project__in=self, date__lte=date)\
             .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
+
+        if expenditure == None:
+            return 0
+        return expenditure
+
+    def total_planned_expenditure(self, date):
+        
+        expenditure = Planning.objects\
+            .filter(project__in=self, date__lte=date)\
+            .aggregate(Sum("planned_expenses"))["planned_expenses__sum"]
 
         if expenditure == None:
             return 0
@@ -314,29 +334,31 @@ class Project(models.Model):
 
     def actual_progress(self, date):
         try:
-            s = MonthlySubmission.objects.get(date__year=date.year, date__month=date.month, project=self)
-            return s.actual_progress
-        except MonthlySubmission.DoesNotExist:
+            submissions = MonthlySubmission.objects.filter(date__lte=date, project=self).order_by("-date")
+            most_recent_submission = submissions[0]
+            return most_recent_submission.actual_progress
+        except IndexError:
             raise ProjectException("Could not find actual progress for %s/%s" % (date.year, date.month))
 
     def planned_progress(self, date):
         try:
-            s = self.plannings.get(date__year=date.year, date__month=date.month)
-            return s.planned_progress
-        except Planning.DoesNotExist:
+            plannings = Planning.objects.filter(date__lte=date, project=self).order_by("-date")
+            most_recent_planning = plannings[0]
+            return most_recent_planning.planned_progress
+        except IndexError:
             raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 
     def actual_expenditure(self, date):
         try:
             s = MonthlySubmission.objects.filter(date__lte=date, project=self).aggregate(Sum("actual_expenditure"))
-            return s["actual_expenditure__sum"]
+            return s["actual_expenditure__sum"] or 0
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
             
     def planned_expenditure(self, date):
         try:
             s = Planning.objects.filter(date__lte=date, project=self).aggregate(Sum("planned_expenses"))
-            return s["planned_expenses__sum"]
+            return s["planned_expenses__sum"] or 0
         except Planning.DoesNotExist:
             raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 

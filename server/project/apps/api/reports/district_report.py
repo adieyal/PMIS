@@ -20,37 +20,24 @@ def avg(lst):
 
 def district_client_json(district, client, date):
     financial_year = models.FinancialYearManager.financial_year(date.year, date.month)
-    infinyear = lambda dt : models.FinancialYearManager.date_in_financial_year(financial_year, dt)
 
     projects = models.Project.objects.client(client).district(district)
-    project_financials = models.ProjectFinancial.objects.filter(
-        project__programme__client=client, project__municipality__district=district
-    )
 
-    planning = models.Planning.objects.filter(
-        project__programme__client=client, project__municipality__district=district,
-        date=date
-    )
-
-    monthlysubmissions = models.MonthlySubmission.objects.filter(
-        project__programme__client=client, project__municipality__district=district,
-        date=date 
-    )
+    #print [m.actual_progress for m in models.MonthlySubmission.objects.filter(project__in=projects, date__year=date.year, date__month=date.month)]
 
     return {
         "fullname" : client.description,
         "name" : client.name,
         "num_jobs" : 999,
-        "total_budget" : float(sum([fin.total_anticipated_cost for fin in project_financials])),
+        "total_budget" : float(projects.total_budget()),
         "overall_progress" : {
-            "planned" : avg([p.planned_progress for p in planning]),
-            "actual" : avg([m.actual_progress for m in monthlysubmissions]),
+            "actual" : projects.average_actual_progress(date),
+            "planned" : projects.average_planned_progress(date),
         },
         "overall_expenditure" : {
             "perc_expenditure" : projects.percentage_actual_expenditure(date) * 100,
-            "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
-            "planned_expenditure" : sum([p.planned_expenses for p in planning]),
-
+            "actual_expenditure" : projects.total_actual_expenditure(date),
+            "planned_expenditure" : projects.total_planned_expenditure(date),
         },
         "total_projects" : projects.count(),
         # TODO - might need to check project status - i.e. projects completed in previous financial years don't count

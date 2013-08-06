@@ -6,6 +6,7 @@ import project.apps.api.serializers as serializers
 from datetime import datetime
 import project.apps.api.reports.district_report
 from project.apps.api.reports import graphhelpers
+from dateutil.relativedelta import relativedelta
 
 client = Client()
 
@@ -17,12 +18,15 @@ class DistrictTest(TestCase):
 
         self.dashboard_url = "/api/reports/district/%s/%s/%s/"
         self.year, self.month = 2013, 6
+        self.prevmonth = datetime(self.year, self.month - 1, 1)
         self.date = datetime(self.year, self.month, 1)
+        self.nextmonth = datetime(self.year, self.month + 1, 1)
 
         # Both in the same municipality and programme/client
         self.project1 = factories.ProjectFactory(current_step=models.Milestone.tendering_milestone())
         self.programme = self.project1.programme
-        self.district = self.project1.municipality.district
+        self.municipality = self.project1.municipality
+        self.district = self.municipality.district
 
         self.project2 = factories.ProjectFactory(
             programme=self.project1.programme,
@@ -141,12 +145,31 @@ class DistrictTest(TestCase):
         self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], percentage_expenditure1)
 
     def test_actual_expenditure(self):
+        models.Project.objects.all().delete()
+
+        project = factories.ProjectFactory(programme=self.programme, municipality=self.municipality)
+        factories.MonthlySubmissionFactory(project=project, date=datetime(2013, 5, 1), actual_expenditure=100)
+        factories.MonthlySubmissionFactory(project=project, date=datetime(2013, 6, 1), actual_expenditure=200)
+
+        self.reloadjs(self.municipality.district.id)
+
         self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 110)
+        self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 300)
 
     def test_planned_expenditure(self):
+        models.Project.objects.all().delete()
+
+        project = factories.ProjectFactory(programme=self.programme, municipality=self.municipality)
+        factories.PlanningFactory(project=project, date=self.prevmonth, planned_expenses=100)
+        factories.PlanningFactory(project=project, date=self.date, planned_expenses=200)
+        # Needed for irrelevant calculations
+        factories.MonthlySubmissionFactory(project=project, date=self.date, actual_expenditure=100)
+        factories.ProjectFinancialFactory(project=project)
+
+        self.reloadjs(self.municipality.district.id)
+
         self.assertTrue("planned_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 120)
+        self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 300)
 
     def test_best_performing(self):
         brilliant_project_from_another_district = factories.ProjectFactory(name="good project")
