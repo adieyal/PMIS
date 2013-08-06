@@ -34,6 +34,7 @@ class DistrictTest(TestCase):
 
         # Same programme different district - doesn't affect total
         self.project4 = factories.ProjectFactory(programme=self.project1.programme)
+        self.district2 = self.project4.municipality.district
 
         self.client1 = self.project1.programme.client
         self.client2 = self.project3.programme.client
@@ -131,9 +132,12 @@ class DistrictTest(TestCase):
         
         self.assertTrue("overall_expenditure" in self.client1js)
         self.assertTrue("perc_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], 0.60)
+        percentage_expenditure1 = models.Project.objects\
+            .client(self.client1)\
+            .district(self.district)\
+            .percentage_actual_expenditure(self.year, self.month) * 100
 
-        self.assertEqual(self.client2js["overall_expenditure"]["perc_expenditure"], 5)
+        self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], percentage_expenditure1)
 
     def test_actual_expenditure(self):
         self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])
@@ -331,6 +335,7 @@ class DistrictTest(TestCase):
         self.assertTrue("between_76_and_99" in js["clients"][2]["projects"])
         self.assertEqual(js["clients"][2]["projects"]["between_76_and_99"], 2)
 
+
 class TestGraphHelpers(TestCase):
     def test_dashboard_gauge(self):
         gauge2 = graphhelpers.dashboard_gauge(1, 1)
@@ -379,7 +384,7 @@ class GraphJson(TestCase):
         self.municipality = factories.MunicipalityFactory()
         self.district = self.municipality.district
         self.year, self.month = 2013, 6
-        self.url = reverse("api:reports_district_graphs", args=(self.district.id, self.year, self.month))
+        self.url = reverse("api:reports:district_graphs", args=(self.district.id, self.year, self.month))
 
         for i in range(5):
             project = factories.ProjectFactory(municipality=self.municipality)

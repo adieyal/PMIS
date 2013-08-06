@@ -330,15 +330,33 @@ class ProjectTest(TestCase):
         total = sum([p.project_financial.total_anticipated_cost for p in projects])
         
         self.assertEqual(projects.total_budget(), total)
-        
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().total_budget(), 0)
+
     def test_actual_expenditure(self):
         projects = models.Project.objects.district(self.munic1.district)
         total = sum([p.actual_expenditure(self.year, self.month) for p in projects])
         
         self.assertEqual(projects.total_actual_expenditure(self.year, self.month), total)
 
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)
+        
+
     def test_percentage_actual_expenditure(self):
         projects = models.Project.objects.district(self.munic1.district)
         budget = projects.total_budget()
         actual_expenditure = projects.total_actual_expenditure(self.year, self.month)
         self.assertEqual(projects.percentage_actual_expenditure(self.year, self.month), float(actual_expenditure) / float(budget))
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        self.assertEqual(models.Project.objects.all().percentage_actual_expenditure(self.year, self.month), 0)
+
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
+        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.year, self.month), 0)

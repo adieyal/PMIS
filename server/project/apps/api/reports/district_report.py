@@ -47,9 +47,7 @@ def district_client_json(district, client, year, month):
             "actual" : avg([m.actual_progress for m in monthlysubmissions]),
         },
         "overall_expenditure" : {
-            "perc_expenditure" : avg([
-                fin.percentage_expenditure(year, month) for fin in project_financials
-            ]),
+            "perc_expenditure" : projects.percentage_actual_expenditure(year, month) * 100,
             "actual_expenditure" : sum([m.actual_expenditure for m in monthlysubmissions]),
             "planned_expenditure" : sum([p.planned_expenses for p in planning]),
 
@@ -136,6 +134,8 @@ def dashboard_graphs(request, district_id, year, month):
         else:
             #import pdb; pdb.set_trace()
             val1 = val1 / budget; val2 = val2 / budget
+            if client["name"] == "DoE":
+                print val1, val2, client["total_budget"]
             js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
 
     return HttpResponse(json.dumps(js, indent=4), mimetype="application/json")

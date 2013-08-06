@@ -225,17 +225,32 @@ class ProjectManagerQuerySet(QuerySet):
         )
 
     def total_budget(self):
-        return self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+        
+        val =  self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+        if val == None:
+            return 0
+        return val
         
     def total_actual_expenditure(self, year, month):
         submissions = MonthlySubmission.objects.filter(project__in=self, year=year, month=month).aggregate(Sum("actual_expenditure"))
         return submissions["actual_expenditure__sum"]
 
     def total_actual_expenditure(self, year, month):
-        submissions = MonthlySubmission.objects.filter(project__in=self, year=year, month=month).aggregate(Sum("actual_expenditure"))
-        return submissions["actual_expenditure__sum"]
+        
+        expenditure = MonthlySubmission.objects\
+            .filter(project__in=self, year=year, month=month)\
+            .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
+
+        if expenditure == None:
+            return 0
+        return expenditure
 
     def percentage_actual_expenditure(self, year, month):
+        actual_expenditure = self.total_actual_expenditure(year, month)
+        budget = self.total_budget()
+        if budget == 0:
+            return 0
+
         return float(self.total_actual_expenditure(year, month)) / float(self.total_budget())
 
     def district(self, district):
