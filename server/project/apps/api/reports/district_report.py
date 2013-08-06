@@ -1,8 +1,13 @@
 from django.http import HttpResponse, Http404
+from django.core.cache import cache
+from collections import OrderedDict
+from decimal import Decimal
+from datetime import datetime
 from django.shortcuts import get_object_or_404
 import json
 import project.apps.projects.models as models
 import project.apps.api.serializers as serializers
+from project.apps.api.reports import graphhelpers
 
 """
 JSON views to product reports
@@ -32,7 +37,6 @@ def district_client_json(district, client, year, month):
         year=year, month=month
     )
 
-    #print "Districts: %s" % [p.district for p in projects]
     return {
         "fullname" : client.description,
         "name" : client.name,
@@ -66,6 +70,10 @@ def district_client_json(district, client, year, month):
 
 
 def district_report_json(district_id, year, month):
+    key = 'district_%s_%s_%s' % (district_id, year, month)
+    js = cache.get(key)
+    #if js: return js
+        
     year = int(year)
     month = int(month)
 
@@ -73,7 +81,11 @@ def district_report_json(district_id, year, month):
     best_projects = models.Project.objects.district(district).best_performing(year, month, count=3)
     worst_projects = models.Project.objects.district(district).worst_performing(year, month, count=3)
     js = {
-        "name" : district.name,
+        "date" : datetime(year, month, 1),
+        "district" : {
+            "name" : district.name,
+            "id" : district.id,
+        },
         "clients" : [
             district_client_json(district, c, year, month) for c in models.Client.objects.all()
         ],
@@ -88,9 +100,44 @@ def district_report_json(district_id, year, month):
             ],
         }
     }
+    cache.set(key, js, 30)
     return js
+
+def handler(obj):
+    if hasattr(obj, 'isoformat'):
+        return obj.isoformat()
+    elif isinstance(obj, Decimal):
+        return float(obj)
+    else:
+        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
 def district_report(request, district_id, year, month):
     js = district_report_json(district_id, year, month)
-    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4), mimetype="application/json")
+    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
 
+
+def dashboard_graphs(request, district_id, year, month):
+    data = district_report_json(district_id, year, month)
+
+    js = OrderedDict()
+    for i, client in enumerate(data["clients"]):
+        val1 = client["overall_progress"]["planned"] / 100.
+        val2 = client["overall_progress"]["actual"] / 100.
+
+        js["gauge%d" % (i + 1)] = graphhelpers.dashboard_gauge(val1, val2)
+
+        
+        val1 = client["overall_expenditure"]["planned_expenditure"]
+        val2 = client["overall_expenditure"]["actual_expenditure"]
+        budget = client["total_budget"]
+        if client["total_budget"] == 0:
+            #import pdb; pdb.set_trace()
+            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(0, 0, client["name"])
+        else:
+            #import pdb; pdb.set_trace()
+            val1 = val1 / budget; val2 = val2 / budget
+            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
+
+    return HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
+
+    
