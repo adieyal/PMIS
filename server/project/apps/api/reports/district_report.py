@@ -72,7 +72,7 @@ def district_client_json(district, client, year, month):
 def district_report_json(district_id, year, month):
     key = 'district_%s_%s_%s' % (district_id, year, month)
     js = cache.get(key)
-    if js: return js
+    #if js: return js
         
     year = int(year)
     month = int(month)

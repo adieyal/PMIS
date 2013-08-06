@@ -21,7 +21,7 @@
                                 <div id="gauge1" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge1"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.0.overall_expenditure.actual_expenditure | floatformat:"0" | intcomma }}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.0.overall_expenditure.perc_expenditure | floatformat:"0" | intcomma }}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span> R {{ clients.0.overall_expenditure.actual_expenditure |floatformat:"0"| intcomma }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider1"> </div>
                             </div><!-- .implementation-bg -->
@@ -41,7 +41,7 @@
                                 <div id="gauge2" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge2"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.1.overall_expenditure.actual_expenditure| floatformat:"0" | intcomma }}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.1.overall_expenditure.perc_expenditure| floatformat:"0" | intcomma }}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>R {{ clients.1.overall_expenditure.actual_expenditure | floatformat:"0"| intcomma }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider2"> </div>
                             </div><!-- .implementation-bg -->
@@ -61,7 +61,7 @@
                                 <div id="gauge3" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge3"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.2.overall_expenditure.actual_expenditure| floatformat:"0" | intcomma }}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.2.overall_expenditure.perc_expenditure| floatformat:"0" | intcomma }}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>R {{ clients.2.overall_expenditure.actual_expenditure| floatformat:"0" | intcomma }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider3"> </div>
                             </div><!-- .implementation-bg -->
@@ -81,7 +81,7 @@
                                 <div id="gauge4" class="progress-gauge" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge4"></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.3.overall_expenditure.actual_expenditure| floatformat:"0" | intcomma }}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.3.overall_expenditure.perc_expenditure| floatformat:"0" | intcomma }}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>R {{ clients.3.overall_expenditure.actual_expenditure| intcomma }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider4"> </div>
                             </div><!-- .implementation-bg -->
@@ -101,7 +101,7 @@
                                 <div id="gauge5" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge5" ></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.4.overall_expenditure.actual_expenditure | floatformat:"0" | intcomma }}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.4.overall_expenditure.perc_expenditure | floatformat:"0" | intcomma }}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>R {{ clients.4.overall_expenditure.actual_expenditure | intcomma }}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider5"> </div>
                             </div><!-- .implementation-bg -->
@@ -121,7 +121,7 @@
                                 <div id="gauge6" class="progress-gauge" data-widget="gauge" src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#gauge6" ></div>
                             </div><!-- .project-jobs-bg -->
                             <div class="implementation-bg cf">
-                                <div class="implementation-text">Planned Expenditure: <span>R {{ clients.5.overall_expenditure.actual_expenditure | floatformat:"0" | intcomma}}</span></div><!-- .implementation-text -->
+                                <div class="implementation-text">Percentage Spent: <span>{{ clients.5.overall_expenditure.actual_expenditure | floatformat:"0" | intcomma}}%</span></div><!-- .implementation-text -->
                                 <div class="actual-text">Actual Expenditure: <span>R {{ clients.5.overall_expenditure.actual_expenditure|floatformat |intcomma}}</span></div><!-- .actual-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#slider6"> </div>
                             </div><!-- .implementation-bg -->
@@ -150,7 +150,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs"> {{ projects.best_performing.0.jobs|intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.best_performing.0.expenditure.actual| floatformat:"0" | intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.best_performing.0.expenditure.actual| floatformat:"0" | intcomma }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
@@ -171,7 +171,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.1.jobs| intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.best_performing.1.expenditure.actual| floatformat:"0" |intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.best_performing.1.expenditure.actual | floatformat:"0" | intcomma}}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
@@ -192,7 +192,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.2.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.best_performing.2.expenditure.actual| floatformat:"0" |intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.best_performing.2.expenditure.actual |floatformat:"0" | intcomma }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
@@ -217,7 +217,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.0.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.worst_performing.0.expenditure.actual| floatformat:"0" | intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.worst_performing.0.expenditure.actual|floatformat:"0"|intcomma }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
@@ -238,7 +238,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.worst_performing.1.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.worst_performing.1.expenditure.actual| floatformat:"0" | intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.worst_performing.1.expenditure.actual | floatformat:"0" | intcomma }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
@@ -259,7 +259,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.worst_performing.2.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">Planned Expenditure: <span class="expenditure">
+                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
 				R {{ projects.worst_performing.2.expenditure.actual | floatformat:"0" | intcomma }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">R {{ projects.worst_performing.2.expenditure.actual | floatformat:"0" | intcomma }}</span></div><!-- .actual-price -->
                                 <div class="expenditure-slider" data-widget="slider" data-aspect="1.3"></div>
