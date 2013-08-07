@@ -105,29 +105,30 @@ def district_report(request, district_id, year, month):
 
 
 def dashboard_graphs(request, district_id, year, month):
+
+    def create_gauges(client):
+        val1 = client["overall_progress"]["planned"] / 100.
+        val2 = client["overall_progress"]["actual"] / 100.
+
+        return graphhelpers.dashboard_gauge(val1, val2)
+
+    def create_client_sliders(client):
+        val1 = client["overall_expenditure"]["planned_expenditure"]
+        val2 = client["overall_expenditure"]["actual_expenditure"]
+        budget = client["total_budget"]
+        if client["total_budget"] == 0:
+            return graphhelpers.dashboard_slider(0, 0, client["name"])
+        else:
+            val1 = val1 / budget; val2 = val2 / budget
+            return graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
+
     year, month = int(year), int(month)
     data = district_report_json(district_id, datetime(year, month, 1))
 
     js = OrderedDict()
     for i, client in enumerate(data["clients"]):
-        val1 = client["overall_progress"]["planned"] / 100.
-        val2 = client["overall_progress"]["actual"] / 100.
-
-        js["gauge%d" % (i + 1)] = graphhelpers.dashboard_gauge(val1, val2)
-
-        
-        val1 = client["overall_expenditure"]["planned_expenditure"]
-        val2 = client["overall_expenditure"]["actual_expenditure"]
-        budget = client["total_budget"]
-        if client["total_budget"] == 0:
-            #import pdb; pdb.set_trace()
-            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(0, 0, client["name"])
-        else:
-            #import pdb; pdb.set_trace()
-            val1 = val1 / budget; val2 = val2 / budget
-            if client["name"] == "DoE":
-                print val1, val2, client["total_budget"]
-            js["slider%d" % (i + 1)] = graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
+        js["gauge%d" % (i + 1)] = create_gauges(client)
+        js["slider%d" % (i + 1)] = create_client_sliders(client)
 
     return HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
 
