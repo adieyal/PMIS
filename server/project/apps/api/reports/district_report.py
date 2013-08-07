@@ -23,8 +23,6 @@ def district_client_json(district, client, date):
 
     projects = models.Project.objects.client(client).district(district)
 
-    #print [m.actual_progress for m in models.MonthlySubmission.objects.filter(project__in=projects, date__year=date.year, date__month=date.month)]
-
     return {
         "fullname" : client.description,
         "name" : client.name,
@@ -67,8 +65,8 @@ def district_report_json(district_id, date):
     date = datetime(year, month, 1)
 
     district = get_object_or_404(models.District, pk=district_id)
-    best_projects = models.Project.objects.district(district).best_performing(date, count=3)
-    worst_projects = models.Project.objects.district(district).worst_performing(date, count=3)
+    best_projects = models.Project.objects.district(district).best_performing(date, count=7)
+    worst_projects = models.Project.objects.district(district).worst_performing(date, count=7)
     js = {
         "date" : date,
         "district" : {
