@@ -70,8 +70,8 @@ def condensed_project_serializer(project, date):
         spending_difference = float(actual_spend - planned_spend)
         if spending_difference == 0:
             overunder = "On budget"
-            amount = ""
-            perc_overunder = ""
+            amount = 0
+            perc_overunder = 0
         elif planned_spend == 0:
             overunder = "Over"
             amount = abs(spending_difference)
@@ -79,7 +79,7 @@ def condensed_project_serializer(project, date):
         elif spending_difference < 0:
             overunder = "Under"
             amount = abs(spending_difference)
-            perc_overunder = (1 - abs(spending_difference) / planned_spend) * 100
+            perc_overunder = (abs(spending_difference) / planned_spend) * 100
         else:
             overunder = "Over"
             amount = abs(spending_difference)
@@ -88,7 +88,7 @@ def condensed_project_serializer(project, date):
         return {
             "overunder" : overunder,
             "amount" : amount,
-            "percentage_overunder" : perc_overunder,
+            "percentage_overunder" : perc_overunder
         }
 
     return {

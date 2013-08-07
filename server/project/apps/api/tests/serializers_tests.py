@@ -35,6 +35,50 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.date))
         self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.date))
 
+    def test_overunder_budget(self):
+        def create_overunder(actual, planned):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=actual, date=self.date)
+            factories.PlanningFactory(project=project, planned_expenses=planned, date=self.date)
+            factories.ProjectFinancialFactory(project=project)
+            js = serializers.condensed_project_serializer(project, self.date)
+            overunder = js["expenditure"]["overunder"]
+            return overunder
+
+        #js = serializers.condensed_project_serializer(self.project, self.date)
+        #
+        #self.assertIn("overunder", js["expenditure"])
+        #overunder = js["expenditure"]["overunder"]
+        #self.assertIn("overunder", overunder)
+        #self.assertIn("amount", overunder)
+        #self.assertIn("percentage_overunder", overunder)
+
+        overunder = create_overunder(0, 0)
+        self.assertEqual(overunder["overunder"], "On budget")
+        self.assertEqual(overunder["amount"], 0)
+        self.assertEqual(overunder["percentage_overunder"], 0)
+
+        overunder = create_overunder(100, 0)
+        self.assertEqual(overunder["overunder"], "Over")
+        self.assertEqual(overunder["amount"], 100)
+        self.assertEqual(overunder["percentage_overunder"], "")
+
+        overunder = create_overunder(0, 100)
+        self.assertEqual(overunder["overunder"], "Under")
+        self.assertEqual(overunder["amount"], 100)
+        self.assertEqual(overunder["percentage_overunder"], 100)
+
+        overunder = create_overunder(25, 100)
+        self.assertEqual(overunder["overunder"], "Under")
+        self.assertEqual(overunder["amount"], 75)
+        self.assertEqual(overunder["percentage_overunder"], 75)
+
+        overunder = create_overunder(100, 25)
+        self.assertEqual(overunder["overunder"], "Over")
+        self.assertEqual(overunder["amount"], 75)
+        self.assertEqual(overunder["percentage_overunder"], 300)
+        
+
 class ExpandedProjectSerializerTest(TestCase):
     def setUp(self):
         self.year, self.month = 2013, 6
