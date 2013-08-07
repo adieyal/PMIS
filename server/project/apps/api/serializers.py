@@ -95,9 +95,20 @@ def expanded_project_serializer(project, date):
         "final_accounts" : project.final_accounts_milestone.completion_date
     }
 
+    class dummy_submission(object):
+        comment = ""
+        remedial_action = ""
+
     pyear, pmonth = models.CalendarFunctions.previous_month(date.year, date.month) 
-    last_month_submission = project.monthly_submissions.get(date=datetime(pyear, pmonth, 1))
-    current_month_submission = project.monthly_submissions.get(date=date)
+    try:
+        last_month_submission = project.monthly_submissions.get(date=datetime(pyear, pmonth, 1))
+    except models.MonthlySubmission.DoesNotExist:
+        last_month_submission = dummy_submission
+
+    try:
+        current_month_submission = project.monthly_submissions.get(date=date)
+    except models.MonthlySubmission.DoesNotExist:
+        current_month_submission = dummy_submission
 
     js["last_month"] = {
         "comment" : last_month_submission.comment,
