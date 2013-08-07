@@ -9,5 +9,5 @@ createdatabase:
 
 loaddata:
 	python scripts/process_idp.py ../data/June.xls 2013 6 > /tmp/projects.json
-	python manage.py load_projects /tmp/projects.json
+	python manage.py load_projects /tmp/projects.json --traceback
 

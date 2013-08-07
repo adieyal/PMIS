@@ -1,0 +1,25 @@
+require.config({
+    baseUrl: "/static/js/",
+    paths: {
+        jquery : "lib/jquery",
+        text : "lib/text",
+        d3 : "lib/d3",
+    },
+    shim: {
+        "lib/jquery": {
+            exports: '$'
+        },
+        "lib/d3": {
+            exports: 'd3'
+        },
+        "lib/jquery.number": ['jquery'],
+    },
+});
+
+require(['widgets/js/widgets'], function($, district) {
+    /*
+    All we need to get going is widgets.js
+    Once it is loaded, it scans through the page picking
+    up data-widget attributes and drawing the appropriate widgets
+    */
+})

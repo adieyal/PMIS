@@ -4,7 +4,7 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import User
 from django.contrib.webdesign import lorem_ipsum
 import factory
-from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork, Planning, MONTHS, Milestone, ProjectMilestone, CommentType, MonthlySubmission, ProjectStatus, VarianceOrder
+from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork, Planning, Milestone, ProjectMilestone, CommentType, MonthlySubmission, ProjectStatus, VarianceOrder
 from datetime import date
 
 
@@ -123,6 +123,7 @@ class BudgetFactory(factory.DjangoModelFactory):
     year = random.choice(YEARS)
     allocated_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
     project_financial = factory.SubFactory(ProjectFinancial)
+    date = factory.Sequence(lambda n:(datetime.now(), int))
 
 
 class ScopeCodeFactory(factory.DjangoModelFactory):
@@ -149,8 +150,6 @@ class ScopeOfWorkFactory(factory.DjangoModelFactory):
 
 class PlanningFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Planning
-    month = random.choice(MONTHS)
-    year = random.choice(YEARS)
     planned_expenses = random.randint(0, 100)
     planned_progress = random.randint(0, 100)
     project = factory.SubFactory(ProjectFactory)
@@ -178,8 +177,6 @@ class CommentTypeFactory(factory.DjangoModelFactory):
 
 class MonthlySubmissionFactory(factory.DjangoModelFactory):
     FACTORY_FOR = MonthlySubmission
-    month = random.choice(MONTHS)
-    year = random.choice(YEARS)
     project = factory.SubFactory(ProjectFactory)
     actual_expenditure = random.randint(0, 100)
     actual_progress = random.randint(0, 100)

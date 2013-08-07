@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from django.db.models import Q
 from rest_framework import serializers
 from rest_framework.relations import RelatedField, PrimaryKeyRelatedField
@@ -61,7 +61,7 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
         model = models.ScopeCode
         fields = ('id', 'name', )
 
-def condensed_project_serializer(project, year, month):
+def condensed_project_serializer(project, date):
     return {
         "name" : project.name,
         "client" : project.programme.client.name,
@@ -75,19 +75,19 @@ def condensed_project_serializer(project, year, month):
         },
         "budget" : project.project_financial.total_anticipated_cost,
         "progress" : {
-            "actual" : project.actual_progress(year, month),
-            "planned" : project.planned_progress(year, month),
+            "actual" : project.actual_progress(date),
+            "planned" : project.planned_progress(date),
         },
         "jobs" : project.jobs,
         "expenditure" : {
-            "ratio" : project.project_financial.percentage_expenditure(year, month),
-            "actual" : project.actual_expenditure(year, month),
-            "planned" : project.planned_expenditure(year, month),
+            "perc_spent" : project.project_financial.percentage_expenditure(date) * 100,
+            "actual" : project.actual_expenditure(date),
+            "planned" : project.planned_expenditure(date),
         }
     }
 
-def expanded_project_serializer(project, year, month):
-    js = condensed_project_serializer(project, year, month)
+def expanded_project_serializer(project, date):
+    js = condensed_project_serializer(project, date)
     js["milestones"] = {
         "start_date" : project.start_milestone.completion_date,
         "practical_completion" : project.practical_completion_milestone.completion_date,
@@ -95,9 +95,9 @@ def expanded_project_serializer(project, year, month):
         "final_accounts" : project.final_accounts_milestone.completion_date
     }
 
-    pyear, pmonth = models.CalendarFunctions.previous_month(year, month) 
-    last_month_submission = project.monthly_submissions.get(year=pyear, month=pmonth)
-    current_month_submission = project.monthly_submissions.get(year=year, month=month)
+    pyear, pmonth = models.CalendarFunctions.previous_month(date.year, date.month) 
+    last_month_submission = project.monthly_submissions.get(date=datetime(pyear, pmonth, 1))
+    current_month_submission = project.monthly_submissions.get(date=date)
 
     js["last_month"] = {
         "comment" : last_month_submission.comment,
@@ -262,13 +262,13 @@ def progress_serializer(project, year):
         plannings = project.plannings.in_financial_year(year)
         for p in plannings:
             try:
-                monthly_submission = project.monthly_submissions.get(month=p.month, year=p.year)
+                monthly_submission = project.monthly_submissions.get(month=p.date.month, year=p.date.year)
                 actual_progress = getattr(monthly_submission, 'actual_progress', '')
             except:
                 actual_progress = ''
 
             data += [{
-                'month': p.get_month_display(),
+                'month': p.date.month,
                 'planned': getattr(p, 'planned_progress', ''),
                 'actual': actual_progress
             }]
@@ -276,12 +276,15 @@ def progress_serializer(project, year):
         plannings = project.plannings.all()
         for p in plannings:
             try:
-                monthly_submission = project.monthly_submissions.get(month=p.month, year=p.year)
+                monthly_submission = project.monthly_submissions.get(month=p.date.month, year=p.date.year)
                 actual_progress = getattr(monthly_submission, 'actual_progress', '')
             except:
                 actual_progress = ''
 
-            data += [{'year': p.year, 'month': p.get_month_display(), 'planned': getattr(p, 'planned_progress', ''),
-                      'actual': actual_progress}]
+            data += [{
+                'year': p.date.year, 'month': p.date.month,
+                'planned': getattr(p, 'planned_progress', ''),
+                 'actual': actual_progress
+            }]
 
     return data

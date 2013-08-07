@@ -6,6 +6,7 @@ import project.apps.api.serializers as serializers
 from datetime import datetime
 import project.apps.api.reports.district_report
 from project.apps.api.reports import graphhelpers
+from dateutil.relativedelta import relativedelta
 
 client = Client()
 
@@ -17,11 +18,15 @@ class DistrictTest(TestCase):
 
         self.dashboard_url = "/api/reports/district/%s/%s/%s/"
         self.year, self.month = 2013, 6
+        self.prevmonth = datetime(self.year, self.month - 1, 1)
+        self.date = datetime(self.year, self.month, 1)
+        self.nextmonth = datetime(self.year, self.month + 1, 1)
 
         # Both in the same municipality and programme/client
         self.project1 = factories.ProjectFactory(current_step=models.Milestone.tendering_milestone())
         self.programme = self.project1.programme
-        self.district = self.project1.municipality.district
+        self.municipality = self.project1.municipality
+        self.district = self.municipality.district
 
         self.project2 = factories.ProjectFactory(
             programme=self.project1.programme,
@@ -44,21 +49,21 @@ class DistrictTest(TestCase):
         factories.ProjectFinancialFactory(project=self.project3, total_anticipated_cost=60)
         factories.ProjectFinancialFactory(project=self.project4, total_anticipated_cost=200)
 
-        factories.PlanningFactory(project=self.project1, year=self.year, month=self.month, planned_progress=200, planned_expenses="50")
-        factories.PlanningFactory(project=self.project2, year=self.year, month=self.month, planned_progress=50, planned_expenses="70")
-        factories.PlanningFactory(project=self.project3, year=self.year, month=self.month, planned_progress=25)
+        factories.PlanningFactory(project=self.project1, date=self.date, planned_progress=200, planned_expenses="50")
+        factories.PlanningFactory(project=self.project2, date=self.date, planned_progress=50, planned_expenses="70")
+        factories.PlanningFactory(project=self.project3, date=self.date, planned_progress=25)
 
         factories.MonthlySubmissionFactory(
-            project=self.project1, year=self.year, month=self.month, actual_expenditure=100, actual_progress=80
+            project=self.project1, date=self.date, actual_expenditure=100, actual_progress=80
         ) 
         factories.MonthlySubmissionFactory(
-            project=self.project2, year=self.year, month=self.month, actual_expenditure=10, actual_progress=40
+            project=self.project2, date=self.date, actual_expenditure=10, actual_progress=40
         ) 
         factories.MonthlySubmissionFactory(
-            project=self.project3, year=self.year, month=self.month, actual_expenditure=300, actual_progress=100
+            project=self.project3, date=self.date, actual_expenditure=300, actual_progress=100
         ) 
         factories.MonthlySubmissionFactory(
-            project=self.project4, year=self.year, month=self.month, actual_expenditure=400, actual_progress=20
+            project=self.project4, date=self.date, actual_expenditure=400, actual_progress=20
         ) 
 
         self.dt = datetime(year=2013, month=6, day=1) 
@@ -135,24 +140,43 @@ class DistrictTest(TestCase):
         percentage_expenditure1 = models.Project.objects\
             .client(self.client1)\
             .district(self.district)\
-            .percentage_actual_expenditure(self.year, self.month) * 100
+            .percentage_actual_expenditure(self.date) * 100
 
         self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], percentage_expenditure1)
 
     def test_actual_expenditure(self):
+        models.Project.objects.all().delete()
+
+        project = factories.ProjectFactory(programme=self.programme, municipality=self.municipality)
+        factories.MonthlySubmissionFactory(project=project, date=datetime(2013, 5, 1), actual_expenditure=100)
+        factories.MonthlySubmissionFactory(project=project, date=datetime(2013, 6, 1), actual_expenditure=200)
+
+        self.reloadjs(self.municipality.district.id)
+
         self.assertTrue("actual_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 110)
+        self.assertEqual(self.client1js["overall_expenditure"]["actual_expenditure"], 300)
 
     def test_planned_expenditure(self):
+        models.Project.objects.all().delete()
+
+        project = factories.ProjectFactory(programme=self.programme, municipality=self.municipality)
+        factories.PlanningFactory(project=project, date=self.prevmonth, planned_expenses=100)
+        factories.PlanningFactory(project=project, date=self.date, planned_expenses=200)
+        # Needed for irrelevant calculations
+        factories.MonthlySubmissionFactory(project=project, date=self.date, actual_expenditure=100)
+        factories.ProjectFinancialFactory(project=project)
+
+        self.reloadjs(self.municipality.district.id)
+
         self.assertTrue("planned_expenditure" in self.client1js["overall_expenditure"])
-        self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 120)
+        self.assertEqual(self.client1js["overall_expenditure"]["planned_expenditure"], 300)
 
     def test_best_performing(self):
         brilliant_project_from_another_district = factories.ProjectFactory(name="good project")
         factories.ProjectFinancialFactory(project=brilliant_project_from_another_district, total_anticipated_cost=100)
-        factories.PlanningFactory(project=brilliant_project_from_another_district, year=self.year, month=self.month, planned_progress=1)
+        factories.PlanningFactory(project=brilliant_project_from_another_district, date=self.date, planned_progress=1)
         factories.MonthlySubmissionFactory(
-            project=brilliant_project_from_another_district, year=self.year, month=self.month, actual_progress=100
+            project=brilliant_project_from_another_district, date=self.date, actual_progress=100
         ) 
 
         self.reloadjs(self.project1.municipality.district.id)
@@ -173,9 +197,9 @@ class DistrictTest(TestCase):
     def test_worst_performing(self):
         terrible_project_from_another_district = factories.ProjectFactory(name="bad project")
         factories.ProjectFinancialFactory(project=terrible_project_from_another_district, total_anticipated_cost=100)
-        factories.PlanningFactory(project=terrible_project_from_another_district, year=self.year, month=self.month, planned_progress=100)
+        factories.PlanningFactory(project=terrible_project_from_another_district, date=self.date, planned_progress=100)
         factories.MonthlySubmissionFactory(
-            project=terrible_project_from_another_district, year=self.year, month=self.month, actual_progress=0
+            project=terrible_project_from_another_district, date=self.date, actual_progress=0
         ) 
 
         self.reloadjs(self.project1.municipality.district.id)
@@ -319,8 +343,8 @@ class DistrictTest(TestCase):
         
         for i in range(10):
             project = factories.ProjectFactory(programme=programme, municipality=municipality)
-            planning = factories.PlanningFactory(project=project, planned_progress=10*i, year=year, month=month)
-            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, year=year, month=month)
+            planning = factories.PlanningFactory(project=project, planned_progress=10*i, date=self.date)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=10*i, date=self.date)
             financial = factories.ProjectFinancialFactory(project=project)
 
         district = project.municipality.district
@@ -385,11 +409,12 @@ class GraphJson(TestCase):
         self.district = self.municipality.district
         self.year, self.month = 2013, 6
         self.url = reverse("api:reports:district_graphs", args=(self.district.id, self.year, self.month))
+        self.date = datetime(self.year, self.month, 1)
 
         for i in range(5):
             project = factories.ProjectFactory(municipality=self.municipality)
-            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=i*10, actual_expenditure=i*10, year=self.year, month=self.month)
-            planning = factories.PlanningFactory(project=project, planned_progress=i*20, planned_expenses=i*20, year=self.year, month=self.month)
+            submission = factories.MonthlySubmissionFactory(project=project, actual_progress=i*10, actual_expenditure=i*10, date=self.date)
+            planning = factories.PlanningFactory(project=project, planned_progress=i*20, planned_expenses=i*20, date=self.date)
             factories.ProjectFinancialFactory(project=project, total_anticipated_cost=10)
 
         self.response = client.get(self.url)

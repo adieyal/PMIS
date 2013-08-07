@@ -147,10 +147,10 @@ class Command(BaseCommand):
     def create_planning(self, project, year, month, planned_expenses, planned_progress):
             try:
                 planning = models.Planning.objects.get(
-                    project=project, month=month, year=year
+                    project=project, date=datetime(year, month, 1)
                 )
             except models.Planning.DoesNotExist:
-                planning = models.Planning(project=project, month=month, year=year)
+                planning = models.Planning(project=project, date=datetime(year, month, 1))
 
             planning.planned_expenses = planned_expenses
             planning.planned_progress = planned_progress
@@ -160,10 +160,10 @@ class Command(BaseCommand):
     def create_monthly_submission(self, project, year, month, actual_expenses, actual_progress, comment, comment_type, remedial_action):
             try:
                 submission = models.MonthlySubmission.objects.get(
-                    project=project, month=month, year=year
+                    project=project, date=datetime(year, month, 1)
                 )
             except models.MonthlySubmission.DoesNotExist:
-                submission = models.MonthlySubmission(project=project, month=month, year=year)
+                submission = models.MonthlySubmission(project=project, date=datetime(year, month, 1))
 
             submission.actual_expenditure=actual_expenses
             submission.actual_progress=actual_progress

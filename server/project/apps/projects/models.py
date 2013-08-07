@@ -7,23 +7,8 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
-from django.db.models import Sum
+from django.db.models import Sum, Avg
 
-
-MONTHS = (
-    ('1', 'January'),
-    ('2', 'February'),
-    ('3', 'March'),
-    ('4', 'April'),
-    ('5', 'May'),
-    ('6', 'June'),
-    ('7', 'July'),
-    ('8', 'August'),
-    ('9', 'September'),
-    ('10', 'October'),
-    ('11', 'November'),
-    ('12', 'December'),
-)
 
 financial_year = range(4, 13) + range(1,4)
 
@@ -69,15 +54,21 @@ class CalendarFunctions(object):
 
 
 class FinancialYearQuerySet(QuerySet):
-    previous_months = ["4", "5", "6", "7", "8", "9", "10", "11", "12"]
-    current_months = ["1", "2", "3"]
+    previous_months = [4, 5, 6, 7, 8, 9, 10, 11, 12]
+    current_months = [1, 2, 3]
+
+    def month_in(self, months, field='date'):
+        q = Q()
+        for m in months:
+           q |= Q(**{field + '__month': m})
+        return q
 
     def in_financial_year(self, year):
         year = int(year)
         previous_year = year - 1
         return self.filter(
-            Q(year=previous_year, month__in=FinancialYearQuerySet.previous_months) 
-            | Q(year=year, month__in=FinancialYearQuerySet.current_months)
+            (Q(date__year=previous_year) & self.month_in(FinancialYearQuerySet.previous_months)) |\
+            (Q(date__year=year) & self.month_in(FinancialYearQuerySet.current_months))
         )
 
 class FinancialYearManager(models.Manager):
@@ -100,12 +91,12 @@ class FinancialYearManager(models.Manager):
 
     @classmethod
     def financial_year(cls, year, month):
-        return year if str(month) in FinancialYearQuerySet.current_months else year + 1
+        return year if month in FinancialYearQuerySet.current_months else year + 1
 
     @classmethod
     def date_in_financial_year(cls, year, dt):
-        return (dt.year == year and str(dt.month) in FinancialYearManager.current_months) \
-            or (dt.year + 1 == year and str(dt.month) in FinancialYearManager.previous_months)
+        return (dt.year == year and dt.month in FinancialYearManager.current_months) \
+            or (dt.year + 1 == year and dt.month in FinancialYearManager.previous_months)
 
     @classmethod
     def yearmonth_in_financial_year(cls, year, year2, month2):
@@ -230,28 +221,48 @@ class ProjectManagerQuerySet(QuerySet):
         if val == None:
             return 0
         return val
-        
-    def total_actual_expenditure(self, year, month):
-        submissions = MonthlySubmission.objects.filter(project__in=self, year=year, month=month).aggregate(Sum("actual_expenditure"))
-        return submissions["actual_expenditure__sum"]
 
-    def total_actual_expenditure(self, year, month):
+    def average_actual_progress(self, date):
+        # TODO - rather than using an exact date - should get the most recent submission
+        res = MonthlySubmission.objects\
+            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .aggregate(Avg("actual_progress"))
+        return res["actual_progress__avg"] or 0
+        
+    def average_planned_progress(self, date):
+        # TODO - rather than using an exact date - should get the most recent submission
+        res = Planning.objects\
+            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
+
+    def total_actual_expenditure(self, date):
         
         expenditure = MonthlySubmission.objects\
-            .filter(project__in=self, year=year, month=month)\
+            .filter(project__in=self, date__lte=date)\
             .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
 
         if expenditure == None:
             return 0
         return expenditure
 
-    def percentage_actual_expenditure(self, year, month):
-        actual_expenditure = self.total_actual_expenditure(year, month)
+    def total_planned_expenditure(self, date):
+        
+        expenditure = Planning.objects\
+            .filter(project__in=self, date__lte=date)\
+            .aggregate(Sum("planned_expenses"))["planned_expenses__sum"]
+
+        if expenditure == None:
+            return 0
+        return expenditure
+
+    def percentage_actual_expenditure(self, date):
+        actual_expenditure = self.total_actual_expenditure(date)
         budget = self.total_budget()
         if budget == 0:
             return 0
 
-        return float(self.total_actual_expenditure(year, month)) / float(self.total_budget())
+        return float(self.total_actual_expenditure(date)) / float(self.total_budget())
 
     def district(self, district):
         if type(district) == int:
@@ -265,18 +276,18 @@ class ProjectManagerQuerySet(QuerySet):
         else:
             return self.filter(programme__id=programme)
 
-    def _sort_by_performance(self, year, month, reverse):
+    def _sort_by_performance(self, date, reverse):
         projects_with_plannings_for_date = self.filter(
-            plannings__year__exact=year, plannings__month__exact=month
+            plannings__date__year=date.year, plannings__date__month=date.month
         )
-        performance = lambda x : x.performance(year, month)
+        performance = lambda x : x.performance(date)
         return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
 
-    def best_performing(self, year, month, count=5):
-        return self._sort_by_performance(year, month, True)[0:count]
+    def best_performing(self, date, count=5):
+        return self._sort_by_performance(date, True)[0:count]
 
-    def worst_performing(self, year, month, count=5):
-        return self._sort_by_performance(year, month, False)[0:count]
+    def worst_performing(self, date, count=5):
+        return self._sort_by_performance(date, False)[0:count]
 
     def completed_by_fye(self, year):
         # TODO gross method but I wasn't sure how to not violate DRY
@@ -321,33 +332,35 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
-    def actual_progress(self, year, month):
+    def actual_progress(self, date):
         try:
-            s = MonthlySubmission.objects.get(year=year, month=month, project=self)
-            return s.actual_progress
-        except MonthlySubmission.DoesNotExist:
-            raise ProjectException("Could not find actual progress for %s/%s" % (year, month))
+            submissions = MonthlySubmission.objects.filter(date__lte=date, project=self).order_by("-date")
+            most_recent_submission = submissions[0]
+            return most_recent_submission.actual_progress
+        except IndexError:
+            raise ProjectException("Could not find actual progress for %s/%s" % (date.year, date.month))
 
-    def planned_progress(self, year, month):
+    def planned_progress(self, date):
         try:
-            s = self.plannings.get(year=year, month=month)
-            return s.planned_progress
-        except Planning.DoesNotExist:
-            raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+            plannings = Planning.objects.filter(date__lte=date, project=self).order_by("-date")
+            most_recent_planning = plannings[0]
+            return most_recent_planning.planned_progress
+        except IndexError:
+            raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 
-    def actual_expenditure(self, year, month):
+    def actual_expenditure(self, date):
         try:
-            s = MonthlySubmission.objects.get(year=year, month=month, project=self)
-            return s.actual_expenditure
+            s = MonthlySubmission.objects.filter(date__lte=date, project=self).aggregate(Sum("actual_expenditure"))
+            return s["actual_expenditure__sum"] or 0
         except MonthlySubmission.DoesNotExist:
-            raise ProjectException("Could not find actual expenditure for %s/%s" % (year, month))
+            raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
             
-    def planned_expenditure(self, year, month):
+    def planned_expenditure(self, date):
         try:
-            s = Planning.objects.get(year=year, month=month, project=self)
-            return s.planned_expenses
+            s = Planning.objects.filter(date__lte=date, project=self).aggregate(Sum("planned_expenses"))
+            return s["planned_expenses__sum"] or 0
         except Planning.DoesNotExist:
-            raise ProjectException("Could not find planned progress for %s/%s" % (year, month))
+            raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 
         
 
@@ -373,9 +386,9 @@ class Project(models.Model):
         return 434343
             
         
-    def performance(self, year, month):
+    def performance(self, date):
         try:
-            return self.actual_progress(year, month) / self.planned_progress(year, month)
+            return self.actual_progress(date) / self.planned_progress(date)
         except ZeroDivisionError:
             return 0
 
@@ -414,13 +427,13 @@ class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
     project = models.OneToOneField(Project, related_name='project_financial')
 
-    def percentage_expenditure(self, year, month):
+    def percentage_expenditure(self, date):
         try:
-            actual = self.project.monthly_submissions.get(year=year, month=month)
+            actual = self.project.monthly_submissions.get(date__year=date.year, date__month=date.month)
             
             return float(actual.actual_expenditure) / float(self.total_anticipated_cost)
         except MonthlySubmission.DoesNotExist:
-            raise ProjectException("No submission exists for %s/%s" % (year, month))
+            raise ProjectException("No submission exists for %s/%s" % (date.year, date.month))
         except ZeroDivisionError:
             raise ProjectException("Missing project budget - cannot calculate percentage expenditure")
             
@@ -465,25 +478,32 @@ class ScopeOfWork(models.Model):
 
 
 class Planning(models.Model):
-    month = models.CharField(max_length=255, choices=MONTHS)
-    year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
-    planned_expenses = models.FloatField(blank=True, null=True, help_text="Planned expenses for this month")
-    planned_progress = models.FloatField(blank=True, null=True, help_text="Expected progress to this point")
+    date = models.DateTimeField(default=lambda : datetime.datetime.now())
+    planned_expenses = models.FloatField(blank=True, null=True)
+    planned_progress = models.FloatField(blank=True, null=True)
     project = models.ForeignKey(Project, related_name='plannings')
 
     objects = FinancialYearManager()
 
     def __unicode__(self):
-        return u'Planning for project %s for month %s' % (self.project.name, self.month)
+        return u'Planning for project %s for month %s' % (self.project.name, self.date.month)
 
     class Meta:
         verbose_name_plural = "Project planning"
-        unique_together = ('project', 'month', 'year')
+        # How can this been done?
+        #unique_together = ('project', 'date__month', 'date.year')
 
 
 class ProjectMilestoneManager(models.Manager):
     def project_start(self, project):
-        return project.milestones.get(milestone=Milestone.start_milestone())
+        try:
+            return project.milestones.get(milestone=Milestone.start_milestone())
+        except ProjectMilestone.DoesNotExist:
+            # TODO If a project is missing a start date - return a factitious date
+            # so sue me - this is the simplest thing that can work. Wait for
+            # client recommendation
+            import factories
+            return factories.ProjectMilestoneFactory.build()
 
     def project_practical_completion(self, project):
         return project.milestones.get(milestone=Milestone.practical_completion())
@@ -513,8 +533,7 @@ class CommentType(models.Model):
 
 
 class MonthlySubmission(models.Model):
-    month = models.CharField(max_length=255, choices=MONTHS, default=lambda: datetime.datetime.now().month)
-    year = models.CharField(max_length=255, choices=YEARS, default=lambda: datetime.datetime.now().year)
+    date = models.DateTimeField(default=lambda : datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='monthly_submissions')
     actual_expenditure = models.FloatField(help_text="Actual expenditure this month")
     actual_progress = models.FloatField(help_text="Actual progress at this point")
@@ -525,10 +544,12 @@ class MonthlySubmission(models.Model):
     objects = FinancialYearManager()
 
     def __unicode__(self):
-        return "Submission for %s for %s/%s" % (self.project, self.year, self.month)
+        return "Submission for %s for %s/%s" % (self.project, self.date.year, self.date.month)
 
     class Meta:
-        unique_together = ('project', 'month', 'year')
+        # How can this been done?
+        #unique_together = ('project', 'date__month', 'date.year')
+        pass
 
 
 class ProjectStatus(models.Model):
