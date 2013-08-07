@@ -62,6 +62,35 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
         fields = ('id', 'name', )
 
 def condensed_project_serializer(project, date):
+
+    def calc_overunder():
+        actual_spend = project.actual_expenditure(date)
+        planned_spend = project.planned_expenditure(date)
+
+        spending_difference = float(actual_spend - planned_spend)
+        if spending_difference == 0:
+            overunder = "On budget"
+            amount = ""
+            perc_overunder = ""
+        elif planned_spend == 0:
+            overunder = "Over"
+            amount = abs(spending_difference)
+            perc_overunder = ""
+        elif spending_difference < 0:
+            overunder = "Under"
+            amount = abs(spending_difference)
+            perc_overunder = (1 - abs(spending_difference) / planned_spend) * 100
+        else:
+            overunder = "Over"
+            amount = abs(spending_difference)
+            perc_overunder = (spending_difference / planned_spend) * 100
+
+        return {
+            "overunder" : overunder,
+            "amount" : amount,
+            "percentage_overunder" : perc_overunder,
+        }
+
     return {
         "name" : project.name,
         "client" : project.programme.client.name,
@@ -83,6 +112,7 @@ def condensed_project_serializer(project, date):
             "perc_spent" : project.project_financial.percentage_expenditure(date) * 100,
             "actual" : project.actual_expenditure(date),
             "planned" : project.planned_expenditure(date),
+            "overunder" : calc_overunder()
         }
     }
 
