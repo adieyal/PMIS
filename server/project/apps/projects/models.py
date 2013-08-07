@@ -495,9 +495,9 @@ class Planning(models.Model):
 
 
 class ProjectMilestoneManager(models.Manager):
-    def project_start(self, project):
+    def _return_milestone(self, project, milestone):
         try:
-            return project.milestones.get(milestone=Milestone.start_milestone())
+            return project.milestones.get(milestone=milestone)
         except ProjectMilestone.DoesNotExist:
             # TODO If a project is missing a start date - return a factitious date
             # so sue me - this is the simplest thing that can work. Wait for
@@ -505,14 +505,17 @@ class ProjectMilestoneManager(models.Manager):
             import factories
             return factories.ProjectMilestoneFactory.build()
 
+    def project_start(self, project):
+        return self._return_milestone(project, Milestone.start_milestone())
+
     def project_practical_completion(self, project):
-        return project.milestones.get(milestone=Milestone.practical_completion())
+        return self._return_milestone(project, Milestone.practical_completion())
     
     def project_final_completion(self, project):
-        return project.milestones.get(milestone=Milestone.final_completion())
+        return self._return_milestone(project, Milestone.final_completion())
 
     def project_final_accounts(self, project):
-        return project.milestones.get(milestone=Milestone.final_accounts())
+        return self._return_milestone(project, Milestone.final_accounts())
 
 class ProjectMilestone(models.Model):
     completion_date = models.DateField(default=datetime.datetime.now, blank=True, null=True)
