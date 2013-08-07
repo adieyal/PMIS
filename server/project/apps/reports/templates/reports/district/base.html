@@ -5,39 +5,7 @@
     <link href="/static/reports/css/style.css" rel="stylesheet" type="text/css">
     <title>The Dpwrt</title>
 
-    <script src="/static/js/lib/require.js"></script>
-
-    <script>
-        require.config({
-            baseUrl: "/static/js/",
-            paths: {
-                jquery : "lib/jquery",
-                text : "lib/text",
-                d3 : "lib/d3",
-            },
-            shim: {
-                "lib/jquery": {
-                    exports: '$'
-                },
-                "lib/d3": {
-                    exports: 'd3'
-                },
-                "lib/jquery.number": ['jquery'],
-            },
-        });
-
-        require(['lib/jquery', "reports/district"], function($, district) {
-            var district_id = {{ district.id }}
-            var year = {{ date.year }}
-            var month = {{ date.month }}
-            var d = new district(year, month);
-            url = "{% url 'api:reports:district' district.id  date.year date.month %}";
-
-            $.getJSON(url, function(json) {
-                d.populate_dashboard(json);
-            });
-        })
-    </script>
+    <script data-main="{{ STATIC_URL }}js/reports" src="/static/js/lib/require.js"></script>
 
     {% block extraheader %}
     {% endblock %}
