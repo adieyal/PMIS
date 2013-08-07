@@ -80,11 +80,11 @@ def district_report_json(district_id, date):
         ],
         "projects" : {
             "best_performing" : [
-                serializers.condensed_project_serializer(project, date)
+                serializers.expanded_project_serializer(project, date)
                 for project in best_projects
             ],
             "worst_performing" : [
-                serializers.condensed_project_serializer(project, date)
+                serializers.expanded_project_serializer(project, date)
                 for project in worst_projects
             ],
         }

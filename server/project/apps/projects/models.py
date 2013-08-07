@@ -496,7 +496,14 @@ class Planning(models.Model):
 
 class ProjectMilestoneManager(models.Manager):
     def project_start(self, project):
-        return project.milestones.get(milestone=Milestone.start_milestone())
+        try:
+            return project.milestones.get(milestone=Milestone.start_milestone())
+        except ProjectMilestone.DoesNotExist:
+            # TODO If a project is missing a start date - return a factitious date
+            # so sue me - this is the simplest thing that can work. Wait for
+            # client recommendation
+            import factories
+            return factories.ProjectMilestoneFactory.build()
 
     def project_practical_completion(self, project):
         return project.milestones.get(milestone=Milestone.practical_completion())
