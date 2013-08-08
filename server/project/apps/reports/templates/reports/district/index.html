@@ -5,6 +5,7 @@
 {% block extraheader %}
 {% endblock %}
 
+{% block topheading %}Projects under implementation{% endblock %}
 {% block body %}
 
     <div class="project-main-area">
@@ -151,8 +152,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs"> {{ projects.best_performing.0.jobs|intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
-				{{ projects.best_performing.0.expenditure.actual | format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.best_performing.0.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.0.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#best1_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
@@ -172,8 +172,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.1.jobs| intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
-				{{ projects.best_performing.1.expenditure.actual | format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.best_performing.1.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.1.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#best2_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
@@ -193,8 +192,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.2.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
-				{{ projects.best_performing.2.expenditure.actual| format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.best_performing.2.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.best_performing.2.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#best3_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
@@ -218,7 +216,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.best_performing.0.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">{{ projects.worst_performing.0.expenditure.actual| format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.worst_performing.0.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.0.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#worst1_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
@@ -238,8 +236,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.worst_performing.1.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">
-				{{ projects.worst_performing.1.expenditure.actual| format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.worst_performing.1.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.1.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#worst2_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
@@ -259,7 +256,7 @@
                     	<div class="perform-area-main float">
                         	<div class="num-jobs">Jobs created: <span class="jobs">{{ projects.worst_performing.2.jobs | intcomma }}</span></div>
                             <div class="progress-bg cf">
-                            	<div class="overall-progress marg implementation-expenditure">% Spent: <span class="expenditure">{{ projects.worst_performing.2.expenditure.actual | format_currency }}</span></div><!-- .progress-text -->
+                            	<div class="overall-progress marg implementation-expenditure">Percentage Spent: <span class="expenditure">{{ projects.worst_performing.2.expenditure.perc_spent | format_percentage }}</span></div><!-- .progress-text -->
                                 <div class="actual-expenditure">Actual Expenditure: <span class="expenditure">{{ projects.worst_performing.2.expenditure.actual | format_currency }}</span></div><!-- .actual-price -->
                                 <div class="progress-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#worst3_expenditure" data-aspect="1.3"> </div>
                             </div><!-- .progress-bg -->
