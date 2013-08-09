@@ -51,6 +51,7 @@ class FormatterTest(TestCase):
         self.assertEqual(formatters._format_percentage(20), "20%")
         self.assertEqual(formatters._format_percentage(20.5), "20.5%")
         self.assertEqual(formatters._format_percentage(20.56), "20.6%")
+        self.assertEqual(formatters._format_percentage(""), "-")
 
     def test_currency_tag(self):
 
@@ -67,15 +68,16 @@ class FormatterTest(TestCase):
         self.assertEqual(val.strip(), "R10,000.23")
 
     def test_percentage_tag(self):
-
-        template = Template(
-            """
+        template = Template("""
             {% load formatters %}
             {{ num|format_percentage }}
-            """
-        )
+        """)
+
         val = template.render(Context({"num" : 20}))
         self.assertEqual(val.strip(), "20%")
-        
+
         val = template.render(Context({"num" : 20.23}))
         self.assertEqual(val.strip(), "20.2%")
+
+        val = template.render(Context())
+        self.assertEqual(val.strip(), "-")

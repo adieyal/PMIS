@@ -17,10 +17,13 @@ def _format_currency(value):
         return "-"
 
 def _format_percentage(value):
-    if int(value) == value:
-        return "%d%%" % value
-    else:
-        return "%.1f%%" % value
+    try:
+        if int(value) == value:
+            return "%d%%" % value
+        else:
+            return "%.1f%%" % value
+    except ValueError:
+        return "-"
 
 def format_currency(value):
     return _format_currency(value)
