@@ -29,11 +29,11 @@ def dashboard_gauge(val1, val2, text1=None, text2=None):
         position2,
     ]
 
-def dashboard_slider(val1, val2, client, threshold=0.8, text1=None, text2=None):
-    if (val1 < 0.1): val1 = 0.1
-    if (val2 < 0.1): val2 = 0.1
-    if (val1 > 0.9): val1 = 0.8
-    if (val2 > 0.9): val2 = 0.8
+def dashboard_slider(val1, val2, client, threshold=0.1, text1=None, text2=None, min_val=0.1, max_val=0.9):
+    if (val1 < min_val): val1 = min_val
+    if (val2 < min_val): val2 = min_val
+    if (val1 > max_val): val1 = max_val
+    if (val2 > max_val): val2 = max_val
 
     barcolor2 = clientcolors.get(client, "")
     if (val2 - val1 > threshold):
