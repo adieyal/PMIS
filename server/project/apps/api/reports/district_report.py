@@ -110,12 +110,12 @@ def dashboard_graphs(request, district_id, year, month):
 
         return graphhelpers.dashboard_gauge(val1, val2)
 
-    def create_expenditure_slider(val1, val2, budget, client):
+    def create_expenditure_slider(planned, actual, budget, client):
         if budget == 0:
-            return graphhelpers.dashboard_slider(0, 0, client)
+            return graphhelpers.dashboard_slider(0, 0, client, text1="Planned", text2="Actual")
         else:
-            val1 = val1 / budget; val2 = val2 / budget
-            return graphhelpers.dashboard_slider(val1, val2, client)
+            planned = planned / budget; actual = actual / budget
+            return graphhelpers.dashboard_slider(planned, actual, client, text1="Planned", text2="Actual")
 
     def create_project_slider(project):
         val1 = project["expenditure"]["planned"]
@@ -124,15 +124,15 @@ def dashboard_graphs(request, district_id, year, month):
         return create_expenditure_slider(val1, val2, budget, project["client"])
 
     def create_client_sliders(client):
-        val1 = client["overall_expenditure"]["planned_expenditure"]
-        val2 = client["overall_expenditure"]["actual_expenditure"]
+        planned = client["overall_expenditure"]["planned_expenditure"]
+        actual = client["overall_expenditure"]["actual_expenditure"]
         budget = client["total_budget"]
-        return create_expenditure_slider(val1, val2, budget, client["name"])
+        return create_expenditure_slider(planned, actual, budget, client["name"])
 
     def create_project_progress_slider(project):
-        val1 = project["progress"]["planned"]
-        val2 = project["progress"]["actual"]
-        return graphhelpers.dashboard_slider(val1, val2, project["client"])
+        planned = project["progress"]["planned"]
+        actual = project["progress"]["actual"]
+        return graphhelpers.dashboard_slider(planned, actual, project["client"])
 
     year, month = int(year), int(month)
     data = district_report_json(district_id, datetime(year, month, 1))
