@@ -5,6 +5,7 @@ from django.test import TestCase, Client
 from project.apps.projects import factories
 from datetime import datetime
 from project.apps.api.reports import graphhelpers
+from datetime import datetime
 
 client = Client()
 
@@ -36,11 +37,10 @@ class GraphJson(TestCase):
             self.assertEqual(self.js[gauge][0]["position"], (i * 2) / 10.)
             self.assertEqual(self.js[gauge][1]["position"], i / 10.)
 
-    #def test_pies(self):
-    #    for i in range(0, 5):
-    #        pie = "stagespie%d" % (i + 1)
-    #        print pie
-    #        self.assertIn(pie, self.js)
+    def test_pies(self):
+        for i in range(0, 5):
+            pie = "stagespie%d" % (i + 1)
+            self.assertIn(pie, self.js)
         
     def test_client_sliders(self):
         budget = self.budget
@@ -56,8 +56,6 @@ class GraphJson(TestCase):
             # planned and actual swap around because the markers swap around if val1 > val2
             self.assertEqual(sliderjs[0]["position"], actual)
             self.assertEqual(sliderjs[1]["position"], planned)
-    # TODO add tests to test budget calculations for slider and also when budget is 0
-    # TODO add tests to test budget calculations for values greater than 1
 
 class TestGraphHelpers(TestCase):
     def setUp(self):
