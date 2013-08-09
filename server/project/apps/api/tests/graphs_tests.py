@@ -107,3 +107,8 @@ class TestGraphHelpers(TestCase):
         slider7 = self.sliderfunc(0.5, 0.55)
         self.assertEqual(slider7[0]["marker-text"], "")
 
+    def test_slider_raises_exception_for_out_of_range_values(self):
+        self.assertRaises(ValueError, self.sliderfunc, -1, 0)
+        self.assertRaises(ValueError, self.sliderfunc, 0, -1)
+        self.assertRaises(ValueError, self.sliderfunc, 12, 0)
+        self.assertRaises(ValueError, self.sliderfunc, 0, 12)

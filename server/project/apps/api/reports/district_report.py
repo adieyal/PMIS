@@ -1,3 +1,4 @@
+from __future__ import division
 from django.http import HttpResponse, Http404
 from django.core.cache import cache
 from collections import OrderedDict
@@ -132,7 +133,12 @@ def dashboard_graphs(request, district_id, year, month):
     def create_project_progress_slider(project):
         planned = project["progress"]["planned"]
         actual = project["progress"]["actual"]
-        return graphhelpers.dashboard_slider(planned, actual, project["client"])
+        m = max(planned, actual)
+        if m == 0:
+            return graphhelpers.dashboard_slider(0, 0, project["client"])
+        else:
+            planned, actual = planned / m, actual / m
+            return graphhelpers.dashboard_slider(planned, actual, project["client"])
 
     year, month = int(year), int(month)
     data = district_report_json(district_id, datetime(year, month, 1))

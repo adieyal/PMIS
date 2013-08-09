@@ -30,6 +30,9 @@ def dashboard_gauge(val1, val2, text1=None, text2=None):
     ]
 
 def dashboard_slider(val1, val2, client, threshold=0.1, text1=None, text2=None, min_val=0.1, max_val=0.9):
+    if val1 < 0 or val1 > 1 or val2 < 0 or val2 > 1:
+        raise ValueError("Values between 0 and 1 expected")
+
     if (val1 < min_val): val1 = min_val
     if (val2 < min_val): val2 = min_val
     if (val1 > max_val): val1 = max_val
