@@ -1,4 +1,5 @@
 import json
+import functools
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from project.apps.projects import factories
@@ -41,7 +42,6 @@ class GraphJson(TestCase):
     #        print pie
     #        self.assertIn(pie, self.js)
         
-
     def test_client_sliders(self):
         budget = self.budget
         min_value = 0.1 # The default min value in the slider code - if this test failed - check that this value is correct
@@ -60,6 +60,12 @@ class GraphJson(TestCase):
     # TODO add tests to test budget calculations for values greater than 1
 
 class TestGraphHelpers(TestCase):
+    def setUp(self):
+        self.sliderfunc = functools.partial(
+            graphhelpers.dashboard_slider,
+            min_val=0.1, max_val=0.9, client="DoE", text1="Planned", text2="Actual"
+        )
+
     def test_dashboard_gauge(self):
         gauge2 = graphhelpers.dashboard_gauge(1, 1)
         self.assertEqual(gauge2[0]["text"], "Planned")
@@ -70,18 +76,18 @@ class TestGraphHelpers(TestCase):
         self.assertEqual(gauge3[1]["text"], "def")
 
     def test_dashboard_slider(self):
-        slider1 = graphhelpers.dashboard_slider(0, 0, "DoE", min_val=0.1, max_val=0.9)
+        slider1 = self.sliderfunc(0, 0)
         self.assertEqual(slider1[0]["position"], 0.1)
         self.assertEqual(slider1[1]["position"], 0.1)
 
-        slider2 = graphhelpers.dashboard_slider(1, 1, "DoE", min_val=0.1, max_val=0.9)
+        slider2 = self.sliderfunc(1, 1)
         self.assertEqual(slider2[0]["position"], 0.9)
         self.assertEqual(slider2[1]["position"], 0.9)
 
-        slider3 = graphhelpers.dashboard_slider(0.5, 0.7, "DoE", min_val=0.1, max_val=0.9)
+        slider3 = self.sliderfunc(0.5, 0.7)
         self.assertEqual(slider3[0]["marker-text"], "Planned")
         self.assertEqual(slider3[1]["marker-text"], "Actual")
-        slider3 = graphhelpers.dashboard_slider(0.5, 0.7, "DoE", text1="aaa", text2="bbb", min_val=0.1, max_val=0.9)
+        slider3 = self.sliderfunc(0.5, 0.7, text1="aaa", text2="bbb")
         self.assertEqual(slider3[0]["marker-text"], "aaa")
         self.assertEqual(slider3[1]["marker-text"], "bbb")
 
@@ -89,15 +95,15 @@ class TestGraphHelpers(TestCase):
         self.assertEqual(slider4[0]["bar-color"], graphhelpers.clientcolors["DoE"])
         self.assertEqual(slider4[1]["bar-color"], graphhelpers.clientcolors["DoE"])
 
-        slider5 = graphhelpers.dashboard_slider(0.7, 0.5, "DoE", threshold=0.1, min_val=0.1, max_val=0.9)
+        slider5 = self.sliderfunc(0.7, 0.5)
         self.assertEqual(slider5[1]["bar-color"], graphhelpers.red)
         self.assertEqual(slider5[0]["bar-color"], graphhelpers.clientcolors["DoE"])
 
-        slider6 = graphhelpers.dashboard_slider(0.5, 0.7, "DoE", threshold=0.1, min_val=0.1, max_val=0.9)
+        slider6 = self.sliderfunc(0.5, 0.7)
         self.assertEqual(slider6[0]["bar-color"], graphhelpers.clientcolors["DoE"])
         self.assertEqual(slider6[1]["bar-color"], graphhelpers.red)
 
         
-        slider7 = graphhelpers.dashboard_slider(0.5, 0.55, "DoE", threshold=0.1, min_val=0.1, max_val=0.9)
+        slider7 = self.sliderfunc(0.5, 0.55)
         self.assertEqual(slider7[0]["marker-text"], "")
 
