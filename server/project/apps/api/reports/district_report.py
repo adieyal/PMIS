@@ -147,6 +147,7 @@ def dashboard_graphs(request, district_id, year, month):
     for i, client in enumerate(data["clients"]):
         js["gauge%d" % (i + 1)] = create_gauges(client)
         js["client_slider%d" % (i + 1)] = create_client_sliders(client)
+        js["stagespie%d" % (i + 1)] = 0
 
     for i, project in enumerate(data["projects"]["best_performing"]):
         js["best%d_expenditure" % (i + 1)] = create_project_slider(project)
