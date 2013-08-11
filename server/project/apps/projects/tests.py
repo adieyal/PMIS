@@ -86,6 +86,24 @@ class FinancialYearTest(TestCase):
         self.assertTrue(models.FinancialYearManager.yearmonth_in_financial_year(2014, 2013, 6))
         self.assertFalse(models.FinancialYearManager.yearmonth_in_financial_year(2013, 2013, 6))
 
+    def test_start_of_year(self):
+        dt = models.FinancialYearManager.start_of_year(2014)
+        self.assertEqual(dt.year, 2013)
+        self.assertEqual(dt.month, 4)
+        self.assertEqual(dt.day, 1)
+
+        dt = models.FinancialYearManager.start_of_year(2013)
+        self.assertEqual(dt.year, 2012)
+        self.assertEqual(dt.month, 4)
+        self.assertEqual(dt.day, 1)
+
+    def test_end_of_year(self):
+        dt = models.FinancialYearManager.end_of_year(2014)
+        self.assertEqual(dt.year, 2014)
+        self.assertEqual(dt.month, 3)
+        self.assertEqual(dt.day, 31)
+        
+
 class ProjectManagerTest(TestCase):
     def setUp(self):
         self.client = factories.ClientFactory.create()

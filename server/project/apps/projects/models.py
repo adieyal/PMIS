@@ -79,6 +79,7 @@ class FinancialYearManager(models.Manager):
 
     previous_months = FinancialYearQuerySet.previous_months
     current_months = FinancialYearQuerySet.current_months
+    oneday = relativedelta(days=1)
 
     def get_query_set(self):
         return FinancialYearQuerySet(self.model)
@@ -97,6 +98,16 @@ class FinancialYearManager(models.Manager):
     def date_in_financial_year(cls, year, dt):
         return (dt.year == year and dt.month in FinancialYearManager.current_months) \
             or (dt.year + 1 == year and dt.month in FinancialYearManager.previous_months)
+
+    @classmethod
+    def start_of_year(cls, year):
+        return datetime.datetime(year - 1, cls.previous_months[0], 1)
+
+    @classmethod
+    def end_of_year(cls, year):
+        dt = datetime.datetime(year, cls.previous_months[0], 1)
+        return dt - cls.oneday
+        
 
     @classmethod
     def yearmonth_in_financial_year(cls, year, year2, month2):
