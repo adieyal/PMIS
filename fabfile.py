@@ -3,9 +3,9 @@ from fabric.contrib.console import confirm
 from fabric import operations
 import urllib2
 
-api.env.hosts = ["adi@pmis.burgercom.co.za:2224"]
+api.env.hosts = ["adi@pmis.burgercom.co.za:2227"]
 trigger_url = "http://hudson.burgercom.co.za/job/PMIS/build"
-code_dir = "/var/www/pmis.burgercom.co.za"
+code_dir = "/var/www/PMIS/"
 
 def host_type():
     api.run('uname -s')
