@@ -107,7 +107,7 @@ def dashboard_graphs(request, district_id, year, month):
 
     def create_gauges(client):
         val1 = client["overall_progress"]["planned"] / 100.
-        kkkkval2 = client["overall_progress"]["actual"] / 100.
+        val2 = client["overall_progress"]["actual"] / 100.
 
         return graphhelpers.dashboard_gauge(val1, val2)
 
