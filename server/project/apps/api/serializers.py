@@ -91,6 +91,12 @@ def condensed_project_serializer(project, date):
             "percentage_overunder" : perc_overunder
         }
 
+    def tryexcept(cmd, locals=locals()):
+        try:
+            return eval(cmd, globals(), locals)
+        except models.ProjectException:
+            return "-"
+
     return {
         "name" : project.name,
         "client" : project.programme.client.name,
@@ -104,12 +110,12 @@ def condensed_project_serializer(project, date):
         },
         "budget" : project.project_financial.total_anticipated_cost,
         "progress" : {
-            "actual" : project.actual_progress(date),
+            "actual" : tryexcept("project.actual_progress(date)"),
             "planned" : project.planned_progress(date),
         },
         "jobs" : project.jobs,
         "expenditure" : {
-            "perc_spent" : project.project_financial.percentage_expenditure(date) * 100,
+            "perc_spent" : tryexcept("project.project_financial.percentage_expenditure(date) * 100"),
             "actual" : project.actual_expenditure(date),
             "planned" : project.planned_expenditure(date),
             "overunder" : calc_overunder()

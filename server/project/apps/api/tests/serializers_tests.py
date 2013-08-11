@@ -35,6 +35,18 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.date))
         self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.date))
 
+    def test_actual_progess_with_missing_submission(self):
+        dt = datetime(2014, 1, 1)
+        models.MonthlySubmission.objects.all().delete()
+        js = serializers.condensed_project_serializer(self.project, self.date)
+        self.assertEqual(js["progress"]["actual"], "-")
+
+    def test_perc_spent_with_missing_submission(self):
+        dt = datetime(2014, 1, 1)
+        models.MonthlySubmission.objects.all().delete()
+        js = serializers.condensed_project_serializer(self.project, self.date)
+        self.assertEqual(js["expenditure"]["perc_spent"], "-")
+
     def test_overunder_budget(self):
         def create_overunder(actual, planned):
             project = factories.ProjectFactory()
