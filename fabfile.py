@@ -9,6 +9,7 @@ trigger_url = "http://hudson.burgercom.co.za/job/PMIS/build"
 code_dir = "/var/www/PMIS/server"
 env_dir = "/home/adi/.virtualenvs/pmis"
 python = "%s/bin/python" % env_dir
+pip = "%s/bin/pip" % env_dir
 
 def package_installed(pkg_name):
     """ref: http:superuser.com/questions/427318/#comment490784_427339"""
@@ -43,11 +44,11 @@ def push():
 
 def migrate():
     with api.cd(code_dir):
-        api.run("%s manage.py migrate" % python)
+        api.run("%s manage.py migrate --noinput" % python)
 
 def create_database():
     with api.cd(code_dir):
-        api.run("rm -f project/default.db")
+        api.run("rm -f project/default.db --quiet")
         api.run("%s manage.py syncdb --noinput" % python)
         migrate()
         api.run("%s manage.py loaddata production" % python)
@@ -62,9 +63,10 @@ def deploy():
     """
     with api.cd(code_dir):
         api.run("git pull origin master")
-    with api.cd(code_dir + "/server"):
-        api.run("/home/adi/.virtualenvs/pmis/bin/pip install -r requirements/test.txt")
+        api.run("%s install -r requirements/test.txt --quiet" % pip)
+        api.run("%s manage.py collectstatic --noinput" % python)
         api.sudo("supervisorctl restart pmis")
+        api.sudo("/etc/init.d/nginx restart")
     trigger_hudson()
 
 def trigger_hudson():
