@@ -151,7 +151,7 @@ class Programme(models.Model):
     client = models.ForeignKey(Client, related_name='programmes')
 
     def __unicode__(self):
-        return self.name
+        return "%s - %s" % (self.name, self.client)
 
 class Milestone(models.Model):
     PHASE = (
