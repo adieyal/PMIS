@@ -204,7 +204,7 @@
         	<div id="worst-performing-projects" class="worst-performing-projects">
             	<div class="top-performing-title"><h3><span class="font-whight">WORST</span> performing projects</h3></div><!-- .top-performing-title -->
                 <div class="project project-1">
-                	<div class="project-name client-{{ projects.worst_performing.0.client |lower }}"> {{ projects.worst_performing.0.name }} <span class="pname">{{ projects.worst_performing.0.name }}</span> (<a class="project-department" href="index.html#">{{ projects.worst_performing.0.client}}</a> | <a class="project-location" href="index.html#">{{ projects.worst_performing.0.municipality.name }}</a>)</div><!-- .lucation-area -->
+                	<div class="project-name client-{{ projects.worst_performing.0.client |lower }}"><span class="pname">{{ projects.worst_performing.0.name }}</span> (<a class="project-department" href="index.html#">{{ projects.worst_performing.0.client}}</a> | <a class="project-location" href="index.html#">{{ projects.worst_performing.0.municipality.name }}</a>)</div><!-- .lucation-area -->
                     <div class="perform-area-row cf">
                     	<div class="perform-area-main">
                         	<div class="total-budget">Total Budget: <span class="price">{{ projects.worst_performing.0.budget | format_currency }}</span></div><!-- .total-price -->
