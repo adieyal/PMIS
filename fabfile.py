@@ -41,10 +41,12 @@ def test():
 def push():
     api.local("git push")
 
-
 def migrate():
     with api.cd(code_dir):
         api.run("%s manage.py migrate --noinput" % python)
+
+def restart():
+    api.sudo("supervisorctl restart pmis")
 
 def create_database():
     with api.cd(code_dir):
@@ -65,9 +67,8 @@ def deploy():
         api.run("git pull origin master")
         api.run("%s install -r requirements/test.txt --quiet" % pip)
         api.run("%s manage.py collectstatic --noinput" % python)
-        api.sudo("supervisorctl restart pmis")
-        api.sudo("/etc/init.d/nginx restart")
-    trigger_hudson()
+        restart()
+    #trigger_hudson()
 
 def trigger_hudson():
     urllib2.urlopen(trigger_url)
