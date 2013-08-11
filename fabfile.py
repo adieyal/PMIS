@@ -1,5 +1,6 @@
 from fabric import api
 from fabric.contrib.console import confirm
+from fabric.context_managers import settings
 from fabric import operations
 import urllib2
 
@@ -9,17 +10,32 @@ code_dir = "/var/www/PMIS/server"
 env_dir = "/home/adi/.virtualenvs/pmis"
 python = "%s/bin/python" % env_dir
 
+def package_installed(pkg_name):
+    """ref: http:superuser.com/questions/427318/#comment490784_427339"""
+    cmd_f = 'dpkg-query -l "%s" | grep -q "^.i"'
+    cmd = cmd_f % (pkg_name)
+    with settings(warn_only=True):
+        result = api.run(cmd)
+    return result.succeeded
+
+def yes_install(pkg_name):
+    """ref: http://stackoverflow.com/a/10439058/1093087"""
+    api.sudo('apt-get --force-yes --yes install %s' % (pkg_name))
+
 def host_type():
     api.run('uname -s')
 
-def commit():
-    with api.settings(warn_only=True):
-        result = api.local("git add -p && git commit", capture=True)
-    if result.failed and not confirm("Error with commit. Continue anyway?"):
-        abort("Aborting at user request.")
+def make_sure_memcached_is_installed_and_running():
+    if not package_installed('memcached'):
+        yes_install('memcached')
+    with settings(warn_only=True):
+        api.sudo('/etc/init.d/memcached restart', pty=False)
+
+def install_prerequisites():
+    make_sure_memcached_is_installed_and_running()
 
 def test():
-    api.local("server/manage.py test api projects")
+    api.local("server/manage.py test api projects reports")
 
 def push():
     api.local("git push")
