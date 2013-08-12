@@ -1,33 +1,35 @@
 {% extends "reports/district/base.html" %}
+{% load humanize %}
 {% block performactive %}active{% endblock performactive %}
 {% block body %}
     <div class="container">
     	<div class="client-area"><span class="font-weight">WORST</span> performing projects in implementation / client</div><!-- .client-area -->
         <div class="client-worst-project-1 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.0.name }}</span> (<a href="perform.html#">{{ projects.worst_performing.0.client}}</a> | <a href="perform.html#"> {{ projects.worst_performing.0.municipality.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.0.jobs | floatformat:"0" | intcomma}}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>{{ projects.worst_performing.0.budget | floatformat:"0" | intcomma }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span> {{ projects.worst_performing.0.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span> {{ projects.worst_performing.0.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                            	<div class="overall-progress">Overall Progress: {{ projects.worst_performing.0.progress.actual }} </div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.0.expenditure.overunder.amount }}
+                                    <br>( {{ projects.worst_performing.0.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: {{ projects.worst_performing.0.expenditure.actual | floatformat:"0" | intcomma  }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -38,41 +40,41 @@
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.0.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br>
+                        {{ projects.worst_performing.0.last_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br> {{ projects.worst_performing.0.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>{{ projects.worst_performing.0.current_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-1 -->
         <div class="client-worst-project-2 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.1.name }}</span> (<a href="perform.html#">{{ projects.worst_performing.1.client }}</a> | <a href="perform.html#">{{ projects.worst_performing.1.municipality.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.1.jobs | floatformat:"0" | intcomma }}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>R {{ projects.worst_performing.1.budget | floatformat:"0" | intcomma }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span>{{ projects.worst_performing.1.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span>{{ projects.worst_performing.1.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                            	<div class="overall-progress">Overall Progress: {{ projects.worst_performing.1.progress.actual }}%</div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.1.expenditure.overunder.amount }}
+                                    <br>( {{ projects.worst_performing.1.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: R{{projects.worst_performing.1.expenditure.actual | floatformat:"0" | intcomma }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -83,41 +85,40 @@ New contractor to be appointed</div><!-- .comment-text -->
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.1.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br>{{ projects.worst_performing.1.last_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>{{ projects.worst_performing.1.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>{{ projects.worst_performing.1.current_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-2 -->
         <div class="client-worst-project-3 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.2.name}}</span> (<a href="perform.html#">{{ projects.worst_performing.2.client}}</a> | <a href="perform.html#">{{ projects.worst_performing.2.municipality.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.2.jobs | floatformat:"0" | intcomma }}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>R {{ projects.worst_performing.2.budget | floatformat:"0" | intcomma  }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span>{{ projects.worst_performing.2.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span>{{ projects.worst_performing.2.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                            	<div class="overall-progress">Overall Progress: {{ projects.worst_performing.0.progress.actual }}%</div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.2.expenditure.overunder.amount }}
+                                    <br>({{ projects.worst_performing.2.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: R{{projects.worst_performing.2.expenditure.actual | floatformat:"0" | intcomma }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -128,41 +129,41 @@ New contractor to be appointed</div><!-- .comment-text -->
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.2.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br>{{ projects.worst_performing.5.last_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>{{ projects.worst_performing.2.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>
+                            {{ projects.worst_performing.2.last_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-3 -->
         <div class="client-worst-project-4 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.3.name }}</span> (<a href="perform.html#">{{ projects.worst_performing.3.client}}</a> | <a href="perform.html#">{{ projects.worst_performing.3.municipality.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.3.jobs | floatformat:"0" | intcomma }}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>R {{ projects.worst_performing.3.budget  | floatformat:"0" | intcomma }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span>{{ projects.worst_performing.3.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span>{{ projects.worst_performing.3.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                                <div class="overall-progress">Overall Progress: {{ projects.worst_performing.3.progress.actual }}%</div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.3.expenditure.overunder.amount }}
+                                    <br>( {{ projects.worst_performing.3.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: R{{projects.worst_performing.3.expenditure.actual | floatformat:"0" | intcomma }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -173,41 +174,41 @@ New contractor to be appointed</div><!-- .comment-text -->
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.3.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br> {{ projects.worst_performing.3.last_month.mitigation}}
+                    </div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>{{ projects.worst_performing.3.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>{{ projects.worst_performing.3.current_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-4 -->
         <div class="client-worst-project-5 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.4.name }}</span> (<a href="perform.html#">{{ projects.worst_performing.4.client}}</a> | <a href="perform.html#">{{ projects.worst_performing.4.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.4.jobs | floatformat:"0" | intcomma }}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>R {{ projects.worst_performing.4.budget | floatformat:"0" | intcomma  }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span>{{ projects.worst_performing.4.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span>{{ projects.worst_performing.4.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                            	<div class="overall-progress">Overall Progress: {{ projects.worst_performing.4.progress.actual }}%</div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.4.expenditure.overunder.amount | floatformat:"0" | intcomma }}
+                                    <br>( {{ projects.worst_performing.4.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: R{{projects.worst_performing.4.expenditure.actual | floatformat:"0" | intcomma }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -218,41 +219,41 @@ New contractor to be appointed</div><!-- .comment-text -->
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.4.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br>{{ projects.worst_performing.4.last_month.mitigation }}
+                    </div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>{{ projects.worst_performing.4.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>{{ projects.worst_performing.4.current_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
         </div><!-- .client-worst-project-5 -->
         <div class="client-worst-project-6 cf">
         	<div class="client-location cf">
-            	<div class="client-worst-project-name"><span class="worst-project-name">Project Name</span> (<a href="perform.html#">Department</a> | <a href="perform.html#">Location</a>)</div><!-- .location-main -->
+            	<div class="client-worst-project-name"><span class="worst-project-name">{{ projects.worst_performing.4.name }}</span> (<a href="perform.html#">{{ projects.worst_performing.4.client}}</a> | <a href="perform.html#">{{ projects.worst_performing.4.municipality.name }}</a>)</div><!-- .location-main -->
                 <div class="cap-image"></div><!-- .cap-image -->
-                <div class="job-detail">Jobs created : 1278</div><!-- .job-detail -->
+                <div class="job-detail">Jobs created : {{ projects.worst_performing.5.jobs | floatformat:"0" | intcomma }}</div><!-- .job-detail -->
             </div><!-- .client-location -->
             <div class="client-row cf">
             	<div class="client-main">
                 	<div class="date-main-row cf">
-                    	<div class="budget">Budget: <span>R1,000,000</span></div><!-- .budget-price -->
-                    	<div class="start-date">Start Date: <span>20/01/2013</span></div><!-- .budget-price -->
-                    	<div class="completion-date">Completion Date: <span>20/08/2013</span></div><!-- .budget-price -->
+                    	<div class="budget">Budget: <span>{{ projects.worst_performing.5.budget | floatformat:"0" | intcomma }}</span></div><!-- .budget-price -->
+                    	<div class="start-date">Start Date: <span>{{ projects.worst_performing.5.milestones.start_date }}</span></div><!-- .budget-price -->
+                    	<div class="completion-date">Completion Date: <span>{{ projects.worst_performing.5.milestones.practical_completion }}</span></div><!-- .budget-price -->
                     </div><!-- .date-main-row -->
                     <div class="actual-client-area cf">
                     	<div class="actual-client-row cf">
                         	<div class="actual-client-main cf">
-                            	<div class="overall-progress">Overall Progress: 76%</div><!-- .actual-price -->
+                            	<div class="overall-progress">Overall Progress: {{ projects.worst_performing.5.progress.actual }}%</div><!-- .actual-price -->
                                 <div class="planned-actual-progress cf">
                                 	<div class="planed">Planned</div><!-- .planed -->
                                     <div class="actul">Actual</div><!-- .actul -->
                                 </div><!-- .client-image -->
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: R100,000,000<br>(35% over budget)</div><!-- .expend-text -->
-                                <div class="expenditure-to-date">Expenditure to date: R1,500,000</div><!-- .date-text -->
+                            	<div class="over-expenditure">Over expenditure: R{{ projects.worst_performing.5.expenditure.overunder.amount | floatformat:"0" | intcomma }}
+                                    <br>( {{ projects.worst_performing.5.expenditure.overunder.percentage_overunder }}% over budget)</div><!-- .expend-text -->
+                                <div class="expenditure-to-date">Expenditure to date: R{{projects.worst_performing.5.expenditure.actual | floatformat:"0" | intcomma }}</div><!-- .date-text -->
                                 <div class="budget-actual-progress cf">
                                 	<div class="budget">Budget</div><!-- .budgt -->
                                     <div class="actual">Actual</div><!-- .act -->
@@ -263,12 +264,11 @@ New contractor to be appointed</div><!-- .comment-text -->
                 </div><!-- .client-main -->
                 <div class="comment-main-area">
                 	<div class="comment-main marg cf">
-                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>Contractor nor performing and waming letter handed over<br><br><span class="comment">MITIGATION</span> (previous month):<br>
-Contract terminated due to non-performance</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">COMMENTS</span> (previous month):<br>{{ projects.worst_performing.5.last_month.comment }}<br><br><span class="comment">MITIGATION</span> (previous month):<br>{{ projects.worst_performing.5.last_month.mitigation }}
+                        </div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 	<div class="comment-main cf">
-                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>Previous month waming letter issued<br><br><span class="comment">CURRENT MITIGATION:</span><br>
-New contractor to be appointed</div><!-- .comment-text -->
+                    	<div class="comment-text"><span class="comment">CURRENT COMMENTS:</span><br>{{ projects.worst_performing.5.current_month.comment }}<br><br><span class="comment">CURRENT MITIGATION:</span><br>{{ projects.worst_performing.5.current_month.mitigation }}</div><!-- .comment-text -->
                     </div><!-- .comment-main -->
                 </div><!-- .comment-main-area -->
             </div><!-- .client-row -->
