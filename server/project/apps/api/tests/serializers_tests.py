@@ -10,13 +10,15 @@ class CondensedProjectSerializerTest(TestCase):
         self.date = datetime(self.year, self.month, 1)
 
         self.project = factories.ProjectFactory()
-        self.financial = factories.ProjectFinancialFactory(project=self.project)
+        self.financial = factories.ProjectFinancialFactory(project=self.project, previous_expenses=1000)
         self.monthlysubmission = factories.MonthlySubmissionFactory(
             project=self.project, actual_progress=55, actual_expenditure="100", date=self.date
         )
+
         self.planning = factories.PlanningFactory(
             project=self.project, planned_progress=20, planned_expenses="200", date=self.date
         )
+
 
     def test_project_serializer(self):
         js = serializers.condensed_project_serializer(self.project, self.date)
@@ -34,6 +36,63 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["expenditure"]["perc_spent"], self.project.project_financial.percentage_expenditure(self.date) * 100)
         self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.date))
         self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.date))
+        self.assertEquals(js["expenditure"]["actual_overall"], self.project.actual_expenditure_overall())
+
+    def test_actual_progess_with_missing_submission(self):
+        dt = datetime(2014, 1, 1)
+        models.MonthlySubmission.objects.all().delete()
+        js = serializers.condensed_project_serializer(self.project, self.date)
+        self.assertEqual(js["progress"]["actual"], "-")
+
+    def test_perc_spent_with_missing_submission(self):
+        dt = datetime(2014, 1, 1)
+        models.MonthlySubmission.objects.all().delete()
+        js = serializers.condensed_project_serializer(self.project, self.date)
+        self.assertEqual(js["expenditure"]["perc_spent"], "-")
+
+    def test_overunder_budget(self):
+        def create_overunder(actual, planned):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=actual, date=self.date)
+            factories.PlanningFactory(project=project, planned_expenses=planned, date=self.date)
+            factories.ProjectFinancialFactory(project=project)
+            js = serializers.condensed_project_serializer(project, self.date)
+            overunder = js["expenditure"]["overunder"]
+            return overunder
+
+        #js = serializers.condensed_project_serializer(self.project, self.date)
+        #
+        #self.assertIn("overunder", js["expenditure"])
+        #overunder = js["expenditure"]["overunder"]
+        #self.assertIn("overunder", overunder)
+        #self.assertIn("amount", overunder)
+        #self.assertIn("percentage_overunder", overunder)
+
+        overunder = create_overunder(0, 0)
+        self.assertEqual(overunder["overunder"], "On budget")
+        self.assertEqual(overunder["amount"], 0)
+        self.assertEqual(overunder["percentage_overunder"], 0)
+
+        overunder = create_overunder(100, 0)
+        self.assertEqual(overunder["overunder"], "Over")
+        self.assertEqual(overunder["amount"], 100)
+        self.assertEqual(overunder["percentage_overunder"], "")
+
+        overunder = create_overunder(0, 100)
+        self.assertEqual(overunder["overunder"], "Under")
+        self.assertEqual(overunder["amount"], 100)
+        self.assertEqual(overunder["percentage_overunder"], 100)
+
+        overunder = create_overunder(25, 100)
+        self.assertEqual(overunder["overunder"], "Under")
+        self.assertEqual(overunder["amount"], 75)
+        self.assertEqual(overunder["percentage_overunder"], 75)
+
+        overunder = create_overunder(100, 25)
+        self.assertEqual(overunder["overunder"], "Over")
+        self.assertEqual(overunder["amount"], 75)
+        self.assertEqual(overunder["percentage_overunder"], 300)
+        
 
 class ExpandedProjectSerializerTest(TestCase):
     def setUp(self):

@@ -28,3 +28,8 @@ PROJECT_APPS = (
 )
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+    }
+}

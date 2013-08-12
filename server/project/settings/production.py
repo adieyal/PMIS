@@ -49,14 +49,25 @@ SERVER_EMAIL = EMAIL_HOST_USER
 
 
 ########## DATABASE CONFIGURATION
+#DATABASES = {
+#        'default': {
+#            'ENGINE': 'django.db.backends.mysql',
+#            'NAME': 'pmis_production',
+#            'USER': 'pmis_production',
+#            'PASSWORD': '551*main*Florida*suffix*various*348',
+#            'HOST': '/var/run/mysqld/mysqld.sock',
+#        }
+#}
+
 DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'pmis_production',
-            'USER': 'pmis_production',
-            'PASSWORD': '551*main*Florida*suffix*various*348',
-            'HOST': '/var/run/mysqld/mysqld.sock',
-        }
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': normpath(join(DJANGO_ROOT, 'default.db')),
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    }
 }
 ########## END DATABASE CONFIGURATION
 

@@ -1,3 +1,4 @@
+from __future__ import division
 from django.http import HttpResponse, Http404
 from django.core.cache import cache
 from collections import OrderedDict
@@ -8,6 +9,7 @@ import json
 import project.apps.projects.models as models
 import project.apps.api.serializers as serializers
 from project.apps.api.reports import graphhelpers
+from django.views.decorators.cache import cache_page
 
 """
 JSON views to product reports
@@ -58,10 +60,6 @@ def district_report_json(district_id, date):
     year = date.year
     month = date.month
 
-    key = 'district_%s_%s_%s' % (district_id, year, month)
-    js = cache.get(key)
-    #if js: return js
-        
     date = datetime(year, month, 1)
 
     district = get_object_or_404(models.District, pk=district_id)
@@ -87,7 +85,6 @@ def district_report_json(district_id, date):
             ],
         }
     }
-    cache.set(key, js, 30)
     return js
 
 def handler(obj):
@@ -98,12 +95,14 @@ def handler(obj):
     else:
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
+@cache_page(60 * 5)
 def district_report(request, district_id, year, month):
     year, month = int(year), int(month)
     js = district_report_json(district_id, datetime(year, month, 1))
-    return HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
+    response = HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
+    return response
 
-
+@cache_page(60 * 5)
 def dashboard_graphs(request, district_id, year, month):
 
     def create_gauges(client):
@@ -112,15 +111,34 @@ def dashboard_graphs(request, district_id, year, month):
 
         return graphhelpers.dashboard_gauge(val1, val2)
 
-    def create_client_sliders(client):
-        val1 = client["overall_expenditure"]["planned_expenditure"]
-        val2 = client["overall_expenditure"]["actual_expenditure"]
-        budget = client["total_budget"]
-        if client["total_budget"] == 0:
-            return graphhelpers.dashboard_slider(0, 0, client["name"])
+    def create_expenditure_slider(planned, actual, budget, client):
+        if budget == 0:
+            return graphhelpers.dashboard_slider(0, 0, client, text1="Planned", text2="Actual")
         else:
-            val1 = val1 / budget; val2 = val2 / budget
-            return graphhelpers.dashboard_slider(val1 / 10, val2 / 10, client["name"])
+            planned = planned / budget; actual = actual / budget
+            return graphhelpers.dashboard_slider(planned, actual, client, text1="Planned", text2="Actual")
+
+    def create_project_slider(project):
+        val1 = project["expenditure"]["planned"]
+        val2 = project["expenditure"]["actual"]
+        budget = float(project["budget"])
+        return create_expenditure_slider(val1, val2, budget, project["client"])
+
+    def create_client_sliders(client):
+        planned = client["overall_expenditure"]["planned_expenditure"]
+        actual = client["overall_expenditure"]["actual_expenditure"]
+        budget = client["total_budget"]
+        return create_expenditure_slider(planned, actual, budget, client["name"])
+
+    def create_project_progress_slider(project):
+        planned = project["progress"]["planned"]
+        actual = project["progress"]["actual"]
+        m = max(planned, actual)
+        if m == 0:
+            return graphhelpers.dashboard_slider(0, 0, project["client"])
+        else:
+            planned, actual = planned / m, actual / m
+            return graphhelpers.dashboard_slider(planned, actual, project["client"])
 
     year, month = int(year), int(month)
     data = district_report_json(district_id, datetime(year, month, 1))
@@ -128,8 +146,18 @@ def dashboard_graphs(request, district_id, year, month):
     js = OrderedDict()
     for i, client in enumerate(data["clients"]):
         js["gauge%d" % (i + 1)] = create_gauges(client)
-        js["slider%d" % (i + 1)] = create_client_sliders(client)
+        js["client_slider%d" % (i + 1)] = create_client_sliders(client)
+        js["stagespie%d" % (i + 1)] = 0
 
-    return HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
+    for i, project in enumerate(data["projects"]["best_performing"]):
+        js["best%d_expenditure" % (i + 1)] = create_project_slider(project)
+        js["best%d_progress" % (i + 1)] = create_project_progress_slider(project)
+
+    for i, project in enumerate(data["projects"]["worst_performing"]):
+        js["worst%d_expenditure" % (i + 1)] = create_project_slider(project)
+        js["worst%d_progress" % (i + 1)] = create_project_progress_slider(project)
+
+    response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
+    return response
 
     

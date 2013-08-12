@@ -86,6 +86,24 @@ class FinancialYearTest(TestCase):
         self.assertTrue(models.FinancialYearManager.yearmonth_in_financial_year(2014, 2013, 6))
         self.assertFalse(models.FinancialYearManager.yearmonth_in_financial_year(2013, 2013, 6))
 
+    def test_start_of_year(self):
+        dt = models.FinancialYearManager.start_of_year(2014)
+        self.assertEqual(dt.year, 2013)
+        self.assertEqual(dt.month, 4)
+        self.assertEqual(dt.day, 1)
+
+        dt = models.FinancialYearManager.start_of_year(2013)
+        self.assertEqual(dt.year, 2012)
+        self.assertEqual(dt.month, 4)
+        self.assertEqual(dt.day, 1)
+
+    def test_end_of_year(self):
+        dt = models.FinancialYearManager.end_of_year(2014)
+        self.assertEqual(dt.year, 2014)
+        self.assertEqual(dt.month, 3)
+        self.assertEqual(dt.day, 31)
+        
+
 class ProjectManagerTest(TestCase):
     def setUp(self):
         self.client = factories.ClientFactory.create()
@@ -333,6 +351,18 @@ class TestProject(TestCase):
 
         self.assertEqual(project.actual_expenditure(date1), 100)
         self.assertEqual(project.actual_expenditure(date2), 300)
+
+    def test_actual_expenditure_with_previous_expenses(self):
+        date1 = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+
+        factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
+        factories.MonthlySubmissionFactory(project=project, actual_expenditure=200, date=date2)
+        factories.ProjectFinancial(project=project, previous_expenses=500)
+
+        self.assertEqual(project.actual_expenditure_overall(), 800)
         
     def test_planned_expenditure(self):
 
@@ -425,6 +455,23 @@ class TestProject(TestCase):
         self.assertEqual(projects.total_actual_expenditure(date1), total)
         total = sum([p.actual_expenditure(date2) for p in projects])
         self.assertEqual(projects.total_actual_expenditure(date2), total)
+
+    def test_previous_expenditure(self):
+        models.Project.objects.all().delete()
+        date1 = datetime(2013, 5, 1)
+        date2 = datetime(2013, 6, 1)
+
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
+            factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date2)
+            factories.ProjectFinancialFactory(project=project, previous_expenses=1000)
+
+        # Test expenditure using previous expenditure as well
+
+        projects = models.Project.objects.all()
+        total = sum([p.actual_expenditure_overall() for p in projects])
+        self.assertEqual(projects.total_actual_expenditure_overall(), total)
         
     def test_total_planned_expenditure(self):
         models.Project.objects.all().delete()
