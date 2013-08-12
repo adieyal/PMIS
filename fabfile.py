@@ -66,6 +66,7 @@ def deploy():
     with api.cd(code_dir):
         api.run("git pull origin master")
         api.run("%s install -r requirements/test.txt --quiet" % pip)
+        migrate()
         api.run("%s manage.py collectstatic --noinput" % python)
         restart()
     #trigger_hudson()
