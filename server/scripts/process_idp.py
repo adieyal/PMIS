@@ -61,7 +61,7 @@ def dump_to_json(data):
     dthandler = lambda obj: obj.isoformat() if isinstance(obj, datetime) else None
     return json.dumps(data, default=dthandler, indent=4)
 
-def process_file(filename):
+def process_file(filename, processor):
     all_projects = []
     workbook = WorkBook(filename)
     for sheet in workbook.sheets():
@@ -70,14 +70,15 @@ def process_file(filename):
         #if "(ONGOING)" in sheet.name or "(COMPLETE" in sheet.name:
         for label in ["ONGOING", "ON GOING", "ON-GOING", "ON-GO"]:
             if label in sheet.name.upper():
-                projects = process_sheet(sheet)
+                
+                projects = process_sheet(sheet, processor)
                 all_projects.extend(projects)
                 break
         #else:
         #    print sheet.name
     print dump_to_json(all_projects)
 
-def process_sheet(sheet):
+def process_sheet(sheet, processor_class):
     projects = []
     try:
         programme = sheet.cell("A6")
@@ -98,8 +99,9 @@ def process_sheet(sheet):
             except ValueError:
                 continue
 
-            processor = ModernProcessor(sheet)
-            project = processor.process_project(cell, current_district, programme)
+            _, row = sheet._c2c(cell)
+            processor = processor_class(sheet, row + 1)
+            project = processor.process_project(current_district, programme)
             projects.append(project)
             
     except IndexError:
@@ -107,38 +109,42 @@ def process_sheet(sheet):
     return projects
 
 class ProjectProcessor(object):
-    def __init__(self, sheet):
+    def __init__(self, sheet, row):
         self.sheet = sheet
+        self.row = row
 
-    def municipality(self, row):
+    @property
+    def municipality(self):
         return ""
 
 
-    def scope_of_work(self, row):
+    @property
+    def scope_of_work(self):
         return []
 
 
-    def parse_progress(self, current_row):
+    @property
+    def parse_progress(self):
 
         month_cols = self.activity_month_cols
 
         planned_expenditure = [
-            to_float(self.sheet.cell("%s%s" % (col, current_row + self.planned_expenditure_row))) * 1000
+            to_float(self.sheet.cell("%s%s" % (col, self.row + self.planned_expenditure_row))) * 1000
             for col in month_cols
         ]
 
         planned_progress = [
-            to_float(self.sheet.cell("%s%s" % (col, current_row + self.planned_progress_row))) 
+            to_float(self.sheet.cell("%s%s" % (col, self.row + self.planned_progress_row))) 
             for col in month_cols
         ]
 
         actual_expenditure = [
-            to_float(self.sheet.cell("%s%s" % (col, current_row + self.actual_expenditure_row))) * 1000
+            to_float(self.sheet.cell("%s%s" % (col, self.row + self.actual_expenditure_row))) * 1000
             for col in month_cols
         ]
 
         actual_progress = [
-            to_float(self.sheet.cell("%s%s" % (col, current_row + self.actual_progress_row))) 
+            to_float(self.sheet.cell("%s%s" % (col, self.row + self.actual_progress_row))) 
             for col in month_cols
         ]
 
@@ -154,35 +160,33 @@ class ProjectProcessor(object):
             })
         return progress
 
-    def process_project(self, start_cell, district, programme):
-        col, row = re_cell.search(start_cell).groups()
-        row = int(row)
+    def process_project(self, district, programme):
 
         return {
             "year" : year,
             "month" : month,
-            "project" : self.project_name(row),
-            "project_code" : self.project_code(row),
+            "project" : self.project_name,
+            "project_code" : self.project_code,
             "district" : district,
-            "municipality" : self.municipality(row),
+            "municipality" : self.municipality,
             "programme" : programme,
-            "total_anticipated_cost" : self.total_anticipated_cost(row),
-            "prev_year_expenditure" : self.prev_year_expenditure(row),
-            "allocated_budget" : self.allocated_budget(row),
+            "total_anticipated_cost" : self.total_anticipated_cost,
+            "prev_year_expenditure" : self.prev_year_expenditure,
+            "allocated_budget" : self.allocated_budget,
             "allocated_planning_budget" : 0,
-            "expenditure_to_date_current" : self.expenditure_to_date_current(row),
-            "expenditure_to_date" : self.expenditure_to_date(row),
-            "start_date" : self.start_date(row),
-            "completion_date" : self.completion_date(row),
-            "revised_completion" : self.revised_completion_date(row),
-            "progress" : self.parse_progress(row),
-            "comment" : self.comment(row),
-            "mitigation" : self.mitigation(row),
-            "completion_dates" : self.completion_dates(row),
-            "revised_completion_dates" : self.revised_completion_dates(row),
-            "consultant" : self.consultant(row),
-            "contractor" : self.contractor(row),
-            "scope_of_work" : self.scope_of_work(row),
+            "expenditure_to_date_current" : self.expenditure_to_date_current,
+            "expenditure_to_date" : self.expenditure_to_date,
+            "start_date" : self.start_date,
+            "completion_date" : self.completion_date,
+            "revised_completion" : self.revised_completion_date,
+            "progress" : self.parse_progress,
+            "comment" : self.comment,
+            "mitigation" : self.mitigation,
+            "completion_dates" : self.completion_dates,
+            "revised_completion_dates" : self.revised_completion_dates,
+            "consultant" : self.consultant,
+            "contractor" : self.contractor,
+            "scope_of_work" : self.scope_of_work,
         }
 
 class BasicProcessor(ProjectProcessor):
@@ -207,11 +211,13 @@ class BasicProcessor(ProjectProcessor):
     def actual_expenditure_row(self):
         return 5
 
-    def project_name(self, row):
-        return self.sheet.cell("B%s" % row)
+    @property
+    def project_name(self):
+        return self.sheet.cell("B%s" % self.row)
 
-    def project_code(self, row):
-        return self.sheet.cell("C%s" % row)
+    @property
+    def project_code(self):
+        return self.sheet.cell("C%s" % self.row)
 
     @property
     def total_anticipated_cost(self):
@@ -220,17 +226,21 @@ class BasicProcessor(ProjectProcessor):
         except ValueError:
             return None
 
-    def prev_year_expenditure(self, row):
-        return float(self.sheet.cell("E%s" % row)) * 1000
+    @property
+    def prev_year_expenditure(self):
+        return float(self.sheet.cell("E%s" % self.row)) * 1000
 
-    def allocated_budget(self, row):
-        return float(self.sheet.cell("F%s" % row)) * 1000
+    @property
+    def allocated_budget(self):
+        return float(self.sheet.cell("F%s" % self.row)) * 1000
 
-    def expenditure_to_date_current(self, row):
-        return float(self.sheet.cell("G%s" % row)) * 1000
+    @property
+    def expenditure_to_date_current(self):
+        return float(self.sheet.cell("G%s" % self.row)) * 1000
 
-    def expenditure_to_date(self, row):
-        return float(self.sheet.cell("H%s" % row)) * 1000
+    @property
+    def expenditure_to_date(self):
+        return float(self.sheet.cell("H%s" % self.row)) * 1000
 
     def _date(self, row, string):
         date = None
@@ -238,14 +248,17 @@ class BasicProcessor(ProjectProcessor):
             date = self.sheet.cell_as_date("C%s" % row)
         return date
         
-    def start_date(self, row):
-        return self._date(row + 1, "Start Date")
+    @property
+    def start_date(self):
+        return self._date(self.row + 1, "Start Date")
 
-    def completion_date(self, row):
-        return self._date(row + 2, "Completion Date")
+    @property
+    def completion_date(self):
+        return self._date(self.row + 2, "Completion Date")
 
-    def revised_completion_date(self, row):
-        return self._date(row + 3, "Revised Completion Date") or self._date(row + 3, "Actual Practical Completion Date")
+    @property
+    def revised_completion_date(self):
+        return self._date(self.row + 3, "Revised Completion Date") or self._date(self.row + 3, "Actual Practical Completion Date")
 
     def _dates(self, row):
         date_cols = "WXY"
@@ -255,29 +268,49 @@ class BasicProcessor(ProjectProcessor):
         ]
         return dates
         
-    def completion_dates(self, row):
-        return self._dates(row + 2)
+    @property
+    def completion_dates(self):
+        return self._dates(self.row + 2)
 
-    def revised_completion_dates(self, row):
-        return self._dates(row + 3)
+    @property
+    def revised_completion_dates(self):
+        return self._dates(self.row + 3)
 
-    def comment(self, row):
-        return self.sheet.cell("Z%s" % row)
+    @property
+    def comment(self):
+        return self.sheet.cell("Z%s" % self.row)
         
-    def mitigation(self, row):
-        return self.sheet.cell("AA%s" % row)
+    @property
+    def mitigation(self):
+        return self.sheet.cell("AA%s" % self.row)
 
-    def consultant(self, row):
-        consultant = str(self.sheet.cell("AB%s" % row))
+    @property
+    def consultant(self):
+        consultant = str(self.sheet.cell("AB%s" % self.row))
         if ":" in consultant:
             consultant = consultant.split(":")[1].strip()
         return consultant
 
-    def contractor(self, row):
-        contractor = str(self.sheet.cell("AB%s" % (row + 3)))
+    @property
+    def contractor(self):
+        contractor = str(self.sheet.cell("AB%s" % (self.row + 3)))
         if ":" in contractor:
             contractor = contractor.split(":")[1].strip()
         return contractor
+
+class DSDProcessor(BasicProcessor):
+
+    @property
+    def municipality(self):
+        return self.sheet.cell("B%s" % (self.row + 4))
+
+    @property
+    def consultant(self):
+        return str(self.sheet.cell("F%s" % (self.row + 4)))
+     
+    @property
+    def contractor(self):
+        return str(self.sheet.cell("F%s" % (self.row + 5)))
 
 class ModernProcessor(BasicProcessor):
 
@@ -301,26 +334,33 @@ class ModernProcessor(BasicProcessor):
     def actual_expenditure_row(self):
         return 6
 
-    def municipality(self, row):
-        return self.sheet.cell("C%s" % row)
+    @property
+    def municipality(self):
+        return self.sheet.cell("C%s" % self.row)
     
-    def project_code(self, row):
-        return self.sheet.cell("D%s" % row)
+    @property
+    def project_code(self):
+        return self.sheet.cell("D%s" % self.row)
 
-    def total_anticipated_cost(self, row):
-        return to_float(self.sheet.cell("E%s" % row)) * 1000
+    @property
+    def total_anticipated_cost(self):
+        return to_float(self.sheet.cell("E%s" % self.row)) * 1000
 
-    def prev_year_expenditure(self, row):
-        return to_float(self.sheet.cell("F%s" % row)) * 1000
+    @property
+    def prev_year_expenditure(self):
+        return to_float(self.sheet.cell("F%s" % self.row)) * 1000
 
-    def allocated_budget(self, row):
-        return to_float(self.sheet.cell("G%s" % row)) * 1000
+    @property
+    def allocated_budget(self):
+        return to_float(self.sheet.cell("G%s" % self.row)) * 1000
 
-    def expenditure_to_date_current(self, row):
-        return to_float(self.sheet.cell("J%s" % row)) * 1000
+    @property
+    def expenditure_to_date_current(self):
+        return to_float(self.sheet.cell("J%s" % self.row)) * 1000
 
-    def expenditure_to_date(self, row):
-        return to_float(self.sheet.cell("K%s" % row)) * 1000
+    @property
+    def expenditure_to_date(self):
+        return to_float(self.sheet.cell("K%s" % self.row)) * 1000
 
     def _date(self, row, string):
         date = None
@@ -331,14 +371,17 @@ class ModernProcessor(BasicProcessor):
             pass
         return date
         
-    def start_date(self, row):
-        return self._date(row + 2, "Start Date")
+    @property
+    def start_date(self):
+        return self._date(self.row + 2, "Start Date")
 
-    def completion_date(self, row):
-        return self._date(row + 3, "Completion Date")
+    @property
+    def completion_date(self):
+        return self._date(self.row + 3, "Completion Date")
 
-    def revised_completion_date(self, row):
-        return self.completion_date(row)
+    @property
+    def revised_completion_date(self):
+        return self.completion_date(self.row)
 
     def _dates(self, row):
         date_cols = ["Z", "AA", "AB"]
@@ -348,39 +391,53 @@ class ModernProcessor(BasicProcessor):
         ]
         return dates
         
-    def completion_dates(self, row):
+    @property
+    def completion_dates(self):
         try:
-            return self._dates(row + 3)
+            return self._dates(self.row + 3)
         except ValueError:
             return []
 
-    def revised_completion_dates(self, row):
-        return self.completion_dates(row)
+    @property
+    def revised_completion_dates(self):
+        return self.completion_dates(self.row)
 
-    def comment(self, row):
-        return self.sheet.cell("AC%s" % row)
+    @property
+    def comment(self):
+        return self.sheet.cell("AC%s" % self.row)
         
-    def mitigation(self, row):
-        return self.sheet.cell("AD%s" % row)
+    @property
+    def mitigation(self):
+        return self.sheet.cell("AD%s" % self.row)
 
-    def consultant(self, row):
-        return self.sheet.cell("F%s" % (row + 4))
+    @property
+    def consultant(self):
+        return self.sheet.cell("F%s" % (self.row + 4))
 
-    def contractor(self, row):
-        return self.sheet.cell("F%s" % (row + 5))
+    @property
+    def contractor(self):
+        return self.sheet.cell("F%s" % (self.row + 5))
 
-    def scope_of_work(self, row):
-        scope_str = self.sheet.cell("F%s" % (row + 6))
+    @property
+    def scope_of_work(self):
+        scope_str = self.sheet.cell("F%s" % (self.row + 6))
         return scope_str.split(",")
+
+processors = {
+    "modern" : ModernProcessor,
+    "dsd" : DSDProcessor,
+}
+
 
 if __name__ == "__main__":
     filename = sys.argv[1]
     year = int(sys.argv[2])
     month = int(sys.argv[3])
+    processor = sys.argv[4]
+
+    processor = processors[processor]
     financial_year_months = range(4, 13) + range(1, 4)
     calc_year = (year + 1) if month > 3 else year 
     months = zip([calc_year - 1] * 9 + [calc_year] * 3, financial_year_months)
-    process_file(filename)
-#sheet = self.workbook.sheet_by_name(sheet_name)
-#data = ftypes.list(*self._load_data())
+    process_file(filename, processor)
 
