@@ -460,7 +460,9 @@ class ProjectRole(models.Model):
 class ProjectFinancial(models.Model):
     total_anticipated_cost = models.FloatField(default=0)
     previous_expenses = models.FloatField(default=0)
+    final_accounts = models.FloatField(null=True, blank=True)
     project = models.OneToOneField(Project, related_name='project_financial')
+
 
     def percentage_expenditure(self, date):
         try:
