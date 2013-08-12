@@ -458,8 +458,8 @@ class ProjectRole(models.Model):
         return u'%s - %s: %s' % (self.project, self.role, self.entity)
 
 class ProjectFinancial(models.Model):
-    total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    previous_expenses = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    total_anticipated_cost = models.FloatField(default=0)
+    previous_expenses = models.FloatField(default=0)
     project = models.OneToOneField(Project, related_name='project_financial')
 
     def percentage_expenditure(self, date):
@@ -479,8 +479,8 @@ class ProjectFinancial(models.Model):
 
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
-    allocated_budget = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
-    allocated_planning_budget = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+    allocated_budget = models.FloatField(default=0)
+    allocated_planning_budget = models.FloatField(default=0)
     project = models.ForeignKey(Project, related_name='budgets')
 
     def __unicode__(self):
