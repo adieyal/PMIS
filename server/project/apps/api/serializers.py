@@ -118,7 +118,8 @@ def condensed_project_serializer(project, date):
             "perc_spent" : tryexcept("project.project_financial.percentage_expenditure(date) * 100"),
             "actual" : project.actual_expenditure(date),
             "planned" : project.planned_expenditure(date),
-            "overunder" : calc_overunder()
+            "overunder" : calc_overunder(),
+            "actual_overall" : project.actual_expenditure_overall()
         }
     }
 

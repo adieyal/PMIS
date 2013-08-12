@@ -247,6 +247,7 @@ class ProjectManagerQuerySet(QuerySet):
             .aggregate(Avg("planned_progress"))
         return res["planned_progress__avg"] or 0
 
+    # TODO - should be for the financial year only
     def total_actual_expenditure(self, date):
         
         expenditure = MonthlySubmission.objects\
@@ -256,6 +257,20 @@ class ProjectManagerQuerySet(QuerySet):
         if expenditure == None:
             return 0
         return expenditure
+
+    def total_actual_expenditure_overall(self):
+        prevexp = ProjectFinancial.objects\
+            .filter(project__in=self)\
+            .aggregate(Sum("previous_expenses"))["previous_expenses__sum"]
+
+        expenditure = MonthlySubmission.objects\
+            .filter(project__in=self)\
+            .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
+        
+        if not prevexp: prevexp = 0
+        if not expenditure: expenditure = 0
+
+        return float(prevexp) + expenditure
 
     def total_planned_expenditure(self, date):
         
@@ -353,12 +368,26 @@ class Project(models.Model):
         except IndexError:
             raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
 
+    # TODO - this should probably be only for this financial year
     def actual_expenditure(self, date):
         try:
             s = MonthlySubmission.objects.filter(date__lte=date, project=self).aggregate(Sum("actual_expenditure"))
-            return s["actual_expenditure__sum"] or 0
+            s = s["actual_expenditure__sum"] or 0
+            return s
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
+
+    def actual_expenditure_overall(self):
+        try:
+        
+            s = MonthlySubmission.objects.filter(project=self).aggregate(Sum("actual_expenditure"))
+            s = s["actual_expenditure__sum"] or 0
+            s += float(self.project_financial.previous_expenses)
+            return s
+        except MonthlySubmission.DoesNotExist:
+            raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
+        except ProjectFinancial.DoesNotExist:
+            return s
             
     def planned_expenditure(self, date):
         try:
@@ -430,6 +459,7 @@ class ProjectRole(models.Model):
 
 class ProjectFinancial(models.Model):
     total_anticipated_cost = models.DecimalField(max_digits=20, decimal_places=2, blank=True, null=True)
+    previous_expenses = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     project = models.OneToOneField(Project, related_name='project_financial')
 
     def percentage_expenditure(self, date):

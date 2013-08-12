@@ -10,13 +10,15 @@ class CondensedProjectSerializerTest(TestCase):
         self.date = datetime(self.year, self.month, 1)
 
         self.project = factories.ProjectFactory()
-        self.financial = factories.ProjectFinancialFactory(project=self.project)
+        self.financial = factories.ProjectFinancialFactory(project=self.project, previous_expenses=1000)
         self.monthlysubmission = factories.MonthlySubmissionFactory(
             project=self.project, actual_progress=55, actual_expenditure="100", date=self.date
         )
+
         self.planning = factories.PlanningFactory(
             project=self.project, planned_progress=20, planned_expenses="200", date=self.date
         )
+
 
     def test_project_serializer(self):
         js = serializers.condensed_project_serializer(self.project, self.date)
@@ -34,6 +36,7 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["expenditure"]["perc_spent"], self.project.project_financial.percentage_expenditure(self.date) * 100)
         self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.date))
         self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.date))
+        self.assertEquals(js["expenditure"]["actual_overall"], self.project.actual_expenditure_overall())
 
     def test_actual_progess_with_missing_submission(self):
         dt = datetime(2014, 1, 1)
