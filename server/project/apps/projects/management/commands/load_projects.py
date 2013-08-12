@@ -5,6 +5,13 @@ from django.db import transaction
 import json
 from project.apps.projects import models
 
+municipalities = {
+    "pixley ka seme" : "Pixley Ka Seme",
+    "Pixley Ka Seme Local Municipality" : "Pixley Ka Seme",
+    "Delmas Local Municipality" : "Delmas",
+    "Mbombela Local Municipality" : "Mbombela",
+    "Msukaligwa Local Municipality" : "Msukaligwa",
+}
 programme_map = {
     "MUD SCHOOLS/UNSAFE/CONVENTIONAL (ON-GOING)" : "Mud and Unsafe Structures (Conventional)",
     "MUD SCHOOLS/UNSAFE/CONVENTIONAL (COMPLETED)" : "Mud and Unsafe Structures (Conventional)",
@@ -54,6 +61,8 @@ programme_map = {
     "REFURBRISHMENT AND RENOVATION (ON-GOING)" : "Refurbishment and Renovation", 
 
     "ENVIROLOO SANITATION SYSTEM (ON-GOING)" : "Enviroloo Toilet",
+
+    "EQUITABLE SHARE" : "Equitable Share",
 }
 
 district_map = {
@@ -75,14 +84,15 @@ class Command(BaseCommand):
     args = 'project json file'
     help = 'Loads projects from a json file'
 
-    def resolve_programme(self, programme):
+    def resolve_programme(self, client, programme):
         programme =  programme_map[programme]
-        programme = models.Programme.objects.get(name=programme)
+        programme = models.Programme.objects.get(client=client, name=programme)
         return programme
 
     def resolve_municipality(self, district, municipality):
         try:
             if municipality:
+                municipality = municipalities[municipality]
                 return models.Municipality.objects.get(name=municipality)
         except models.Municipality.DoesNotExist:
             if district:
@@ -105,12 +115,17 @@ class Command(BaseCommand):
 
         return project
 
-    def create_project_financial(self, project, total_anticipated_cost):
-        financial, _ = models.ProjectFinancial.objects.get_or_create(
-            project=project
-        )
+    def create_project_financial(self, project, total_anticipated_cost, previous_expenses):
+        try:
+            financial = models.ProjectFinancial.objects.get(project=project)
+        except models.ProjectFinancial.DoesNotExist:
+            financial, _ = models.ProjectFinancial.objects.get_or_create(
+                project=project,
+                previous_expenses=previous_expenses
+            )
 
         financial.total_anticipated_cost = total_anticipated_cost
+        financial.previous_expenses = previous_expenses
         financial.save()
         return financial
 
@@ -193,16 +208,17 @@ class Command(BaseCommand):
             municipality = models.Municipality.objects.get_or_create(
                 name="Unknown", district=district)
 
+        client = models.Client.objects.get(name=args[1])
         data = json.load(open(args[0]))
         with transaction.commit_on_success():
             for datum in data:
                 year = int(datum["year"])
-                programme = self.resolve_programme(datum["programme"])
+                programme = self.resolve_programme(client, datum["programme"])
                 municipality = self.resolve_municipality(district, datum["municipality"])
 
                 project = self.create_project(datum["project"], programme, municipality, datum["project_code"])
 
-                self.create_project_financial(project, float(datum["total_anticipated_cost"]))
+                self.create_project_financial(project, float(datum["total_anticipated_cost"]), float(datum["prev_year_expenditure"]))
                 self.create_budget(project, year, float(datum["allocated_budget"]), 0)
                 if datum["start_date"]:
                     self.create_start_date(project, dateparser.parse(datum["start_date"]))

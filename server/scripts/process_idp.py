@@ -213,8 +213,12 @@ class BasicProcessor(ProjectProcessor):
     def project_code(self, row):
         return self.sheet.cell("C%s" % row)
 
-    def total_anticipated_cost(self, row):
-        return float(self.sheet.cell("D%s" % row)) * 1000
+    @property
+    def total_anticipated_cost(self):
+        try:
+            return float(self.sheet.cell("D%s" % self.row)) * 1000
+        except ValueError:
+            return None
 
     def prev_year_expenditure(self, row):
         return float(self.sheet.cell("E%s" % row)) * 1000
