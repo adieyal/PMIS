@@ -359,7 +359,7 @@ class Project(models.Model):
             most_recent_submission = submissions[0]
             return most_recent_submission.actual_progress
         except IndexError:
-            raise ProjectException("Could not find actual progress for %s/%s" % (date.year, date.month))
+            return 0
 
     def planned_progress(self, date):
         try:
@@ -465,14 +465,11 @@ class ProjectFinancial(models.Model):
 
     def percentage_expenditure(self, date):
         try:
-            actual = self.project.monthly_submissions.get(date__year=date.year, date__month=date.month)
+            actual = self.project.actual_expenditure(date)
             
-            return float(actual.actual_expenditure) / float(self.total_anticipated_cost)
-        except MonthlySubmission.DoesNotExist:
-            raise ProjectException("No submission exists for %s/%s" % (date.year, date.month))
-        except ZeroDivisionError:
-            raise ProjectException("Missing project budget - cannot calculate percentage expenditure")
-            
+            return actual / float(self.total_anticipated_cost) * 100
+        except (MonthlySubmission.DoesNotExist, ZeroDivisionError):
+            return 0
 
     def __unicode__(self):
         return u'Financial for %s' % self.project.name

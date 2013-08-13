@@ -218,15 +218,19 @@ class ProjectManagerTest(TestCase):
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
         date = datetime(2013, 6, 1)
+        date2 = datetime(2013, 7, 1)
         project = factories.ProjectFactory()
-        financial = factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
+        financial = factories.ProjectFinancialFactory(project=project, total_anticipated_cost=80)
         actual = factories.MonthlySubmissionFactory(project=project, actual_expenditure=25, date=date)
-        self.assertEqual(financial.percentage_expenditure(date), 0.25)
-        self.assertRaises(models.ProjectException, financial.percentage_expenditure, datetime(2013, 7, 1))
+        self.assertEqual(financial.percentage_expenditure(date), 31.25)
+        self.assertEqual(financial.percentage_expenditure(date2), 31.25)
+
+        factories.MonthlySubmissionFactory(project=project, actual_expenditure=50, date=date2)
+        self.assertEqual(financial.percentage_expenditure(date2), 93.75)
 
         financial.total_anticipated_cost = 0
         financial.save()
-        self.assertRaises(models.ProjectException, financial.percentage_expenditure, date)
+        self.assertEqual(financial.percentage_expenditure(date), 0)
 
 class TestProject(TestCase):
     def setUp(self):
@@ -255,7 +259,7 @@ class TestProject(TestCase):
         date3 = datetime(2013, 8, 1)
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertRaises(models.ProjectException, project.actual_progress, datetime(2012, 3, 1))
+        self.assertEqual(project.actual_progress(date1), 0)
 
         factories.MonthlySubmissionFactory(project=project, actual_progress=54, date=date1)
         factories.MonthlySubmissionFactory(project=project, actual_progress=82, date=date2)

@@ -138,7 +138,7 @@ class DistrictTest(TestCase):
         percentage_expenditure1 = models.Project.objects\
             .client(self.client1)\
             .district(self.district)\
-            .percentage_actual_expenditure(self.date) * 100
+            .percentage_actual_expenditure(self.date)
 
         self.assertEqual(self.client1js["overall_expenditure"]["perc_expenditure"], percentage_expenditure1)
 
