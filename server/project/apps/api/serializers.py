@@ -64,8 +64,8 @@ class ScopeCodeSerializer(serializers.HyperlinkedModelSerializer):
 def condensed_project_serializer(project, date):
 
     def calc_overunder():
-        actual_spend = project.actual_expenditure(date)
-        planned_spend = project.planned_expenditure(date)
+        actual_spend = project.fy(date).actual_expenditure
+        planned_spend = project.fy(date).planned_expenditure
 
         spending_difference = float(actual_spend - planned_spend)
         if spending_difference == 0:
@@ -110,10 +110,10 @@ def condensed_project_serializer(project, date):
         "jobs" : project.jobs,
         "expenditure" : {
             "perc_spent" : project.project_financial.percentage_expenditure(date),
-            "actual" : project.actual_expenditure(date),
-            "planned" : project.planned_expenditure(date),
+            "actual" : project.fy(date).actual_expenditure,
+            "planned" : project.fy(date).planned_expenditure,
             "overunder" : calc_overunder(),
-            "actual_overall" : project.actual_expenditure_overall()
+            "actual_overall" : project.all(date).actual_expenditure
         }
     }
 

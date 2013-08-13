@@ -34,9 +34,9 @@ class CondensedProjectSerializerTest(TestCase):
         self.assertEquals(js["progress"]["planned"], self.project.planned_progress(self.date))
         self.assertEquals(js["jobs"], self.project.jobs)
         self.assertEquals(js["expenditure"]["perc_spent"], self.project.project_financial.percentage_expenditure(self.date))
-        self.assertEquals(js["expenditure"]["actual"], self.project.actual_expenditure(self.date))
-        self.assertEquals(js["expenditure"]["planned"], self.project.planned_expenditure(self.date))
-        self.assertEquals(js["expenditure"]["actual_overall"], self.project.actual_expenditure_overall())
+        self.assertEquals(js["expenditure"]["actual"], self.project.fy(self.date).actual_expenditure)
+        self.assertEquals(js["expenditure"]["planned"], self.project.fy(self.date).planned_expenditure)
+        self.assertEquals(js["expenditure"]["actual_overall"], self.project.all(self.date).actual_expenditure)
 
     def test_actual_progess_with_missing_submission(self):
         dt = datetime(2014, 1, 1)
@@ -59,14 +59,6 @@ class CondensedProjectSerializerTest(TestCase):
             js = serializers.condensed_project_serializer(project, self.date)
             overunder = js["expenditure"]["overunder"]
             return overunder
-
-        #js = serializers.condensed_project_serializer(self.project, self.date)
-        #
-        #self.assertIn("overunder", js["expenditure"])
-        #overunder = js["expenditure"]["overunder"]
-        #self.assertIn("overunder", overunder)
-        #self.assertIn("amount", overunder)
-        #self.assertIn("percentage_overunder", overunder)
 
         overunder = create_overunder(0, 0)
         self.assertEqual(overunder["overunder"], "On budget")
