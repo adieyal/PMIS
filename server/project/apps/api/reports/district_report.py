@@ -35,8 +35,8 @@ def district_client_json(district, client, date):
             "planned" : projects.average_planned_progress(date),
         },
         "overall_expenditure" : {
-            "perc_expenditure" : projects.percentage_actual_expenditure(date),
-            "actual_expenditure" : projects.total_actual_expenditure(date),
+            "perc_expenditure" : projects.fy.percentage_actual_expenditure(date),
+            "actual_expenditure" : projects.fy.actual_expenditure(date),
             "planned_expenditure" : projects.total_planned_expenditure(date),
         },
         "total_projects" : projects.count(),
@@ -95,14 +95,14 @@ def handler(obj):
     else:
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
-@cache_page(60 * 5)
+#@cache_page(60 * 5)
 def district_report(request, district_id, year, month):
     year, month = int(year), int(month)
     js = district_report_json(district_id, datetime(year, month, 1))
     response = HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
     return response
 
-@cache_page(60 * 5)
+#@cache_page(60 * 5)
 def dashboard_graphs(request, district_id, year, month):
 
     def create_gauges(client):

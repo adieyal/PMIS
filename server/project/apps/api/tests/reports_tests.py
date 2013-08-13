@@ -135,7 +135,7 @@ class DistrictTest(TestCase):
         
         self.assertTrue("overall_expenditure" in self.client1js)
         self.assertTrue("perc_expenditure" in self.client1js["overall_expenditure"])
-        percentage_expenditure1 = models.Project.objects\
+        percentage_expenditure1 = models.Project.objects.fy\
             .client(self.client1)\
             .district(self.district)\
             .percentage_actual_expenditure(self.date)

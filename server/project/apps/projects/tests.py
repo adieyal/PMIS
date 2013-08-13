@@ -389,7 +389,6 @@ class TestProject(TestCase):
 
         self.assertEqual(project.fy(date1).planned_expenditure, 100)
         self.assertEqual(project.fy(date2).planned_expenditure, 300)
-        self.assertEqual(project.all(date2).planned_expenditure, 350)
 
     def test_start_date(self):
         project = self.projects[0]
@@ -441,7 +440,7 @@ class TestProject(TestCase):
         date1 = datetime(2013, 5, 1)
         date2 = datetime(2013, 6, 1)
 
-        self.assertEqual(models.Project.objects.total_actual_expenditure(date1), 0)
+        self.assertEqual(models.Project.objects.fy.actual_expenditure(date1), 0)
         for i in range(5):
             project = factories.ProjectFactory()
             factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date1)
@@ -449,21 +448,21 @@ class TestProject(TestCase):
             factories.MonthlySubmissionFactory(project=project, actual_expenditure=100, date=date2)
 
         # Should include only may expenditure
-        projects = models.Project.objects.all()
+        projects = models.Project.objects.fy.all()
         total = sum([p.fy(date1).actual_expenditure for p in projects])
-        self.assertEqual(projects.total_actual_expenditure(date1), total)
+        self.assertEqual(projects.fy.actual_expenditure(date1), total)
 
         # Should include both may and june expenditure
         total = sum([p.fy(date2).actual_expenditure for p in projects])
-        self.assertEqual(projects.total_actual_expenditure(date2), total)
+        self.assertEqual(projects.fy.actual_expenditure(date2), total)
 
         # Check that subsets are catered for - i.e. not just .all()
         district = projects[0].municipality.district
-        projects = models.Project.objects.district(district)
+        projects = models.Project.objects.fy.district(district)
         total = sum([p.fy(date1).actual_expenditure for p in projects])
-        self.assertEqual(projects.total_actual_expenditure(date1), total)
+        self.assertEqual(projects.fy.actual_expenditure(date1), total)
         total = sum([p.fy(date2).actual_expenditure for p in projects])
-        self.assertEqual(projects.total_actual_expenditure(date2), total)
+        self.assertEqual(projects.fy.actual_expenditure(date2), total)
 
     def test_previous_expenditure(self):
         models.Project.objects.all().delete()
@@ -480,7 +479,7 @@ class TestProject(TestCase):
 
         projects = models.Project.objects.all()
         total = sum([p.all(date2).actual_expenditure for p in projects])
-        self.assertEqual(projects.total_actual_expenditure_overall(), total)
+        self.assertEqual(projects.alltime.actual_expenditure(date2), total)
         
     def test_total_planned_expenditure(self):
         models.Project.objects.all().delete()
@@ -513,16 +512,16 @@ class TestProject(TestCase):
         self.assertEqual(projects.total_planned_expenditure(date2), total)
 
     def test_percentage_actual_expenditure(self):
-        projects = models.Project.objects.district(self.munic1.district)
+        projects = models.Project.objects.fy.district(self.munic1.district)
         budget = projects.total_budget()
-        actual_expenditure = projects.total_actual_expenditure(self.date)
-        self.assertEqual(projects.percentage_actual_expenditure(self.date), actual_expenditure / budget * 100)
+        actual_expenditure = projects.fy.actual_expenditure(self.date)
+        self.assertEqual(projects.fy.percentage_actual_expenditure(self.date), actual_expenditure / budget * 100)
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertEqual(models.Project.objects.all().percentage_actual_expenditure(self.date), 0)
+        self.assertEqual(models.Project.objects.fy.percentage_actual_expenditure(self.date), 0)
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
         factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
-        self.assertEqual(models.Project.objects.all().total_actual_expenditure(self.date), 0)
+        self.assertEqual(models.Project.objects.fy.actual_expenditure(self.date), 0)

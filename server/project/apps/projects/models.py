@@ -204,6 +204,16 @@ class Milestone(models.Model):
 
 class ProjectQuerySet(QuerySet):
 
+    @property
+    def fy(self):
+        self.__class__ = FYProjectQuerySet
+        return self
+
+    @property
+    def alltime(self):
+        self.__class__ = AllProjectQuerySet
+        return self
+
     def client(self, client):
         if type(client) == int:
             return self.filter(programme__client__id=client)
@@ -215,6 +225,18 @@ class ProjectQuerySet(QuerySet):
             return self.filter(municipality__id=municipality)
         else:
             return self.filter(municipality=municipality)
+
+    def district(self, district):
+        if type(district) == int:
+            return self.filter(municipality__district__id=district)
+        else:
+            return self.filter(municipality__district=district)
+
+    def programme(self, programme):
+        if type(programme) == int:
+            return self.filter(programme__id=programme)
+        else:
+            return self.filter(programme__id=programme)
 
     def actual_progress_between(self, progress_start, progress_end):
         return self.filter(
@@ -249,26 +271,7 @@ class ProjectQuerySet(QuerySet):
             .aggregate(Avg("planned_progress"))
         return res["planned_progress__avg"] or 0
 
-    # TODO - should be for the financial year only
-    def total_actual_expenditure(self, date):
-        return MonthlySubmission.objects.filter(project__in=self).fyexpenditure(date)
-
-    def total_actual_expenditure_overall(self):
-        prevexp = ProjectFinancial.objects\
-            .filter(project__in=self)\
-            .aggregate(Sum("previous_expenses"))["previous_expenses__sum"]
-
-        expenditure = MonthlySubmission.objects\
-            .filter(project__in=self)\
-            .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
-        
-        if not prevexp: prevexp = 0
-        if not expenditure: expenditure = 0
-
-        return float(prevexp) + expenditure
-
     def total_planned_expenditure(self, date):
-        
         expenditure = Planning.objects\
             .filter(project__in=self, date__lte=date)\
             .aggregate(Sum("planned_expenses"))["planned_expenses__sum"]
@@ -276,26 +279,6 @@ class ProjectQuerySet(QuerySet):
         if expenditure == None:
             return 0
         return expenditure
-
-    def percentage_actual_expenditure(self, date):
-        actual_expenditure = self.total_actual_expenditure(date)
-        budget = self.total_budget()
-        if budget == 0:
-            return 0
-
-        return self.total_actual_expenditure(date) / self.total_budget() * 100
-
-    def district(self, district):
-        if type(district) == int:
-            return self.filter(municipality__district__id=district)
-        else:
-            return self.filter(municipality__district=district)
-
-    def programme(self, programme):
-        if type(programme) == int:
-            return self.filter(programme__id=programme)
-        else:
-            return self.filter(programme__id=programme)
 
     def _sort_by_performance(self, date, reverse):
         projects_with_plannings_for_date = self.filter(
@@ -330,6 +313,39 @@ class ProjectManager(models.Manager):
         Any method defined on our queryset is now available in our manager
         """
         return getattr(self.get_query_set(), name)
+
+class FYProjectQuerySet(ProjectQuerySet):
+    def actual_expenditure(self, date):
+        return MonthlySubmission.objects.filter(project__in=self).fyexpenditure(date)
+
+    def percentage_actual_expenditure(self, date):
+        actual_expenditure = self.actual_expenditure(date)
+        budget = self.total_budget()
+        if budget == 0:
+            return 0
+
+        return (actual_expenditure / budget) * 100
+
+class AllProjectQuerySet(ProjectQuerySet):
+    def actual_expenditure(self, date):
+        prevexp = ProjectFinancial.objects\
+            .filter(project__in=self)\
+            .aggregate(Sum("previous_expenses"))["previous_expenses__sum"]
+
+        expenditure = MonthlySubmission.objects.filter(project__in=self).expenditure(date)
+        
+        if not prevexp: prevexp = 0
+        if not expenditure: expenditure = 0
+
+        return float(prevexp) + expenditure
+
+    def percentage_actual_expenditure(self, date):
+        actual_expenditure = self.actual_expenditure(date)
+        budget = self.total_budget()
+        if budget == 0:
+            return 0
+
+        return (actual_expenditure / budget) * 100
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
@@ -422,7 +438,6 @@ class Project(models.Model):
     def jobs(self):
         return 434343
             
-        
     def performance(self, date):
         try:
             return self.actual_progress(date) / self.planned_progress(date)
