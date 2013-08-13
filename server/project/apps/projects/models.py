@@ -1,3 +1,4 @@
+from __future__ import division
 import datetime
 from dateutil.relativedelta import relativedelta
 from django.contrib.auth.models import User
@@ -288,7 +289,7 @@ class ProjectManagerQuerySet(QuerySet):
         if budget == 0:
             return 0
 
-        return float(self.total_actual_expenditure(date)) / float(self.total_budget())
+        return self.total_actual_expenditure(date) / self.total_budget() * 100
 
     def district(self, district):
         if type(district) == int:

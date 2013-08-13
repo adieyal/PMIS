@@ -1,3 +1,4 @@
+from __future__ import division
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 import factories
@@ -507,7 +508,7 @@ class TestProject(TestCase):
         projects = models.Project.objects.district(self.munic1.district)
         budget = projects.total_budget()
         actual_expenditure = projects.total_actual_expenditure(self.date)
-        self.assertEqual(projects.percentage_actual_expenditure(self.date), float(actual_expenditure) / float(budget))
+        self.assertEqual(projects.percentage_actual_expenditure(self.date), actual_expenditure / budget * 100)
 
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()

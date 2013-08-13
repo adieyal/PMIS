@@ -35,7 +35,7 @@ def district_client_json(district, client, date):
             "planned" : projects.average_planned_progress(date),
         },
         "overall_expenditure" : {
-            "perc_expenditure" : projects.percentage_actual_expenditure(date) * 100,
+            "perc_expenditure" : projects.percentage_actual_expenditure(date),
             "actual_expenditure" : projects.total_actual_expenditure(date),
             "planned_expenditure" : projects.total_planned_expenditure(date),
         },
