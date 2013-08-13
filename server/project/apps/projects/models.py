@@ -64,8 +64,8 @@ class FinancialYearQuerySet(QuerySet):
            q |= Q(**{field + '__month': m})
         return q
 
-    def in_financial_year(self, year):
-        year = int(year)
+    def in_financial_year(self, dt):
+        year = FinancialYearManager.financial_year(dt.year, dt.month)
         previous_year = year - 1
         return self.filter(
             (Q(date__year=previous_year) & self.month_in(FinancialYearQuerySet.previous_months)) |\
@@ -250,14 +250,7 @@ class ProjectManagerQuerySet(QuerySet):
 
     # TODO - should be for the financial year only
     def total_actual_expenditure(self, date):
-        
-        expenditure = MonthlySubmission.objects\
-            .filter(project__in=self, date__lte=date)\
-            .aggregate(Sum("actual_expenditure"))["actual_expenditure__sum"]
-
-        if expenditure == None:
-            return 0
-        return expenditure
+        return MonthlySubmission.objects.filter(project__in=self).actual_year_expenditure(date)
 
     def total_actual_expenditure_overall(self):
         prevexp = ProjectFinancial.objects\
@@ -372,9 +365,7 @@ class Project(models.Model):
     # TODO - this should probably be only for this financial year
     def actual_expenditure(self, date):
         try:
-            s = MonthlySubmission.objects.filter(date__lte=date, project=self).aggregate(Sum("actual_expenditure"))
-            s = s["actual_expenditure__sum"] or 0
-            return s
+            return MonthlySubmission.objects.filter(project=self).actual_year_expenditure(date)
         except MonthlySubmission.DoesNotExist:
             raise ProjectException("Could not find actual expenditure for %s/%s" % (date.year, date.month))
 
@@ -390,6 +381,8 @@ class Project(models.Model):
         except ProjectFinancial.DoesNotExist:
             return s
             
+    # TODO at some point we may need for this to be only for this financial year
+    # and to add an planned_expenditure_overall method
     def planned_expenditure(self, date):
         try:
             s = Planning.objects.filter(date__lte=date, project=self).aggregate(Sum("planned_expenses"))
@@ -567,6 +560,17 @@ class CommentType(models.Model):
     def __unicode__(self):
         return self.name
 
+class MonthlySubmissionQuerySet(FinancialYearQuerySet):
+    def actual_year_expenditure(self, date):
+        s = self\
+            .in_financial_year(date)\
+            .filter(date__lte=date)\
+            .aggregate(Sum("actual_expenditure"))
+        return s["actual_expenditure__sum"] or 0
+
+class MonthlySubmissionManager(FinancialYearManager):
+    def get_query_set(self):
+        return MonthlySubmissionQuerySet(self.model)
 
 class MonthlySubmission(models.Model):
     date = models.DateTimeField(default=lambda : datetime.datetime.now())
@@ -577,7 +581,7 @@ class MonthlySubmission(models.Model):
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
 
-    objects = FinancialYearManager()
+    objects = MonthlySubmissionManager()
 
     def __unicode__(self):
         return "Submission for %s for %s/%s" % (self.project, self.date.year, self.date.month)

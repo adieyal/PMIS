@@ -63,8 +63,8 @@ class FinancialYearTest(TestCase):
 
     def test_financial_year(self):
         
-        planning_2013 = models.Planning.objects.in_financial_year("2013")
-        planning_2014 = models.Planning.objects.in_financial_year("2014")
+        planning_2013 = models.Planning.objects.in_financial_year(datetime(2013, 1, 1))
+        planning_2014 = models.Planning.objects.in_financial_year(datetime(2014, 1, 1))
 
         self.assertEqual(planning_2013.count(), 3)
         self.assertEqual(planning_2014.count(), 9)
