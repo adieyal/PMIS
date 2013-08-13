@@ -43,15 +43,15 @@ def district_client_json(district, client, date):
         # TODO - might need to check project status - i.e. projects completed in previous financial years don't count
         "projects" : {
             "completed_in_fye" : len(projects.completed_by_fye(financial_year)),
-            "currently_in_planning" : len(projects.filter(current_step__phase="planning")),
-            "currently_in_implementation" : len(projects.filter(current_step__phase="implementation")),
-            "currently_in_final_completion" : len(projects.filter(current_step=models.Milestone.final_accounts())),
-            "currently_in_practical_completion" : len(projects.filter(current_step=models.Milestone.final_completion())),
-            "between_0_and_50": len(projects.actual_progress_between(0, 50)),
-            "between_51_and_75": len(projects.actual_progress_between(51, 75)),
-            "between_76_and_99": len(projects.actual_progress_between(76, 99)),
-            "due_in_3_months": 5,
-            "due_this_month": 2,
+            "currently_in_planning" : projects.in_planning.count(),
+            "currently_in_implementation" : projects.in_implementation.count(),
+            "currently_in_final_completion" : projects.in_finalcompletion.count(),
+            "currently_in_practical_completion" : projects.in_practicalcompletion.count(),
+            "between_0_and_50": projects.actual_progress_between(0, 50).count(),
+            "between_51_and_75": projects.actual_progress_between(51, 75).count(),
+            "between_76_and_99": projects.actual_progress_between(76, 99).count(),
+            "due_in_3_months": projects.due_in_3_months(date).count(),
+            "due_this_month": projects.due_in_1_month(date).count(),
         }
     }
 

@@ -14,7 +14,7 @@ from django.db.models import Sum, Avg
 financial_year = range(4, 13) + range(1,4)
 
 YEARS = tuple(map(lambda x: (str(x), x), range(2010, 2060)))
-
+onemonth = relativedelta(months=1)
 
 class ProjectException(Exception):
     pass
@@ -32,7 +32,6 @@ class PMISUser(User):
         proxy = True
 
 class CalendarFunctions(object):
-    onemonth = relativedelta(months=1)
     @staticmethod
     def previous_year(year, month):
         return (year - 1, month)
@@ -44,13 +43,13 @@ class CalendarFunctions(object):
     @staticmethod
     def previous_month(year, month):
         dt = datetime.datetime(year=year, month=month, day=1)
-        dt2 = dt - CalendarFunctions.onemonth
+        dt2 = dt - onemonth
         return (dt2.year, dt2.month)
 
     @staticmethod
     def next_month(year, month):
         dt = datetime.datetime(year=year, month=month, day=1)
-        dt2 = dt + CalendarFunctions.onemonth
+        dt2 = dt + onemonth
         return (dt2.year, dt2.month)
 
 
@@ -250,6 +249,52 @@ class ProjectQuerySet(QuerySet):
             monthly_submissions__actual_progress__lt=progress_end,
         )
 
+    def _sort_by_performance(self, date, reverse):
+        projects_with_plannings_for_date = self.filter(
+            plannings__date__year=date.year, plannings__date__month=date.month
+        )
+        performance = lambda x : x.performance(date)
+        return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
+
+    def best_performing(self, date, count=5):
+        return self._sort_by_performance(date, True)[0:count]
+
+    def worst_performing(self, date, count=5):
+        return self._sort_by_performance(date, False)[0:count]
+
+    def completed_by_fye(self, year):
+        ystart = FinancialYearManager.start_of_year(year)
+        yend = FinancialYearManager.end_of_year(year)
+
+        return self.due_by(yend)
+
+    def due_by(self, date):
+        return self.filter(milestones__milestone=Milestone.practical_completion(), milestones__completion_date__lte=date)
+
+    def due_in_3_months(self, date):
+        dt = date + 3 * onemonth
+        return self.filter(milestones__milestone=Milestone.practical_completion(), milestones__completion_date__lte=dt)
+
+    def due_in_1_month(self, date):
+        dt = date + onemonth
+        return self.filter(milestones__milestone=Milestone.practical_completion(), milestones__completion_date__lte=dt)
+
+    @property
+    def in_planning(self):
+        return self.filter(current_step__phase="planning")
+
+    @property
+    def in_implementation(self):
+        return self.filter(current_step__phase="implementation")
+
+    @property
+    def in_practicalcompletion(self):
+        return self.filter(current_step=Milestone.final_completion())
+
+    @property
+    def in_finalcompletion(self):
+        return self.filter(current_step=Milestone.final_accounts())
+
     def total_budget(self):
         
         val =  self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
@@ -279,25 +324,6 @@ class ProjectQuerySet(QuerySet):
         if expenditure == None:
             return 0
         return expenditure
-
-    def _sort_by_performance(self, date, reverse):
-        projects_with_plannings_for_date = self.filter(
-            plannings__date__year=date.year, plannings__date__month=date.month
-        )
-        performance = lambda x : x.performance(date)
-        return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
-
-    def best_performing(self, date, count=5):
-        return self._sort_by_performance(date, True)[0:count]
-
-    def worst_performing(self, date, count=5):
-        return self._sort_by_performance(date, False)[0:count]
-
-    def completed_by_fye(self, year):
-        ystart = FinancialYearManager.start_of_year(year)
-        yend = FinancialYearManager.end_of_year(year)
-
-        return self.filter(milestones__completion_date__range=(ystart, yend)).distinct()
 
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):

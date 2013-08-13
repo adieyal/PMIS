@@ -183,10 +183,25 @@ class ProjectManagerTest(TestCase):
             self.assertEquals(p.practical_completion_milestone.completion_date.month, 6)
 
         completed_2015 = models.Project.objects.completed_by_fye(2015)
-        self.assertEquals(len(completed_2015), 5)
-        for p in completed_2015:
-            self.assertEquals(p.practical_completion_milestone.completion_date.year, 2014)
-            self.assertEquals(p.practical_completion_milestone.completion_date.month, 6)
+        self.assertEquals(len(completed_2015), 10)
+
+    def test_due_by_date(self):
+        models.Project.objects.all().delete()
+        year, month = 2013, 6
+        date = datetime(year, month, 1)
+        for i in range(1, 6):
+            project = factories.ProjectFactory()
+            factories.ProjectMilestoneFactory(project=project, milestone=models.Milestone.practical_completion(), completion_date=datetime(2013, i, 1))
+
+        projects = models.Project.objects.due_by(datetime(2013, 4, 1))
+        self.assertEqual(projects.count(), 4)
+
+        
+        projects = models.Project.objects.due_in_3_months(datetime(2013, 1, 1))
+        self.assertEqual(projects.count(), 4)
+
+        projects = models.Project.objects.due_in_1_month(datetime(2013, 1, 1))
+        self.assertEqual(projects.count(), 2)
 
     def test_projects_completed_in_fye_different_clients(self):
         models.Project.objects.all().delete()
