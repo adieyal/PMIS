@@ -26,13 +26,24 @@ a:hover {text-decoration:underline; }
 .container{width:1024px; margin:0 auto;}
 
 /* logo-area */
-.logo-area{ background:url(../images/map-bg.png) right bottom no-repeat; background-size:466px 299px; margin:0 0 10px 0;}
+.logo-area { background:right bottom no-repeat; background-size:466px 299px; margin:0 15px 10px 0;}
+.logo-area-ehlanzeni{ background-image:url(../images/district-ehlanzeni.png)}
+.logo-area-nkangala{ background-image:url(../images/district-nkangala.png)}
+.logo-area-gertsibande{ background-image:url(../images/district-gertsibande.png)}
+
 	.logo-area .logo-left-area{ width:525px; float:left; padding:20px 0 0 0;}
 	.logo-area .logo-left-area .logo{ width:269px; height:81px; clear:both; margin:0 0 25px 0;}
 	.logo-area .logo-left-area .logo.marg{ margin:0 0 60px 0;}
 	.logo-area .logo-left-area .district-text{ font-size:14px; font-family:Arial, Helvetica, sans-serif; color:#58585a; font-weight:700; margin:0 0 5px 0;}
 	.logo-area .logo-left-area .district-text .font-weight{ font-weight:400;}
-	.logo-area .logo-left-area .district-text .district-name{ font-size:43px; color:#404041; font-weight:700; line-height:45px; font-family:"Arial Narrow"; text-transform: uppercase;}}
+	.logo-area .logo-left-area .district-text .district-name{
+        font-size:43px;
+        color:#404041;
+        font-weight:700;
+        line-height:45px;
+        text-transform: uppercase;
+        font-family:'Conv_Arial Narrow',Sans-Serif;
+    }
 	.logo-area .logo-left-area .nav-area{ clear:both; margin:0 0 10px 0; height:39px; background:url(../images/ul-bg.png) left center no-repeat;}
 	.logo-area .logo-left-area .nav-area ul{ margin:0; padding:0; list-style:none; float:left;}
 	.logo-area .logo-left-area .nav-area ul.hover-progress-bg{ background:url(../images/ul-hover.png) 137px center no-repeat; height:39px;}
