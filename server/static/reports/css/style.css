@@ -703,6 +703,7 @@ svg .gauge-marker-text {
 #mpmap {
     float: left;
     clear: right;
+    margin-left: 100px;
 }
 
 .mpmap-fewbad {
