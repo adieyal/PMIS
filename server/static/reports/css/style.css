@@ -700,3 +700,23 @@ svg .gauge-marker-text {
 .client-dssl { background-color: #bd7794; }
 
 .spg-arc-text { fill: #58585a !important; }
+#mpmap {
+    float: left;
+    clear: right;
+}
+
+.mpmap-fewbad {
+    fill: #FB6A4A;
+}
+
+.mpmap-morebad {
+    fill: #DE2D26;
+}
+
+.mpmap-lotsbad {
+    fill: #A50F15;
+}
+
+.mpmap-allgood {
+    fill: white;
+}
