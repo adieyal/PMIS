@@ -46,6 +46,7 @@ def migrate():
         api.run("%s manage.py migrate --noinput" % python)
 
 def restart():
+    api.sudo("supervisorctl update")
     api.sudo("supervisorctl restart pmis")
 
 def create_database():
