@@ -73,5 +73,14 @@ def deploy():
         restart()
     #trigger_hudson()
 
+def quick_deploy():
+    """
+    Quickly deploy code with lots of unnecessary stuff"
+    """
+    with api.cd(code_dir):
+        api.run("git pull origin master")
+        api.run("%s manage.py collectstatic --noinput" % python)
+        restart()
+
 def trigger_hudson():
     urllib2.urlopen(trigger_url)
