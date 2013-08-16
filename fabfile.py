@@ -68,6 +68,7 @@ def deploy():
         api.run("%s install -r requirements/test.txt --quiet" % pip)
         migrate()
         api.run("%s manage.py collectstatic --noinput" % python)
+        api.run("%s manage.py fixdata" % python)
         restart()
     #trigger_hudson()
 
