@@ -279,6 +279,7 @@ REST_FRAMEWORK = {
 # XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
 XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept',]
 
+API_CACHE = 60 * 5
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',

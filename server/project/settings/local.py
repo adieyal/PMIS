@@ -43,6 +43,8 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     }
 }
+
+API_CACHE = 5
 ########## END CACHE CONFIGURATION
 
 
