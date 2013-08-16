@@ -94,7 +94,7 @@ def district_report_json(district_id, date):
                 "bad" : {
                     m.name : m.num_projects
                     for m in models.Municipality.objects.filter(
-                        projects__in=models.Project.objects.bad(date)
+                        projects__in=projects.bad(date)
                     ).annotate(num_projects=Count('projects'))
                 },
             }
