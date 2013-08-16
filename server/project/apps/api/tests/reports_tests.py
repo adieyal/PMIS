@@ -363,3 +363,29 @@ class DistrictTest(TestCase):
         else:
             raise Exception("Expected to find client: %s" % client.name)
 
+    def test_projects_by_municipality(self):
+        models.Project.objects.all().delete()
+        models.Municipality.objects.all().delete()
+        date = datetime(2013, 6, 1)
+        district = factories.DistrictFactory()
+        munics = [
+            factories.MunicipalityFactory(district=district),
+            factories.MunicipalityFactory(district=district),
+            factories.MunicipalityFactory(district=district),
+        ]
+
+        vals = {m.name : v for (m, v) in zip(munics, [5, 4, 10])}
+
+        for m, count in vals.items():
+            for i in range(count):
+                municipality = models.Municipality.objects.get(name=m)
+                factories.ProjectFactory(municipality=municipality)
+
+        
+        js = self.reloadjs(district.id)
+
+        by_munic = js["projects"]["by_municipality"]
+        self.assertEqual(len(by_munic), 3)
+        for name, val in by_munic.items():
+            self.assertEqual(val, vals[name])
+        

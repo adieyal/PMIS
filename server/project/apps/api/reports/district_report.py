@@ -6,6 +6,7 @@ from decimal import Decimal
 from datetime import datetime
 from django.shortcuts import get_object_or_404
 import json
+from django.db.models import Count
 import project.apps.projects.models as models
 import project.apps.api.serializers as serializers
 from project.apps.api.reports import graphhelpers
@@ -83,6 +84,10 @@ def district_report_json(district_id, date):
                 serializers.expanded_project_serializer(project, date)
                 for project in worst_projects
             ],
+            "by_municipality" : {
+                m.name : m.num_projects
+                for m in models.Municipality.objects.annotate(num_projects=Count('projects'))
+            }
         }
     }
     return js
