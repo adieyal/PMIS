@@ -57,6 +57,9 @@ class GraphJson(TestCase):
             self.assertEqual(sliderjs[0]["position"], actual)
             self.assertEqual(sliderjs[1]["position"], planned)
 
+    def test_mpmap(self):
+        self.assertIn("mpmap", self.js)
+
 class TestGraphHelpers(TestCase):
     def setUp(self):
         self.sliderfunc = functools.partial(

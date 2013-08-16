@@ -109,14 +109,14 @@ def handler(obj):
     else:
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
-#@cache_page(60 * 5)
+@cache_page(5)
 def district_report(request, district_id, year, month):
     year, month = int(year), int(month)
     js = district_report_json(district_id, datetime(year, month, 1))
     response = HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
     return response
 
-#@cache_page(60 * 5)
+@cache_page(5)
 def dashboard_graphs(request, district_id, year, month):
 
     def create_gauges(client):
@@ -170,6 +170,8 @@ def dashboard_graphs(request, district_id, year, month):
     for i, project in enumerate(data["projects"]["worst_performing"]):
         js["worst%d_expenditure" % (i + 1)] = create_project_slider(project)
         js["worst%d_progress" % (i + 1)] = create_project_progress_slider(project)
+
+    js["mpmap"] = data["projects"]["by_municipality"]["bad"]
 
     response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
     return response
