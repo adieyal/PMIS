@@ -441,7 +441,12 @@ class Project(models.Model):
             most_recent_planning = plannings[0]
             return most_recent_planning.planned_progress
         except IndexError:
-            raise ProjectException("Could not find planned progress for %s/%s" % (date.year, date.month))
+            return 0
+
+    def is_bad(self, date, progress_threshold=10):
+        if self.planned_progress(date) - self.actual_progress(date) > progress_threshold:
+            return True
+        return False
 
     @property
     def start_milestone(self):

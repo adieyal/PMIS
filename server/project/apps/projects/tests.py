@@ -290,7 +290,7 @@ class TestProject(TestCase):
         date3 = datetime(2013, 8, 1)
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertRaises(models.ProjectException, project.planned_progress, datetime(2012, 3, 1))
+        self.assertEqual(project.planned_progress(date1), 0)
 
         factories.PlanningFactory(project=project, planned_progress=54, date=date1)
         factories.PlanningFactory(project=project, planned_progress=82, date=date2)
@@ -540,3 +540,23 @@ class TestProject(TestCase):
         project = factories.ProjectFactory()
         factories.ProjectFinancialFactory(project=project, total_anticipated_cost=100)
         self.assertEqual(models.Project.objects.fy.actual_expenditure(self.date), 0)
+
+    def test_bad_project(self):
+
+        date = datetime(2013, 6, 1)
+        project = factories.ProjectFactory()
+        factories.MonthlySubmissionFactory(project=project, actual_progress=10, date=date)
+        factories.PlanningFactory(project=project, planned_progress=50, date=date)
+
+        self.assertTrue(project.is_bad(date))
+
+        project = factories.ProjectFactory()
+        factories.MonthlySubmissionFactory(project=project, actual_progress=50, date=date)
+        factories.PlanningFactory(project=project, planned_progress=10, date=date)
+
+        self.assertFalse(project.is_bad(date))
+
+        project = factories.ProjectFactory()
+        factories.MonthlySubmissionFactory(project=project, actual_progress=10, date=date)
+        factories.PlanningFactory(project=project, planned_progress=10, date=date)
+        self.assertFalse(project.is_bad(date))
