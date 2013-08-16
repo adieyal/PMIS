@@ -262,6 +262,10 @@ class ProjectQuerySet(QuerySet):
     def worst_performing(self, date, count=5):
         return self._sort_by_performance(date, False)[0:count]
 
+    def bad(self, date):
+        return self.filter(calculations__project__in=self, calculations__is_bad=True)
+
+
     def completed_by_fye(self, year):
         ystart = FinancialYearManager.start_of_year(year)
         yend = FinancialYearManager.end_of_year(year)
@@ -444,6 +448,7 @@ class Project(models.Model):
             return 0
 
     def is_bad(self, date, progress_threshold=10):
+        # TODO need to figure out how to do this more efficiently
         if self.planned_progress(date) - self.actual_progress(date) > progress_threshold:
             return True
         return False
@@ -658,6 +663,13 @@ class MonthlySubmission(models.Model):
         #unique_together = ('project', 'date__month', 'date.year')
         pass
 
+class ProjectCalculations(models.Model):
+    date = models.DateTimeField(default=lambda : datetime.datetime.now())
+    project = models.ForeignKey(Project, related_name='calculations')
+    is_bad = models.NullBooleanField(null=True)
+
+    def __unicode__(self):
+        return unicode(self.project)
 
 class ProjectStatus(models.Model):
     STATUS = (

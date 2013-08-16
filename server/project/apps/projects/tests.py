@@ -230,6 +230,17 @@ class ProjectManagerTest(TestCase):
             self.assertEquals(p.practical_completion_milestone.completion_date.year, year)
             self.assertEquals(p.practical_completion_milestone.completion_date.month, month)
 
+    def test_bad(self):
+        models.Project.objects.all().delete()
+        date = datetime(2013, 6, 1)
+
+        for i in range(10):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, date=date, actual_progress=i*10)
+            factories.PlanningFactory(project=project, date=date, planned_progress=60)
+
+        self.assertEqual(models.Project.objects.bad(date).count(), 5)
+
 class ProjectFinancialTest(TestCase):
     def test_percentage_expenditure(self):
         date = datetime(2013, 6, 1)
