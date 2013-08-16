@@ -64,8 +64,9 @@ def district_report_json(district_id, date):
     date = datetime(year, month, 1)
 
     district = get_object_or_404(models.District, pk=district_id)
-    best_projects = models.Project.objects.district(district).best_performing(date, count=7)
-    worst_projects = models.Project.objects.district(district).worst_performing(date, count=7)
+    projects = models.Project.objects.district(district)
+    best_projects = projects.best_performing(date, count=7)
+    worst_projects = projects.worst_performing(date, count=7)
     js = {
         "date" : date,
         "district" : {
@@ -85,8 +86,16 @@ def district_report_json(district_id, date):
                 for project in worst_projects
             ],
             "by_municipality" : {
-                m.name : m.num_projects
-                for m in models.Municipality.objects.annotate(num_projects=Count('projects'))
+                "count" : {
+                    m.name : m.num_projects
+                    for m in models.Municipality.objects.annotate(num_projects=Count('projects'))
+                },
+                "bad" : {
+                    m.name : m.num_projects
+                    for m in models.Municipality.objects.filter(
+                        projects__in=models.Project.objects.bad(date)
+                    ).annotate(num_projects=Count('projects'))
+                },
             }
         }
     }
@@ -100,14 +109,14 @@ def handler(obj):
     else:
         raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
     
-@cache_page(60 * 5)
+#@cache_page(60 * 5)
 def district_report(request, district_id, year, month):
     year, month = int(year), int(month)
     js = district_report_json(district_id, datetime(year, month, 1))
     response = HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
     return response
 
-@cache_page(60 * 5)
+#@cache_page(60 * 5)
 def dashboard_graphs(request, district_id, year, month):
 
     def create_gauges(client):

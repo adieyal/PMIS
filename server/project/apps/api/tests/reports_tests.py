@@ -363,7 +363,7 @@ class DistrictTest(TestCase):
         else:
             raise Exception("Expected to find client: %s" % client.name)
 
-    def test_projects_by_municipality(self):
+    def test_projects_by_municipality_count(self):
         models.Project.objects.all().delete()
         models.Municipality.objects.all().delete()
         date = datetime(2013, 6, 1)
@@ -384,8 +384,39 @@ class DistrictTest(TestCase):
         
         js = self.reloadjs(district.id)
 
-        by_munic = js["projects"]["by_municipality"]
+        by_munic = js["projects"]["by_municipality"]["count"]
         self.assertEqual(len(by_munic), 3)
         for name, val in by_munic.items():
             self.assertEqual(val, vals[name])
+        
+    def test_bad_projects_by_municipality(self):
+        models.Project.objects.all().delete()
+        models.Municipality.objects.all().delete()
+        date = datetime(2013, 6, 1)
+        district = factories.DistrictFactory()
+        munics = [
+            factories.MunicipalityFactory(district=district),
+            factories.MunicipalityFactory(district=district),
+            factories.MunicipalityFactory(district=district),
+        ]
+
+        vals = {m.name : v for (m, v) in zip(munics, [5, 4, 10])}
+
+        planned_progress = 60
+        bad_threshold = planned_progress - 10
+        for m, count in vals.items():
+            for i in range(count):
+                municipality = models.Municipality.objects.get(name=m)
+                project = factories.ProjectFactory(municipality=municipality)
+                factories.MonthlySubmissionFactory(project=project, date=date, actual_progress=i*10)
+                factories.PlanningFactory(project=project, date=date, planned_progress=planned_progress)
+                factories.ProjectFinancialFactory(project=project)
+
+        js = self.reloadjs(district.id)
+
+        by_munic = js["projects"]["by_municipality"]["bad"]
+        self.assertEqual(len(by_munic), 3)
+        for name, val in by_munic.items():
+            num_bad = len([i for i in range(vals[name]) if i * 10 < bad_threshold])
+            self.assertEqual(val, num_bad)
         
