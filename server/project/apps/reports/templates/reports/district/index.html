@@ -298,7 +298,9 @@
                     <div class="department-num">{{ clients.5.total_projects }}</div><!-- .department-num -->
                 </div><!-- .department-brdr -->
             </div><!-- .department-main -->
-            <div class="map-image"><img src="/static/reports/images/map-image.png" alt=""></div><!-- .map-image -->
+            <div class="map-image">
+                <object id="map" type="image/svg+xml" data="{{ STATIC_URL }}reports/images/mpumalanga.svg" ></object>
+            </div><!-- .map-image -->
         </div><!-- .department-main-row -->
     </div><!-- .container -->
 {% endblock %}

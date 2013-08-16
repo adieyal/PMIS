@@ -16,7 +16,10 @@ require.config({
     },
 });
 
-require(['widgets/js/widgets'], function($, district) {
+require(['lib/jquery', 'widgets/js/widgets'], function($, widgets) {
+    map = $("#map")[0]
+    mapdoc = $(map.contentDocument)
+    mapdoc.find("#m_lekwa").css("fill", "red")
     /*
     All we need to get going is widgets.js
     Once it is loaded, it scans through the page picking
