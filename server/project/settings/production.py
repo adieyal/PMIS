@@ -80,6 +80,8 @@ CACHES = {
             'LOCATION': '127.0.0.1:11211'
         }
 }
+
+API_CACHE = 60 * 60
 ########## END CACHE CONFIGURATION
 
 
