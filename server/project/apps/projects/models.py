@@ -260,6 +260,10 @@ class ProjectQuerySet(QuerySet):
             calculations__date__month=date.month,
         ).order_by(order_field)
 
+    # TODO - write test
+    def completed(self):
+        return self.filter(current_step__in=[Milestone.final_completion(), Milestone.final_accounts()])
+
     def best_performing(self, date, count=5):
         return self._sort_by_performance(date, True)[0:count]
 
