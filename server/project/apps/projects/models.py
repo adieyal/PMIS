@@ -249,18 +249,21 @@ class ProjectQuerySet(QuerySet):
             monthly_submissions__actual_progress__lt=progress_end,
         )
 
-    def _sort_by_performance(self, date, reverse):
-        projects_with_plannings_for_date = self.filter(
-            plannings__date__year=date.year, plannings__date__month=date.month
-        )
-        performance = lambda x : x.performance(date)
-        return sorted(projects_with_plannings_for_date, key=performance, reverse=reverse) 
+    def _sort_by_performance(self, date, reverse=False):
+        order_field = "calculations__performance"
+        if reverse:
+            order_field = "-" + order_field
+        return self.filter(
+            calculations__in=self,
+            calculations__date__year=date.year,
+            calculations__date__month=date.month,
+        ).order_by(order_field)
 
     def best_performing(self, date, count=5):
         return self._sort_by_performance(date, True)[0:count]
 
     def worst_performing(self, date, count=5):
-        return self._sort_by_performance(date, False)[0:count]
+        return self._sort_by_performance(date)[0:count]
 
     def bad(self, date):
         return self.filter(calculations__project__in=self, calculations__is_bad=True)
@@ -667,6 +670,7 @@ class ProjectCalculations(models.Model):
     date = models.DateTimeField(default=lambda : datetime.datetime.now())
     project = models.ForeignKey(Project, related_name='calculations')
     is_bad = models.NullBooleanField(null=True)
+    performance = models.FloatField(null=True)
 
     def __unicode__(self):
         return unicode(self.project)
