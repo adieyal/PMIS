@@ -29,6 +29,20 @@ def dashboard_gauge(val1, val2, text1=None, text2=None):
         position2,
     ]
 
+# TODO needs a test
+def single_value_slider(val, client, text):
+    if val < 0 or val > 1:
+        raise ValueError("Values between 0 and 1 expected")
+
+    barcolor = clientcolors.get(client, "")
+    return [{
+        "position": val,
+        "bar-color": barcolor,
+        "marker-color": grey,
+        "marker-style": "short",
+        "marker-text": text,
+    }] 
+
 def dashboard_slider(val1, val2, client, threshold=0.1, text1=None, text2=None, min_val=0.1, max_val=0.9):
     if val1 < 0 or val1 > 1 or val2 < 0 or val2 > 1:
         raise ValueError("Values between 0 and 1 expected")
