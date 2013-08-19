@@ -1,4 +1,5 @@
 {% extends "reports/district/base.html" %}
+{% load formatters %}
 {% block progressactive %}active{% endblock progressactive %}
 {% block body %}
     <div class="project-main-area cf">
@@ -151,7 +152,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.0.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span><span class="right">{{ clients.0.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 Months</span><span class="right">{{ clients.0.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this Month</span><span class="right">{{ clients.0.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -159,7 +160,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -168,7 +169,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -177,7 +178,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -186,7 +187,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -195,7 +196,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -204,7 +205,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -213,7 +214,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.0.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
@@ -225,7 +226,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.1.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.1.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due  in 3 months</span> <span class="right">{{ clients.1.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.1.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -234,7 +235,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -243,7 +244,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -252,7 +253,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -261,7 +262,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -270,7 +271,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -279,7 +280,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -288,7 +289,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.1.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
@@ -300,7 +301,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.2.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span><span class="right">{{ clients.2.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.2.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.2.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -309,7 +310,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -318,7 +319,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -327,7 +328,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -336,7 +337,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -345,7 +346,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -354,7 +355,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -363,7 +364,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.2.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
@@ -375,7 +376,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.3.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.3.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.3.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.3.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -383,7 +384,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -392,7 +393,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -401,7 +402,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -410,7 +411,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -419,7 +420,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -428,7 +429,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -437,7 +438,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.3.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
@@ -449,7 +450,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.4.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.4.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.4.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.4.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -458,7 +459,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -467,7 +468,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -476,7 +477,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -485,7 +486,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -494,7 +495,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -503,7 +504,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -512,7 +513,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.4.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
@@ -524,7 +525,7 @@
         	<div class="completion-main">
             	<div class="completion-brdr cf">
                 	<div class="completion-area cf">
-                    	<div class="complete-project">Projects Complete: <span class="span">35%</span></div><!-- .complete-project -->
+                    	<div class="in-planning"><span class="left">Projects Complete</span> <span class="right">{{ clients.5.projects.project_complete }}</span></div><!-- .complete-project -->
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.5.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.5.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.5.projects.due_this_month}}</span></div><!-- .in-planning -->
@@ -532,7 +533,7 @@
                         <div class="project-a">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
                         {% endif %}
@@ -541,7 +542,7 @@
                         <div class="project-b">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
                         {% endif %}
@@ -550,7 +551,7 @@
                         <div class="project-c">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
                         {% endif %}
@@ -559,7 +560,7 @@
                         <div class="project-d">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
@@ -568,7 +569,7 @@
                         <div class="project-e">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
                         {% endif %}
@@ -577,7 +578,7 @@
                         <div class="project-f">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
                         {% endif %}
@@ -586,7 +587,7 @@
                         <div class="project-g">
                         <div class="complete-title">{{ clients.5.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
+                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
                         {% endif %}
