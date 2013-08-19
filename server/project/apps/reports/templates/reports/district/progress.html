@@ -155,48 +155,68 @@
                         <div class="in-planning"><span class="left">Due During current FY</span><span class="right">{{ clients.0.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 Months</span><span class="right">{{ clients.0.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this Month</span><span class="right">{{ clients.0.projects.due_this_month}}</span></div><!-- .in-planning -->
+                        {% if clients.0.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title"> Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title"> Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.0.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.0.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->
@@ -209,48 +229,69 @@
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.1.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due  in 3 months</span> <span class="right">{{ clients.1.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.1.projects.due_this_month}}</span></div><!-- .in-planning -->
+
+                        {% if clients.1.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.1.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.1.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->
@@ -263,48 +304,69 @@
                         <div class="in-planning"><span class="left">Due During current FY</span><span class="right">{{ clients.2.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.2.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.2.projects.due_this_month}}</span></div><!-- .in-planning -->
+                        
+                        {% if clients.2.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.2.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.2.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->
@@ -317,48 +379,68 @@
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.3.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.3.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.3.projects.due_this_month}}</span></div><!-- .in-planning -->
+                        {% if clients.3.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.3.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.3.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->
@@ -371,48 +453,69 @@
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.4.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.4.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.4.projects.due_this_month}}</span></div><!-- .in-planning -->
+
+                        {% if clients.4.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.4.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.4.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->
@@ -425,48 +528,68 @@
                         <div class="in-planning"><span class="left">Due During current FY</span> <span class="right">{{ clients.5.projects.completed_in_fye }}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due in 3 months</span> <span class="right">{{ clients.5.projects.due_in_3_months}}</span></div><!-- .in-planning -->
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.5.projects.due_this_month}}</span></div><!-- .in-planning -->
+                        {% if clients.5.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">Project A</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.0.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-a -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">Project B</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.1.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-b -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.1 %}
                         <div class="project-c">
-                        <div class="complete-title">Project C</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.2.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-c -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.2 %}
                         <div class="project-d">
-                        <div class="complete-title">Project D</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.3.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.3 %}
                         <div class="project-e">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.4.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-e -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.4 %}
                         <div class="project-f">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.5.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-f -->
+                        {% endif %}
+
+                        {% if clients.5.projects.worst_performing.5 %}
                         <div class="project-g">
-                        <div class="complete-title">Project E</div><!-- .complete-title -->
+                        <div class="complete-title">{{ clients.5.projects.worst_performing.6.name }}</div><!-- .complete-title -->
                         <div class="project-completion-progress cf">
                         	<div class="completion-progress">Complete: <span>35%</span></div><!-- .pro-text -->
                         </div><!-- .pro-bg -->
                         </div><!-- .project-g -->
+                        {% endif %}
                     </div><!-- .completion-area -->
                 </div><!-- .completion-brdr -->
             </div><!-- .completion-main -->

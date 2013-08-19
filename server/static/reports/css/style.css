@@ -381,7 +381,7 @@ a:hover {text-decoration:underline; }
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a:hover{ border:1px #e97865 solid; text-decoration:none;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a .left{ float:left; padding:0 0 0 3px;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a .right{ float:right; padding:0 3px 0 0;}
-	#completion-projects .completion-main .completion-brdr .completion-area .complete-title{ height:18px; line-height:18px; border-bottom:1px #a0a1a2 solid; font-size:12px; color:#58585a; font-weight:700; margin:0 8px 2px 8px;}
+	#completion-projects .completion-main .completion-brdr .completion-area .complete-title{ height:18px; line-height:18px; border-bottom:1px #a0a1a2 solid; font-size:9px; color:#58585a; font-weight:700; margin:0 8px 2px 8px;}
 	
 	#completion-projects .completion-project-1 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-1.png) center center no-repeat;}
 	#completion-projects .completion-project-1 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
