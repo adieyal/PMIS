@@ -253,8 +253,9 @@ class ProjectQuerySet(QuerySet):
         order_field = "calculations__performance"
         if reverse:
             order_field = "-" + order_field
+
         return self.filter(
-            calculations__in=self,
+            calculations__project__in=self,
             calculations__date__year=date.year,
             calculations__date__month=date.month,
         ).order_by(order_field)
