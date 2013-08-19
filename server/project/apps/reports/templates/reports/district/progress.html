@@ -158,64 +158,57 @@
                         <div class="in-planning"><span class="left">Due this Month</span><span class="right">{{ clients.0.projects.due_this_month}}</span></div><!-- .in-planning -->
                         {% if clients.0.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
                         {% if clients.0.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.0.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.0.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.0.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_0_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->
@@ -233,64 +226,57 @@
 
                         {% if clients.1.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
                         {% if clients.1.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.1.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.1.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.1.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_1_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->
@@ -308,64 +294,57 @@
                         
                         {% if clients.2.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
                         {% if clients.2.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.2.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.2.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.2.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_2_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->
@@ -382,64 +361,57 @@
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.3.projects.due_this_month}}</span></div><!-- .in-planning -->
                         {% if clients.3.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
                         {% if clients.3.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.3.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.3.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.3.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_3_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->
@@ -457,64 +429,57 @@
 
                         {% if clients.4.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
                         {% if clients.4.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.4.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.4.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_4_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->
@@ -531,64 +496,57 @@
                         <div class="in-planning"><span class="left">Due this month</span> <span class="right">{{ clients.5.projects.due_this_month}}</span></div><!-- .in-planning -->
                         {% if clients.5.projects.worst_performing.0 %}
                         <div class="project-a">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.0.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.4.projects.worst_performing.6.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.0.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_0">
+                            </div>
                         </div><!-- .project-a -->
                         {% endif %}
 
                         {% if clients.5.projects.worst_performing.1 %}
                         <div class="project-b">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.1.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.0.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.1.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_1">
+                            </div>
                         </div><!-- .project-b -->
                         {% endif %}
 
-                        {% if clients.5.projects.worst_performing.1 %}
+                        {% if clients.5.projects.worst_performing.2 %}
                         <div class="project-c">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.2.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.1.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.2.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_2">
+                            </div>
                         </div><!-- .project-c -->
                         {% endif %}
 
-                        {% if clients.5.projects.worst_performing.2 %}
+                        {% if clients.5.projects.worst_performing.3 %}
                         <div class="project-d">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.3.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.2.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.3.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_3">
+                            </div><!-- .pro-bg -->
                         </div><!-- .project-d -->
                         {% endif %}
 
-                        {% if clients.5.projects.worst_performing.3 %}
+                        {% if clients.5.projects.worst_performing.4 %}
                         <div class="project-e">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.4.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.3.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.4.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_4">
+                            </div>
                         </div><!-- .project-e -->
                         {% endif %}
 
-                        {% if clients.5.projects.worst_performing.4 %}
+                        {% if clients.5.projects.worst_performing.5 %}
                         <div class="project-f">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.5.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.4.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.5.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_5">
+                            </div>
                         </div><!-- .project-f -->
                         {% endif %}
 
-                        {% if clients.5.projects.worst_performing.5 %}
+                        {% if clients.5.projects.worst_performing.6 %}
                         <div class="project-g">
-                        <div class="complete-title">{{ clients.5.projects.worst_performing.6.name }}</div><!-- .complete-title -->
-                        <div class="project-completion-progress cf">
-                        	<div class="completion-progress">Complete: <span>{{ clients.5.projects.worst_performing.5.progress.actual| format_percentage }}</span></div><!-- .pro-text -->
-                        </div><!-- .pro-bg -->
+                            <div class="complete-title">{{ clients.5.projects.worst_performing.6.name }}</div><!-- .complete-title -->
+                            <div class="client-slider project-completion-progress cf" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#client_5_worst_6">
+                            </div>
                         </div><!-- .project-g -->
                         {% endif %}
                     </div><!-- .completion-area -->

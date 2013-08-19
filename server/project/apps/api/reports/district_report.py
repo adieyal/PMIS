@@ -180,6 +180,14 @@ def dashboard_graphs(request, district_id, year, month):
 
     js["mpmap"] = data["projects"]["by_municipality"]["bad"]
 
+    for i, client in enumerate(data["clients"]):
+        for j, project in enumerate(client["projects"]["worst_performing"]):
+            progress = project["progress"]["actual"] / 100 
+            progress_text = "%s%%" % int(project["progress"]["actual"])
+            slider = graphhelpers.single_value_slider(progress, client["name"], progress_text)
+            js["client_%d_worst_%d" % (i, j)] = slider
+        
+
     response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
     return response
 

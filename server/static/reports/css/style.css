@@ -383,29 +383,11 @@ a:hover {text-decoration:underline; }
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a .right{ float:right; padding:0 3px 0 0;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-title{ height:18px; line-height:18px; border-bottom:1px #a0a1a2 solid; font-size:9px; color:#58585a; font-weight:700; margin:0 8px 2px 8px;}
 	
-	#completion-projects .completion-project-1 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-1.png) center center no-repeat;}
-	#completion-projects .completion-project-1 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-1 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
+	#completion-projects .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px;}
+	#completion-projects .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
+	#completion-projects .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
 	
-	#completion-projects .completion-project-2 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-2.png) center center no-repeat;}
-	#completion-projects .completion-project-2 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-2 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
 	
-	#completion-projects .completion-project-3 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-3.png) center center no-repeat;}
-	#completion-projects .completion-project-3 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-3 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
-	
-	#completion-projects .completion-project-4 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-4.png) center center no-repeat;}
-	#completion-projects .completion-project-4 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-4 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
-	
-	#completion-projects .completion-project-5 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-5.png) center center no-repeat;}
-	#completion-projects .completion-project-5 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-5 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
-	
-	#completion-projects .completion-project-6 .completion-main .completion-brdr .completion-area .project-completion-progress{ height:52px; background:url(../images/pro-6.png) center center no-repeat;}
-	#completion-projects .completion-project-6 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress{ font-size:10px; color:#6a6a6c; margin:35px 0 0 30px;}
-	#completion-projects .completion-project-6 .completion-main .completion-brdr .completion-area .project-completion-progress .completion-progress span{ font-weight:bold;}
 	
 /* jobs-main-row */
 .jobs-main-row{ clear:both; padding:8px 0;}
