@@ -27,6 +27,11 @@ def district_client_json(district, client, date):
 
     projects = models.Project.objects.client(client).district(district)
 
+    worst_performing = [
+        serializers.expanded_project_serializer(project, date)
+        for project in projects.worst_performing(date)
+    ]
+
     return {
         "fullname" : client.description,
         "name" : client.name,
@@ -54,9 +59,9 @@ def district_client_json(district, client, date):
             "between_76_and_99": projects.actual_progress_between(76, 99).count(),
             "due_in_3_months": projects.due_in_3_months(date).count(),
             "due_this_month": projects.due_in_1_month(date).count(),
+            "worst_performing": worst_performing,
         }
     }
-
 
 def district_report_json(district_id, date):
     year = date.year
