@@ -60,6 +60,7 @@ def district_client_json(district, client, date):
             "due_in_3_months": projects.due_in_3_months(date).count(),
             "due_this_month": projects.due_in_1_month(date).count(),
             "worst_performing": worst_performing,
+            "project_complete": projects.completed().count(),
         }
     }
 
