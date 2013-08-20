@@ -48,6 +48,7 @@ def migrate():
 def restart():
     api.sudo("supervisorctl update")
     api.sudo("supervisorctl restart pmis")
+    api.sudo('/etc/init.d/memcached restart', pty=False)
 
 def create_database():
     with api.cd(code_dir):
