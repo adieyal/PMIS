@@ -14,7 +14,7 @@
 <body>
     {% block logo %}
 	<div class="container">
-    	<div class="logo-area cf logo-area-{% block district-class %}{% endblock %}">
+    	<div class="logo-area cf logo-area-{% block district-class %}{{ district.name|lower|cut:" " }}{% endblock %}">
         	<div class="logo-left-area cf">
             	<!--<div class="logo"><a href="index.html#"><img src="/static/reports/images/logo.png" width="269px" height="81" alt=""></a></div> -->
             	<div class="logo"><a href="index.html#"><img src="/static/reports/images/logo.png" width="269px" height="81" alt=""></a></div><!-- .logo -->

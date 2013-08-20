@@ -44,7 +44,8 @@ a:hover {text-decoration:underline; }
         text-transform: uppercase;
         font-family:'Conv_Arial Narrow',Sans-Serif;
     }
-	.logo-area .logo-left-area .nav-area{ clear:both; margin:0 0 10px 0; height:39px; background:url(../images/ul-bg.png) left center no-repeat;}
+	/*.logo-area .logo-left-area .nav-area{ clear:both; margin:0 0 10px 0; height:39px; background:url(../images/ul-bg.png) left center no-repeat;}*/
+	.logo-area .logo-left-area .nav-area{ clear:both; margin:0 0 10px 0; height:39px;}
 	.logo-area .logo-left-area .nav-area ul{ margin:0; padding:0; list-style:none; float:left;}
 	.logo-area .logo-left-area .nav-area ul.hover-progress-bg{ background:url(../images/ul-hover.png) 137px center no-repeat; height:39px;}
 	.logo-area .logo-left-area .nav-area ul.hover-performance-bg{ background:url(../images/ul-hover.png) 295px center no-repeat; height:39px;}
@@ -405,254 +406,40 @@ a:hover {text-decoration:underline; }
 .client-area{ height:43px; background:#f15a48 url(../images/worst-bg.png) left center no-repeat; background-size:43px 43px; line-height:43px; font-size:20px; font-family:Arial, Helvetica, sans-serif; color:#fff; clear:both; padding:0 0 0 53px; margin:0 0 8px 0;}
 	.client-area .font-weight{ font-weight:700;}
 	
-/* client-worst-project-1 */
-.client-worst-project-1{ clear:both; padding:0 0 5px 0;}
-	.client-worst-project-1 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-1 .client-location .client-worst-project-name{ width:800px; float:left; background:#e7bb5e; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-1 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-1 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
+.client-worst-project { clear:both; padding:0 0 5px 0;}
+	.client-worst-project .client-location{ clear:both; padding:0 0 3px 0;}
+	.client-worst-project .client-location .client-worst-project-name{ width:800px; float:left; background:#e7bb5e; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
+	.client-worst-project .client-location .client-worst-project-name a{ color:#fff;}
+	.client-worst-project .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
 	
-	.client-worst-project-1 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-1 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-1 .client-row{ clear:both;}
-	.client-worst-project-1 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-1 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
+	.client-worst-project .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
+	.client-worst-project .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
+	.client-worst-project .client-row{ clear:both;}
+	.client-worst-project .client-row .client-main{ width:390px; float:left;}
+	.client-worst-project .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
 	
-	.client-worst-project-1 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-1 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
+	.client-worst-project .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
+	.client-worst-project .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
 	
-	.client-worst-project-1 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-1 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
+	.client-worst-project .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
+	.client-worst-project .start-date span{ font-weight:bold;}
 	
-	.client-worst-project-1 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-1 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
+	.client-worst-project .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
+	.client-worst-project .completion-date span{ font-weight:bold;}
 	
-	.client-worst-project-1 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-1 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-1 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-1 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-1 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-1 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-1 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-1 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
-	
-/* client-worst-project-2 */
-.client-worst-project-2{ clear:both; padding:0 0 5px 0;}
-	.client-worst-project-2 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-2 .client-location .client-worst-project-name{ width:800px; float:left; background:#8cc6ec; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-2 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-2 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
-	
-	.client-worst-project-2 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-2 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-2 .client-row{ clear:both;}
-	.client-worst-project-2 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-2 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
-	
-	.client-worst-project-2 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-2 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
-	
-	.client-worst-project-2 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-2 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
-	
-	.client-worst-project-2 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-2 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
-	
-	.client-worst-project-2 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-2 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-2 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-2 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-2 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-2 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-2 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-2 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
-
-/* client-worst-project-3 */
-.client-worst-project-3{ clear:both; padding:0 0 5px 0;}
-	.client-worst-project-3 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-3 .client-location .client-worst-project-name{ width:800px; float:left; background:#b9b387; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-3 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-3 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
-	
-	.client-worst-project-3 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-3 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-3 .client-row{ clear:both;}
-	.client-worst-project-3 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-3 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
-	
-	.client-worst-project-3 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-3 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
-	
-	.client-worst-project-3 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-3 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
-	
-	.client-worst-project-3 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-3 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
-	
-	.client-worst-project-3 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-3 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-3 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-3 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-3 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-3 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-3 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-3 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
-
-/* client-worst-project-4 */
-.client-worst-project-4{ clear:both; padding:0 0 5px 0;}
-	.client-worst-project-4 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-4 .client-location .client-worst-project-name{ width:800px; float:left; background:#9792b3; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-4 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-4 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
-	.client-worst-project-4 .client-location .location-main.color-5{ background:#bd7794;}
-	.client-worst-project-4 .client-location .location-main.color-6{ background:#84c4bf;}
-	
-	.client-worst-project-4 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-4 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-4 .client-row{ clear:both;}
-	.client-worst-project-4 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-4 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
-	
-	.client-worst-project-4 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-4 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
-	
-	.client-worst-project-4 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-4 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
-	
-	.client-worst-project-4 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-4 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
-	
-	.client-worst-project-4 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-4 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-4 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-4 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-4 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-4 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-4 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-4 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
-
-/* client-worst-project-5 */
-.client-worst-project-5{ clear:both; padding:0 0 5px 0;}
-	.client-worst-project-5 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-5 .client-location .client-worst-project-name{ width:800px; float:left; background:#bd7794; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-5 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-5 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
-	.client-worst-project-5 .client-location .location-main.color-6{ background:#84c4bf;}
-	
-	.client-worst-project-5 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-5 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-5 .client-row{ clear:both;}
-	.client-worst-project-5 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-5 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
-	
-	.client-worst-project-5 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-5 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
-	
-	.client-worst-project-5 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-5 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
-	
-	.client-worst-project-5 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-5 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
-	
-	.client-worst-project-5 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-5 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-5 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-5 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-5 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-5 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-5 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-5 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
-
-/* client-worst-project-6 */
-.client-worst-project-6{ clear:both;}
-	.client-worst-project-6 .client-location{ clear:both; padding:0 0 3px 0;}
-	.client-worst-project-6 .client-location .client-worst-project-name{ width:800px; float:left; background:#84c4bf; height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; padding:0 0 0 10px; color:#fff;}
-	.client-worst-project-6 .client-location .client-worst-project-name a{ color:#fff;}
-	.client-worst-project-6 .client-location .client-worst-project-name .worst-project-name{ font-weight:700; color:#58585a;}
-	
-	.client-worst-project-6 .client-location .cap-image{ width:30px; height:24px; background:url(../images/cap-image.png) center center no-repeat; float:left;}
-	.client-worst-project-6 .client-location .job-detail{ width:170px; height:22px; line-height:22px; background:#58585a; float:right; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#fff; text-align:left; padding:0 0 0 10px;}
-	.client-worst-project-6 .client-row{ clear:both;}
-	.client-worst-project-6 .client-row .client-main{ width:390px; float:left;}
-	.client-worst-project-6 .client-row .client-main .date-main-row{ clear:both; padding:0 0 2px 0;}
-	
-	.client-worst-project-6 .client-row .client-main .date-main-row .budget{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-6 .client-row .client-main .date-main-row .budget span{ font-weight:bold;}
-	
-	.client-worst-project-6 .client-row .client-main .date-main-row .start-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:10px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-6 .client-row .client-main .date-main-row .start-date span{ font-weight:bold;}
-	
-	.client-worst-project-6 .client-row .client-main .date-main-row .completion-date{ width:128px; height:22px; float:left; line-height:22px; background:#58585a; text-align:center; font-size:9px; color:#fff; margin:0 2px 0 0;}
-	.client-worst-project-6 .client-row .client-main .date-main-row .completion-date span{ font-weight:bold;}
-	
-	.client-worst-project-6 .actual-client-area{ clear:both; background:#d1d2d4;}
-	.client-worst-project-6 .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress{ height:89px; background:url(../images/client-image.png) center center no-repeat; margin:0 0 10px 0;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .planed{ font-size:12px; color:#6a6a6c; margin:0 0 0 65px; clear:both;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client-main .planned-actual-progress .actul{ font-size:12px; color:#6a6a6c; margin:0 0 0 138px; clear:both;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client .budget-actual-progress{ height:50px; background:url(../images/date-image.png) center center no-repeat;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .budget{ margin:24px 0 0 78px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-6 .actual-client-area .actual-client-row .actual-client .budget-actual-progress .actual{ margin:0 0 0 132px; font-size:12px; color:#6a6a6c; clear:both;}
-	.client-worst-project-6 .client-row .comment-main-area{ width:628px; float:right;}
-	.client-worst-project-6 .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
-	.client-worst-project-6 .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
-	.client-worst-project-6 .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
-	.client-worst-project-6 .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
+	.client-worst-project .actual-client-area{ clear:both; background:#d1d2d4;}
+	.client-worst-project .actual-client-area .actual-client-row{ clear:both; padding:4px 0 0 4px;}
+	.client-worst-project .actual-client-area .actual-client-row .actual-client-main{ width:180px; float:left; background:url(../images/client-main-bg.png) repeat-x;}
+	.client-worst-project .actual-client-area .actual-client-row .actual-client-main .overall-progress{ width:172px; height:24px; line-height:24px; background:#fff; border:1px #a2a2a3 solid; text-align:center; font-size:12px; color:#6d6d6f; margin:5px 0 7px 3px;}
+	.client-worst-project .actual-client-area .actual-client-row .actual-client{ width:196px; float:left; margin:0 0 0 5px; background:url(../images/client-main-bg.png) repeat-x;}
+	.client-worst-project .actual-client-area .actual-client-row .actual-client .over-expenditure{ width:186px; height:32px; background:#fff; border:#7f7f80 1px solid; margin:5px 0 4px 4px; font-size:11px; color:#777779; text-align:center; line-height:15px;}
+	.client-worst-project .actual-client-area .actual-client-row .actual-client .expenditure-to-date{ width:186px; height:24px; line-height:24px; background:#818285; border:#b5b5b8 1px solid; margin:0 0 7px 4px; font-size:10px; color:#fff; text-align:center; line-height:24px;}
+	.client-worst-project .client-row .comment-main-area{ width:628px; float:right;}
+	.client-worst-project .client-row .comment-main-area .comment-main{ height:80px; border:1px #828283 solid;}
+	.client-worst-project .client-row .comment-main-area .comment-main.marg{ margin:0 0 2px 0;}
+	.client-worst-project .client-row .comment-main-area .comment-main .comment-text{ font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; line-height:13px; margin:3px 0 0 5px;}
+	.client-worst-project .client-row .comment-main-area .comment-main .comment-text .comment{ font-size:13px; font-weight:700;}
+    .worst-project-gauge { height:100px; }
 
 .client-slider {
     height: 54px;
@@ -674,12 +461,12 @@ a:hover {text-decoration:underline; }
 svg .gauge-marker-text {
 }
 
-.client-doe { background-color: #9792b3; }
-.client-dscr { background-color: #e7bb5e; }
-.client-dedet { background-color: #e4cfbf; }
-.client-doh { background-color: #8cc6ec; }
-.client-dsd { background-color: #b9b387; }
-.client-dssl { background-color: #bd7794; }
+.client-doe { background-color: #9792b3 !important;}
+.client-dscr { background-color: #e7bb5e !important; }
+.client-dedet { background-color: #e4cfbf !important; }
+.client-doh { background-color: #8cc6ec !important; }
+.client-dsd { background-color: #b9b387 !important; }
+.client-dssl { background-color: #bd7794 !important; }
 
 .spg-arc-text { fill: #58585a !important; }
 #mpmap {
