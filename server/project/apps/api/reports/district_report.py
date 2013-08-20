@@ -132,6 +132,7 @@ def dashboard_graphs(request, district_id, year, month):
 
         return graphhelpers.dashboard_gauge(val1, val2)
 
+
     def create_expenditure_slider(planned, actual, budget, client):
         if budget == 0:
             return graphhelpers.dashboard_slider(0, 0, client, text1="Planned", text2="Actual")
@@ -188,6 +189,13 @@ def dashboard_graphs(request, district_id, year, month):
             js["client_%d_worst_%d" % (i, j)] = slider
         
 
+    for i, project in enumerate(data["projects"]["worst_performing"]):
+        val1 = project["progress"]["planned"] / 100.
+        val2 = project["progress"]["actual"] / 100.
+
+        js["worst_project%d" % i] = graphhelpers.dashboard_gauge(val1, val2)
+        js["worst_project_expenditure%d" %i] = create_project_slider(project)
+        
     response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
     return response
 
