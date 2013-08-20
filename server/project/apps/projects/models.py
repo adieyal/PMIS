@@ -486,7 +486,8 @@ class Project(models.Model):
         try:
             return self.actual_progress(date) / self.planned_progress(date)
         except ZeroDivisionError:
-            return 0
+            # TODO test - assume that our actual is the same as our planned
+            return 1
 
     def __unicode__(self):
         return self.name
