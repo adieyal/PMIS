@@ -1,136 +1,18 @@
 {% extends "reports/district/base.html" %}
 {% load formatters %}
+{% load progress_chunks %}
+
 {% block progressactive %}active{% endblock progressactive %}
 {% block body %}
     <div class="project-main-area cf">
     	<div class="container">
         	<div id="department-projects" class="cf">
-            	<div class="department-projects-1">
-            	<div class="project-brdr marg">
-                	<div class="border">
-                        <div class="project-main">
-                            <div class="department-name"> {{clients.0.fullname }}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{clients.0.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.0.projects.currently_in_planning }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left"></div>In Implementation<span class="right">{{clients.0.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.0.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.0.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.0.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-1 -->
-            	<div class="department-projects-2">
-            	<div class="project-brdr marg">
-                	<div class="border">
-                        <div class="project-main">
-                            <div class="department-name col-2 "> {{ clients.1.fullname }}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{clients.1.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.1.projects.currently_in_planning }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">{{clients.1.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.1.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.1.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.1.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-2 -->
-            	<div class="department-projects-3">
-            	<div class="project-brdr marg">
-                	<div class="border">
-                        <div class="project-main">
-                            <div class="department-name col-3">{{ clients.2.fullname }}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{clients.2.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.2.projects.currently_in_planning }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">{{clients.2.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.2.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.2.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.2.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-3 -->
-            	<div class="department-projects-4">
-            	<div class="project-brdr marg">
-                	<div class="border">
-                        <div class="project-main">
-                            <div class="department-name col-4">{{ clients.3.fullname}}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{clients.3.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.3.projects.currently_in_planning }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">{{clients.3.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.3.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.3.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.3.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-4 -->
-            	<div class="department-projects-5">
-            	<div class="project-brdr marg">
-                	<div class="border">
-                        <div class="project-main">
-                            <div class="department-name col-5">{{ clients.4.fullname }}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{clients.4.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.4.projects.currently_in_planning }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">{{clients.4.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.4.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.4.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.4.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-5 -->
-            	<div class="department-projects-6">
-            	<div class="project-brdr">
-                	<div class="border brdr">
-                        <div class="project-main">
-                            <div class="department-name col-6">{{ clients.5.fullname }}</div><!-- .project-name -->
-                            <div class="total_projects">Total Projects: {{ clients.5.total_projects }}</div><!-- .project-budget -->
-                            <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{clients.5.projects.currently_in_planning }} </span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">In Implementation</div><span class="right">{{clients.5.projects.currently_in_implementation }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Completed by FYE</div><span class="right">{{clients.5.projects.completed_in_fye}}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Practical Completion</div><span class="right">{{clients.5.projects.currently_in_practical_completion }}</span></div><!-- .in-planning -->
-                            <div class="in-planning"><div class="left">Final Completion</div><span class="right">{{clients.4.projects.currently_in_final_completion }}</span></div><!-- .in-planning -->
-                            <div class="curcle-image cf">
-                            	<div class="nine">9</div><!-- .nine -->
-                                <div class="six">60</div><!-- .six -->
-                                <div class="sixteen">16</div><!-- .sixteen -->
-                                <div class="two">26</div><!-- .two -->
-                            </div><!-- .curcle-image -->
-                        </div><!-- .project-main -->
-                    </div><!-- .border -->
-                </div><!-- .project-brdr -->
-                </div><!-- .department-projects-6 -->
+                {% department_project 0 %}
+                {% department_project 1 %}
+                {% department_project 2 %}
+                {% department_project 3 %}
+                {% department_project 4 %}
+                {% department_project 5 %}
             </div><!-- .project-main-row -->
             <div class="completion-area cf">
             	<div class="completion-text">Completion:</div><!-- .completion-text -->
