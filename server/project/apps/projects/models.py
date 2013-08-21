@@ -248,7 +248,7 @@ class ProjectQuerySet(QuerySet):
         return self.filter(
             monthly_submissions__actual_progress__gte=progress_start,
             monthly_submissions__actual_progress__lt=progress_end,
-        )
+        ).distinct()
 
     def _sort_by_performance(self, date, reverse=False):
         order_field = "calculations__performance"
