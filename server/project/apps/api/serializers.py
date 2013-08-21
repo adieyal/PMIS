@@ -107,7 +107,7 @@ def condensed_project_serializer(project, date):
             "actual" : project.actual_progress(date),
             "planned" : project.planned_progress(date),
         },
-        "jobs" : project.jobs,
+        "jobs" : project.jobs_created(date),
         "expenditure" : {
             "perc_spent" : project.project_financial.percentage_expenditure(date),
             "actual" : project.fy(date).actual_expenditure,

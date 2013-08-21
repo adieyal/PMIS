@@ -35,7 +35,7 @@ def district_client_json(district, client, date):
     return {
         "fullname" : client.description,
         "name" : client.name,
-        "num_jobs" : 999,
+        "num_jobs" : projects.total_jobs(date), # TODO Needs testing
         "total_budget" : float(projects.total_budget()),
         "overall_progress" : {
             "actual" : projects.average_actual_progress(date),
