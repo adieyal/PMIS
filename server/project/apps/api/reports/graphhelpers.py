@@ -10,7 +10,17 @@ clientcolors = {
 red = "#f04338"
 grey = "#656263"
 
+# TODO needs testing
+def dashboard_pie(values, as_percentage=True):
+    return {
+        "values" : values,
+        "as_percentage" : as_percentage
+    }
+
 def dashboard_gauge(val1, val2, text1=None, text2=None):
+    if abs(val1 - val2) < 0.08:
+        text1 = " "
+
     position1 = {
         "text" : text1 or "Planned",
         "needle-style" : "dashed",
@@ -23,6 +33,7 @@ def dashboard_gauge(val1, val2, text1=None, text2=None):
         "needle-color": ["#86bf53", "#cce310"],
         "position" : val2
     }
+
 
     return [
         position1,
