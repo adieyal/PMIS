@@ -237,11 +237,12 @@ class ProjectQuerySet(QuerySet):
         else:
             return self.filter(programme__id=programme)
 
+    # TODO test
     def actual_progress_between(self, progress_start, progress_end):
         return self.filter(
             monthly_submissions__actual_progress__gte=progress_start,
             monthly_submissions__actual_progress__lt=progress_end,
-        )
+        ).distinct()
 
     def planned_progress_between(self, progress_start, progress_end):
         return self.filter(
