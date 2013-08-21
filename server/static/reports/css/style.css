@@ -321,12 +321,11 @@ a:hover {text-decoration:underline; }
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-project{ background:#d1d2d4; width:155px; height:19px; line-height:19px; font-size:12px; color:#58585a; text-align:left; margin:4px 0 4px 4px;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-project .span{ font-weight:700;}
 	
+	.in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid; padding:0 0 0 5px;}
+	.in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
+	.in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
+	.in-planning .left{ float:left;}
 	
-	.department-projects .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects .in-planning .left{ float:left;}
-
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a{ height:20px; line-height:20px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a:hover{ border:1px #e97865 solid; text-decoration:none;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a .left{ float:left; padding:0 0 0 3px;}
