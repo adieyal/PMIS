@@ -195,6 +195,16 @@ def dashboard_graphs(request, district_id, year, month):
 
         js["worst_project%d" % i] = graphhelpers.dashboard_gauge(val1, val2)
         js["worst_project_expenditure%d" %i] = create_project_slider(project)
+
+    for i, client in enumerate(data["clients"]):
+        js["client_projects_pie%d" % i] = graphhelpers.dashboard_pie([
+            data["clients"][i]["projects"]["project_complete"],
+            data["clients"][i]["projects"]["between_76_and_99"],
+            data["clients"][i]["projects"]["between_51_and_75"],
+            data["clients"][i]["projects"]["between_0_and_50"],
+        ], as_percentage=False)
+        
+        
         
     response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
     return response
