@@ -11,11 +11,11 @@ def department_project(context, index):
     
     template = Template("""
         {% load formatters %}
-        <div class="department-projects-{{ index1 }}">
+        <div class="department-projects department-projects-{{ index1 }}">
         <div class="project-brdr marg">
             <div class="border">
                 <div class="project-main">
-                    <div class="department-name"> {{ client.fullname }}</div><!-- .project-name -->
+                    <div class="department-name client-{{ client.name|lower }}"><div>{{ client.fullname }}</div></div><!-- .project-name -->
                     <div class="total_projects">Total Projects: {{ client.total_projects }}</div><!-- .project-budget -->
                     <div class="in-planning"><div class="left">Currently in planning</div><span class="right">{{ client.projects.currently_in_planning }}</span></div><!-- .in-planning -->
                     <div class="in-planning"><div class="left"></div>In Implementation<span class="right">{{ client.projects.currently_in_implementation }}</span></div><!-- .in-planning -->

@@ -70,56 +70,34 @@ a:hover {text-decoration:underline; }
 /* project-main-area */
 .project-main-area{ background:#e7e7e8; clear:both; margin:0 0 5px 0;}
 	.project-main-area #department-projects{ clear:both; padding:6px 0;}
-	.project-main-area #department-projects .department-projects-1, .project-main-area #department-projects .department-projects-2, .project-main-area #department-projects .department-projects-3, .project-main-area #department-projects .department-projects-4, .project-main-area #department-projects .department-projects-5, .project-main-area #department-projects .department-projects-6{ width:165px; float:left;}
-	.project-main-area #department-projects .department-projects-1, .project-main-area #department-projects .department-projects-2, .project-main-area #department-projects .department-projects-3, .project-main-area #department-projects .department-projects-4, .project-main-area #department-projects .department-projects-5{ margin:0 6px 0 0;}
-	.project-main-area #department-projects .project-brdr{ width:165px; float:left;}
-	.project-main-area #department-projects .project-brdr .border{ width:164px; float:left; border-right:1px #6d6e71 dashed;}
-	.project-main-area #department-projects .project-brdr .border.brdr{ border:none;}
+	.project-main-area #department-projects .department-projects { width:165px; float:left;}
+
+	#department-projects .department-projects {
+        margin:0 6px 0 0;
+    }
+
+	#department-projects .department-projects-6 {
+        margin:0 0 0 0;
+    }
+
+	#department-projects .project-brdr{ width:165px; float:left;}
+	#department-projects .project-brdr .border{ width:164px; float:left; border-right:1px #6d6e71 dashed;}
+	#department-projects .project-brdr .border.brdr{ border:none;}
 	
-	.project-main-area #department-projects .project-brdr .border .project-main{ width:158px; float:left;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name div{ padding : 2px; }
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name{ height:37px; background:#e7bb5e; font-size:14px; font-family:Arial, Helvetica, sans-serif; color:#404041; text-align:center; padding:3px 0 0 0;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-2{ background:#84c4bf; font-size:12px}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-2 div{ padding-top:2px; }
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-3{ background:#9792b3;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-3 div{ padding-top:3px; }
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-4{ background:#8cc6ec;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-4 div{ padding-top:9px; }
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-5{ background:#b9b387;}
-	.project-main-area #department-projects .project-brdr .border .project-main .department-name.col-6{ background:#bd7794;}
-	.project-main-area #department-projects .project-brdr .border .project-main .total_projects{ font-size:12px; color:#fff; text-align:center; background:#58585a; height:25px; line-height:25px; margin:0 0 5px 0;}
+	#department-projects .project-brdr .border .project-main{ width:158px; float:left;}
+	#department-projects .project-brdr .border .project-main .department-name div{ padding : 2px; }
+	#department-projects .project-brdr .border .project-main .department-name{ height:37px; background:#e7bb5e; font-size:14px; font-family:Arial, Helvetica, sans-serif; color:#404041; text-align:center; padding:3px 0 0 0;}
+	#department-projects .project-brdr .border .project-main .department-name.col-2{ background:#84c4bf; font-size:12px}
+	#department-projects .project-brdr .border .project-main .department-name.col-2 div{ padding-top:2px; }
+	#department-projects .project-brdr .border .project-main .department-name.col-3{ background:#9792b3;}
+	#department-projects .project-brdr .border .project-main .department-name.col-3 div{ padding-top:3px; }
+	#department-projects .project-brdr .border .project-main .department-name.col-4{ background:#8cc6ec;}
+	#department-projects .project-brdr .border .project-main .department-name.col-4 div{ padding-top:9px; }
+	#department-projects .project-brdr .border .project-main .department-name.col-5{ background:#b9b387;}
+	#department-projects .project-brdr .border .project-main .department-name.col-6{ background:#bd7794;}
+	#department-projects .project-brdr .border .project-main .total_projects{ font-size:12px; color:#fff; text-align:center; background:#58585a; height:25px; line-height:25px; margin:0 0 5px 0;}
 	.project-main-area #department-projects .project-brdr .border .project-main .project-budget{ font-size:11px; color:#fff; text-align:center; background:#58585a; height:25px; line-height:25px; margin:0 0 5px 0;}
 	.project-main-area #department-projects .project-brdr .border .project-main .project-budget span{ font-weight:bold;}
-	
-	.department-projects-1 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-1 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-1 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-1 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.department-projects-2 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-2 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-2 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-2 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.department-projects-3 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-3 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-3 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-3 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.department-projects-4 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-4 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-4 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-4 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.department-projects-5 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-5 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-5 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-5 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.department-projects-6 .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
-	.department-projects-6 .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.department-projects-6 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.department-projects-6 .in-planning .left{ float:left; padding:0 0 0 5px;}
 	
 	.project-main-area #department-projects .project-brdr .border .project-main .progress-nav a{ height:22px; line-height:22px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0 4px 0; border:1px #fff solid;}
 	.project-main-area #department-projects .project-brdr .border .project-main .progress-nav a .left{ float:left; padding:0 0 0 5px;}
@@ -343,37 +321,12 @@ a:hover {text-decoration:underline; }
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-project{ background:#d1d2d4; width:155px; height:19px; line-height:19px; font-size:12px; color:#58585a; text-align:left; margin:4px 0 4px 4px;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-project .span{ font-weight:700;}
 	
-	.completion-project-1 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-1 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-1 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-1 .in-planning .left{ float:left; padding:0 0 0 5px;}
 	
-	.completion-project-2 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-2 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-2 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-2 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.completion-project-3 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-3 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-3 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-3 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.completion-project-4 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-4 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-4 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-4 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.completion-project-5 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-5 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-5 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-5 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	.completion-project-6 .in-planning{ height:18px; line-height:18px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
-	.completion-project-6 .in-planning:hover{ border:1px #e97865 solid; text-decoration:none;}
-	.completion-project-6 .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
-	.completion-project-6 .in-planning .left{ float:left; padding:0 0 0 5px;}
-	
-	
+	.department-projects .in-planning{ height:19px; line-height:19px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#fff; display:block; margin:0 0px 4px 0; padding:0 0 0 5px; border:1px #fff solid;}
+	.department-projects .in-planning:hover{ border:1px #f15a40 solid; text-decoration:none;}
+	.department-projects .in-planning .right{ float:right; padding:0 5px 0 0; font-weight:bold;}
+	.department-projects .in-planning .left{ float:left;}
+
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a{ height:20px; line-height:20px; font-size:12px; font-family:Arial, Helvetica, sans-serif; color:#58585a; background:#d1d2d4; display:block; margin:0 5px 4px 4px; border:1px #d1d2d4 solid;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a:hover{ border:1px #e97865 solid; text-decoration:none;}
 	#completion-projects .completion-main .completion-brdr .completion-area .complete-nav a .left{ float:left; padding:0 0 0 3px;}
@@ -452,6 +405,11 @@ a:hover {text-decoration:underline; }
 .progress-gauge {
     width: 158px;
     height: 85px;
+}
+
+.department-projects-2 .department-name div {
+    font-size: 12px;
+    
 }
 
 svg .gauge-marker-text {
