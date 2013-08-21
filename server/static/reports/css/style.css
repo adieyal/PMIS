@@ -125,11 +125,7 @@ a:hover {text-decoration:underline; }
 	.project-main-area #department-projects .project-brdr .border .project-main .progress-nav a .left{ float:left; padding:0 0 0 5px;}
 	.project-main-area #department-projects .project-brdr .border .project-main .progress-nav a .right{ float:right; padding:0 5px 0 0;}
 	.project-main-area #department-projects .project-brdr .border .project-main .progress-nav a:hover{ border:1px #f15a40 solid; text-decoration:none;}
-	.project-main-area #department-projects .project-brdr .border .project-main .curcle-image{ width:153px; height:127px; background:url(../images/curcle-image.png) center center no-repeat;}
-	.project-main-area #department-projects .project-brdr .border .project-main .curcle-image .nine{ font-size:12px; color:#58585a; margin:7px 0 0 35px; clear:both;}
-	.project-main-area #department-projects .project-brdr .border .project-main .curcle-image .six{ font-size:12px; color:#58585a; margin:10px 0 0 0; float:right; clear:both;}
-	.project-main-area #department-projects .project-brdr .border .project-main .curcle-image .sixteen{ font-size:12px; color:#58585a; margin:5px 0 0 0; clear:both;}
-	.project-main-area #department-projects .project-brdr .border .project-main .curcle-image .two{ font-size:12px; color:#58585a; margin:45px 0 0 30px; clear:both;}
+    #department-projects .donut-widget { height:158px; }
 	.project-main-area .completion-area{ height:25px; background:#fff; clear:both; margin:0 0 6px 0; padding:0 0 0 320px;}
 	.project-main-area .completion-area .completion-text{ margin:0 10px 0 0; float:left; line-height:25px; font-size:12px; color:#58585a;}
 	.project-main-area .completion-area .completion-yellow{ width:14px; height:14px; float:left; background:#f2d499; margin:5px 10px 0 0;}
@@ -489,4 +485,8 @@ svg .gauge-marker-text {
 
 .mpmap-allgood {
     fill: white;
+}
+
+.slice-grey {
+    fill: grey;
 }
