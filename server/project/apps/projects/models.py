@@ -338,6 +338,16 @@ class ProjectQuerySet(QuerySet):
             return 0
         return expenditure
 
+    def total_jobs(self, date):
+        jobs = MonthlySubmission.objects\
+           .filter(
+                projectcalculations__project__in=self,
+                projectcalculations__date__year=date.year,
+                projectcalculations__date__month=date.month
+            )\
+           .aggregate(Sum("jobs_created"))["jobs_created__sum"]
+        return jobs or 0
+
 class ProjectManager(models.Manager):
     def get_project(self, user_id=None):
         return self.annotate(cl=Count('group_perm_objs__group_perm', distinct=True)).filter(
@@ -456,6 +466,10 @@ class Project(models.Model):
         except IndexError:
             return 0
 
+    # TODO need to test
+    def jobs_created(self, date):
+        return Project.objects.filter(id=self.id).total_jobs(date)
+
     def is_bad(self, date, progress_threshold=10):
         # TODO need to figure out how to do this more efficiently
         if self.planned_progress(date) - self.actual_progress(date) > progress_threshold:
@@ -478,17 +492,18 @@ class Project(models.Model):
     def final_accounts_milestone(self):
         return ProjectMilestone.objects.project_final_accounts(self)
 
-    # TODO implement
-    @property
-    def jobs(self):
-        return 434343
-            
     def performance(self, date):
         try:
             return self.actual_progress(date) / self.planned_progress(date)
         except ZeroDivisionError:
             # TODO test - assume that our actual is the same as our planned
             return 1
+
+    def most_recent_submission(self, date):
+        try:
+            return MonthlySubmission.objects.filter(project=self, date__lte=date).order_by("-date")[0]
+        except IndexError:
+            return None
 
     def __unicode__(self):
         return self.name
@@ -659,6 +674,7 @@ class MonthlySubmission(models.Model):
     project = models.ForeignKey(Project, related_name='monthly_submissions')
     actual_expenditure = models.FloatField(help_text="Actual expenditure this month")
     actual_progress = models.FloatField(help_text="Actual progress at this point")
+    jobs_created = models.PositiveIntegerField(default=0, help_text="Number of jobs created (cumulative total)")
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
     remedial_action = models.CharField(max_length=255, blank=True)
@@ -678,6 +694,7 @@ class ProjectCalculations(models.Model):
     project = models.ForeignKey(Project, related_name='calculations')
     is_bad = models.NullBooleanField(null=True)
     performance = models.FloatField(null=True)
+    most_recent_submission = models.ForeignKey(MonthlySubmission, null=True)
 
     def __unicode__(self):
         return unicode(self.project)
