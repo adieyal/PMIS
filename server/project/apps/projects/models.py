@@ -508,8 +508,13 @@ class Project(models.Model):
     def __unicode__(self):
         return self.name
 
+class EntityManager(models.Manager):
+    def get_query_set(self):
+        return QuerySet(self.model).all().order_by("name")
+
 class Entity(models.Model):
     name = models.CharField(max_length=255)
+    objects = EntityManager()
 
     def __unicode__(self):
         return self.name

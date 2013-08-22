@@ -101,7 +101,6 @@ class EntityAdmin(admin.ModelAdmin):
 class RoleAdmin(admin.ModelAdmin):
     fields = ('name',)
 
-
 class ProjectRoleAdmin(admin.ModelAdmin):
     fields = ('project', 'role', 'entity')
 

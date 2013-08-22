@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.formsets import formset_factory
 from django.contrib.auth.models import User
-from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork, ProjectRole
+from .models import Project, MonthlySubmission, ProjectStatus, VarianceOrder, ProjectMilestone, ProjectFinancial, District, Municipality, ScopeOfWork, ProjectRole, Entity
 from project.apps.projects.form_container import FormContainer
 from project.apps.projects.widgets import CheckboxSelectMultipleIter
 
