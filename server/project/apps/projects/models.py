@@ -142,7 +142,7 @@ class Municipality(models.Model):
     district = models.ForeignKey(District, related_name='municipalities')
 
     def __unicode__(self):
-        return self.name
+        return "%s - %s" % (self.name, self.district)
 
 
 class Programme(models.Model):
@@ -472,9 +472,10 @@ class Project(models.Model):
 
     def is_bad(self, date, progress_threshold=10):
         # TODO need to figure out how to do this more efficiently
-        if self.planned_progress(date) - self.actual_progress(date) > progress_threshold:
-            return True
-        return False
+        planned_progress = self.planned_progress(date) or 0
+        actual_progress = self.actual_progress(date) or 0
+
+        return planned_progress - actual_progress > progress_threshold
 
     @property
     def start_milestone(self):
@@ -493,8 +494,10 @@ class Project(models.Model):
         return ProjectMilestone.objects.project_final_accounts(self)
 
     def performance(self, date):
+        actual_progress = self.actual_progress(date) or 0
+        planned_progress = self.planned_progress(date) or 0
         try:
-            return self.actual_progress(date) / self.planned_progress(date)
+            return actual_progress / planned_progress
         except ZeroDivisionError:
             # TODO test - assume that our actual is the same as our planned
             return 1
