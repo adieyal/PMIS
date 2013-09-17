@@ -1,0 +1,364 @@
+{
+    "district-a-budget": "R1,500,000", 
+    "district-a-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-a-expenditure": "R800,000", 
+    "district-a-projects-appointment": "00", 
+    "district-a-projects-design": "00", 
+    "district-a-projects-documentation": "00", 
+    "district-a-projects-implementation": "800", 
+    "district-a-projects-tendering": "00", 
+    "district-a-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "district-b-budget": "R1,500,000", 
+    "district-b-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-b-expenditure": "R800,000", 
+    "district-b-projects-appointment": "00", 
+    "district-b-projects-design": "00", 
+    "district-b-projects-documentation": "00", 
+    "district-b-projects-implementation": "800", 
+    "district-b-projects-tendering": "00", 
+    "district-b-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "district-c-budget": "R1,500,000", 
+    "district-c-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-c-expenditure": "R800,000", 
+    "district-c-projects-appointment": "00", 
+    "district-c-projects-design": "00", 
+    "district-c-projects-documentation": "00", 
+    "district-c-projects-implementation": "800", 
+    "district-c-projects-tendering": "00", 
+    "district-c-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "implementation-budget": "R1,500,000", 
+    "implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "implementation-expenditure": "40%", 
+    "implementation-progress": "40%", 
+    "implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "implementation-projects-complete": "5", 
+    "implementation-projects-due": "5", 
+    "implementation-projects-final-completion": "5", 
+    "implementation-projects-practical-completion": "5", 
+    "implementation-projects-total": "7", 
+    "planning-budget": "R1,500,000", 
+    "planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "planning-expenditure": "R800,000", 
+    "planning-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "planning-total": "7", 
+    "programme-a-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-a-implementaion-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-a-implementation-projects": "5", 
+    "programme-a-implementation-projects-appointment": "00", 
+    "programme-a-implementation-projects-budget": "R1,500,000", 
+    "programme-a-implementation-projects-design": "00", 
+    "programme-a-implementation-projects-documentation": "00", 
+    "programme-a-implementation-projects-expenditure": "R800,000", 
+    "programme-a-implementation-projects-tendering": "00", 
+    "programme-a-implementation-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "programme-a-projects-accounts": "4", 
+    "programme-a-projects-implementation": "5", 
+    "programme-a-projects-planning": "40", 
+    "programme-a-projects-total": "5", 
+    "programme-a-total-expenditure": "R800,000", 
+    "programme-b-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-b-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-b-implementation-projects": "5", 
+    "programme-b-implementation-projects-appointment": "00", 
+    "programme-b-implementation-projects-budget": "R1,500,000", 
+    "programme-b-implementation-projects-design": "00", 
+    "programme-b-implementation-projects-documentation": "00", 
+    "programme-b-implementation-projects-expenditure": "R800,000", 
+    "programme-b-implementation-projects-tendering": "00", 
+    "programme-b-implementation-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "programme-b-projects-accounts": "4", 
+    "programme-b-projects-implementation": "5", 
+    "programme-b-projects-planning": "40", 
+    "programme-b-projects-total": "5", 
+    "programme-b-total-expenditure": "R800,000", 
+    "programme-c-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-c-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "programme-c-implementation-projects": "5", 
+    "programme-c-implementation-projects-appointment": "00", 
+    "programme-c-implementation-projects-budget": "R1,500,000", 
+    "programme-c-implementation-projects-design": "00", 
+    "programme-c-implementation-projects-documentation": "00", 
+    "programme-c-implementation-projects-expenditure": "R800,000", 
+    "programme-c-implementation-projects-tendering": "00", 
+    "programme-c-implementation-stages-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "programme-c-projects-accounts": "4", 
+    "programme-c-projects-implementation": "5", 
+    "programme-c-projects-planning": "40", 
+    "programme-c-projects-total": "5", 
+    "programme-c-total-expenditure": "R800,000", 
+    "total-budget": "R1,500,000", 
+    "total-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "total-expenditure": "R800,000", 
+    "total-progress": "35%", 
+    "total-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "total-projects": "30", 
+    "total-projects-accounts": "5", 
+    "total-projects-implementation": "7", 
+    "total-projects-planning": "5"
+}
