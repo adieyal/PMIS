@@ -1,0 +1,608 @@
+<html>
+  <head>
+    <title>Cluster Report - Dashboard</title>
+    <link type="text/css" rel="stylesheet" href="../css/general.css">
+    <link type="text/css" rel="stylesheet" href="../css/cluster-dashboard.css">
+    <script type="text/javascript" src="/js/require.js"></script>
+    <script type="text/javascript" src="/js/jquery.js"></script>
+
+    <!-- This script pulls all the dynamic tags from this file and prints a
+	 template JSON file that can be customized to populate this report. -->
+    <script type="text/javascript" src="/js/generate.js"></script>
+
+    <script>
+      require.config({
+          baseUrl: "/js",
+          deps: ["widgets/js/widgets"]
+      });
+      
+      setTimeout(function() {
+          window.location.reload(true);
+      }, 10000);
+    </script>
+  </head>
+  <body>
+    <div class="page page-a4">
+      <div class="page-header">
+	<div class="page-header-detail">
+	  <div class="page-header-logo">
+	    <img src="../img/logo.png" />
+	  </div>
+	  <div class="page-header-date">July (2012/2013)</div>
+	  <div class="page-header-heading">Head Office Report</div>
+	  <ul class="page-header-tabs">
+	    <li class="page-header-tabs-active">
+	      <img src="../img/icon-dashboard-active.svg"/> Dashboard
+	    </li>
+	    <li>
+	      <img src="../img/icon-progress.svg"/> Progress
+	    </li>
+	    <li>
+	      <img src="../img/icon-performance.svg"/> Performance
+	    </li>
+	  </ul>
+	</div>
+	<div class="page-header-image">
+	  <img src="../img/map-region.svg" />
+	</div>
+      </div>
+      <div class="line"></div>
+      <div class="container container-grey">
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkorange block-larger-text center">
+	    <span class="replace" id="department-a-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-orange">
+	    Jobs created: <span class="replace" id="department-a-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-a-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-a-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-a-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-a-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-a-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-a-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-a-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-a-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-a-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-a-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-a-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-a-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-a-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-a-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-a-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-a-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-a-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-a-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-a-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkgreen block-larger-text center">
+	    <span class="replace" id="department-b-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-green">
+	    Jobs created: <span class="replace" id="department-b-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-b-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-b-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-b-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-b-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-b-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-b-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-b-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-b-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-b-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-b-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-b-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-b-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-b-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-b-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-b-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-b-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-b-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-b-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-b-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkpurple block-larger-text center">
+	    <span class="replace" id="department-c-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-purple">
+	    Jobs created: <span class="replace" id="department-c-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-c-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-c-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-c-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-c-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-c-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-c-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-c-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-c-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-c-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-c-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-c-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-c-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-c-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-c-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-c-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-c-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-c-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-c-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-c-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkblue block-larger-text center">
+	    <span class="replace" id="department-d-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-blue">
+	    Jobs created: <span class="replace" id="department-d-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-d-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-d-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-d-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-d-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-d-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-d-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-d-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-d-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-d-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-d-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-d-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-d-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-d-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-d-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-d-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-d-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-d-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-d-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-d-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkbrown block-larger-text center">
+	    <span class="replace" id="department-e-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-brown">
+	    Jobs created: <span class="replace" id="department-e-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-e-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-e-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-e-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-e-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-e-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-e-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-e-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-e-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-e-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-e-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-e-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-e-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-e-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-e-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-e-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-e-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-e-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-e-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-e-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+	<div class="column column-16 column-dashed-separator">
+	  <div class="block block-double block-darkpink block-larger-text center">
+	    <span class="replace" id="department-f-name">Department of Department Name</span>
+	  </div>
+	  <div class="block block-jobs block-jobs-pink">
+	    Jobs created: <span class="replace" id="department-f-jobs">1278</span>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Total number of projects: <span class="replace" id="department-f-projects-total">20</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in planning: <span class="replace right" id="department-f-projects-planning">5</span>
+	  </div>
+	  <div class="block block-line">
+	    Projects in implementaion: <span class="replace right" id="department-f-projects-implementation">40</span>
+	  </div>
+	  <div class="block block-line">
+	    Completed projects: <span class="replace right" id="department-f-projects-completed">5</span>
+	  </div>
+	  <div class="block">
+	    Final accounts: <span class="replace right" id="department-f-projects-accounts">4</span>
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-f-projects-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-f-projects-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-f-projects-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-f-projects-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Implementation
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-f-implementation-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-f-implementation-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-f-implementation-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-f-implementation-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	  <div class="block block-white center">
+	    Total Progress: <span class="replace" id="department-f-implementation-progress">70%</span>
+	  </div>
+	  <div class="block block-quad block-nopad">
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#department-f-implementation-progress-gauge"></div>
+	  </div>
+	  <div class="block block-darkgrey center">
+	    Planning
+	  </div>
+	  <div class="block block-white center">
+	    Budget: <span class="replace" id="department-f-planning-budget">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    Total Expenditure: <span class="replace" id="department-f-planning-expenditure">R800,000</span>
+	  </div>
+	  <div class="block block-grey center">
+	    % Expenditure: <span class="replace" id="department-f-planning-pecent-expenditure">30%</span>
+	  </div>
+	  <div class="block block-tripple block-nopad">
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#department-f-planning-budget-slider" data-aspect="1.1"></div>
+	  </div>
+	</div>
+      </div>
+
+      <div class="block"></div>
+
+      <div class="container container-transparent">
+	<div class="column three-column column-narrower">
+	  <div class="column column-bordered one-column">
+	    <div class="block block-darkgrey center">
+	      Nkangala District
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Total number of projects: <span class="replace right" id="district-a-projects-total">5</span>
+	      </div>	      
+	      <div class="block">
+		Projects in planning: <span class="replace right" id="district-a-projects-planning">5</span>
+	      </div>
+	      <div class="block block-darkgrey center">
+		Budget: <span class="replace" id="district-a-budget">R800,000</span>
+	      </div>
+	      <div class="block block-white center">
+		Total Progress: <span class="replace" id="district-a-progress">70%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="gauge" data-src="dashboard.json#district-a-progress-gauge"></div>
+	      </div>
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Projects in implementation: <span class="replace right" id="district-a-projects-implementation">1</span>
+	      </div>	      
+	      <div class="block">
+		Projects completed in FY: <span class="replace right" id="district-a-projects-completed">3</span>
+	      </div>
+	      <div class="block block-grey center">
+		Total Expenditure: <span class="replace" id="district-a-expenditure">R800,000</span>
+	      </div>
+	      <div class="block block-grey center">
+		% Expenditure: <span class="replace" id="district-a-percent-expenditure">30%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-a-budget-slider" data-aspect="1.1"></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="column three-column column-narrower">
+	  <div class="column column-bordered one-column">
+	    <div class="block block-darkgrey center">
+	      Gert Sibande District
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Total number of projects: <span class="replace right" id="district-b-projects-total">5</span>
+	      </div>	      
+	      <div class="block">
+		Projects in planning: <span class="replace right" id="district-b-projects-planning">5</span>
+	      </div>
+	      <div class="block block-darkgrey center">
+		Budget: <span class="replace" id="district-b-budget">R800,000</span>
+	      </div>
+	      <div class="block block-white center">
+		Total Progress: <span class="replace" id="district-b-progress">70%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="gauge" data-src="dashboard.json#district-b-progress-gauge"></div>
+	      </div>
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Projects in implementation: <span class="replace right" id="district-b-projects-implementation">1</span>
+	      </div>	      
+	      <div class="block">
+		Projects completed in FY: <span class="replace right" id="district-b-projects-completed">3</span>
+	      </div>
+	      <div class="block block-grey center">
+		Total Expenditure: <span class="replace" id="district-b-expenditure">R800,000</span>
+	      </div>
+	      <div class="block block-grey center">
+		% Expenditure: <span class="replace" id="district-b-percent-expenditure">30%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-b-budget-slider" data-aspect="1.1"></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	<div class="column three-column column-narrower">
+	  <div class="column column-bordered one-column">
+	    <div class="block block-darkgrey center">
+	      Ehlazeni District
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Total number of projects: <span class="replace right" id="district-c-projects-total">5</span>
+	      </div>	      
+	      <div class="block">
+		Projects in planning: <span class="replace right" id="district-c-projects-planning">5</span>
+	      </div>
+	      <div class="block block-darkgrey center">
+		Budget: <span class="replace" id="district-c-budget">R800,000</span>
+	      </div>
+	      <div class="block block-white center">
+		Total Progress: <span class="replace" id="district-c-progress">70%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="gauge" data-src="dashboard.json#district-c-progress-gauge"></div>
+	      </div>
+	    </div>
+	    <div class="column two-column column-nomargin">
+	      <div class="block block-line">
+		Projects in implementation: <span class="replace right" id="district-c-projects-implementation">1</span>
+	      </div>	      
+	      <div class="block">
+		Projects completed in FY: <span class="replace right" id="district-c-projects-completed">3</span>
+	      </div>
+	      <div class="block block-grey center">
+		Total Expenditure: <span class="replace" id="district-c-expenditure">R800,000</span>
+	      </div>
+	      <div class="block block-grey center">
+		% Expenditure: <span class="replace" id="district-c-percent-expenditure">30%</span>
+	      </div>
+	      <div class="block block-quad block-nopad">
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-c-budget-slider" data-aspect="1.1"></div>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </body>
+</html>

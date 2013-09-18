@@ -5,10 +5,18 @@ $white: white;
 
 $orange: #E6B744;
 
+$lightorange: #e7ce8b;
 $lightpurple: #BCB3D1;
 $lightbrown: #D0D0AE;
 $lightgreen: #B6DED3;
 $lightblue: #BFDFF6;
+
+$darkorange: #e6b744;
+$darkpurple: #958bb7;
+$darkbrown: #b5b278;
+$darkgreen: #85cabb;
+$darkblue: #95cbef;
+$darkpink: #bc6293;
 
 @font-face {
 	font-family: 'Arial';
@@ -93,7 +101,7 @@ body {
 		padding: 20px;
 		padding-left: 60px;
 		font-size: 30px;
-		width: 230px;
+		width: 250px;
 		height: 35px;
 		margin: 0 0 0 -4px;
 		box-shadow: -40px 0 70px 70px $darkgrey;
@@ -232,7 +240,7 @@ h2 {
     }
     
     .column-left, .column-right {
-	width: 49%;
+	width: 49.7%;
     }
     
     .column-left {
@@ -286,6 +294,22 @@ h2 {
 	width: 33.3%;
     }
     
+    &.column-75 {
+	width: 75%;
+    }
+    
+    &.column-50 {
+	width: 50%;
+    }
+    
+    &.column-25 {
+	width: 25%;
+    }
+    
+    &.column-16 {
+	width: 16.66667%;
+    }
+    
     &.column-nomargin {
 	margin-top: -5px;
     }
@@ -326,19 +350,23 @@ h2 {
     }
     
     &.block-tripple {
-	height: 148px;
+	height: 143px;
     }
     
     &.block-quad {
-	height: 199px;
+	height: 194px;
     }
     
     &.block-quintuple {
-	height: 250px;
+	height: 245px;
     }
     
     &.block-nopad {
 	padding: 0;
+    }
+    
+    &.block-larger-text {
+	font-size: 25px;
     }
     
     &.greyblock, &.block-grey {
@@ -361,6 +389,74 @@ h2 {
 	border-bottom: 1px solid $darkgrey;
     }
     
+    &.block-jobs {
+	position: relative;
+	margin-top: 28px;
+	margin-bottom: 28px;
+	margin-left: 70px;
+	background: $darkgrey;
+	
+	&:before {
+	    content: url(../img/icon-jobs.svg);
+	    position: absolute;
+	    left: -60px;
+	    margin-top: -20px;
+	    height: 56px;
+	}
+    }
+
+    &.block-jobs-orange {   
+	background: $darkorange;
+	
+	&:before {
+	    content: url(../img/icon-jobs-orange.svg);
+	}
+    }
+    
+    &.block-jobs-green {   
+	background: $darkgreen;
+	
+	&:before {
+	    content: url(../img/icon-jobs-green.svg);
+	}
+    }
+    
+    &.block-jobs-purple {   
+	background: $darkpurple;
+	
+	&:before {
+	    content: url(../img/icon-jobs-purple.svg);
+	}
+    }
+    
+    &.block-jobs-blue {   
+	background: $darkblue;
+	
+	&:before {
+	    content: url(../img/icon-jobs-blue.svg);
+	}
+    }
+    
+    &.block-jobs-brown {   
+	background: $darkbrown;
+	
+	&:before {
+	    content: url(../img/icon-jobs-brown.svg);
+	}
+    }
+    
+    &.block-jobs-pink {   
+	background: $darkpink;
+	
+	&:before {
+	    content: url(../img/icon-jobs-pink.svg);
+	}
+    }
+    
+    &.block-orange {
+	background: $lightorange;
+    }
+    
     &.block-purple {
 	background: $lightpurple;
     }
@@ -375,6 +471,30 @@ h2 {
 
     &.block-blue {
 	background: $lightblue;
+    }
+    
+    &.block-darkorange {
+	background: $darkorange;
+    }
+    
+    &.block-darkpurple {
+	background: $darkpurple;
+    }
+    
+    &.block-darkbrown {
+	background: $darkbrown;
+    }
+    
+    &.block-darkgreen {
+	background: $darkgreen;
+    }
+    
+    &.block-darkblue {
+	background: $darkblue;
+    }
+    
+    &.block-darkpink {
+	background: $darkpink;
     }
 }
 

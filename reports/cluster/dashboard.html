@@ -5,68 +5,16 @@
     <link type="text/css" rel="stylesheet" href="../css/cluster-dashboard.css">
     <script type="text/javascript" src="/js/require.js"></script>
     <script type="text/javascript" src="/js/jquery.js"></script>
+
+    <!-- This script pulls all the dynamic tags from this file and prints a
+	 template JSON file that can be customized to populate this report. -->
+    <script type="text/javascript" src="/js/generate.js"></script>
+
     <script>
       require.config({
-      baseUrl: "/js",
-      deps: ["widgets/js/widgets"]
+          baseUrl: "/js",
+          deps: ["widgets/js/widgets"]
       });
-    </script>
-    <script>
-      $(document).ready(function() {
-	  var json = {}
-	  var templates = {
-	      slider: [
-		  {
-		      "position": 0.5,
-		      "bar-color": "#e5b744",
-		      "marker-color": "#656263",
-		      "marker-style": "short",
-		      "marker-text": "Budget"
-		  },
-		  {
-		      "position": 0.65,
-		      "bar-color": "#f04338",
-		      "marker-color": "#f04338",
-		      "marker-style": "long",
-		      "marker-text": "Actual"
-		  }
-	      ],
-	      gauge: [
-		  {
-		      "position": 0.5,
-		      "text": "Planned",
-		      "needle-style": "dashed"
-		  },
-		  {
-		      "position": 0.85,
-		      "text": "Actual",
-		      "needle-color": ["#86bf53", "#cce310"],
-		      "needle-style": "plain"
-		  }
-	      ],
-	      donut: {
-		  "as_percentage" : true,
-		  "values" : [0.5, 0.65, 0.35, 0.65]
-	      }
-	  }
-	  $('.replace').each(function() {
-	      var key = $(this).attr('id');
-	      var value = $(this).text();
-	      json[key] = value;
-	  });
-	  $('.widget').each(function() {
-	      var key = $(this).attr('data-src').split('#')[1];
-	      var widget = $(this).attr('data-widget');
-	      var value = templates[widget];
-	      json[key] = value;
-	  });
-	  console.log(JSON.stringify(json));
-      });
-/*
-  setTimeout(function() {
-  window.location.reload(true);
-  }, 5000);
-*/
     </script>
   </head>
   <body>
@@ -119,7 +67,7 @@
 	    Budget: <span class="replace" id="total-budget">R1,500,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#total-budget-slider" data-aspect="2"></div>
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#total-budget-slider" data-aspect="2"></div>
 	  </div>
 	</div>
 	<div class="three-column column">
@@ -127,7 +75,7 @@
 	    Total progress (implementation): <span class="replace" id="total-progress">35%</span>
 	  </div>
 	  <div class="block block-tripple block-nopad">
-	    <div class="widget" data-widget="gauge" data-src="data.json#total-progress-gauge"></div>
+	    <div class="widget" data-widget="gauge" data-src="dashboard.json#total-progress-gauge"></div>
 	  </div>
 	</div>
       </div>
@@ -153,7 +101,7 @@
 	    Total expenditure: <span class="replace" id="programme-a-total-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-a-budget-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-a-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
 	<div class="three-column column column-dashed-separator">
@@ -176,7 +124,7 @@
 	    Total expenditure: <span class="replace" id="programme-b-total-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-b-budget-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-b-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
 	<div class="three-column column column-dashed-separator">
@@ -199,7 +147,7 @@
 	    Total expenditure: <span class="replace" id="programme-c-total-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-c-budget-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-c-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
       </div>
@@ -220,7 +168,7 @@
 	    </div>
 	    <div class="column two-column column-nomargin">
 	      <div class="block block-double block-nopad">
-		<div class="widget" data-widget="slider" data-src="data.json#planning-budget-slider" data-aspect="1.5"></div>	    		
+		<div class="widget" data-widget="slider" data-src="dashboard.json#planning-budget-slider" data-aspect="1.5"></div>	    		
 	      </div>
 	    </div>
 	    <div class="block block-grey center">
@@ -242,7 +190,7 @@
 	    </div>
 	    <div class="column two-column column-nomargin">
 	      <div class="block block-quad block-nopad">
-		<div class="widget" data-widget="donut" data-src="data.json#planning-stages-donut"></div>	    		
+		<div class="widget" data-widget="donut" data-src="dashboard.json#planning-stages-donut"></div>	    		
 	      </div>
 	    </div>
 	  </div>
@@ -264,7 +212,7 @@
 		Total progress: <span class="replace" id="implementation-progress">40%</span>
 	      </div>
 	      <div class="block block-quad block-nopad">
-		<div class="widget" data-widget="gauge" data-src="data.json#implementation-progress-gauge"></div>
+		<div class="widget" data-widget="gauge" data-src="dashboard.json#implementation-progress-gauge"></div>
 	      </div>
 	    </div>
 	    <div class="column two-column">
@@ -281,7 +229,7 @@
 		Budget: <span class="replace" id="implementation-budget">R1,500,000</span>
 	      </div>
 	      <div class="block block-tripple block-nopad">
-		<div class="widget" data-widget="slider" data-src="data.json#implementation-budget-slider" data-aspect="1.5"></div>
+		<div class="widget" data-widget="slider" data-src="dashboard.json#implementation-budget-slider" data-aspect="1.5"></div>
 	      </div>
 	    </div>	    
 	  </div>
@@ -312,7 +260,7 @@
 	  </div>
 	  <div class="column two-column">
 	    <div class="block block-quad block-nopad">
-	      <div class="widget" data-widget="donut" data-src="data.json#programme-a-implementation-stages-donut"></div>	    		
+	      <div class="widget" data-widget="donut" data-src="dashboard.json#programme-a-implementation-stages-donut"></div>	    		
 	    </div>
 	  </div>
 	  <div class="block block-white center">
@@ -322,7 +270,7 @@
 	    Budget: <span class="replace" id="programme-a-implementation-projects-budget">R1,500,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-a-implementaion-budget-slider" data-aspect="2.0"></div>	    		
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-a-implementaion-budget-slider" data-aspect="2.0"></div>	    		
 	  </div>
 	</div>
 	<div class="column three-column column-dashed-separator">
@@ -348,7 +296,7 @@
 	  </div>
 	  <div class="column two-column">
 	    <div class="block block-quad block-nopad">
-	      <div class="widget" data-widget="donut" data-src="data.json#programme-b-implementation-stages-donut"></div>	    		
+	      <div class="widget" data-widget="donut" data-src="dashboard.json#programme-b-implementation-stages-donut"></div>	    		
 	    </div>
 	  </div>
 	  <div class="block block-white center">
@@ -358,7 +306,7 @@
 	    Budget: <span class="replace" id="programme-b-implementation-projects-budget">R1,500,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-b-implementation-budget-slider" data-aspect="2.0"></div>
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-b-implementation-budget-slider" data-aspect="2.0"></div>
 	  </div>	  
 	</div>
 	<div class="column three-column column-dashed-separator">
@@ -384,7 +332,7 @@
 	  </div>
 	  <div class="column two-column">
 	    <div class="block block-quad block-nopad">
-	      <div class="widget" data-widget="donut" data-src="data.json#programme-c-implementation-stages-donut"></div>	    		
+	      <div class="widget" data-widget="donut" data-src="dashboard.json#programme-c-implementation-stages-donut"></div>	    		
 	    </div>
 	  </div>
 	  <div class="block block-white center">
@@ -394,7 +342,7 @@
 	    Budget: <span class="replace" id="programme-c-implementation-projects-budget">R1,500,000</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="data.json#programme-c-implementation-budget-slider" data-aspect="2.0"></div>	    		
+	    <div class="widget" data-widget="slider" data-src="dashboard.json#programme-c-implementation-budget-slider" data-aspect="2.0"></div>	    		
 	  </div>
 	</div>
       </div>
@@ -409,7 +357,7 @@
 	    </div>
 	    <div class="column two-column column-nomargin">
 	      <div class="block block-quintuple">
-		<div class="widget" data-widget="donut" data-src="data.json#district-a-stages-donut"></div>
+		<div class="widget" data-widget="donut" data-src="dashboard.json#district-a-stages-donut"></div>
 	      </div>
 	      <div class="block block-purple">
 		Consultant Appointment <span class="replace right" id="district-a-projects-appointment">00</span>		
@@ -426,7 +374,7 @@
 		Budget: <span class="replace" id="district-a-budget">R1,500,000</span>
 	      </div>
 	      <div class="block block-tripple">
-		<div class="widget" data-widget="slider" data-src="data.json#district-a-budget-slider" data-aspect="1.0"></div>
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-a-budget-slider" data-aspect="1.0"></div>
 	      </div>
 	      <div class="block block-green">
 		Documentation <span class="replace right" id="district-a-projects-documentation">00</span>
@@ -447,7 +395,7 @@
 	    </div>
 	    <div class="column two-column column-nomargin">
 	      <div class="block block-quintuple">
-		<div class="widget" data-widget="donut" data-src="data.json#district-b-stages-donut"></div>
+		<div class="widget" data-widget="donut" data-src="dashboard.json#district-b-stages-donut"></div>
 	      </div>
 	      <div class="block block-purple">
 		Consultant Appointment <span class="replace right" id="district-b-projects-appointment">00</span>		
@@ -464,7 +412,7 @@
 		Budget: <span class="replace" id="district-b-budget">R1,500,000</span>
 	      </div>
 	      <div class="block block-tripple">
-		<div class="widget" data-widget="slider" data-src="data.json#district-b-budget-slider" data-aspect="1.0"></div>
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-b-budget-slider" data-aspect="1.0"></div>
 	      </div>
 	      <div class="block block-green">
 		Documentation <span class="replace right" id="district-b-projects-documentation">00</span>
@@ -485,7 +433,7 @@
 	    </div>
 	    <div class="column two-column column-nomargin">
 	      <div class="block block-quintuple">
-		<div class="widget" data-widget="donut" data-src="data.json#district-c-stages-donut"></div>
+		<div class="widget" data-widget="donut" data-src="dashboard.json#district-c-stages-donut"></div>
 	      </div>
 	      <div class="block block-purple">
 		Consultant Appointment <span class="replace right" id="district-c-projects-appointment">00</span>		
@@ -502,7 +450,7 @@
 		Budget: <span class="replace" id="district-c-budget">R1,500,000</span>
 	      </div>
 	      <div class="block block-tripple">
-		<div class="widget" data-widget="slider" data-src="data.json#district-c-budget-slider" data-aspect="1.0"></div>
+		<div class="widget" data-widget="slider" data-src="dashboard.json#district-c-budget-slider" data-aspect="1.0"></div>
 	      </div>
 	      <div class="block block-green">
 		Documentation <span class="replace right" id="district-c-projects-documentation">00</span>
