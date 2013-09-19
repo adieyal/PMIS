@@ -4,6 +4,7 @@ $darkgrey: #4C4C4C;
 $white: white;
 
 $orange: #E6B744;
+$red: #F1423E;
 
 $lightorange: #e7ce8b;
 $lightpurple: #BCB3D1;
@@ -219,6 +220,27 @@ h1 {
     &.heading-orange {
 	background: $orange;
     }
+    
+    &.heading-red {
+	color: $white;
+	background: $red;
+    }
+    
+    &.heading-icon-down {
+	position: relative;
+	margin-left: 80px;
+	height: 47px;
+	
+	&:before {
+	    content: url(../img/icon-arrow-down.svg);
+	    position: absolute;
+	    left: -80px;
+	    margin-top: -10px;
+	    height: 67px;
+	    width: 80px;
+	    background: $darkgrey;
+	}
+    }
 }
 
 h2 {
@@ -265,6 +287,14 @@ h2 {
     &.container-grey{
 	background: $lightgrey;
     }
+
+    &.container-white {
+	background: $white;
+    }
+    
+    &.container-pad {
+	padding: 10px;
+    }
 }
 
 .column {
@@ -298,8 +328,16 @@ h2 {
 	width: 75%;
     }
     
+    &.column-66 {
+	width: 66.66666%;
+    }
+    
     &.column-50 {
 	width: 50%;
+    }
+    
+    &.column-33 {
+	width: 33.33333%;
     }
     
     &.column-25 {
@@ -354,11 +392,15 @@ h2 {
     }
     
     &.block-quad {
-	height: 194px;
+	height: 199px;
     }
     
     &.block-quintuple {
 	height: 245px;
+    }
+    
+    &.block-sextuple {
+	height: 296px;
     }
     
     &.block-nopad {
@@ -402,6 +444,21 @@ h2 {
 	    left: -60px;
 	    margin-top: -20px;
 	    height: 56px;
+	}
+    }
+    
+    &.block-jobs-compact {
+	position: relative;
+	color: $white;
+	margin-left: 55px;
+	margin-right: 0;
+	background: $darkgrey;
+	
+	&:before {
+	    content: url(../img/icon-jobs.svg);
+	    position: absolute;
+	    left: -45px;
+	    margin-top: -12px;
 	}
     }
 
@@ -472,6 +529,10 @@ h2 {
     &.block-blue {
 	background: $lightblue;
     }
+
+    &.block-ggrey {
+	background: $mediumgrey;
+    }
     
     &.block-darkorange {
 	background: $darkorange;
@@ -523,5 +584,61 @@ h2 {
 
     &[data-widget="donut"] {
 	font-size: 8px;
+    }
+}
+
+
+.block.block-white.block-legend {
+    border: none;
+    height: 205px;
+    padding: 10px;
+    margin-top: 25px;
+    margin-bottom: 30px;
+}
+
+.block-legend {
+    ul {
+        padding: 0;
+        margin: 0;
+
+	li {
+	    position: relative;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+	    margin-top: 10px;
+	    margin-bottom: 10px;
+	    margin-left: 25px;
+	    
+	    &:before {
+		content: '';
+		position: absolute;
+		left: -25px;
+		top: 2px;
+		width: 20px;
+		height: 20px;
+		background: $darkgrey;
+	    }
+	    
+	    &:nth-child(1):before {
+		background: $lightorange;
+	    }
+	    
+	    &:nth-child(2):before {
+		background: $lightpurple;
+	    }
+	    
+	    &:nth-child(3):before {
+		background: $lightbrown;
+	    }
+	    
+	    &:nth-child(4):before {
+		background: $lightgreen;
+	    }
+	    
+	    &:nth-child(5):before {
+		background: $mediumgrey;
+	    }
+	}
     }
 }

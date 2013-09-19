@@ -1,0 +1,195 @@
+{
+    "district-a-completion-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "district-a-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-a-projects-3months": "5", 
+    "district-a-projects-final-completion": "5", 
+    "district-a-projects-financial-year": "5", 
+    "district-a-projects-practical-completion": "5", 
+    "district-a-projects-this-month": "5", 
+    "district-a-projects-total": "5", 
+    "district-b-completion-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "district-b-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-b-projects-3months": "5", 
+    "district-b-projects-final-completion": "5", 
+    "district-b-projects-financial-year": "5", 
+    "district-b-projects-practical-completion": "5", 
+    "district-b-projects-this-month": "5", 
+    "district-b-projects-total": "5", 
+    "district-c-completion-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "district-c-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-c-projects-3months": "5", 
+    "district-c-projects-final-completion": "5", 
+    "district-c-projects-financial-year": "5", 
+    "district-c-projects-practical-completion": "5", 
+    "district-c-projects-this-month": "5", 
+    "district-c-projects-total": "5", 
+    "implemenatation-projects-due-financial-year": "7", 
+    "implemenatation-projects-due-month": "7", 
+    "implemenatation-projects-final-completion": "7", 
+    "implemenatation-projects-implementation": "0", 
+    "implemenatation-projects-practical-completion": "7", 
+    "implemenatation-projects-progress": "35%", 
+    "implemenatation-projects-status-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "implemenatation-projects-total": "30", 
+    "planning-project-status-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "planning-projects-appointments": "7", 
+    "planning-projects-completed": "7", 
+    "planning-projects-design": "7", 
+    "planning-projects-documentation": "7", 
+    "planning-projects-implementation-a": "Project A", 
+    "planning-projects-implementation-b": "Project B", 
+    "planning-projects-implementation-c": "Project C", 
+    "planning-projects-implementation-d": "Project D", 
+    "planning-projects-implementation-e": "Project E", 
+    "planning-projects-implementation-f": "Project F", 
+    "planning-projects-implementation-g": "Project G", 
+    "planning-projects-tender": "7", 
+    "planning-projects-tender-a": "Project A", 
+    "planning-projects-tender-b": "Project B", 
+    "planning-projects-tender-c": "Project C", 
+    "planning-projects-tender-d": "Project D", 
+    "planning-projects-tender-e": "Project E", 
+    "planning-projects-tender-f": "Project F", 
+    "planning-projects-tender-g": "Project G", 
+    "planning-projects-total": "0", 
+    "summary-overall-progress": "35%", 
+    "summary-overall-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "summary-project-status-donut": {
+        "as_percentage": true, 
+        "values": [
+            0.5, 
+            0.65, 
+            0.35, 
+            0.65
+        ]
+    }, 
+    "summary-projects-3months": "5", 
+    "summary-projects-accounts": "5", 
+    "summary-projects-completed": "0", 
+    "summary-projects-implementation": "7", 
+    "summary-projects-planning": "13", 
+    "summary-projects-total": "30", 
+    "worst-a-budget": "R1,500,000", 
+    "worst-a-department": "Department", 
+    "worst-a-jobs": "1278", 
+    "worst-a-location": "Location", 
+    "worst-a-name": "Project Name", 
+    "worst-a-progress": "35%", 
+    "worst-a-progress-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-a-reason": "J. Doe"
+}
