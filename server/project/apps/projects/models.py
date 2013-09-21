@@ -310,7 +310,14 @@ class ProjectQuerySet(QuerySet):
 
     def total_budget(self):
         
-        val =  self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+        val = self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+        if val == None:
+            return 0
+        return val
+
+    # TODO need testing
+    def total_planning_budget(self):
+        val = self.aggregate(Sum("budget__allocated_planning_budget"))["budget__allocated_planning_budget__sum"]
         if val == None:
             return 0
         return val
