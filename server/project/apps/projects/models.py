@@ -507,7 +507,7 @@ class Project(models.Model):
             return actual_progress / planned_progress
         except ZeroDivisionError:
             # TODO test - assume that our actual is the same as our planned
-            return 1
+            return 0
 
     def most_recent_submission(self, date):
         try:

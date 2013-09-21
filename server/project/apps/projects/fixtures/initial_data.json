@@ -1,0 +1,92 @@
+[
+{
+  "pk": 1, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Project Identification", 
+    "order": 1
+  }
+},
+{
+  "pk": 2, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Consultant Appointment", 
+    "order": 2
+  }
+},
+{
+  "pk": 3, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Design and Costing", 
+    "order": 3
+  }
+},
+{
+  "pk": 4, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Documentation", 
+    "order": 4
+  }
+},
+{
+  "pk": 5, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Tendering", 
+    "order": 5
+  }
+},
+{
+  "pk": 6, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "planning", 
+    "name": "Site Handove", 
+    "order": 6
+  }
+},
+{
+  "pk": 7, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "implementation", 
+    "name": "Practical Completion", 
+    "order": 7
+  }
+},
+{
+  "pk": 8, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "implementation", 
+    "name": "Final Completion", 
+    "order": 8
+  }
+},
+{
+  "pk": 9, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "implementation", 
+    "name": "Final Accounts", 
+    "order": 9
+  }
+},
+{
+  "pk": 10, 
+  "model": "projects.milestone", 
+  "fields": {
+    "phase": "completed", 
+    "name": "Completed", 
+    "order": 10
+  }
+}
+]
