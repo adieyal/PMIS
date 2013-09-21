@@ -4,12 +4,15 @@ from django.template import Template, Context
 
 register = template.Library()
 
+
+
 @register.filter(is_safe=True)
 @register.simple_tag(takes_context=True)
 def worst_project(context, index):
     
     template = Template("""
         {% load formatters %}
+        {% load perform_blocks %}
         <div class="client-worst-project-{{ index1 }} client-worst-project cf">
         	<div class="client-location cf">
             	<div class="client-worst-project-name client-{{ data.client|lower }}"><span class="worst-project-name">{{ data.name }}</span> (<a href="perform.html#">{{ data.client }}</a> | <a href="perform.html#">{{ data.municipality.name }}</a>)</div><!-- .location-main -->
@@ -30,8 +33,8 @@ def worst_project(context, index):
                                 <div class="worst-project-gauge worst-project-gauge{{ index1 }}" data-widget="gauge" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#worst_project{{ index }}"></div>
                             </div><!-- .actual-client-main -->
                             <div class="actual-client cf">
-                            	<div class="over-expenditure">Over expenditure: {{ data.expenditure.overunder.amount|format_currency }}
-                                    <br>( {{ data.expenditure.overunder.percentage_overunder|format_percentage }} over budget)</div><!-- .expend-text -->
+                            	<div class="over-expenditure">{% overunder_expenditure data.expenditure.actual data.expenditure.planned %}
+                                    <br>({% overunder_percentage data.expenditure.actual data.expenditure.planned %})</div><!-- .expend-text -->
                                 <div class="expenditure-to-date">Expenditure to date: {{data.expenditure.actual|format_currency }}</div><!-- .date-text -->
                                 <div class="client-slider" data-widget="slider" data-src="{% url 'api:reports:district_graphs' district.id date.year date.month %}#worst_project_expenditure{{ index }}"> </div>
                             </div><!-- .actual-client -->
