@@ -460,6 +460,11 @@ class TestProject(TestCase):
         project = factories.ProjectFactory()
         self.assertEqual(models.Project.objects.all().total_budget(), 0)
 
+    def test_planning_budget(self):
+        project1 = factories.ProjectFactory()
+        budget1 = factories.BudgetFactory(project=project1, allocated_planning_budget=100)
+        
+
     def test_total_actual_expenditure(self):
         models.Project.objects.all().delete()
         date0 = datetime(2012, 5, 1)
