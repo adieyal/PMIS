@@ -170,6 +170,9 @@
     "summary-projects-planning": "13", 
     "summary-projects-total": "30", 
     "worst-a-budget": "R1,500,000", 
+    "worst-a-consultant": "J. Doe", 
+    "worst-a-contractor": "J. Doe", 
+    "worst-a-coordinator": "J. Doe", 
     "worst-a-department": "Department", 
     "worst-a-jobs": "1278", 
     "worst-a-location": "Location", 
@@ -191,5 +194,83 @@
             "position": 0.65
         }
     ], 
-    "worst-a-reason": "J. Doe"
+    "worst-a-reason": "Project delayed due to ...", 
+    "worst-b-budget": "R1,500,000", 
+    "worst-b-consultant": "J. Doe", 
+    "worst-b-contractor": "J. Doe", 
+    "worst-b-coordinator": "J. Doe", 
+    "worst-b-department": "Department", 
+    "worst-b-jobs": "1278", 
+    "worst-b-location": "Location", 
+    "worst-b-name": "Project Name", 
+    "worst-b-progress": "35%", 
+    "worst-b-progress-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-b-reason": "Project delayed due to ...", 
+    "worst-c-budget": "R1,500,000", 
+    "worst-c-consultant": "J. Doe", 
+    "worst-c-contractor": "J. Doe", 
+    "worst-c-coordinator": "J. Doe", 
+    "worst-c-department": "Department", 
+    "worst-c-jobs": "1278", 
+    "worst-c-location": "Location", 
+    "worst-c-name": "Project Name", 
+    "worst-c-progress": "35%", 
+    "worst-c-progress-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-c-reason": "Project delayed due to bad things happening.", 
+    "worst-d-budget": "R1,500,000", 
+    "worst-d-consultant": "John Doe", 
+    "worst-d-contractor": "James Doe", 
+    "worst-d-coordinator": "Jason Doe", 
+    "worst-d-department": "Department", 
+    "worst-d-jobs": "1278", 
+    "worst-d-location": "Location", 
+    "worst-d-name": "Project Name", 
+    "worst-d-progress": "35%", 
+    "worst-d-progress-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-d-reason": "Project delayed due to ..."
 }
