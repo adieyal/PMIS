@@ -1,0 +1,64 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="100%" height="100%" version="1.1" viewBox="0 0 94 30" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <linearGradient id="inner-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#b1b3b2"/>
+      <stop offset="100%" stop-color="#eceeed"/>
+    </linearGradient>
+    <linearGradient id="inner-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#cfd0d0"/>
+      <stop offset="100%" stop-color="#999c9c"/>
+    </linearGradient>
+    <linearGradient id="marker-outer-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#cccccc"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+    <linearGradient id="marker-outer-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#b7b9b8"/>
+    </linearGradient>
+    <linearGradient id="marker-inner-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#d3d2d2"/>
+      <stop offset="100%" stop-color="#656263"/>
+    </linearGradient>
+    <linearGradient id="marker-tab-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#b1b3b2"/>
+      <stop offset="100%" stop-color="#eef0ef"/>
+    </linearGradient>
+    <linearGradient id="tpl-inner-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#49ef3f"/>
+      <stop offset="100%" stop-color="#eceeed" stop-opacity="0.1"/>
+    </linearGradient>
+    <linearGradient id="tpl-marker-inner-gradient" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#49ef3f" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#eceeed"/>
+    </linearGradient>
+    <g id="tpl-marker-short">
+      <rect class="marker-accent marker-tab" x="2.5" y="8" rx="1" ry="1" width="3" height="8"/>
+      <circle class="marker-accent" cx="4" cy="8" r="4"/>
+      <circle class="marker-outer" cx="4" cy="8" r="3.6"/>
+      <circle class="marker-inner" cx="4" cy="8" r="1.75"/>
+      <text class="marker-text" x="4" y="22" text-anchor="middle"></text>
+    </g>
+    <g id="tpl-marker-long">
+      <rect class="marker-accent marker-tab" x="2.5" y="8" rx="1" ry="1" width="3" height="14"/>
+      <circle class="marker-accent" cx="4" cy="8" r="4"/>
+      <circle class="marker-outer" cx="4" cy="8" r="3.6"/>
+      <circle class="marker-inner" cx="4" cy="8" r="1.75"/>
+      <text class="marker-text" x="4" y="28" text-anchor="middle"></text>
+    </g>
+    <rect id="tpl-inner-bar" class="inner-bar" x="4" y="6" rx="2" ry="2" width="50" height="4"/>
+    <style type="text/css"><![CDATA[
+      .outer-bar { fill:#eef0ef; stroke:#dcdcdb; stroke-width:0.5; }
+      .inner-bar { fill:url(#inner-gradient); stroke:url(#inner-stroke-gradient); stroke-width:0.5; }
+      .marker-accent { fill:none; stroke:#656263; stroke-width:0.5; }
+      .marker-tab { fill:url(#marker-tab-gradient); }
+      .marker-outer { fill:url(#marker-outer-gradient); stroke:url(#marker-outer-stroke-gradient); stroke-width:0.5; }
+      .marker-inner { fill:url(#marker-inner-gradient); stroke:#656263; stroke-width:0.5; }
+      .marker-text { font-family:Arial,sans-seriff; font-size:100%; }
+    ]]></style>
+  </defs>
+  <rect class="outer-bar" x="2" y="4" rx="4" ry="4" width="90" height="8"/>
+  <rect class="inner-bar" x="4" y="6" rx="2" ry="2" width="86" height="4"/>
+  <g class="dynamic"/>
+</svg>
