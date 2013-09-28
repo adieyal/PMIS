@@ -91,6 +91,13 @@ def condensed_project_serializer(project, date):
             "percentage_overunder" : perc_overunder
         }
 
+    year = models.FinancialYearManager.financial_year(date.year, date.month)
+    try:
+        budget = project.budgets.get(year=year)
+        percentage_expenditure = budget.percentage_expenditure(date)
+    except models.Budget.DoesNotExist:
+        percentage_expenditure = 0
+
     return {
         "name" : project.name,
         "client" : project.programme.client.name,
@@ -102,14 +109,14 @@ def condensed_project_serializer(project, date):
             "id" : project.municipality.district.id,
             "name" : project.municipality.district.name,
         },
-        "budget" : project.project_financial.total_anticipated_cost,
+        "budget" : project.total_budget(year),
         "progress" : {
             "actual" : project.actual_progress(date),
             "planned" : project.planned_progress(date),
         },
         "jobs" : project.jobs_created(date),
         "expenditure" : {
-            "perc_spent" : project.project_financial.percentage_expenditure(date),
+            "perc_spent" : percentage_expenditure,
             "actual" : project.fy(date).actual_expenditure,
             "planned" : project.fy(date).planned_expenditure,
             "overunder" : calc_overunder(),

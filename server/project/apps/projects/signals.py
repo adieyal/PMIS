@@ -73,10 +73,10 @@ def ms_update_is_bad(**kwargs):
 def pl_update_is_bad(**kwargs):
     return _update_is_bad(**kwargs)
 
-@receiver(post_save, sender=models.Project, dispatch_uid="project.apps.projects.signals.ensure_has_financial")
-def ensure_has_financial(**kwargs):
-    try:
-        instance = kwargs["instance"]
-        instance.project_financial
-    except models.ProjectFinancial.DoesNotExist:
-        models.ProjectFinancial.objects.create(project=instance)
+#@receiver(post_save, sender=models.Project, dispatch_uid="project.apps.projects.signals.ensure_has_financial")
+#def ensure_has_financial(**kwargs):
+#    try:
+#        instance = kwargs["instance"]
+#        instance.project_financial
+#    except models.ProjectFinancial.DoesNotExist:
+#        models.ProjectFinancial.objects.create(project=instance)

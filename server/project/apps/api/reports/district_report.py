@@ -34,7 +34,7 @@ def district_client_json(district, client, date):
         "fullname" : client.description,
         "name" : client.name,
         "num_jobs" : projects.total_jobs(date), # TODO Needs testing
-        "total_budget" : float(projects.total_budget()),
+        "total_budget" : float(projects.total_budget(financial_year)),
         "overall_progress" : {
             "actual" : projects.average_actual_progress(date),
             "planned" : projects.average_planned_progress(date),

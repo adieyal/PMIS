@@ -308,12 +308,8 @@ class ProjectQuerySet(QuerySet):
     def in_finalcompletion(self):
         return self.filter(current_step=Milestone.final_accounts())
 
-    def total_budget(self):
-        
-        val = self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
-        if val == None:
-            return 0
-        return val
+    def total_budget(self, year):
+        return sum(p.total_budget(year) for p in self) 
 
     # TODO need testing
     def total_planning_budget(self):
@@ -393,7 +389,8 @@ class FYProjectQuerySet(ProjectQuerySet):
 
     def percentage_actual_expenditure(self, date):
         actual_expenditure = self.actual_expenditure(date)
-        budget = self.total_budget()
+        year = FinancialYearManager.financial_year(date.year, date.month)
+        budget = self.total_budget(year)
         if budget == 0:
             return 0
 
@@ -494,6 +491,13 @@ class Project(models.Model):
     def jobs_created(self, date):
         return Project.objects.filter(id=self.id).total_jobs(date)
 
+    def total_budget(self, year):
+        try:
+            budget = Budget.objects.get(year=year, project=self)
+            return budget.total_budget
+        except Budget.DoesNotExist:
+            return 0
+
     def is_bad(self, date, progress_threshold=10):
         # TODO need to figure out how to do this more efficiently
         planned_progress = self.planned_progress(date) or 0
@@ -592,9 +596,20 @@ class ProjectFinancial(models.Model):
 
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
-    allocated_budget = models.FloatField(default=0)
+    allocated_budget = models.FloatField(default=0, help_text="Implementation Budget")
     allocated_planning_budget = models.FloatField(default=0)
     project = models.ForeignKey(Project, related_name='budgets')
+
+    @property
+    def total_budget(self):
+        return self.allocated_budget + self.allocated_planning_budget
+
+    def percentage_expenditure(self, date):
+        try:
+            actual = self.project.fy(date).actual_expenditure
+            return actual / float(self.total_budget) * 100
+        except (MonthlySubmission.DoesNotExist, ZeroDivisionError):
+            return 0
 
     def __unicode__(self):
         return u'Budget for %s  for  %s year' % (self.project.name, self.year)
