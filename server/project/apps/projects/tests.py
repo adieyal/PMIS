@@ -450,8 +450,18 @@ class TestProject(TestCase):
         self.assertEqual(projects.average_actual_progress(date1), avg_progress)
         self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
 
+        # Check that we use date1 submissions in date2 if we don't have data for date2
         self.assertEqual(projects.average_actual_progress(date2), avg_progress)
         self.assertEqual(projects.average_planned_progress(date2), avg_progress * 2)
+
+        # Now check that we can still go back to a previous month
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_progress=100, date=date2)
+            factories.PlanningFactory(project=project, planned_progress=100, date=date2)
+
+        self.assertEqual(projects.average_actual_progress(date1), avg_progress)
+        self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
 
     def test_total_budget(self):
         projects = models.Project.objects.district(self.munic1.district)
