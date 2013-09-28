@@ -62,6 +62,7 @@ def _update_is_bad(**kwargs):
     calc.is_bad = project.is_bad(date)
     calc.performance = project.performance(date)
     calc.most_recent_submission = project.most_recent_submission(date)
+    calc.most_recent_planning= project.most_recent_planning(date)
     calc.save()
 
 @receiver(post_save, sender=models.MonthlySubmission, dispatch_uid="project.apps.projects.signals.ms_update_is_bad")

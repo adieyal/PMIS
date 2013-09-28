@@ -450,6 +450,9 @@ class TestProject(TestCase):
         self.assertEqual(projects.average_actual_progress(date1), avg_progress)
         self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
 
+        self.assertEqual(projects.average_actual_progress(date2), avg_progress)
+        self.assertEqual(projects.average_planned_progress(date2), avg_progress * 2)
+
     def test_total_budget(self):
         projects = models.Project.objects.district(self.munic1.district)
         total = sum([p.project_financial.total_anticipated_cost for p in projects])

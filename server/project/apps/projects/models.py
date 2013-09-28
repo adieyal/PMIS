@@ -323,14 +323,16 @@ class ProjectQuerySet(QuerySet):
         return val
 
     def average_actual_progress(self, date):
-        # TODO - rather than using an exact date - should get the most recent submission
-        res = MonthlySubmission.objects\
-            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+        res = MonthlySubmission.objects.filter(projectcalculations__project__in=self)\
             .aggregate(Avg("actual_progress"))
         return res["actual_progress__avg"] or 0
         
     def average_planned_progress(self, date):
         # TODO - rather than using an exact date - should get the most recent submission
+        res = Planning.objects.filter(projectcalculations__project__in=self)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
+
         res = Planning.objects\
             .filter(project__in=self, date__year=date.year, date__month=date.month)\
             .aggregate(Avg("planned_progress"))
@@ -512,6 +514,12 @@ class Project(models.Model):
     def most_recent_submission(self, date):
         try:
             return MonthlySubmission.objects.filter(project=self, date__lte=date).order_by("-date")[0]
+        except IndexError:
+            return None
+
+    def most_recent_planning(self, date):
+        try:
+            return Planning.objects.filter(project=self, date__lte=date).order_by("-date")[0]
         except IndexError:
             return None
 
@@ -710,6 +718,7 @@ class ProjectCalculations(models.Model):
     is_bad = models.NullBooleanField(null=True)
     performance = models.FloatField(null=True)
     most_recent_submission = models.ForeignKey(MonthlySubmission, null=True)
+    most_recent_planning = models.ForeignKey(Planning, null=True)
 
     def __unicode__(self):
         return unicode(self.project)
