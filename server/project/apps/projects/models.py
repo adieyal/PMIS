@@ -324,15 +324,34 @@ class ProjectQuerySet(QuerySet):
 
     def average_actual_progress(self, date):
         if self.count() == 0: return 0
-        progress = [p.most_recent_submission(date).actual_progress for p in self]
+        submissions = [p.most_recent_submission(date) for p in self]
+        submissions = [s for s in submissions if s and s.actual_progress]
+        progress = [(s.actual_progress if s else 0) for s in submissions]
 
-        return sum(progress) / len(progress)
+        return sum(progress) / self.count()
         
     def average_planned_progress(self, date):
+        if self.count() == 0: return 0
+        plannings = [p.most_recent_planning(date) for p in self]
+        plannings = [p for p in plannings if p and p.planned_progress]
+        progress = [(p.planned_progress if p else 0) for p in plannings]
+
+        return sum(progress) / self.count()
+
         if self.count() == 0: return 0
         progress = [p.most_recent_planning(date).planned_progress for p in self]
 
         return sum(progress) / len(progress)
+
+        # TODO - rather than using an exact date - should get the most recent submission
+        res = Planning.objects.filter(projectcalculations__project__in=self)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
+
+        res = Planning.objects\
+            .filter(project__in=self, date__year=date.year, date__month=date.month)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
 
     def total_planned_expenditure(self, date):
         expenditure = Planning.objects\
