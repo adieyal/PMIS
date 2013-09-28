@@ -78,7 +78,7 @@ class MonthlySubmissionInlineAdmin(admin.TabularInline):
 class ProjectAdmin(CustomVersionAdmin):
     form = ProjectVersionedForm
     list_display = ('name', 'municipality', 'district', 'programme', 'current_step')
-    list_filter = ("programme", "municipality__district", "current_step", "current_step__phase")
+    list_filter = ("programme", "municipality__district", "current_step", "current_step__phase", "programme__client")
     inlines = (ScopeOfWorkInlineAdmin, ProjectFinancialInlineAdmin, BudgetInlineAdmin, PlanningInlineAdmin, ProjectMilestoneInlineAdmin, ProjectRoleInlineAdmin, MonthlySubmissionInlineAdmin)
 
     @property
