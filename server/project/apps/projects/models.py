@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
-from django.db.models import Sum, Avg
+from django.db.models import Sum, Avg, Max
 
 
 financial_year = range(4, 13) + range(1,4)
@@ -239,16 +239,24 @@ class ProjectQuerySet(QuerySet):
 
     # TODO test
     def actual_progress_between(self, progress_start, progress_end):
-        return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start,
-            monthly_submissions__actual_progress__lt=progress_end,
-        ).distinct()
+        ms = self.annotate(latest_submission=Max('monthly_submissions__date'))
+        ms = MonthlySubmission.objects.filter(
+            date__in=[m.latest_submission for m in ms],
+            actual_progress__gte=progress_start,
+            actual_progress__lt=progress_end,
+        )
+
+        return self.filter(monthly_submissions__in=ms).distinct()
 
     def planned_progress_between(self, progress_start, progress_end):
-        return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start,
-            monthly_submissions__actual_progress__lt=progress_end,
-        ).distinct()
+        pl = self.annotate(latest_planning=Max('plannings'))
+        pl = Planning.objects.filter(
+            id__in=[p.latest_planning for p in pl],
+            planned_progress__gte=progress_start,
+            planned_progress__lt=progress_end,
+        )
+
+        return self.filter(plannings__in=pl).distinct()
 
     def _sort_by_performance(self, date, reverse=False):
         order_field = "calculations__performance"
@@ -259,7 +267,7 @@ class ProjectQuerySet(QuerySet):
             calculations__project__in=self,
             calculations__date__year=date.year,
             calculations__date__month=date.month,
-        ).order_by(order_field)
+        ).distinct().order_by(order_field)
 
     # TODO - write test
     def completed(self):

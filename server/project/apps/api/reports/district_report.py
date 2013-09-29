@@ -52,13 +52,13 @@ def district_client_json(district, client, date):
             "currently_in_implementation" : projects.in_implementation.count(),
             "currently_in_final_completion" : projects.in_finalcompletion.count(),
             "currently_in_practical_completion" : projects.in_practicalcompletion.count(),
-            "between_0_and_50": projects.actual_progress_between(0, 50).count(),
-            "between_51_and_75": projects.actual_progress_between(51, 75).count(),
-            "between_76_and_99": projects.actual_progress_between(76, 99).count(),
+            "between_0_and_50": projects.actual_progress_between(0, 51).count(),
+            "between_51_and_75": projects.actual_progress_between(51, 76).count(),
+            "between_76_and_99": projects.actual_progress_between(76, 100).count(),
             "due_in_3_months": projects.due_in_3_months(date).count(),
             "due_this_month": projects.due_in_1_month(date).count(),
             "worst_performing": worst_performing,
-            "project_complete": projects.completed().count(),
+            "project_complete": projects.actual_progress_between(100, 101).count(),
         }
     }
 
