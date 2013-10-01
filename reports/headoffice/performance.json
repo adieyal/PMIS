@@ -1,0 +1,960 @@
+{
+    "analysis-department-a-implementation-expenditure": "15%", 
+    "analysis-department-a-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-a-implementation-performance": "20%", 
+    "analysis-department-a-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-a-name": "Department of Department Name", 
+    "analysis-department-a-overall-expenditure": "15%", 
+    "analysis-department-a-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-a-overall-performance": "20%", 
+    "analysis-department-a-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-a-planning-expenditure": "15%", 
+    "analysis-department-a-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-a-planning-performance": "20%", 
+    "analysis-department-a-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-b-implementation-expenditure": "15%", 
+    "analysis-department-b-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-b-implementation-performance": "20%", 
+    "analysis-department-b-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-b-name": "Department of Department Name", 
+    "analysis-department-b-overall-expenditure": "15%", 
+    "analysis-department-b-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-b-overall-performance": "20%", 
+    "analysis-department-b-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-b-planning-expenditure": "15%", 
+    "analysis-department-b-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-b-planning-performance": "20%", 
+    "analysis-department-b-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-c-implementation-expenditure": "15%", 
+    "analysis-department-c-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-c-implementation-performance": "20%", 
+    "analysis-department-c-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-c-name": "Department of Department Name", 
+    "analysis-department-c-overall-expenditure": "15%", 
+    "analysis-department-c-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-c-overall-performance": "20%", 
+    "analysis-department-c-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-c-planning-expenditure": "15%", 
+    "analysis-department-c-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-c-planning-performance": "20%", 
+    "analysis-department-c-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-d-implementation-expenditure": "15%", 
+    "analysis-department-d-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-d-implementation-performance": "20%", 
+    "analysis-department-d-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-d-name": "Department of Department Name", 
+    "analysis-department-d-overall-expenditure": "15%", 
+    "analysis-department-d-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-d-overall-performance": "20%", 
+    "analysis-department-d-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-d-planning-expenditure": "15%", 
+    "analysis-department-d-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-d-planning-performance": "20%", 
+    "analysis-department-d-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-e-implementation-expenditure": "15%", 
+    "analysis-department-e-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-e-implementation-performance": "20%", 
+    "analysis-department-e-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-e-name": "Department of Department Name", 
+    "analysis-department-e-overall-expenditure": "15%", 
+    "analysis-department-e-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-e-overall-performance": "20%", 
+    "analysis-department-e-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-e-planning-expenditure": "15%", 
+    "analysis-department-e-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-e-planning-performance": "20%", 
+    "analysis-department-e-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-f-implementation-expenditure": "15%", 
+    "analysis-department-f-implementation-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-f-implementation-performance": "20%", 
+    "analysis-department-f-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-f-name": "Department of Department Name", 
+    "analysis-department-f-overall-expenditure": "15%", 
+    "analysis-department-f-overall-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-f-overall-performance": "20%", 
+    "analysis-department-f-overall-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-department-f-planning-expenditure": "15%", 
+    "analysis-department-f-planning-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-department-f-planning-performance": "20%", 
+    "analysis-department-f-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "summary-department-a-budget": "R800,000", 
+    "summary-department-a-budget-final-accounts": "R200,000", 
+    "summary-department-a-budget-implementation": "R3,000,000", 
+    "summary-department-a-budget-planning": "R1,000,000", 
+    "summary-department-a-expenditure": "R800,000", 
+    "summary-department-a-implementation-budget": "R800,000", 
+    "summary-department-a-implementation-expenditure": "R800,000", 
+    "summary-department-a-implementation-projects": "20", 
+    "summary-department-a-implementation-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "summary-department-a-implementation-under-expenditure": "00%", 
+    "summary-department-a-name": "Department of Department Name", 
+    "summary-department-a-planning-budget": "R800,000", 
+    "summary-department-a-planning-expenditure": "R800,000", 
+    "summary-department-a-planning-projects": "20", 
+    "summary-department-a-planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "summary-department-a-planning-under-expenditure": "00%", 
+    "summary-department-a-projects": "20", 
+    "summary-department-a-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "summary-department-a-under-expenditure": "00%", 
+    "top-a-budget": "R1,500,000", 
+    "top-a-department": "Department", 
+    "top-a-expenditure": "R1,500,000", 
+    "top-a-location": "Location", 
+    "top-a-name": "Project Name", 
+    "top-a-over-expenditure": "R100,000,000", 
+    "top-a-over-expenditure-percent": "35%", 
+    "top-a-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "top-b-budget": "R1,500,000", 
+    "top-b-department": "Department", 
+    "top-b-expenditure": "R1,500,000", 
+    "top-b-location": "Location", 
+    "top-b-name": "Project Name", 
+    "top-b-over-expenditure": "R100,000,000", 
+    "top-b-over-expenditure-percent": "35%", 
+    "top-b-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "top-c-budget": "R1,500,000", 
+    "top-c-department": "Department", 
+    "top-c-expenditure": "R1,500,000", 
+    "top-c-location": "Location", 
+    "top-c-name": "Project Name", 
+    "top-c-over-expenditure": "R100,000,000", 
+    "top-c-over-expenditure-percent": "35%", 
+    "top-c-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "top-d-budget": "R1,500,000", 
+    "top-d-department": "Department", 
+    "top-d-expenditure": "R1,500,000", 
+    "top-d-location": "Location", 
+    "top-d-name": "Project Name", 
+    "top-d-over-expenditure": "R100,000,000", 
+    "top-d-over-expenditure-percent": "35%", 
+    "top-d-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "top-e-budget": "R1,500,000", 
+    "top-e-department": "Department", 
+    "top-e-expenditure": "R1,500,000", 
+    "top-e-location": "Location", 
+    "top-e-name": "Project Name", 
+    "top-e-over-expenditure": "R100,000,000", 
+    "top-e-over-expenditure-percent": "35%", 
+    "top-e-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "top-f-budget": "R1,500,000", 
+    "top-f-department": "Department", 
+    "top-f-expenditure": "R1,500,000", 
+    "top-f-location": "Location", 
+    "top-f-name": "Project Name", 
+    "top-f-over-expenditure": "R100,000,000", 
+    "top-f-over-expenditure-percent": "35%", 
+    "top-f-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-a-budget": "R1,500,000", 
+    "worst-a-department": "Department", 
+    "worst-a-expenditure": "R1,500,000", 
+    "worst-a-location": "Location", 
+    "worst-a-name": "Project Name", 
+    "worst-a-over-expenditure": "R100,000,000", 
+    "worst-a-over-expenditure-percent": "35%", 
+    "worst-a-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-b-budget": "R1,500,000", 
+    "worst-b-department": "Department", 
+    "worst-b-expenditure": "R1,500,000", 
+    "worst-b-location": "Location", 
+    "worst-b-name": "Project Name", 
+    "worst-b-over-expenditure": "R100,000,000", 
+    "worst-b-over-expenditure-percent": "35%", 
+    "worst-b-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-c-budget": "R1,500,000", 
+    "worst-c-department": "Department", 
+    "worst-c-expenditure": "R1,500,000", 
+    "worst-c-location": "Location", 
+    "worst-c-name": "Project Name", 
+    "worst-c-over-expenditure": "R100,000,000", 
+    "worst-c-over-expenditure-percent": "35%", 
+    "worst-c-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-d-budget": "R1,500,000", 
+    "worst-d-department": "Department", 
+    "worst-d-expenditure": "R1,500,000", 
+    "worst-d-location": "Location", 
+    "worst-d-name": "Project Name", 
+    "worst-d-over-expenditure": "R100,000,000", 
+    "worst-d-over-expenditure-percent": "35%", 
+    "worst-d-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-e-budget": "R1,500,000", 
+    "worst-e-department": "Department", 
+    "worst-e-expenditure": "R1,500,000", 
+    "worst-e-location": "Location", 
+    "worst-e-name": "Project Name", 
+    "worst-e-over-expenditure": "R100,000,000", 
+    "worst-e-over-expenditure-percent": "35%", 
+    "worst-e-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "worst-f-budget": "R1,500,000", 
+    "worst-f-department": "Department", 
+    "worst-f-expenditure": "R1,500,000", 
+    "worst-f-location": "Location", 
+    "worst-f-name": "Project Name", 
+    "worst-f-over-expenditure": "R100,000,000", 
+    "worst-f-over-expenditure-percent": "35%", 
+    "worst-f-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ]
+}
