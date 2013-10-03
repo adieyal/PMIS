@@ -738,7 +738,7 @@ class MonthlySubmission(models.Model):
     jobs_created = models.PositiveIntegerField(default=0, help_text="Number of jobs created (cumulative total)")
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
-    remedial_action = models.CharField(max_length=255, blank=True)
+    remedial_action = models.TextField(blank=True)
 
     objects = MonthlySubmissionManager()
 
