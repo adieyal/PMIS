@@ -132,7 +132,7 @@ class ProjectMilestoneAdmin(CustomVersionAdmin):
 
 
 class MilestoneAdmin(admin.ModelAdmin):
-    fields = ('phase', 'name', 'order')
+    list_display = ('name', 'phase', 'order')
     list_filter = ('phase',)
 
 
