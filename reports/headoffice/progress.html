@@ -13,7 +13,8 @@
     <script>
       require.config({
           baseUrl: "{% static 'js' %}",
-          deps: ["widgets/js/widgets"]
+          deps: ["widgets/js/widgets"],
+          waitSeconds: 60
       });
     </script>
     
@@ -126,16 +127,16 @@
 	<div class="column column-50 column-nopad">
 	  <div class="container container-grey">
 	    <div class="column column-50">
-	      <div class="block block-orange">
+	      <div class="block block-green">
 		Total number of projects in planning: <span class="replace right" id="planning-projects-total">0</span>
 	      </div>
-	      <div class="block block-brown">
+	      <div class="block block-orange">
 		Projects in planning completed: <span class="replace right" id="planning-projects-completed">7</span>
 	      </div>
 	      <div class="block block-purple">
 		Consultant appointments: <span class="replace right" id="planning-projects-appointments">7</span>
 	      </div>
-	      <div class="block block-green">
+	      <div class="block block-brown">
 		Design and costing: <span class="replace right" id="planning-projects-design">7</span>
 	      </div>
 	      <div class="block block-blue">
@@ -226,19 +227,19 @@
 	<div class="column column-66 column-nopad">
 	  <div class="container container-grey">
 	    <div class="column column-66">
-	      <div class="block block-orange">
+	      <div class="block block-green">
 		Total number of projects in implementation: <span class="replace right" id="implemenatation-projects-implementation">0</span>
 	      </div>
-	      <div class="block block-brown">
+	      <div class="block block-orange">
 		Projects due in financial year: <span class="replace right" id="implemenatation-projects-due-financial-year">7</span>
 	      </div>
 	      <div class="block block-purple">
 		Projects due this month: <span class="replace right" id="implemenatation-projects-due-month">7</span>
 	      </div>
-	      <div class="block block-green">
+	      <div class="block block-brown">
 		Projects in practical completion: <span class="replace right" id="implemenatation-projects-practical-completion">7</span>
 	      </div>
-	      <div class="block block-ggrey">
+	      <div class="block block-blue">
 		Projects in final completion: <span class="replace right" id="implemenatation-projects-final-completion">7</span>
 	      </div>
 	    </div>
@@ -260,15 +261,15 @@
 	    <div class="column column-50 column-nomargin">
 	      <div class="container container-grey container-margin">
 		<div class="block block-white center">
-		  Total progress: <span class="replace" id="district-a-projects-total">70%</span>
+		  Total progress: <span class="replace" id="district-a-progress">70%</span>
 		</div>
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="gauge" data-src="json#district-a-progress-gauge"></div>	
 		</div>
-		<div class="block block-orange">
+		<div class="block block-green">
 		  Total number of projects: <span class="replace right" id="district-a-projects-total">5</span>
 		</div>
-		<div class="block block-brown">
+		<div class="block block-orange">
 		Due in coming 3 months: <span class="replace right" id="district-a-projects-3months">5</span>
 		</div>
 		<div class="block block-purple">
@@ -284,7 +285,7 @@
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="donut" data-src="json#district-a-completion-donut"></div>
 		</div>
-		<div class="block block-green">
+		<div class="block block-brown">
 		  Due in FY: <span class="replace right" id="district-a-projects-financial-year">5</span>
 		</div>
 		<div class="block block-blue">
@@ -305,15 +306,15 @@
 	    <div class="column column-50 column-nomargin">
 	      <div class="container container-grey container-margin">
 		<div class="block block-white center">
-		  Total progress: <span class="replace" id="district-b-projects-total">70%</span>
+		  Total progress: <span class="replace" id="district-b-progress">70%</span>
 		</div>
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="gauge" data-src="json#district-b-progress-gauge"></div>	
 		</div>
-		<div class="block block-orange">
+		<div class="block block-green">
 		  Total number of projects: <span class="replace right" id="district-b-projects-total">5</span>
 		</div>
-		<div class="block block-brown">
+		<div class="block block-orange">
 		Due in coming 3 months: <span class="replace right" id="district-b-projects-3months">5</span>
 		</div>
 		<div class="block block-purple">
@@ -329,7 +330,7 @@
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="donut" data-src="json#district-b-completion-donut"></div>
 		</div>
-		<div class="block block-green">
+		<div class="block block-brown">
 		  Due in FY: <span class="replace right" id="district-b-projects-financial-year">5</span>
 		</div>
 		<div class="block block-blue">
@@ -350,15 +351,15 @@
 	    <div class="column column-50 column-nomargin">
 	      <div class="container container-grey container-margin">
 		<div class="block block-white center">
-		  Total progress: <span class="replace" id="district-c-projects-total">70%</span>
+		  Total progress: <span class="replace" id="district-c-progress">70%</span>
 		</div>
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="gauge" data-src="json#district-c-progress-gauge"></div>	
 		</div>
-		<div class="block block-orange">
+		<div class="block block-green">
 		  Total number of projects: <span class="replace right" id="district-c-projects-total">5</span>
 		</div>
-		<div class="block block-brown">
+		<div class="block block-orange">
 		Due in coming 3 months: <span class="replace right" id="district-c-projects-3months">5</span>
 		</div>
 		<div class="block block-purple">
@@ -374,7 +375,7 @@
 		<div class="block block-quad block-nopad">
 		  <div class="widget" data-widget="donut" data-src="json#district-c-completion-donut"></div>
 		</div>
-		<div class="block block-green">
+		<div class="block block-brown">
 		  Due in FY: <span class="replace right" id="district-c-projects-financial-year">5</span>
 		</div>
 		<div class="block block-blue">
