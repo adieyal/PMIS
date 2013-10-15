@@ -1,17 +1,15 @@
 from __future__ import division
-from django.http import HttpResponse, Http404
 from django.core.cache import cache
 from collections import OrderedDict
-from decimal import Decimal
 from datetime import datetime
 from django.shortcuts import get_object_or_404
-import json
 from django.db.models import Count
 import project.apps.projects.models as models
 import project.apps.api.serializers as serializers
 from project.apps.api.reports import graphhelpers
 from django.views.decorators.cache import cache_page
 from django.conf import settings
+import common
 
 """
 JSON views to product reports
@@ -36,7 +34,7 @@ def district_client_json(district, client, date):
         "fullname" : client.description,
         "name" : client.name,
         "num_jobs" : projects.total_jobs(date), # TODO Needs testing
-        "total_budget" : float(projects.total_budget()),
+        "total_budget" : float(projects.total_budget(financial_year)),
         "overall_progress" : {
             "actual" : projects.average_actual_progress(date),
             "planned" : projects.average_planned_progress(date),
@@ -54,13 +52,13 @@ def district_client_json(district, client, date):
             "currently_in_implementation" : projects.in_implementation.count(),
             "currently_in_final_completion" : projects.in_finalcompletion.count(),
             "currently_in_practical_completion" : projects.in_practicalcompletion.count(),
-            "between_0_and_50": projects.actual_progress_between(0, 50).count(),
-            "between_51_and_75": projects.actual_progress_between(51, 75).count(),
-            "between_76_and_99": projects.actual_progress_between(76, 99).count(),
+            "between_0_and_50": projects.actual_progress_between(0, 51).count(),
+            "between_51_and_75": projects.actual_progress_between(51, 76).count(),
+            "between_76_and_99": projects.actual_progress_between(76, 100).count(),
             "due_in_3_months": projects.due_in_3_months(date).count(),
             "due_this_month": projects.due_in_1_month(date).count(),
             "worst_performing": worst_performing,
-            "project_complete": projects.completed().count(),
+            "project_complete": projects.actual_progress_between(100, 101).count(),
         }
     }
 
@@ -108,19 +106,11 @@ def district_report_json(district_id, date):
     }
     return js
 
-def handler(obj):
-    if hasattr(obj, 'isoformat'):
-        return obj.isoformat()
-    elif isinstance(obj, Decimal):
-        return float(obj)
-    else:
-        raise TypeError, 'Object of type %s with value of %s is not JSON serializable' % (type(obj), repr(obj))
-    
 @cache_page(settings.API_CACHE)
 def district_report(request, district_id, year, month):
     year, month = int(year), int(month)
     js = district_report_json(district_id, datetime(year, month, 1))
-    response = HttpResponse(json.dumps(js, cls=serializers.ModelEncoder, indent=4, default=handler), mimetype="application/json")
+    response = common.JsonResponse(js)
     return response
 
 @cache_page(settings.API_CACHE)
@@ -134,10 +124,11 @@ def dashboard_graphs(request, district_id, year, month):
 
 
     def create_expenditure_slider(planned, actual, budget, client):
+        largest = max(planned, actual, budget)
         if budget == 0:
             return graphhelpers.dashboard_slider(0, 0, client, text1="Planned", text2="Actual")
         else:
-            planned = planned / budget; actual = actual / budget
+            planned = planned / largest; actual = actual / largest
             return graphhelpers.dashboard_slider(planned, actual, client, text1="Planned", text2="Actual")
 
     def create_project_slider(project):
@@ -206,7 +197,7 @@ def dashboard_graphs(request, district_id, year, month):
         
         
         
-    response = HttpResponse(json.dumps(js, indent=4), mimetype="application/json")
+    response = common.JsonResponse(js)
     return response
 
     

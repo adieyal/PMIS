@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="66.5"
+   width="86.5"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48+devel r11876"
+   sodipodi:docname="icon-arrow-up.svg">
+  <defs
+     id="defs14" />
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1198"
+     inkscape:window-height="1899"
+     id="namedview12"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:zoom="3.5488722"
+     inkscape:cx="68.108681"
+     inkscape:cy="26.45411"
+     inkscape:window-x="0"
+     inkscape:window-y="19"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <metadata
+     id="metadata4">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="matrix(0.729,0,0,0.729,-135.44758,-435.99882)"
+     id="g6"
+     style="fill:#ffffff">
+    <path
+       d="M 238,658 221,640 199,659 199,677 270,677 270,638 245,658 C 243,660 240,660 238,658 Z"
+       id="path8"
+       inkscape:connector-curvature="0" />
+    <path
+       d="M 281,611 258,615 C 256,615 256,616 257,617 L 261,623 243,639 229,622 C 226,619 221,618 218,621 L 198,640 C 196,641 196,644 198,647 199,647 200,648 201,648 202,648 204,648 204,647 L 223,630 238,648 C 239,648 240,649 240,649 241,650 242,650 243,650 244,650 246,649 247,648 L 267,631 270,635 271,636 272,637 C 273,638 274,638 275,636 L 283,613 C 284,612 283,610 281,611 Z"
+       id="path10"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>

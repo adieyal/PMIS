@@ -40,18 +40,18 @@ class ReportsTest(TestCase):
 
 class FormatterTest(TestCase):
     def test_currency_formatter(self):
-        self.assertEqual(formatters._format_currency(10000), "R10,000")
-        self.assertEqual(formatters._format_currency(10000.23), "R10,000.23")
-        self.assertEqual(formatters._format_currency(10000.569), "R10,000.57")
-        self.assertEqual(formatters._format_currency(10000.573), "R10,000.57")
-        self.assertEqual(formatters._format_currency(0), "R0.00")
-        self.assertEqual(formatters._format_currency(""), "-")
+        self.assertEqual(formatters.format_currency(10000), "R10,000")
+        self.assertEqual(formatters.format_currency(10000.23), "R10,000.23")
+        self.assertEqual(formatters.format_currency(10000.569), "R10,000.57")
+        self.assertEqual(formatters.format_currency(10000.573), "R10,000.57")
+        self.assertEqual(formatters.format_currency(0), "R0.00")
+        self.assertEqual(formatters.format_currency(""), "-")
 
     def test_percentage_formatter(self):
-        self.assertEqual(formatters._format_percentage(20), "20%")
-        self.assertEqual(formatters._format_percentage(20.5), "20.5%")
-        self.assertEqual(formatters._format_percentage(20.56), "20.6%")
-        self.assertEqual(formatters._format_percentage(""), "-")
+        self.assertEqual(formatters.format_percentage(20), "20%")
+        self.assertEqual(formatters.format_percentage(20.5), "20.5%")
+        self.assertEqual(formatters.format_percentage(20.56), "20.6%")
+        self.assertEqual(formatters.format_percentage(""), "-")
 
     def test_currency_tag(self):
 

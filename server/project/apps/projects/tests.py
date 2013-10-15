@@ -24,8 +24,8 @@ class CalendarFunctionsTest(TestCase):
         self.assertEqual(models.CalendarFunctions.next_month(self.year, 12), (2014, 1))
 
 class TestMilestone(TestCase):
-    def test_milestones_loaded(self):
-        self.assertEqual(models.Milestone.objects.count(), 9)
+    #def test_milestones_loaded(self):
+    #    self.assertEqual(models.Milestone.objects.count(), 9)
 
     def test_milestone_names(self):
         self.assertEqual(models.Milestone.start_milestone().name, "Project Identification")
@@ -450,15 +450,31 @@ class TestProject(TestCase):
         self.assertEqual(projects.average_actual_progress(date1), avg_progress)
         self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
 
-    def test_total_budget(self):
-        projects = models.Project.objects.district(self.munic1.district)
-        total = sum([p.project_financial.total_anticipated_cost for p in projects])
-        
-        self.assertEqual(projects.total_budget(), total)
+        # Check that we use date1 submissions in date2 if we don't have data for date2
+        self.assertEqual(projects.average_actual_progress(date2), avg_progress)
+        self.assertEqual(projects.average_planned_progress(date2), avg_progress * 2)
 
+        # Now check that we can still go back to a previous month
+        for i in range(5):
+            project = factories.ProjectFactory()
+            factories.MonthlySubmissionFactory(project=project, actual_progress=100, date=date2)
+            factories.PlanningFactory(project=project, planned_progress=100, date=date2)
+
+        self.assertEqual(projects.average_actual_progress(date1), avg_progress)
+        self.assertEqual(projects.average_planned_progress(date1), avg_progress * 2)
+
+    def test_total_budget(self):
+        
         models.Project.objects.all().delete()
         project = factories.ProjectFactory()
-        self.assertEqual(models.Project.objects.all().total_budget(), 0)
+        factories.BudgetFactory(year=2014, allocated_budget=100, allocated_planning_budget=50)
+        project = factories.ProjectFactory()
+        factories.BudgetFactory(year=2014, allocated_budget=200, allocated_planning_budget=100)
+
+        projects = models.Project.objects.all()
+        total = sum([p.total_budget(2014) for p in projects])
+        
+        self.assertEqual(projects.total_budget(2014), total)
 
     def test_total_actual_expenditure(self):
         models.Project.objects.all().delete()
@@ -538,8 +554,15 @@ class TestProject(TestCase):
         self.assertEqual(projects.total_planned_expenditure(date2), total)
 
     def test_percentage_actual_expenditure(self):
-        projects = models.Project.objects.fy.district(self.munic1.district)
-        budget = projects.total_budget()
+        models.Project.objects.all().delete()
+        project = factories.ProjectFactory()
+        factories.BudgetFactory(year=2014, allocated_budget=100, allocated_planning_budget=50)
+        project = factories.ProjectFactory()
+        factories.BudgetFactory(year=2014, allocated_budget=200, allocated_planning_budget=100)
+
+        projects = models.Project.objects.all()
+        
+        budget = projects.total_budget(2014)
         actual_expenditure = projects.fy.actual_expenditure(self.date)
         self.assertEqual(projects.fy.percentage_actual_expenditure(self.date), actual_expenditure / budget * 100)
 
@@ -571,3 +594,12 @@ class TestProject(TestCase):
         factories.MonthlySubmissionFactory(project=project, actual_progress=10, date=date)
         factories.PlanningFactory(project=project, planned_progress=10, date=date)
         self.assertFalse(project.is_bad(date))
+
+class TestBudget(TestCase):
+    def test_total_budget(self):
+        project = factories.ProjectFactory()
+        b = factories.BudgetFactory(year=2014, allocated_budget=100, allocated_planning_budget=50, project=project)
+        self.assertEquals(b.total_budget, 150)
+
+        self.assertEquals(project.total_budget(2014), 150)
+        self.assertEquals(project.total_budget(2013), 0)

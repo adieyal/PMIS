@@ -6,7 +6,7 @@ from project.apps.projects import models
 
 @receiver(post_save, sender=models.Client, dispatch_uid="project.apps.projects.signals.add_client_to_groups")
 def add_client_to_groups(**kwargs):
-    instance = kwargs['instance']
+    instance = kwargs["instance"]
 
     instance_type = ContentType.objects.get_for_model(instance)
 
@@ -20,7 +20,7 @@ def add_client_to_groups(**kwargs):
 
 @receiver(post_save, sender=models.District, dispatch_uid="project.apps.projects.signals.add_district_to_groups")
 def add_district_to_groups(**kwargs):
-    instance = kwargs['instance']
+    instance = kwargs["instance"]
 
     instance_type = ContentType.objects.get_for_model(instance)
 
@@ -51,7 +51,7 @@ def add_district_to_groups(**kwargs):
 #        group_perms_obj.save()
 
 def _update_is_bad(**kwargs):
-    instance = kwargs['instance']
+    instance = kwargs["instance"]
     date = instance.date
     project = instance.project
 
@@ -62,6 +62,7 @@ def _update_is_bad(**kwargs):
     calc.is_bad = project.is_bad(date)
     calc.performance = project.performance(date)
     calc.most_recent_submission = project.most_recent_submission(date)
+    calc.most_recent_planning= project.most_recent_planning(date)
     calc.save()
 
 @receiver(post_save, sender=models.MonthlySubmission, dispatch_uid="project.apps.projects.signals.ms_update_is_bad")
@@ -71,3 +72,11 @@ def ms_update_is_bad(**kwargs):
 @receiver(post_save, sender=models.Planning, dispatch_uid="project.apps.projects.signals.pl_update_is_bad")
 def pl_update_is_bad(**kwargs):
     return _update_is_bad(**kwargs)
+
+#@receiver(post_save, sender=models.Project, dispatch_uid="project.apps.projects.signals.ensure_has_financial")
+#def ensure_has_financial(**kwargs):
+#    try:
+#        instance = kwargs["instance"]
+#        instance.project_financial
+#    except models.ProjectFinancial.DoesNotExist:
+#        models.ProjectFinancial.objects.create(project=instance)

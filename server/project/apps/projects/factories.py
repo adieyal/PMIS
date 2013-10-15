@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.webdesign import lorem_ipsum
 import factory
 from .models import Client, District, Municipality, Programme, Project, Entity, Role, ProjectRole, ProjectFinancial, Budget, YEARS, ScopeCode, ScopeOfWork, Planning, Milestone, ProjectMilestone, CommentType, MonthlySubmission, ProjectStatus, VarianceOrder
-from datetime import date
+from datetime import date, datetime
 
 
 class UserFactory(factory.DjangoModelFactory):
@@ -115,16 +115,15 @@ class ProjectFinancialFactory(factory.DjangoModelFactory):
     FACTORY_FOR = ProjectFinancial
     total_anticipated_cost = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
     #project_planning_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
-    project = factory.SubFactory(Project)
+    project = factory.SubFactory(ProjectFactory)
 
 
 class BudgetFactory(factory.DjangoModelFactory):
     FACTORY_FOR = Budget
     year = random.choice(YEARS)
     allocated_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
-    project_financial = factory.SubFactory(ProjectFinancial)
-    date = factory.Sequence(lambda n:(datetime.now(), int))
-
+    allocated_planning_budget = decimal.Decimal(random.random() * 5000).quantize(decimal.Decimal('.01'))
+    project = factory.SubFactory(ProjectFactory)
 
 class ScopeCodeFactory(factory.DjangoModelFactory):
     FACTORY_FOR = ScopeCode

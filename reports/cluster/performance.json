@@ -1,0 +1,270 @@
+{
+    "analysis-overall-expenditure": "10%", 
+    "analysis-overall-expenditure-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-overall-performace": "30%", 
+    "analysis-overall-performance-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-programme-a-expenditure": "10%", 
+    "analysis-programme-a-expenditure-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-programme-a-performace": "30%", 
+    "analysis-programme-a-performance-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "analysis-programme-b-expenditure": "10%", 
+    "analysis-programme-b-expenditure-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "analysis-programme-b-performace": "30%", 
+    "analysis-programme-b-performance-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "implementation-budget": "R800,000", 
+    "implementation-programme-a-budget": "R800,000", 
+    "implementation-programme-a-projects": "00", 
+    "implementation-programme-a-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "implementation-programme-a-total-expenditure": "R800,000 (00%)", 
+    "implementation-programme-a-under-expenditure": "R800,000 (00%)", 
+    "implementation-programme-b-budget": "R800,000", 
+    "implementation-programme-b-projects": "00", 
+    "implementation-programme-b-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "implementation-programme-b-total-expenditure": "R800,000 (00%)", 
+    "implementation-programme-b-under-expenditure": "R800,000 (00%)", 
+    "implementation-programme-c-budget": "R800,000", 
+    "implementation-programme-c-projects": "00", 
+    "implementation-programme-c-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "implementation-programme-c-total-expenditure": "R800,000 (00%)", 
+    "implementation-programme-c-under-expenditure": "R800,000 (00%)", 
+    "implementation-projects": "00", 
+    "implementation-total-expenditure": "R800,000 (00%)", 
+    "implementation-under-expenditure": "R800,000 (00%)", 
+    "planning-expenditure": "R800,000 (00%)", 
+    "planning-programme-a-budget": "R800,000", 
+    "planning-programme-a-projects": "00", 
+    "planning-programme-a-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "planning-programme-a-total-expenditure": "R800,000 (00%)", 
+    "planning-programme-a-under-expenditure": "R800,000 (00%)", 
+    "planning-programme-b-budget": "R800,000", 
+    "planning-programme-b-projects": "00", 
+    "planning-programme-b-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "planning-programme-b-total-expenditure": "R800,000 (00%)", 
+    "planning-programme-b-under-expenditure": "R800,000 (00%)", 
+    "planning-programme-c-budget": "R800,000", 
+    "planning-programme-c-projects": "00", 
+    "planning-programme-c-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "planning-programme-c-total-expenditure": "R800,000 (00%)", 
+    "planning-programme-c-under-expenditure": "R800,000 (00%)", 
+    "planning-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "planning-total-projects": "R800,000", 
+    "planning-under-expenditure": "R800,000 (00%)", 
+    "summary-budget": "R800,000", 
+    "summary-budget-final-accounts": "R800,000", 
+    "summary-budget-implementation": "R800,000", 
+    "summary-budget-planning": "R800,000", 
+    "summary-expenditure": "R800,000", 
+    "summary-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "summary-total-projects": "30", 
+    "summary-under-expenditure": "R800,000 (00%)"
+}

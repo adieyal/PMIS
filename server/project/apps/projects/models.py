@@ -8,7 +8,7 @@ from django.db import models
 from django.db.models.query import QuerySet
 from django.db.models import Q, F, Count
 from reversion.models import Revision
-from django.db.models import Sum, Avg
+from django.db.models import Sum, Avg, Max
 
 
 financial_year = range(4, 13) + range(1,4)
@@ -239,16 +239,24 @@ class ProjectQuerySet(QuerySet):
 
     # TODO test
     def actual_progress_between(self, progress_start, progress_end):
-        return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start,
-            monthly_submissions__actual_progress__lt=progress_end,
-        ).distinct()
+        ms = self.annotate(latest_submission=Max('monthly_submissions__date'))
+        ms = MonthlySubmission.objects.filter(
+            date__in=[m.latest_submission for m in ms],
+            actual_progress__gte=progress_start,
+            actual_progress__lt=progress_end,
+        )
+
+        return self.filter(monthly_submissions__in=ms).distinct()
 
     def planned_progress_between(self, progress_start, progress_end):
-        return self.filter(
-            monthly_submissions__actual_progress__gte=progress_start,
-            monthly_submissions__actual_progress__lt=progress_end,
-        ).distinct()
+        pl = self.annotate(latest_planning=Max('plannings'))
+        pl = Planning.objects.filter(
+            id__in=[p.latest_planning for p in pl],
+            planned_progress__gte=progress_start,
+            planned_progress__lt=progress_end,
+        )
+
+        return self.filter(plannings__in=pl).distinct()
 
     def _sort_by_performance(self, date, reverse=False):
         order_field = "calculations__performance"
@@ -259,7 +267,7 @@ class ProjectQuerySet(QuerySet):
             calculations__project__in=self,
             calculations__date__year=date.year,
             calculations__date__month=date.month,
-        ).order_by(order_field)
+        ).distinct().order_by(order_field)
 
     # TODO - write test
     def completed(self):
@@ -308,22 +316,42 @@ class ProjectQuerySet(QuerySet):
     def in_finalcompletion(self):
         return self.filter(current_step=Milestone.final_accounts())
 
-    def total_budget(self):
-        
-        val =  self.aggregate(Sum("project_financial__total_anticipated_cost"))["project_financial__total_anticipated_cost__sum"]
+    def total_budget(self, year):
+        return sum(p.total_budget(year) for p in self) 
+
+    # TODO need testing
+    def total_planning_budget(self):
+        val = self.aggregate(Sum("budget__allocated_planning_budget"))["budget__allocated_planning_budget__sum"]
         if val == None:
             return 0
         return val
 
     def average_actual_progress(self, date):
-        # TODO - rather than using an exact date - should get the most recent submission
-        res = MonthlySubmission.objects\
-            .filter(project__in=self, date__year=date.year, date__month=date.month)\
-            .aggregate(Avg("actual_progress"))
-        return res["actual_progress__avg"] or 0
+        if self.count() == 0: return 0
+        submissions = [p.most_recent_submission(date) for p in self]
+        submissions = [s for s in submissions if s and s.actual_progress]
+        progress = [(s.actual_progress if s else 0) for s in submissions]
+
+        return sum(progress) / self.count()
         
     def average_planned_progress(self, date):
+        if self.count() == 0: return 0
+        plannings = [p.most_recent_planning(date) for p in self]
+        plannings = [p for p in plannings if p and p.planned_progress]
+        progress = [(p.planned_progress if p else 0) for p in plannings]
+
+        return sum(progress) / self.count()
+
+        if self.count() == 0: return 0
+        progress = [p.most_recent_planning(date).planned_progress for p in self]
+
+        return sum(progress) / len(progress)
+
         # TODO - rather than using an exact date - should get the most recent submission
+        res = Planning.objects.filter(projectcalculations__project__in=self)\
+            .aggregate(Avg("planned_progress"))
+        return res["planned_progress__avg"] or 0
+
         res = Planning.objects\
             .filter(project__in=self, date__year=date.year, date__month=date.month)\
             .aggregate(Avg("planned_progress"))
@@ -369,7 +397,8 @@ class FYProjectQuerySet(ProjectQuerySet):
 
     def percentage_actual_expenditure(self, date):
         actual_expenditure = self.actual_expenditure(date)
-        budget = self.total_budget()
+        year = FinancialYearManager.financial_year(date.year, date.month)
+        budget = self.total_budget(year)
         if budget == 0:
             return 0
 
@@ -470,6 +499,13 @@ class Project(models.Model):
     def jobs_created(self, date):
         return Project.objects.filter(id=self.id).total_jobs(date)
 
+    def total_budget(self, year):
+        try:
+            budget = Budget.objects.get(year=year, project=self)
+            return budget.total_budget
+        except Budget.DoesNotExist:
+            return 0
+
     def is_bad(self, date, progress_threshold=10):
         # TODO need to figure out how to do this more efficiently
         planned_progress = self.planned_progress(date) or 0
@@ -500,11 +536,17 @@ class Project(models.Model):
             return actual_progress / planned_progress
         except ZeroDivisionError:
             # TODO test - assume that our actual is the same as our planned
-            return 1
+            return 0
 
     def most_recent_submission(self, date):
         try:
             return MonthlySubmission.objects.filter(project=self, date__lte=date).order_by("-date")[0]
+        except IndexError:
+            return None
+
+    def most_recent_planning(self, date):
+        try:
+            return Planning.objects.filter(project=self, date__lte=date).order_by("-date")[0]
         except IndexError:
             return None
 
@@ -562,9 +604,20 @@ class ProjectFinancial(models.Model):
 
 class Budget(models.Model):
     year = models.CharField(max_length=255, choices=YEARS)
-    allocated_budget = models.FloatField(default=0)
+    allocated_budget = models.FloatField(default=0, help_text="Implementation Budget")
     allocated_planning_budget = models.FloatField(default=0)
     project = models.ForeignKey(Project, related_name='budgets')
+
+    @property
+    def total_budget(self):
+        return self.allocated_budget + self.allocated_planning_budget
+
+    def percentage_expenditure(self, date):
+        try:
+            actual = self.project.fy(date).actual_expenditure
+            return actual / float(self.total_budget) * 100
+        except (MonthlySubmission.DoesNotExist, ZeroDivisionError):
+            return 0
 
     def __unicode__(self):
         return u'Budget for %s  for  %s year' % (self.project.name, self.year)
@@ -685,7 +738,7 @@ class MonthlySubmission(models.Model):
     jobs_created = models.PositiveIntegerField(default=0, help_text="Number of jobs created (cumulative total)")
     comment = models.TextField(blank=True)
     comment_type = models.ForeignKey(CommentType, related_name='submissions', null=True, blank=True)
-    remedial_action = models.CharField(max_length=255, blank=True)
+    remedial_action = models.TextField(blank=True)
 
     objects = MonthlySubmissionManager()
 
@@ -703,6 +756,7 @@ class ProjectCalculations(models.Model):
     is_bad = models.NullBooleanField(null=True)
     performance = models.FloatField(null=True)
     most_recent_submission = models.ForeignKey(MonthlySubmission, null=True)
+    most_recent_planning = models.ForeignKey(Planning, null=True)
 
     def __unicode__(self):
         return unicode(self.project)
