@@ -238,7 +238,7 @@ class ProjectQuerySet(QuerySet):
         if type(programme) == int:
             return self.filter(programme__id=programme)
         else:
-            return self.filter(programme__id=programme)
+            return self.filter(programme=programme)
 
     # TODO test
     def actual_progress_between(self, progress_start, progress_end):
