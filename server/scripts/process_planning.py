@@ -6,25 +6,25 @@ def process_file(filename, processor):
     all_projects = []
     workbook = spreadsheet.WorkBook(filename)
     for sheet in workbook.sheets():
-        #yesno = raw_input("Process this sheet? ")
-        #if yesno.lower() == "y":
-        #if "(ONGOING)" in sheet.name or "(COMPLETE" in sheet.name:
-        for label in ["ONGOING", "ON GOING", "ON-GOING", "ON-GO"]:
-            if label in sheet.name.upper():
-                
-                projects = process_sheet(sheet, processor)
-                all_projects.extend(projects)
-                break
-        #else:
-        #    print sheet.name
-    print utils.dump_to_json(all_projects)
+        if "PLANNING" in sheet.name.upper():
+            print sheet.name
+            yesno = raw_input("Process this sheet? ")
+            if yesno.lower() == "n": continue
+
+            projects = process_sheet(sheet, processor)
+        #        all_projects.extend(projects)
+        #        break
+        ##else:
+        ##    print sheet.name
+    return
+    #print utils.dump_to_json(all_projects)
 
 def process_sheet(sheet, processor_class):
     projects = []
-    programme = sheet.cell("A6")
+    programme = sheet.cell("A11")
     
     current_district = ""
-    for i in range(7, sheet.nrows):
+    for i in range(12, sheet.nrows):
         cell = "A%s" % i
         try:
             value = sheet.cell(cell)
@@ -41,8 +41,6 @@ def process_sheet(sheet, processor_class):
 
         _, row = sheet._c2c(cell)
         processor = processor_class(sheet, row + 1)
-        if programme == "STORM DAMAGED SCHOOLS (ON-GOING)":
-            import pdb; pdb.set_trace()
         project = processor.process_project(current_district, programme)
         projects.append(project)
     return projects
@@ -100,8 +98,9 @@ class ProjectProcessor(object):
         return progress
 
     def process_project(self, district, programme):
+        import pdb; pdb.set_trace()
         return {
-            "year" : utils.fyear,
+            "year" : fyear,
             "month" : month,
             "project" : self.project_name,
             "project_code" : self.project_code,
@@ -236,20 +235,6 @@ class BasicProcessor(ProjectProcessor):
             contractor = contractor.split(":")[1].strip()
         return contractor
 
-class DSDProcessor(BasicProcessor):
-
-    @property
-    def municipality(self):
-        return self.sheet.cell("B%s" % (self.row + 4))
-
-    @property
-    def consultant(self):
-        return str(self.sheet.cell("F%s" % (self.row + 4)))
-     
-    @property
-    def contractor(self):
-        return str(self.sheet.cell("F%s" % (self.row + 5)))
-
 class ModernProcessor(BasicProcessor):
 
     @property
@@ -278,7 +263,13 @@ class ModernProcessor(BasicProcessor):
     
     @property
     def project_code(self):
-        return self.sheet.cell("D%s" % self.row)
+        code = self.sheet.cell("C%s" % self.row)
+        if "PWRT" in code:
+            return code.strip()
+        code = self.sheet.cell("C%s" % (self.row + 1))
+        if "PWRT" in code:
+            return code.strip()
+        return ""
 
     @property
     def total_anticipated_cost(self):
