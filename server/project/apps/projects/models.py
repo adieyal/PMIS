@@ -10,7 +10,6 @@ from django.db.models import Q, F, Count
 from reversion.models import Revision
 from django.db.models import Sum, Avg, Max
 
-
 financial_year = range(4, 13) + range(1,4)
 
 YEARS = tuple(map(lambda x: (str(x), x), range(2010, 2060)))
@@ -195,6 +194,10 @@ class Milestone(models.Model):
     def final_accounts(cls):
         return Milestone.objects.get(name="Final Accounts")
 
+    @classmethod
+    def complete(cls):
+        return Milestone.objects.get(name="Project Closed")
+
     def __unicode__(self):
         return "%s - %s" % (self.phase, self.name)
 
@@ -235,7 +238,7 @@ class ProjectQuerySet(QuerySet):
         if type(programme) == int:
             return self.filter(programme__id=programme)
         else:
-            return self.filter(programme__id=programme)
+            return self.filter(programme=programme)
 
     # TODO test
     def actual_progress_between(self, progress_start, progress_end):
@@ -316,15 +319,20 @@ class ProjectQuerySet(QuerySet):
     def in_finalcompletion(self):
         return self.filter(current_step=Milestone.final_accounts())
 
+    @property
+    def in_finalaccounts(self):
+        return self.filter(current_step=Milestone.complete())
+
     def total_budget(self, year):
         return sum(p.total_budget(year) for p in self) 
 
     # TODO need testing
-    def total_planning_budget(self):
-        val = self.aggregate(Sum("budget__allocated_planning_budget"))["budget__allocated_planning_budget__sum"]
-        if val == None:
-            return 0
-        return val
+    def total_planning_budget(self, year):
+        return sum(p.planning_budget(year) for p in self)
+
+    # TODO need testing
+    def total_implementation_budget(self, year):
+        return sum(p.implementation_budget(year) for p in self)
 
     def average_actual_progress(self, date):
         if self.count() == 0: return 0
@@ -357,6 +365,13 @@ class ProjectQuerySet(QuerySet):
             .aggregate(Avg("planned_progress"))
         return res["planned_progress__avg"] or 0
 
+    # TODO need testing
+    def average_performance(self, date):
+        try:
+            return sum(p.performance(date) for p in self)/float(self.count())
+        except ZeroDivisionError:
+            return None
+
     def total_planned_expenditure(self, date):
         expenditure = Planning.objects\
             .filter(project__in=self, date__lte=date)\
@@ -365,6 +380,9 @@ class ProjectQuerySet(QuerySet):
         if expenditure == None:
             return 0
         return expenditure
+    
+    def total_expenditure(self, date):
+        return sum(p.fy(date).actual_expenditure for p in self)
 
     def total_jobs(self, date):
         jobs = MonthlySubmission.objects\
@@ -503,6 +521,20 @@ class Project(models.Model):
         try:
             budget = Budget.objects.get(year=year, project=self)
             return budget.total_budget
+        except Budget.DoesNotExist:
+            return 0
+
+    def implementation_budget(self, year):
+        try:
+            budget = Budget.objects.get(year=year, project=self)
+            return budget.allocated_budget
+        except Budget.DoesNotExist:
+            return 0
+
+    def planning_budget(self, year):
+        try:
+            budget = Budget.objects.get(year=year, project=self)
+            return budget.allocated_planning_budget
         except Budget.DoesNotExist:
             return 0
 

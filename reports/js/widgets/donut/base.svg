@@ -3,10 +3,13 @@
   <defs>
     <style type="text/css"><![CDATA[
       .slice text { font-family:Arial,sans-seriff; font-size:100%; }
-      .slice0 path { fill:#e7ce8b; stroke-width:0; }
-      .slice1 path { fill:#d0d0ae; stroke-width:0; }
-      .slice2 path { fill:#bcb3d1; stroke-width:0; }
-      .slice3 path { fill:#b6ded3; stroke-width:0; }
+      .slice-grey path { fill:#CCCCCC; stroke-width:0; }
+      .slice0 path { fill:#E7CE8B; stroke-width:0; }
+      .slice1 path { fill:#BCB3D1; stroke-width:0; }
+      .slice2 path { fill:#D0D0AE; stroke-width:0; }
+      .slice3 path { fill:#B6DED3; stroke-width:0; }
+      .slice4 path { fill:#BCBCBC; stroke-width:0; }
+      .slice5 path { fill:#B6DED3; stroke-width:0; }
     ]]></style>
   </defs>
 </svg>

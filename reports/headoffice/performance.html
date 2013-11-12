@@ -13,7 +13,8 @@
     <script>
       require.config({
           baseUrl: "{% static 'js' %}",
-          deps: ["widgets/js/widgets"]
+          deps: ["widgets/js/widgets"],
+          waitSeconds: 60
       });
     </script>
     <style>
@@ -119,335 +120,335 @@
 
 	<div class="column column-16 column-dashed-separator">
 	  <div class="block block-double block-darkgreen block-larger-text center">
-	    <span class="replace" id="summary-department-a-name">Department of Department Name</span>
+	    <span class="replace" id="summary-department-b-name">Department of Department Name</span>
 	  </div>
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-b-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-b-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-b-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-b-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-b-slider" data-aspect="1.1"></div>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget planning: <span class="replace" id="summary-department-a-budget-planning">R1,000,000</span>
+	    Budget planning: <span class="replace" id="summary-department-b-budget-planning">R1,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget implementation: <span class="replace" id="summary-department-a-budget-implementation">R3,000,000</span>
+	    Budget implementation: <span class="replace" id="summary-department-b-budget-implementation">R3,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Final Budget Accounts: <span class="replace" id="summary-department-a-budget-final-accounts">R200,000</span>
+	    Final Budget Accounts: <span class="replace" id="summary-department-b-budget-final-accounts">R200,000</span>
 	  </div>
 	  <div class="block block-darkgrey center">
 	    Planning
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-planning-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-b-planning-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-planning-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-b-planning-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-planning-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-b-planning-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-planning-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-b-planning-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-planning-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-b-planning-slider" data-aspect="1.1"></div>
 	  </div> 
 	  <div class="block block-darkgrey center">
 	    Implementation
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-implementation-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-b-implementation-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-implementation-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-b-implementation-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-implementation-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-b-implementation-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-implementation-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-b-implementation-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-implementation-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-b-implementation-slider" data-aspect="1.1"></div>
 	  </div>
 	</div>
 
 
 	<div class="column column-16 column-dashed-separator">
 	  <div class="block block-double block-darkpurple block-larger-text center">
-	    <span class="replace" id="summary-department-a-name">Department of Department Name</span>
+	    <span class="replace" id="summary-department-c-name">Department of Department Name</span>
 	  </div>
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-c-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-c-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-c-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-c-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-c-slider" data-aspect="1.1"></div>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget planning: <span class="replace" id="summary-department-a-budget-planning">R1,000,000</span>
+	    Budget planning: <span class="replace" id="summary-department-c-budget-planning">R1,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget implementation: <span class="replace" id="summary-department-a-budget-implementation">R3,000,000</span>
+	    Budget implementation: <span class="replace" id="summary-department-c-budget-implementation">R3,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Final Budget Accounts: <span class="replace" id="summary-department-a-budget-final-accounts">R200,000</span>
+	    Final Budget Accounts: <span class="replace" id="summary-department-c-budget-final-accounts">R200,000</span>
 	  </div>
 	  <div class="block block-darkgrey center">
 	    Planning
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-planning-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-c-planning-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-planning-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-c-planning-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-planning-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-c-planning-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-planning-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-c-planning-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-planning-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-c-planning-slider" data-aspect="1.1"></div>
 	  </div> 
 	  <div class="block block-darkgrey center">
 	    Implementation
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-implementation-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-c-implementation-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-implementation-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-c-implementation-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-implementation-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-c-implementation-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-implementation-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-c-implementation-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-implementation-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-c-implementation-slider" data-aspect="1.1"></div>
 	  </div>
 	</div>
 
 
 	<div class="column column-16 column-dashed-separator">
 	  <div class="block block-double block-darkblue block-larger-text center">
-	    <span class="replace" id="summary-department-a-name">Department of Department Name</span>
+	    <span class="replace" id="summary-department-d-name">Department of Department Name</span>
 	  </div>
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-d-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-d-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-d-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-d-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-d-slider" data-aspect="1.1"></div>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget planning: <span class="replace" id="summary-department-a-budget-planning">R1,000,000</span>
+	    Budget planning: <span class="replace" id="summary-department-d-budget-planning">R1,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget implementation: <span class="replace" id="summary-department-a-budget-implementation">R3,000,000</span>
+	    Budget implementation: <span class="replace" id="summary-department-d-budget-implementation">R3,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Final Budget Accounts: <span class="replace" id="summary-department-a-budget-final-accounts">R200,000</span>
+	    Final Budget Accounts: <span class="replace" id="summary-department-d-budget-final-accounts">R200,000</span>
 	  </div>
 	  <div class="block block-darkgrey center">
 	    Planning
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-planning-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-d-planning-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-planning-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-d-planning-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-planning-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-d-planning-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-planning-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-d-planning-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-planning-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-d-planning-slider" data-aspect="1.1"></div>
 	  </div> 
 	  <div class="block block-darkgrey center">
 	    Implementation
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-implementation-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-d-implementation-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-implementation-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-d-implementation-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-implementation-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-d-implementation-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-implementation-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-d-implementation-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-implementation-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-d-implementation-slider" data-aspect="1.1"></div>
 	  </div>
 	</div>
 
 
 	<div class="column column-16 column-dashed-separator">
 	  <div class="block block-double block-darkbrown block-larger-text center">
-	    <span class="replace" id="summary-department-a-name">Department of Department Name</span>
+	    <span class="replace" id="summary-department-e-name">Department of Department Name</span>
 	  </div>
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-e-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-e-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-e-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-e-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-e-slider" data-aspect="1.1"></div>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget planning: <span class="replace" id="summary-department-a-budget-planning">R1,000,000</span>
+	    Budget planning: <span class="replace" id="summary-department-e-budget-planning">R1,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget implementation: <span class="replace" id="summary-department-a-budget-implementation">R3,000,000</span>
+	    Budget implementation: <span class="replace" id="summary-department-e-budget-implementation">R3,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Final Budget Accounts: <span class="replace" id="summary-department-a-budget-final-accounts">R200,000</span>
+	    Final Budget Accounts: <span class="replace" id="summary-department-e-budget-final-accounts">R200,000</span>
 	  </div>
 	  <div class="block block-darkgrey center">
 	    Planning
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-planning-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-e-planning-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-planning-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-e-planning-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-planning-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-e-planning-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-planning-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-e-planning-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-planning-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-e-planning-slider" data-aspect="1.1"></div>
 	  </div> 
 	  <div class="block block-darkgrey center">
 	    Implementation
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-implementation-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-e-implementation-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-implementation-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-e-implementation-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-implementation-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-e-implementation-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-implementation-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-e-implementation-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-implementation-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-e-implementation-slider" data-aspect="1.1"></div>
 	  </div>
 	</div>
 
 
 	<div class="column column-16 column-dashed-separator">
 	  <div class="block block-double block-darkpink block-larger-text center">
-	    <span class="replace" id="summary-department-a-name">Department of Department Name</span>
+	    <span class="replace" id="summary-department-f-name">Department of Department Name</span>
 	  </div>
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-f-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-f-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-f-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-f-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-f-slider" data-aspect="1.1"></div>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget planning: <span class="replace" id="summary-department-a-budget-planning">R1,000,000</span>
+	    Budget planning: <span class="replace" id="summary-department-f-budget-planning">R1,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Budget implementation: <span class="replace" id="summary-department-a-budget-implementation">R3,000,000</span>
+	    Budget implementation: <span class="replace" id="summary-department-f-budget-implementation">R3,000,000</span>
 	  </div>
 	  <div class="block block-grey block-oneandahalf center">
-	    Final Budget Accounts: <span class="replace" id="summary-department-a-budget-final-accounts">R200,000</span>
+	    Final Budget Accounts: <span class="replace" id="summary-department-f-budget-final-accounts">R200,000</span>
 	  </div>
 	  <div class="block block-darkgrey center">
 	    Planning
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-planning-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-f-planning-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-planning-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-f-planning-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-planning-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-f-planning-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-planning-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-f-planning-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-planning-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-f-planning-slider" data-aspect="1.1"></div>
 	  </div> 
 	  <div class="block block-darkgrey center">
 	    Implementation
 	  </div>
 	  <div class="block block-grey center">
-	    Total number of projects: <span class="replace" id="summary-department-a-implementation-projects">20</span>
+	    Total number of projects: <span class="replace" id="summary-department-f-implementation-projects">20</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Total Budget for financial year:<br/><span class="replace" id="summary-department-a-implementation-budget">R800,000</span>
+	    Total Budget for financial year:<br/><span class="replace" id="summary-department-f-implementation-budget">R800,000</span>
 	  </div>
 	  <div class="block block-white block-oneandahalf center">
-	    Actual Expenditure:<br/><span class="replace" id="summary-department-a-implementation-expenditure">R800,000</span>
+	    Actual Expenditure:<br/><span class="replace" id="summary-department-f-implementation-expenditure">R800,000</span>
 	  </div>
 	  <div class="block block-white center">
-	    Under Expenditure: <span class="replace" id="summary-department-a-implementation-under-expenditure">00%</span>
+	    Under Expenditure: <span class="replace" id="summary-department-f-implementation-under-expenditure">00%</span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-department-a-implementation-slider" data-aspect="1.1"></div>
+	    <div class="widget" data-widget="slider" data-src="json#summary-department-f-implementation-slider" data-aspect="1.1"></div>
 	  </div>
 	</div>
       </div>

@@ -3,7 +3,6 @@
   <head>
     <title>Cluster Report - Performance</title>
     <link type="text/css" rel="stylesheet" href="{% static 'css/general.css' %}">
-    <link type="text/css" rel="stylesheet" href="{% static 'css/cluster-dashboard.css' %}">
     <script type="text/javascript" src="{% static 'js/require.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/jquery.js' %}"></script>
 
@@ -14,12 +13,13 @@
     <script>
       require.config({
           baseUrl: "{% static 'js' %}",
-          deps: ["widgets/js/widgets"]
+          deps: ["widgets/js/widgets"],
+          waitSeconds: 60
       });
     </script>
   </head>
   <body>
-    <div class="page page-a4">
+    <div class="page page-a4" data-widget="replace" data-src="json">
       <div class="page-header">
 	<div class="page-header-detail">
 	  <div class="page-header-logo">
@@ -84,7 +84,7 @@
 	    Total number of projects in planning: <span class="replace" id="planning-total-projects">30</span>
 	  </div>
 	  <div class="block block-white center">
-	    Budget for financial year: <span class="replace" id="planning-total-projects">R800,000</span>
+	    Budget for financial year: <span class="replace" id="planning-total-budget">R800,000</span>
 	  </div>
 	</div>
 	<div class="three-column column">
@@ -105,7 +105,7 @@
       <div class="container container-grey">
 	<div class="column three-column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME A
+	    <span class="replace" id="planning-programme-a-name">PROGRAMME A</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="planning-programme-a-projects">00</span>
@@ -125,7 +125,7 @@
 	</div>
 	<div class="three-column column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME B
+	    <span class="replace" id="planning-programme-b-name">PROGRAMME B</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="planning-programme-b-projects">00</span>
@@ -145,7 +145,7 @@
 	</div>
 	<div class="three-column column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME C
+	    <span class="replace" id="planning-programme-c-name">PROGRAMME C</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="planning-programme-c-projects">00</span>
@@ -185,7 +185,7 @@
 	</div>
 	<div class="column column-33">
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#planning-programme-c-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="json#implementation-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
       </div>
@@ -194,7 +194,7 @@
       <div class="container container-grey">
 	<div class="column three-column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME A
+	    <span class="replace" id="implementation-programme-a-name">PROGRAMME A</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="implementation-programme-a-projects">00</span>
@@ -214,7 +214,7 @@
 	</div>
 	<div class="three-column column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME B
+	    <span class="replace" id="implementation-programme-b-name">PROGRAMME B</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="implementation-programme-b-projects">00</span>
@@ -234,7 +234,7 @@
 	</div>
 	<div class="three-column column column-dashed-separator">
 	  <div class="block block-darkgrey center bold">
-	    PROGRAMME C
+	    <span class="replace" id="implementation-programme-c-name">PROGRAMME C</span>
 	  </div>
 	  <div class="block block-line">
 	    Total number of projects: <span class="replace right" id="implementation-programme-c-projects">00</span>
@@ -280,7 +280,7 @@
 	  </div>
 	  <div class="column column-50 column-nomargin">
 	    <div class="block block-grey center">
-	      PROGRAMME A
+	    <span class="replace" id="analysis-programme-a-name">PROGRAMME A</span>
 	    </div>
 	    <div class="block block-white center">
 	      Performance: <span class="replace" id="analysis-programme-a-performace">30%</span>
@@ -297,7 +297,7 @@
 	  </div>
 	  <div class="column column-50 column-nomargin">
 	    <div class="block block-grey center">
-	      PROGRAMME B
+	    <span class="replace" id="analysis-programme-b-name">PROGRAMME B</span>
 	    </div>
 	    <div class="block block-white center">
 	      Performance: <span class="replace" id="analysis-programme-b-performace">30%</span>

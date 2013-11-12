@@ -411,7 +411,7 @@ h2 {
 }
 
 .block {
-    padding: 10px;
+    padding: 10px 5px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -422,6 +422,7 @@ h2 {
     height: 46px;
     color: $darkgrey;
     clear: both;
+    overflow: hidden;
 
     &.block-oneandahalf {
 	height: 72px;
@@ -481,6 +482,7 @@ h2 {
 	margin-bottom: 28px;
 	margin-left: 70px;
 	background: $darkgrey;
+	overflow: visible;
 	
 	&:before {
 	    content: url(../img/icon-jobs.svg);
@@ -497,6 +499,7 @@ h2 {
 	margin-left: 55px;
 	margin-right: 0;
 	background: $darkgrey;
+	overflow: visible;
 	
 	&:before {
 	    content: url(../img/icon-jobs.svg);
