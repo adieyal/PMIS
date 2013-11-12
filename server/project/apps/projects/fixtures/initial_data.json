@@ -59,7 +59,7 @@
     "fields": {
         "phase": "implementation", 
         "name": "Practical Completion", 
-        "order": 8
+        "order": 7
     }
 },
 {
@@ -68,7 +68,7 @@
     "fields": {
         "phase": "implementation", 
         "name": "Final Completion", 
-        "order": 9
+        "order": 8
     }
 },
 {
@@ -77,7 +77,7 @@
     "fields": {
         "phase": "implementation", 
         "name": "Final Accounts", 
-        "order": 10
+        "order": 9
     }
 },
 {
@@ -86,7 +86,7 @@
     "fields": {
         "phase": "planning", 
         "name": "Budget Confirmation", 
-        "order": 7
+        "order": 10
     }
 },
 {
@@ -95,7 +95,7 @@
     "fields": {
         "phase": "planning", 
         "name": "Planning Complete", 
-        "order": 100
+        "order": 11
     }
 },
 {
@@ -104,7 +104,7 @@
     "fields": {
         "phase": "completed", 
         "name": "Project Closed", 
-        "order": 100
+        "order": 12
     }
 },
 {
@@ -113,7 +113,7 @@
     "fields": {
         "phase": "completed", 
         "name": "Terminated", 
-        "order": 11
+        "order": 13
     }
 }
 ]
