@@ -24,6 +24,8 @@ programme_map = {
     "MUD SCHOOLS (UNCONVECTIONAL TO CONVENTIONAL) (ON-GOING)" : "Mud Schools (Unconventional to Conventional)",
     "MUD AND UNSAFE STRUCTURES (UNCONVECTIONAL TO CONVENTIONAL)  IDT (ON-GOING)" : "Mud Schools (Unconventional to Conventional)",
 
+    "SUBSTITUTION OF UNSAFE STRUCTURES (ON-GOING)" : "Substitution of Unsafe Structures",
+
     "GRADE-R SCHOOL (ON-GOING)" : "Grade R",
     "GRADE R SCHOOL (COMPLETED)" : "Grade R",
 
@@ -72,7 +74,7 @@ district_map = {
     "gert" : "Gert Sibande",
 }
 
-start_milestone = models.Milestone.objects.get(name="Project Identification")
+start_milestone = models.Milestone.objects.get(name="Implementation")
 practical_completion_milestone = models.Milestone.objects.get(name="Practical Completion")
 final_completion_milestone = models.Milestone.objects.get(name="Final Completion")
 final_accounts_milestone = models.Milestone.objects.get(name="Final Accounts")
@@ -81,7 +83,7 @@ contractor_role = models.Role.objects.get(name="Contractor")
 consultant_role = models.Role.objects.get(name="Consultant")
 
 class Command(BaseCommand):
-    args = 'project json file'
+    args = '<json file> <client>'
     help = 'Loads projects from a json file'
 
     def resolve_programme(self, client, programme):
@@ -92,7 +94,7 @@ class Command(BaseCommand):
     def resolve_municipality(self, district, municipality):
         try:
             if municipality:
-                municipality = municipalities[municipality]
+                municipality = municipalities.get(municipality, municipality)
                 return models.Municipality.objects.get(name=municipality)
         except models.Municipality.DoesNotExist:
             if district:
@@ -107,11 +109,14 @@ class Command(BaseCommand):
                 )
 
     def create_project(self, name, programme, municipality, project_number):
-        project, _ = models.Project.objects.get_or_create(
-            name=name, programme=programme,
-            municipality=municipality,
-            project_number=project_number
-        )
+        try:
+            project = models.Project.objects.get(name=name)
+        except models.Project.DoesNotExist:
+            project = models.Project.objects.create(
+                name=name, programme=programme,
+                municipality=municipality,
+                project_number=project_number
+            )
 
         return project
 
@@ -160,32 +165,35 @@ class Command(BaseCommand):
             self.create_milestone(project, final_accounts_milestone, completion_dates[2])
 
     def create_planning(self, project, year, month, planned_expenses, planned_progress):
-            try:
-                planning = models.Planning.objects.get(
-                    project=project, date=datetime(year, month, 1)
-                )
-            except models.Planning.DoesNotExist:
-                planning = models.Planning(project=project, date=datetime(year, month, 1))
+        try:
+            planning = models.Planning.objects.get(
+                project=project, date=datetime(year, month, 1)
+            )
+        except models.Planning.DoesNotExist:
+            planning = models.Planning(project=project, date=datetime(year, month, 1))
 
-            planning.planned_expenses = planned_expenses
-            planning.planned_progress = planned_progress
-            planning.save()
-            return planning
+        planning.planned_expenses = planned_expenses
+        planning.planned_progress = planned_progress
+        planning.save()
+        return planning
 
     def create_monthly_submission(self, project, year, month, actual_expenses, actual_progress, comment, comment_type, remedial_action):
-            try:
-                submission = models.MonthlySubmission.objects.get(
-                    project=project, date=datetime(year, month, 1)
-                )
-            except models.MonthlySubmission.DoesNotExist:
-                submission = models.MonthlySubmission(project=project, date=datetime(year, month, 1))
+        try:
+            submission = models.MonthlySubmission.objects.get(
+                project=project, date=datetime(year, month, 1)
+            )
+        except models.MonthlySubmission.DoesNotExist:
+            submission = models.MonthlySubmission(project=project, date=datetime(year, month, 1))
 
-            submission.actual_expenditure=actual_expenses
-            submission.actual_progress=actual_progress
+        submission.actual_expenditure=actual_expenses
+        submission.actual_progress=actual_progress
+        if comment != "":
             submission.comment = comment
+        if remedial_action != "":
             submission.remedial_action = remedial_action
-            submission.save()
-            return submission
+
+        submission.save()
+        return submission
 
     def set_role(self, project, role, entity_name):
         entity, _ = models.Entity.objects.get_or_create(name=entity_name)
