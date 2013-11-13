@@ -9,7 +9,7 @@ from project.apps.projects import models
 import _spreadsheet as spreadsheet
 import _utils as utils
 from _userdialogue import UserDialogue
-from parsers import ProjectSheetParser
+from parsers import ProjectSheetParser, ImplementationProjectParser
 
 class TestDialogue(UserDialogue):
     def ask_month(self): return 10
@@ -29,9 +29,11 @@ class Command(BaseCommand):
     def process_implementation(self, sheet):
         print "Processing Implementation Sheet"
         sheet_parser = ProjectSheetParser(sheet)
+        project_parser = ImplementationProjectParser(sheet)
 
         for project_range in sheet_parser.projects:
-            print project_range
+            project = project_parser.parse(project_range)
+            print project
 
     def process_planning(self, sheet):
         print "Processing Planning Sheet"

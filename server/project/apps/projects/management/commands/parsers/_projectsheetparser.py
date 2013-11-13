@@ -7,14 +7,6 @@ class ProjectSheetParser(object):
         self.start_row = None
         self.skip_input = "Skip"
 
-    def _value(self, col, row):
-        cell = "%s%d" % (col, row)
-        value = self.sheet.cell(cell)
-        if isinstance(value, basestring):
-            value = value.strip()
-
-        return value
-
     def _isnumber(self, value):
         try:
             int(value)
@@ -44,28 +36,28 @@ class ProjectSheetParser(object):
                     break
 
     def start_state(self, row):
-        bvalue = self._value("B", row)
+        bvalue = self.sheet.cell("B%d" % row)
         if bvalue == "No":
             self.state = self.gobble_until_programme_state
 
     def gobble_until_programme_state(self, row):
-        bvalue = self._value("B", row)
+        bvalue = self.sheet.cell("B%d" % row)
 
         if bvalue != "":
             self.state = self.programme_state
             return self.skip_input
 
     def programme_state(self, row):
-        self.programme = self._value("B", row)
+        self.programme = self.sheet.cell("B%d" % row)
         self.state = self.district_state
 
     def district_state(self, row):
-        self.district = self._value("B", row)
+        self.district = self.sheet.cell("B%d" % row)
         self.state = self.gobble_before_project
 
     def gobble_before_project(self, row):
-        cvalue = self._value("C", row)
-        bvalue = self._value("B", row)
+        cvalue = self.sheet.cell("C%d" % row)
+        bvalue = self.sheet.cell("B%d" % row)
 
         if cvalue == "Project Description":
             self.state = self.project_state
@@ -75,7 +67,7 @@ class ProjectSheetParser(object):
             return self.skip_input
 
     def project_state(self, row):
-        value = self._value("C", row)
+        value = self.sheet.cell("C%d" % row)
         if value == "Project Description":
             self.start_row = row
         elif value == "Responsible Project Manager":
@@ -84,8 +76,8 @@ class ProjectSheetParser(object):
             return rng
 
     def gobble_after_project(self, row):
-        cvalue = self._value("C", row)
-        bvalue = self._value("B", row)
+        cvalue = self.sheet.cell("C%d" % row)
+        bvalue = self.sheet.cell("B%d" % row)
 
         if cvalue == "Project Description":
             self.state = self.project_state

@@ -1,4 +1,5 @@
 import re 
+from datetime import datetime
 import xlrd
 
 re_cell = re.compile("([A-Z]+)([0-9]+)", re.I)
@@ -33,10 +34,14 @@ class Spreadsheet(object):
         return self.sheet.cell(row, col).value
 
     def cell_as_date(self, cell):
-        return self.cellxy_as_date(*self.cell(cell))
+        return self.cellxy_as_date(*self._c2c(cell))
 
     def cellxy_as_date(self, col, row):
-        return datetime(*xlrd.xldate_as_tuple(col, row, self.datemode))
+        try:
+            val = self.cellxy(col, row)
+            return datetime(*xlrd.xldate_as_tuple(val, self.datemode))
+        except ValueError:
+            return None
         
     @property
     def name(self):
