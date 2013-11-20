@@ -16,7 +16,7 @@ class ProjectSheetParser(object):
 
     def _containsdistrict(self, value):
         value = value.upper()
-        if "GERT SIBANDE" in value or "NKANGALA" in value or "EHLANZENI" in value or "ALL DISTRICTS" in value:
+        if "GERT SIBANDE" in value or "NKANGALA" in value or "EHLANZENI" in value or "ALL DISTRICTS" in value or "BOHLABELA" in value:
             return True
         return False
 
@@ -68,9 +68,10 @@ class ProjectSheetParser(object):
 
     def project_state(self, row):
         value = self.sheet.cell("C%d" % row)
+        value = " ".join(value.split())
         if value == "Project Description":
             self.start_row = row
-        elif value == "Responsible Project Manager":
+        elif value == "Responsible Senior Chief Project Manager":
             rng = (self.start_row, row)
             self.state = self.gobble_after_project
             return rng

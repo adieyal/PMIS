@@ -15,6 +15,8 @@ class ImplementationProjectParser(object):
         return {
             "description" : description,
             "contract" : contract,
+            "district" : project_range["district"],
+            "programme" : project_range["programme"],
             "municipality" : municipality,
             "circuit" : circuit,
             "source" : source,
