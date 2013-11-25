@@ -1,5 +1,4 @@
 import logging
-print __name__
 logger = logging.getLogger(__name__)
 
 class ProjectSheetParser(object):
@@ -81,6 +80,7 @@ class ProjectSheetParser(object):
     def project_state(self, row):
         logger.info("Row %d - Project State" % row)
         value = self.sheet.cell("C%d" % row)
+        value = " ".join(value.split())
         if value == "Project Description":
             self.start_row = row
         elif "Responsible" in value and "Manager" in value:
