@@ -33,7 +33,6 @@ class Command(BaseCommand):
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
-            print project
 
     def process_planning(self, sheet):
         print "Processing Planning Sheet"

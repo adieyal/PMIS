@@ -1,3 +1,7 @@
+import logging
+print __name__
+logger = logging.getLogger(__name__)
+
 class ProjectSheetParser(object):
     def __init__(self, sheet):
         self.sheet = sheet
@@ -16,7 +20,7 @@ class ProjectSheetParser(object):
 
     def _containsdistrict(self, value):
         value = value.upper()
-        if "GERT SIBANDE" in value or "NKANGALA" in value or "EHLANZENI" in value or "ALL DISTRICTS" in value:
+        if "GERT SIBANDE" in value or "NKANGALA" in value or "EHLANZENI" in value or "ALL DISTRICTS" in value or "BOHLABELA" in value:
             return True
         return False
 
@@ -36,26 +40,34 @@ class ProjectSheetParser(object):
                     break
 
     def start_state(self, row):
+        logger.info("Row %d - Start State" % row)
         bvalue = self.sheet.cell("B%d" % row)
         if bvalue == "No":
-            self.state = self.gobble_until_programme_state
+            self.next_state = self.programme_state
+            self.state = self.gobble_white_space
 
-    def gobble_until_programme_state(self, row):
+    def gobble_white_space(self, row):
+        logger.info("Row %d - Gobbling white space" % row)
         bvalue = self.sheet.cell("B%d" % row)
 
         if bvalue != "":
-            self.state = self.programme_state
+            self.state = self.next_state
             return self.skip_input
 
     def programme_state(self, row):
+        logger.info("Row %d - Programme State" % row)
         self.programme = self.sheet.cell("B%d" % row)
-        self.state = self.district_state
+        self.state = self.gobble_white_space
+        self.next_state = self.district_state
 
     def district_state(self, row):
+        logger.info("Row %d - District State" % row)
         self.district = self.sheet.cell("B%d" % row)
-        self.state = self.gobble_before_project
+        self.next_state = self.project_or_district
+        self.state = self.gobble_white_space
 
-    def gobble_before_project(self, row):
+    def project_or_district(self, row):
+        logger.info("Row %d - Project or District State" % row)
         cvalue = self.sheet.cell("C%d" % row)
         bvalue = self.sheet.cell("B%d" % row)
 
@@ -67,15 +79,18 @@ class ProjectSheetParser(object):
             return self.skip_input
 
     def project_state(self, row):
+        logger.info("Row %d - Project State" % row)
         value = self.sheet.cell("C%d" % row)
         if value == "Project Description":
             self.start_row = row
-        elif value == "Responsible Project Manager":
+        elif "Responsible" in value and "Manager" in value:
             rng = (self.start_row, row)
-            self.state = self.gobble_after_project
+            self.state = self.gobble_white_space
+            self.next_state = self.project_district_programme
             return rng
 
-    def gobble_after_project(self, row):
+    def project_district_programme(self, row):
+        logger.info("Row %d - Project District Programme State" % row)
         cvalue = self.sheet.cell("C%d" % row)
         bvalue = self.sheet.cell("B%d" % row)
 
