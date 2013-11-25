@@ -68,3 +68,4 @@ DEBUG_TOOLBAR_CONFIG = {
 ########## END TOOLBAR CONFIGURATION
 
 
+LOGGING["loggers"]["apps.projects.management.commands.parsers._projectsheetparser"]["level"] = "WARN"
