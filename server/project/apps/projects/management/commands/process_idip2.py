@@ -30,6 +30,7 @@ class ProjectSaver(object):
             ns = nextstep.nextstep(jsproject)
             if project == None:
                 project = ProjectSaver.create_new_project(jsproject, programme, municipality, ns)
+            ProjectSaver.save_details(project, jsproject)
 
         except SkipException:
             return
@@ -37,23 +38,31 @@ class ProjectSaver(object):
     @staticmethod
     def find_project(project, programme, district):
         if project["contract"] != "":
-            try:
-                return models.Project.objects.get(project_number=project["contract"])
-            except models.Project.DoesNotExist:
+            projects = models.Project.objects.filter(project_number=project["contract"])
+            if len(projects) == 0:
                 pass
-            except models.Project.MultipleObjectsReturned:
+            elif len(projects) == 1:
+                return projects[0]
+            else:
                 print "Multiple projects with contract number: %s" % project["contract"]
-                raise SkipException("Seems like multiple projects already exist")
+                project = ud.ask_project(project, project_number=project["contract"])
+                if not project:
+                    raise SkipException("Seems like multiple projects already exist")
+                return project
 
         if project["description"] != "":
-            try:
-                return models.Project.objects.get(name=project["description"])
-            except models.Project.DoesNotExist:
+            projects = models.Project.objects.filter(name=project["description"])
+            if len(projects) == 0:
                 pass
-            except models.Project.MultipleObjectsReturned:
-                print "Multiple projects with the same name: %s" % project["description"]
-                raise SkipException("Seems like multiple projects already exist")
-        return ud.ask_project(project, programme, district)
+            elif len(projects) == 1:
+                return projects[0]
+            else:
+                print "Multiple projects with name: %s" % project["description"]
+                project = ud.ask_project(project, name=project["description"])
+                if not project:
+                    raise SkipException("Seems like multiple projects already exist")
+                return project
+        return ud.ask_project(project, programme=programme, municipality__district=district)
 
     @staticmethod
     def create_new_project(project, programme, municipality, nextstep):
@@ -61,6 +70,29 @@ class ProjectSaver(object):
             name=project["description"], project_number=project["contract"],
             programme=programme, municipality=municipality, current_step=nextstep
         )
+
+    @staticmethod
+    def save_details(project, details):
+        project_financial, _ = models.ProjectFinancial.objects.get_or_create(project=project)
+        project_financial.total_anticipated_cost = details["total_anticipated_cost"]
+        project_financial.previous_expenses = details["total_previous_expenses"]
+        project_financial.save()
+
+        budget, _ = models.Budget.objects.get_or_create(project=project, year=details["fyear"])
+        budget.allocated_budget = details["allocated_budget_for_year"]
+        budget.save()
+
+        for p in details["planning"]:
+            try:
+                pl = models.Planning.objects.get(date__month=p["date"].month, date__year=p["date"].year, project=project)
+            except models.Planning.DoesNotExist:
+                pl = models.Planning.objects.create(date=p["date"], project=project)
+
+            pl.planned_progress = p["progress"] 
+            pl.planned_expenses = p["expenditure"] 
+            print p
+            pl.save()
+            
 
 class NextStep(object): pass
 class AlwaysPracticalCompletion(NextStep):
@@ -77,7 +109,7 @@ class Command(BaseCommand):
     def process_implementation(self, sheet):
         print "Processing Implementation Sheet"
         sheet_parser = ProjectSheetParser(sheet)
-        project_parser = ImplementationProjectParser(sheet)
+        project_parser = ImplementationProjectParser(sheet, self.fyear)
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
@@ -103,12 +135,17 @@ class Command(BaseCommand):
             elif "RETENTION" in name:
                 self.process_retention(sheet)
 
-    def handle(self, *args, **options):
-        if len(args) == 0:
-            raise CommandError("Expected IDIP filename")
+    @property
+    def process_details(self):
+        return """
+        Year: %(year)d
+        Month: %(month)d
+        Client: %(client)s
+        Financial Year: %(fyear)d
+        Financial Year Months: %(fmonths)s
+        """ % self.__dict__
 
-        filename = args[0]
-
+    def acquire_parameters(self):
         self.year = ud.ask_year()
         self.month = ud.ask_month()
         self.client = ud.ask_client()
@@ -116,13 +153,14 @@ class Command(BaseCommand):
         self.fyear = utils.fyear(self.month, self.year)
         self.fmonths = utils.fmonths(self.fyear)
 
-        print """
-        Year: %(year)d
-        Month: %(month)d
-        Client: %(client)s
-        Financial Year: %(fyear)d
-        Financial Year Months: %(fmonths)s
-        """ % self.__dict__
+    def handle(self, *args, **options):
+        if len(args) == 0:
+            raise CommandError("Expected IDIP filename")
+
+        filename = args[0]
+
+        self.acquire_parameters()
+        print self.process_details
 
         self.process_file(filename)
 
