@@ -122,10 +122,10 @@ class UserDialogue(object):
         self.save_cache()
         return self.municmap[munic]
 
-    def ask_project(self, project, programme, district):
+    def ask_project(self, project, **kwargs):
         print "Which project are you processing?"
         print project["description"]
-        projects = models.Project.objects.filter(programme=programme, municipality__district=district)
+        projects = models.Project.objects.filter(**kwargs)
         project = self._listresponse(projects, allow_none=True)
         
         return project
