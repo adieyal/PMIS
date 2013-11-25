@@ -43,6 +43,18 @@ class ImplementationProjectParser(object):
                 for i, el in enumerate(["Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB"])
             ]
 
+        def actual():
+            one_month = relativedelta(months=1)
+            start_date = datetime(year=self.fyear - 1, month=4, day=1)
+            return [
+                {
+                    "progress" : to_percentage(cell(el, 4)),
+                    "expenditure" : to_currency(cell(el, 5)),
+                    "date" : start_date + one_month * i
+                }
+                for i, el in enumerate(["Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "AA", "AB"])
+            ]
+
         return {
             "fyear" : self.fyear,
             "description" : description,
@@ -57,16 +69,17 @@ class ImplementationProjectParser(object):
             "total_previous_expenses" : to_currency(cell("K")),
             "allocated_budget_for_year" : to_currency(cell("L")),
             "planning" : planning(),
-            "comments" : cell("AD"),
-            "remedial_action" : cell("AE"),
-            "implementing_agent" : cell("AF", 1),
-            "principal_agent" : cell("AF", 3),
-            "contractor" : cell("AF", 5),
-            "scope" : cell("AG"),
-            "planned_start" : self.sheet.cell_as_date("AA%d" % (row + 1)),
-            "planned_completion" : self.sheet.cell_as_date("AB%d" % (row + 1)),
-            "planned_final_accounts" : self.sheet.cell_as_date("AC%d" % (row + 1)),
-            "actual_start" : self.sheet.cell_as_date("AA%d" % (row + 4)),
-            "actual_completion" : self.sheet.cell_as_date("AB%d" % (row + 4)),
-            "actual_final_accounts" : self.sheet.cell_as_date("AC%d" % (row + 4)),
+            "actual" : actual(),
+            "comments" : cell("AF"),
+            "remedial_action" : cell("AG"),
+            "implementing_agent" : cell("F", 1),
+            "principal_agent" : cell("F", 3),
+            "contractor" : cell("F", 5),
+            "scope" : cell("G"),
+            "planned_start" : self.sheet.cell_as_date("AC%d" % (row + 1)),
+            "planned_completion" : self.sheet.cell_as_date("AD%d" % (row + 1)),
+            "planned_final_accounts" : self.sheet.cell_as_date("AE%d" % (row + 1)),
+            "actual_start" : self.sheet.cell_as_date("AC%d" % (row + 3)),
+            "actual_completion" : self.sheet.cell_as_date("AD%d" % (row + 3)),
+            "actual_final_accounts" : self.sheet.cell_as_date("AE%d" % (row + 3)),
         }

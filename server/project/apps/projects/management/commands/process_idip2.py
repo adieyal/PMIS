@@ -72,27 +72,113 @@ class ProjectSaver(object):
         )
 
     @staticmethod
+    @transaction.commit_on_success()
     def save_details(project, details):
+        ProjectSaver.save_project_financial(project, details)
+        ProjectSaver.save_budget(project, details)
+        ProjectSaver.save_planning(project, details)
+        ProjectSaver.save_submissions(project, details)
+        ProjectSaver.save_milestones(project, details)
+        ProjectSaver.save_entities(project, details)
+
+    @staticmethod
+    def save_project_financial(project, details):
         project_financial, _ = models.ProjectFinancial.objects.get_or_create(project=project)
         project_financial.total_anticipated_cost = details["total_anticipated_cost"]
         project_financial.previous_expenses = details["total_previous_expenses"]
         project_financial.save()
 
+    @staticmethod
+    def save_budget(project, details):
         budget, _ = models.Budget.objects.get_or_create(project=project, year=details["fyear"])
         budget.allocated_budget = details["allocated_budget_for_year"]
         budget.save()
 
+    @staticmethod
+    def save_planning(project, details):
+        highest_progress = 0
         for p in details["planning"]:
             try:
                 pl = models.Planning.objects.get(date__month=p["date"].month, date__year=p["date"].year, project=project)
             except models.Planning.DoesNotExist:
                 pl = models.Planning.objects.create(date=p["date"], project=project)
+            highest_progress = max(highest_progress, p["progress"])
 
-            pl.planned_progress = p["progress"] 
+            pl.planned_progress = p["progress"] or highest_progress
             pl.planned_expenses = p["expenditure"] 
-            print p
             pl.save()
-            
+
+    @staticmethod
+    def save_submissions(project, details):
+        month = ud.ask_month()
+        year = ud.ask_year()
+        highest_progress = 0
+        for p in details["actual"]:
+            try:
+                ms = models.MonthlySubmission.objects.get(date__month=p["date"].month, date__year=p["date"].year, project=project)
+            except models.MonthlySubmission.DoesNotExist:
+                ms = models.MonthlySubmission.objects.create(date=p["date"], project=project, actual_expenditure=0, actual_progress=0)
+            highest_progress = max(highest_progress, p["progress"])
+
+            if p["date"].month == month and p["date"].year == year:
+                ms.comment = details["comments"]
+                ms.remedial_action = details["remedial_action"]
+
+            ms.actual_progress = p["progress"] or highest_progress
+            ms.actual_expenditure = p["expenditure"] 
+            ms.save()
+
+    @staticmethod
+    def save_milestones(project, details):
+
+        milestone, _ = models.ProjectMilestone.objects.get_or_create(
+            project=project,
+            milestone=models.Milestone.start_milestone()
+        )
+        milestone.completion_date = details["actual_start"] or details["planned_start"]
+        milestone.save()
+
+        milestone, _ = models.ProjectMilestone.objects.get_or_create(
+            project=project,
+            milestone=models.Milestone.practical_completion()
+        )
+        milestone.completion_date = details["actual_completion"] or details["planned_completion"]
+        milestone.save()
+
+        milestone, _ = models.ProjectMilestone.objects.get_or_create(
+            project=project,
+            milestone=models.Milestone.final_completion()
+        )
+        milestone.completion_date = details["actual_final_accounts"] or details["planned_final_accounts"]
+        milestone.save()
+
+        milestone, _ = models.ProjectMilestone.objects.get_or_create(
+            project=project,
+            milestone=models.Milestone.final_accounts()
+        )
+        milestone.completion_date = details["actual_final_accounts"] or details["planned_final_accounts"]
+        milestone.save()
+
+    @staticmethod
+    def save_entities(project, details):
+        contractor, _ = models.Role.objects.get_or_create(name="Contractor")
+        consultant, _ = models.Role.objects.get_or_create(name="Consultant")
+        agent, _ = models.Role.objects.get_or_create(name="Implementing Agent")
+
+        entity, _ = models.Entity.objects.get_or_create(name=details["contractor"])
+        project_role, _ = models.ProjectRole.objects.get_or_create(project=project, role=contractor)
+        project_role.entity = entity
+        project_role.save()
+
+        entity, _ = models.Entity.objects.get_or_create(name=details["implementing_agent"])
+        project_role, _ = models.ProjectRole.objects.get_or_create(project=project, role=agent)
+        project_role.entity = entity
+        project_role.save()
+
+        entity, _ = models.Entity.objects.get_or_create(name=details["principal_agent"])
+        project_role, _ = models.ProjectRole.objects.get_or_create(project=project, role=consultant)
+        project_role.entity = entity
+        project_role.save()
 
 class NextStep(object): pass
 class AlwaysPracticalCompletion(NextStep):
