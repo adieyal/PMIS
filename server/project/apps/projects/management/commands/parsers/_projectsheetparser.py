@@ -1,7 +1,7 @@
 import logging
 logger = logging.getLogger(__name__)
 
-class ProjectSheetParser(object):
+class ImplementationProjectSheetParser(object):
     def __init__(self, sheet):
         self.sheet = sheet
         self.state = self.start_state

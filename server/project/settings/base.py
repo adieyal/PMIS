@@ -251,6 +251,10 @@ LOGGING = {
         'apps.projects.management.commands.parsers._projectsheetparser' : {
             'level': 'WARN',
             'handlers': ['console']
+        },
+        'apps.projects.management.commands.parsers._planningprojectsheetparser' : {
+            'level': 'WARN',
+            'handlers': ['console']
         }
     }
 }

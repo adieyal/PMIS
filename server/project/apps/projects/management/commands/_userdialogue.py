@@ -6,11 +6,10 @@ class SkipException(Exception): pass
     
 class ModelsEncoder(json.JSONEncoder):
     def default(self, obj):
-        if isinstance(obj, models.Programme):
-            return obj.id
-        elif isinstance(obj, models.District):
-            return obj.id
-        elif isinstance(obj, models.Municipality):
+        if obj.__class__ in (
+            models.Programme, models.District, models.Municipality, 
+            models.Milestone, models.Project
+        ):
             return obj.id
         return json.JSONEncoder.default(self, obj)
 
@@ -19,16 +18,22 @@ class UserDialogue(object):
         self.progmap = {}
         self.distmap = {}
         self.municmap = {}
+        self.nextmilestonemap = {}
+        self.projectmap = {}
         self.cache_path = "/tmp/pmis-dialogue.cache"
         self.load_cache()
 
-    def save_cache(self):
+    def save_cache(self, map, key, val):
+        map[key] = val
         f = open(self.cache_path, "w")
-        json.dump({
+        js = json.dumps({
             "programmes" : self.progmap,
             "districts" : self.distmap,
             "municipalities" : self.municmap,
+            "next_milestones" : self.nextmilestonemap,
+            "projects" : self.projectmap,
         }, f, cls=ModelsEncoder, indent=4)
+        f.write(js)
         f.close()
 
     def load_cache(self):
@@ -43,25 +48,38 @@ class UserDialogue(object):
             if "municipalities" in js:
                 for key, val in js["municipalities"].items():
                     self.municmap[key] = models.Municipality.objects.get(id=int(val))
+            if "next_milestones" in js:
+                for key, val in js["next_milestones"].items():
+                    self.nextmilestonemap[key] = models.Milestone.objects.get(id=int(val))
+            if "projects" in js:
+                for key, val in js["projects"].items():
+                    self.projectmap[key] = models.Project.objects.get(id=int(val))
 
     def _listresponse(self, lst, allow_none=False):
-        i = 0
-        for i, el in enumerate(lst):
-            print "%d) %s" % (i, el)
-        ignore = i + 1
-        none = ignore + 1
+        while True:
+            i = 0
+            for i, el in enumerate(lst):
+                print "%d) %s" % (i, el)
+            ignore = i + 1
+            none = ignore + 1
 
-        print "%d) Skip this item" % ignore
-        if allow_none:
-            print "%d) None match" % none
+            print "%d) Skip this item" % ignore
+            if allow_none:
+                print "%d) None match" % none
 
-        index = int(raw_input(""))
-        if index == ignore:
-            raise SkipException()
-        elif index == none:
-            return None
+            try:
+                result = int(raw_input(""))
+                index = int(result)
+                if index == ignore:
+                    raise SkipException()
+                elif index == none:
+                    return None
 
-        return lst[index]
+                return lst[index]
+
+            except (ValueError, IndexError, TypeError):
+                print ""
+                print "%s was not one of the available options - please choose again:" % result
 
     def ask_month(self):
         print "What month are you processing? (1 - 12): "
@@ -92,8 +110,7 @@ class UserDialogue(object):
             print ""
 
             programme = self._listresponse(programmes)
-            self.progmap[prog] = programme
-        self.save_cache()
+            self.save_cache(self.progmap, prog, programme)
         return self.progmap[prog]
 
     def ask_district(self, dist):
@@ -105,27 +122,44 @@ class UserDialogue(object):
             print ""
 
             district = self._listresponse(districts)
-            self.distmap[dist] = district
-        self.save_cache()
+            self.save_cache(self.distmap, dist, district)
         return self.distmap[dist]
 
     def ask_municipality(self, munic, district):
         if not munic in self.municmap:
-            municipalities = models.Municipality.objects.filter(district=district)
+            try:
+                municipality = models.Municipality.objects.get(name=munic)
+            except models.Municipality.DoesNotExist:
+                municipalities = models.Municipality.objects.filter(district=district)
 
-            print "Which municipality are you processing?"
-            print munic, district
-            print ""
+                print "Which municipality are you processing?"
+                print munic, district
+                print ""
 
-            municipality = self._listresponse(municipalities)
-            self.municmap[munic] = municipality
-        self.save_cache()
+                municipality = self._listresponse(municipalities)
+            self.save_cache(self.municmap, munic, municipality)
         return self.municmap[munic]
 
     def ask_project(self, project, **kwargs):
-        print "Which project are you processing?"
-        print project["description"]
-        projects = models.Project.objects.filter(**kwargs)
-        project = self._listresponse(projects, allow_none=True)
+        proj = project["description"]
+
+        if not proj in self.projectmap:
+            print "Which project are you processing?"
+            print proj
+            projects = models.Project.objects.filter(**kwargs)
+            project = self._listresponse(projects, allow_none=True)
+            self.save_cache(self.projectmap, proj, project)
         
-        return project
+        return self.projectmap[proj]
+
+    def ask_next_milestone(self, project, **kwargs):
+        if not project["comments"] in self.nextmilestonemap:
+            print ""
+            print "What is the next milestone for this project?"
+            print "Here are the comments from the IDIP:"
+            print project["comments"]
+
+            milestones = models.Milestone.objects.filter(**kwargs)
+            milestone = self._listresponse(milestones, allow_none=True)
+            self.save_cache(self.nextmilestonemap, project["comments"], milestone)
+        return self.nextmilestonemap[project["comments"]]

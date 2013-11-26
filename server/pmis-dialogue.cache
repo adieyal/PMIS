@@ -1,0 +1,72 @@
+{
+    "districts": {
+        "EHLANZENI DISTRICT": 4, 
+        "NKANGALA DISTRICT": 3, 
+        "GERT SIBANDE DISTRICT": 2, 
+        "BOHLABELA DISTRICT": 4, 
+        "ALL DISTRICTS": 5
+    }, 
+    "next_milestones": {
+        "Procurement process for the project has been finalised, project is ready for award.": 5, 
+        "Planning and design pocess has been completed.": 4, 
+        "Project identified as a priority during the presidential visit for upgrade and additions in December 2012, project under planning and design at tender production stage": 5, 
+        "Project for planning and design only in the 2013/14 financial year, submmission for the appointment of professional service providers still under consideration.": 2, 
+        "Project for planning and design only in the 2013/14 financial year, submmission for the appointment of professional service providers still under consideration": 2, 
+        "Project ready for award": 5, 
+        "None": 1, 
+        "Tender process completed project ready for Bid evaluation,": 5
+    }, 
+    "municipalities": {
+        "Thembisile Hani": 14, 
+        "Unknown": 24, 
+        "Emakhazeni": 13, 
+        "Msukaligwa ": 4, 
+        "Various": 21, 
+        "Steve Tshwete ": 12, 
+        "Dr JS Moroka ": 15, 
+        "Mbombela": 17, 
+        "Steve Tshwete": 12, 
+        "NA": 21, 
+        "Mbombela ": 17, 
+        "Dr JS Moroka": 15, 
+        "Govan Mbeki ": 9, 
+        "Bushbuckridge": 20, 
+        "All Municipalities": 21, 
+        "Emalahleni ": 11, 
+        "Msukaligwa (Gert Sibande)": 4, 
+        "Pixley ka Seme": 6, 
+        "Msukaligwa": 4, 
+        "Albert Luthuli": 3, 
+        "Nkomazi": 19, 
+        "Mkhondo": 5, 
+        "Govan Mbeki": 9
+    }, 
+    "programmes": {
+        "GRADE- R FACILITIES": 11, 
+        "SINGITA PROGRAMME (ON-GOING)": 16, 
+        "REPAIR OF STORM DAMAGED SCHOOLS INFRASTRACTURE": 13, 
+        "UPGRADE AND ADDITIONS": 18, 
+        "ENVIROLOO SANITATION SYSTEM (ON-GOING)": 17, 
+        "BOARDING SCHOOL (ON-GOING)": 7, 
+        "MUD AND UNSAFE STRUCTURES (UNCONVECTIONAL TO CONVENTIONAL)": 9, 
+        "CURRENT PROGRAMME (ON-GOING)": 19, 
+        "MAINTENANCE SCHOOLS (ONGOING)": 15, 
+        "SUBSTITUTION OF UNSAFE STRUCTURES": 3, 
+        "GRADE R FACILITIES": 11, 
+        "MUD AND UNSAFE STRUCTURES: CONVENTIONAL": 2, 
+        "BOARDING SCHOOLS": 7, 
+        "SPECIAL SCHOOLS (ON-GOING)": 6, 
+        "MUD AND UNSAFE STRUCTURES / CONVENTIONAL": 2
+    }, 
+    "projects": {
+        "Mareleng Primary School (Phase 1)": 46, 
+        "Ilanga P School (Phase 1) ": 7, 
+        "Proposed Additions and Alterations at Mugidi School": 90, 
+        "Ilanga P School (Phase 2)": 8, 
+        "Emakhazeni Boarding School": 39, 
+        "Proposed Additions and Alterations at Sibonelo School": 93, 
+        "Proposed Additions and Alterations at Moses Mnisi School": 89, 
+        "Proposed Additions and Alterations at Ilanga (Bosfontein) School": 91, 
+        "Proposed Additions and Alterations at Thabana School": 94
+    }
+}
