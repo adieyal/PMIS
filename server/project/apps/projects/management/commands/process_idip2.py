@@ -48,7 +48,13 @@ class Command(BaseCommand):
 
     def process_retention(self, sheet):
         print "Processing Retention Sheet"
-        pass
+        sheet_parser = parsers.RetentionProjectSheetParser(sheet)
+        project_parser = parsers.RetentionProjectParser(sheet, self.fyear)
+        saver = savers.RetentionProjectSaver(ud)
+
+        for project_range in sheet_parser.projects:
+            project = project_parser.parse(project_range)
+            saver.save_project(self.client, project)
 
     def process_file(self, filename):
         print "Loading file ..."

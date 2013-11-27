@@ -24,7 +24,8 @@ class UserDialogue(object):
         self.load_cache()
 
     def save_cache(self, map, key, val):
-        map[key] = val
+        if val: map[key] = val
+
         f = open(self.cache_path, "w")
         js = json.dumps({
             "programmes" : self.progmap,
@@ -37,23 +38,42 @@ class UserDialogue(object):
         f.close()
 
     def load_cache(self):
+        def load_obj(model, id):
+            try:
+                return model.objects.get(id=id)
+            except model.DoesNotExist:
+                return None
+
+        sections = {
+            "programmes" : {
+                "map" : self.progmap,
+                "model" : models.Programme
+            },
+            "districts" : {
+                "map" : self.distmap,
+                "model" : models.District
+            },
+            "municipalities" : {
+                "map" : self.municmap,
+                "model" : models.Municipality
+            },
+            "next_milestones" : {
+                "map" : self.nextmilestonemap,
+                "model" : models.Milestone
+            },
+            "projects" : {
+                "map" : self.projectmap,
+                "model" : models.Project
+            },
+        }
         if os.path.exists(self.cache_path):
             js = json.load(open(self.cache_path))
-            if "programmes" in js:
-                for key, val in js["programmes"].items():
-                    self.progmap[key] = models.Programme.objects.get(id=int(val))
-            if "districts" in js:
-                for key, val in js["districts"].items():
-                    self.distmap[key] = models.District.objects.get(id=int(val))
-            if "municipalities" in js:
-                for key, val in js["municipalities"].items():
-                    self.municmap[key] = models.Municipality.objects.get(id=int(val))
-            if "next_milestones" in js:
-                for key, val in js["next_milestones"].items():
-                    self.nextmilestonemap[key] = models.Milestone.objects.get(id=int(val))
-            if "projects" in js:
-                for key, val in js["projects"].items():
-                    self.projectmap[key] = models.Project.objects.get(id=int(val))
+            for section in js.keys():
+                details = sections[section]
+                for key, val in js[section].items():
+                    obj = load_obj(details["model"], int(val))
+                    if obj:
+                        details["map"][key] = obj
 
     def _listresponse(self, lst, allow_none=False):
         while True:
@@ -109,8 +129,9 @@ class UserDialogue(object):
             print prog
             print ""
 
-            programme = self._listresponse(programmes)
+            programme = self._listresponse(programmes, allow_none=True)
             self.save_cache(self.progmap, prog, programme)
+            return programme
         return self.progmap[prog]
 
     def ask_district(self, dist):
@@ -136,7 +157,8 @@ class UserDialogue(object):
                 print munic, district
                 print ""
 
-                municipality = self._listresponse(municipalities)
+                municipality = self._listresponse(municipalities, allow_none=True)
+                return municipality
             self.save_cache(self.municmap, munic, municipality)
         return self.municmap[munic]
 
@@ -149,6 +171,7 @@ class UserDialogue(object):
             projects = models.Project.objects.filter(**kwargs)
             project = self._listresponse(projects, allow_none=True)
             self.save_cache(self.projectmap, proj, project)
+            return project
         
         return self.projectmap[proj]
 

@@ -70,3 +70,4 @@ DEBUG_TOOLBAR_CONFIG = {
 
 LOGGING["loggers"]["apps.projects.management.commands.parsers._projectsheetparser"]["level"] = "WARN"
 LOGGING["loggers"]["apps.projects.management.commands.parsers._planningprojectsheetparser"]["level"] = "WARN"
+LOGGING["loggers"]["apps.projects.management.commands.parsers._retentionprojectsheetparser"]["level"] = "WARN"

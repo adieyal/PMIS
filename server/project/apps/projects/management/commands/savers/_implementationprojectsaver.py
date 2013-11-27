@@ -9,6 +9,9 @@ class ImplementationProjectSaver(object):
     def save_project(self, client, details):
         try:
             programme = self.ud.ask_programme(details["programme"], client)
+            if not programme:
+                programme = models.Programme.objects.create(name=details["programme"], client=client)
+                
             district = self.ud.ask_district(details["district"])
             municipality = self.ud.ask_municipality(details["municipality"], district)
             project = self.find_project(details, programme, district)
@@ -66,8 +69,19 @@ class ImplementationProjectSaver(object):
 
     def save_project_financial(self, project, details):
         project_financial, _ = models.ProjectFinancial.objects.get_or_create(project=project)
-        project_financial.total_anticipated_cost = details["total_anticipated_cost"]
-        project_financial.previous_expenses = details["total_previous_expenses"]
+
+        project_financial.total_anticipated_cost = 0
+        if "total_anticipated_cost" in details:
+            project_financial.total_anticipated_cost = details["total_anticipated_cost"]
+
+        project_financial.previous_expenses = 0
+        if "total_previous_expenses" in details:
+            project_financial.previous_expenses = details["total_previous_expenses"]
+
+        project_financial.final_accounts = 0
+        if "final_accounts" in details:
+            project_financial.final_accounts = details["final_accounts"]
+
         project_financial.save()
 
     def save_budget(self, project, details):
@@ -158,6 +172,10 @@ class ImplementationProjectSaver(object):
         project_role.save()
 
     def save_next_milestone(self, project, details):
-        project.current_step = models.Milestone.practical_completion()
+        progress = max([a["progress"] for a in details["actual"]])
+        if progress == 100:
+            project.current_step = models.Milestone.final_completion()
+        else:
+            project.current_step = models.Milestone.practical_completion()
         project.save()
 
