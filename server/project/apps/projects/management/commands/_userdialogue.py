@@ -1,6 +1,14 @@
 import os
+from datetime import datetime
 import json
 from project.apps.projects import models
+import dateutil.parser as dateparser
+
+x = [2013] *9 + [2014] * 3
+y = range(4,13) + range(1,4)
+z = [30,31,30,31,31,30,31,30,31,31,28,31]
+dates = [datetime(y,m,d) for y,m,d in zip(x,y,z)]
+all_zeros = [0,0,0,0,0,0,0,0,0,0,0,0]
 
 class SkipException(Exception): pass
     
@@ -101,88 +109,204 @@ class UserDialogue(object):
                 print ""
                 print "%s was not one of the available options - please choose again:" % result
 
+    def _ask(self, lst, input=None, map=None):
+        if input == None:
+            return self._listresponse(lst, allow_none=True)
+        else:
+            if not input in map:
+                print input
+                print ""
+                result = self._listresponse(lst, allow_none=True)
+                return result
+            return self.map[input]
+
+    def _ask_yesno(self, question=""):
+        while True:
+            result = raw_input(question)
+            if result.lower().strip() in ["n", "no"]:
+                return False
+            elif result.lower().strip() in ["y", "yes"]:
+                return True
+            print "Expected Yes or No, please try again"
+
     def ask_month(self):
-        print "What month are you processing? (1 - 12): "
-        month = raw_input("")
-        return int(month)
+        while True:
+            try:
+                print "What month are you processing? (1 - 12): "
+                month = raw_input("")
+                return int(month)
+            except ValueError:
+                print "Expected an integer, please try again"
 
     def ask_year(self):
-        print "Which financial year are you processing? (e.g 2013): "
-        month = raw_input("")
-        return int(month)
+        while True:
+            try:
+                return int(raw_input("Which financial year are you processing? (e.g 2013): "))
+            except ValueError:
+                print "Expected an integer, please try again"
+
 
     def ask_client(self):
-        clients = list(models.Client.objects.all())
-        for i, client in enumerate(clients):
-            print "%d) %s" % (i, client.name)
-            
-        index = raw_input("Which client are you processing?\n")
-        return clients[int(index)]
+        clients = models.Client.objects.all()
+        return self._ask(clients)
 
-    def ask_programme(self, prog, client=None):
-        if not prog in self.progmap:
-            programmes = models.Programme.objects.all()
-            if client:
-                programmes = programmes.filter(client=client)
+    def ask_programme(self, prog=None, client=None):
+        programmes = models.Programme.objects.all()
+        print "Which programme?"
+        if client:
+            programmes = programmes.filter(client=client)
+        if prog == None:
+            return self._ask(programmes)
+        else:
+            return self._ask(programmes, input=prog, map=self.progmap)
 
-            print "Which programme are you processing?"
-            print prog
-            print ""
+    def ask_district(self, dist=None):
+        districts = models.District.objects.all()
+        print "Which district are you processing?"
+        return self._ask(districts)
 
-            programme = self._listresponse(programmes, allow_none=True)
-            self.save_cache(self.progmap, prog, programme)
-            return programme
-        return self.progmap[prog]
+    def ask_municipality(self, district=None, munic=None):
+        print "Which municipalities are you processing?"
+        municipalities = models.Municipality.objects.all()
+        if district:
+            municipalities = municipalities.filter(district=district)
+        if munic:
+            return self._ask(municipalities, input=munic, map=self.municmap)
+        else:
+            return self._ask(municipalities)
 
-    def ask_district(self, dist):
-        if not dist in self.distmap:
-            districts = models.District.objects.all()
+    def ask_project(self, proj=None, **kwargs):
+        print "Which project are you processing?"
+        projects = models.Project.objects.filter(**kwargs)
+        if proj:
+            return self._ask(projects, input=proj, map=self.projectmap)
+        else:
+            return self._ask(projects)
 
-            print "Which district are you processing?"
-            print dist
-            print ""
+    def ask_financials(self, project):
+        try:
+            return project.project_financial
+        except models.ProjectFinancial.DoesNotExist:
+            while True:
+                try:
+                    print "Lets create the project financials"
+                    print "For the following questions, enter only numbers - no formatting"
+                    total_anticipated_cost = int(raw_input("What is the total project budget? ")) * 1000
+                    previous_expenses = int(raw_input("What were the previous expenses? ")) * 1000
+                    final_accounts = int(raw_input("What are the final accounts? ")) * 1000
+                    return models.ProjectFinancial(
+                        project=project, total_anticipated_cost=total_anticipated_cost,
+                        previous_expenses=previous_expenses, final_accounts=final_accounts
+                    )
+                except ValueError:
+                    print "Ensure that you enter in integers where needed. Please try again"
 
-            district = self._listresponse(districts)
-            self.save_cache(self.distmap, dist, district)
-        return self.distmap[dist]
+    def ask_budget(self, project, year):
+        try:
+            return project.budgets.get(year=year)
+        except models.Budget.DoesNotExist:
+            while True:
+                try:
+                    print "Lets create a budget for %s" % year
+                    print "For the following questions, enter only numbers - no formatting"
+                    allocated_budget = int(raw_input("What is the total allocated budget? ")) * 1000
+                    allocated_planning_budget = int(raw_input("What is the allocated planning budget? ")) * 1000
+                    return models.Budget(
+                        project=project, year=year, allocated_planning_budget=allocated_planning_budget, 
+                        allocated_budget=allocated_budget
+                    )
+                except ValueError:
+                    print "Ensure that you enter in integers where needed. Please try again"
 
-    def ask_municipality(self, munic, district):
-        if not munic in self.municmap:
-            try:
-                municipality = models.Municipality.objects.get(name=munic)
-            except models.Municipality.DoesNotExist:
-                municipalities = models.Municipality.objects.filter(district=district)
-
-                print "Which municipality are you processing?"
-                print munic, district
-                print ""
-
-                municipality = self._listresponse(municipalities, allow_none=True)
-                return municipality
-            self.save_cache(self.municmap, munic, municipality)
-        return self.municmap[munic]
-
-    def ask_project(self, project, **kwargs):
-        proj = project["description"]
-
-        if not proj in self.projectmap:
-            print "Which project are you processing?"
-            print proj
-            projects = models.Project.objects.filter(**kwargs)
-            project = self._listresponse(projects, allow_none=True)
-            self.save_cache(self.projectmap, proj, project)
-            return project
-        
-        return self.projectmap[proj]
-
-    def ask_next_milestone(self, project, **kwargs):
-        if not project["comments"] in self.nextmilestonemap:
+    def ask_next_milestone(self, comments=None, **kwargs):
+        milestones = models.Milestone.objects.filter(**kwargs)
+        print "What is the next milestone for this project?"
+        if comments:
             print ""
             print "What is the next milestone for this project?"
             print "Here are the comments from the IDIP:"
-            print project["comments"]
+            print comments
+            return self._ask(milestones, input=comments, map=self.nextmilestonemap)
+        else:
+            return self._ask(milestones)
 
-            milestones = models.Milestone.objects.filter(**kwargs)
-            milestone = self._listresponse(milestones, allow_none=True)
-            self.save_cache(self.nextmilestonemap, project["comments"], milestone)
-        return self.nextmilestonemap[project["comments"]]
+    def _ask_months(self):
+        print "Was any progress in the current financial year? "
+        if self._ask_yesno():
+            while True:
+                try:
+                    print "Please enter in an array of 12 numbers, one for each month, starting from April"
+                    print "The array should contain the progress for each month"
+                    print "values should be in percentage values - e.g. 30% should be entered as 30"
+                    print "The array should be formatted like this: 10,15,20,20,20,21,22,30,40,50,60,70"
+                    result = raw_input("")
+                    progress = [float(el) for el in result.split(",")]
+                    progress = (progress + progress[-1:] * 12)[0:12]
+                    break
+                except ValueError:
+                    print "Please ensure that you enter in the array correctly"
+        else:
+            progress = all_zeros
+
+        print "Were any payments in the current financial year? "
+        if self._ask_yesno():
+            while True:
+                try:
+                    print "Please enter in an array of 12 numbers, one for each month, starting from April"
+                    print "The array should contain the payment for each month"
+                    print "values should be in unformatted numbers and should be in thousands"
+                    print "e.g. 150 would actually be 150000"
+                    print "The array should be formatted like this: 150,0,0,0,25,0,0,0,0,60,0,0"
+                    result = raw_input("")
+                    payments = [float(el) * 1000 for el in result.split(",")]
+                    payments = (payments + payments[-1:] * 12)[0:12]
+                    break 
+                except ValueError:
+                    print "Please ensure that you enter in the array correctly"
+        else:
+            payments = all_zeros
+        return (progress, payments)
+
+    def ask_planning(self, project):
+        progress, payments = self._ask_months()
+
+        return [
+            models.Planning(date=d, planned_expenses=pay, planned_progress=prog, project=project)
+            for d, pay, prog in zip(dates, payments, progress)
+        ]
+
+    def ask_monthly_submissions(self, project):
+        progress, payments = self._ask_months()
+
+        return [
+            models.MonthlySubmission(
+                date=d, actual_expenditure=pay, actual_progress=prog, project=project
+            )
+            for d, pay, prog in zip(dates, payments, progress)
+        ]
+
+    def ask_milestone_date(self, project, milestone):
+        while True:
+            try:
+                result = raw_input("Please enter in a date (yyyy-mm-dd) for milestone: %s: " % milestone.name)
+                date = dateparser.parse(result)
+
+                return models.ProjectMilestone(project=project, completion_date=date, milestone=milestone)
+            except Exception:
+                print "Some error occurred when entering the date. Please try again"
+
+    def ask_project_role(self, project, role):
+        entities = models.Entity.objects.filter(project_roles__role=role).distinct()
+        if len(entities) < 10:
+            entity = self._ask(entities)
+        else:
+            query = raw_input("Enter in a string to search for: ")
+            filtered_entities = entities.filter(name__icontains=query.lower())
+            entity = self._ask(filtered_entities)
+            if entity == None:
+                name = raw_input("Ok, let's create a new entity. Please enter in the entity name: ")
+                entity, _ = models.Entity.objects.get_or_create(name=name)
+            
+        return models.ProjectRole(project=project, role=role, entity=entity) 
+        
+        
