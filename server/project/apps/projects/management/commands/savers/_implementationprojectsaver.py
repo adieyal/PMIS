@@ -31,7 +31,7 @@ class ImplementationProjectSaver(object):
                 return projects[0]
             else:
                 print "Multiple projects with contract number: %s" % details["contract"]
-                project = self.ud.ask_project(details, project_number=details["contract"])
+                project = self.ud.ask_project(details["description"], project_number=details["contract"])
                 if not project:
                     raise SkipException("Seems like multiple projects already exist")
                 return project
@@ -63,7 +63,6 @@ class ImplementationProjectSaver(object):
         self.save_planning(project, details)
         self.save_submissions(project, details)
         self.save_milestones(project, details)
-        self.save_entities(project, details)
         self.save_entities(project, details)
         self.save_next_milestone(project, details)
 
