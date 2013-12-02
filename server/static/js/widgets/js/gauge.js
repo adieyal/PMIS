@@ -31,8 +31,10 @@ define(['jquery', 'text!../gauge/base.svg'], function($, svg) {
 		var data = me.data[i];
 		var n = svg.find('#tpl-gauge-needle-'+(data['needle-style'] || 'plain')).clone();
 		var m = svg.find('#tpl-gauge-marker-'+(data['marker-style'] || 'plain')).clone();
-		var a = Math.PI-Math.PI*(data['position'] || 0);
-		var s = Math.abs(0.5-data['position'])*0.28+1;
+		var position = data['position'];
+		if (position > 1) { position = 1; }
+		var a = Math.PI-Math.PI*(position || 0);
+		var s = Math.abs(0.5-position)*0.28+1;
 		var x = Math.cos(a)*57*s;
 		var y = 57-Math.sin(a)*57*s;
 		
@@ -49,7 +51,7 @@ define(['jquery', 'text!../gauge/base.svg'], function($, svg) {
 		    m.find('.gauge-marker-text').remove();
 		}
 
-		var r = 180*(data['position'] || 0)-90;
+		var r = 180*(position || 0)-90;
 		n.attr('id', 'gauge-needle'+i);
 		n.find('line').attr('y1', -57*s);
 		n.find('rect').attr('y', -57*s);
@@ -64,7 +66,7 @@ define(['jquery', 'text!../gauge/base.svg'], function($, svg) {
 		
 		
 		if (i==0) {
-		    var green = Math.round(data['position']*25);
+		    var green = Math.round(position*25);
 		    svg.find('.gauge-markers line').css('stroke', '#86bf53');
 		    svg.find('.gauge-markers line:lt('+green+')').css('stroke', '#f0423e');
 		}
