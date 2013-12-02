@@ -31,6 +31,13 @@ def district_perform(request, district_id, year, month):
     return TemplateResponse(request, 'reports/district/perform.html', district_report_json(district_id, date))
 
 @cache_page(settings.API_CACHE)
+def cluster_report(request, subreport, client_code, year, month):
+    date = datetime(int(year), int(month), 1)
+    template = 'reports/{report}/{subreport}.html'.format(report="cluster", subreport=subreport)
+    context = {'json': None}
+    return TemplateResponse(request, template, context)
+
+@cache_page(settings.API_CACHE)
 def generic_report(request, report, report_id, subreport, year, month):
     date = datetime(int(year), int(month), 1)
     template = 'reports/{report}/{subreport}.html'.format(report=report, subreport=subreport)

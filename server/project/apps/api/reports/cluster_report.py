@@ -94,12 +94,11 @@ def build_donut(*args):
              "values": args }
 
 
-def dashboard_summary_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def dashboard_summary_json(client, date):
     projects = models.Project.objects.client(client)
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -127,8 +126,7 @@ def dashboard_summary_json(dept, date):
         "total-projects-planning": projects.in_planning.count()
         }
 
-def dashboard_programme_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def dashboard_programme_json(client, prog, date):
     programme = client.programmes.all()[prog]
     projects = models.Project.objects.client(client).programme(programme)
 
@@ -158,12 +156,11 @@ def dashboard_programme_json(dept, prog, date):
         "programme-%(prog_id)s-total-expenditure" % values: format.format_currency(projects.total_expenditure(date))
         }
 
-def dashboard_planning_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def dashboard_planning_json(client, date):
     projects = models.Project.objects.client(client).in_planning
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -179,12 +176,11 @@ def dashboard_planning_json(dept, date):
         "planning-total": projects.count(), 
         }
 
-def dashboard_implementation_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def dashboard_implementation_json(client, date):
     projects = models.Project.objects.client(client).in_implementation
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -204,8 +200,7 @@ def dashboard_implementation_json(dept, date):
         "implementation-projects-total": projects.count()
         }
 
-def dashboard_programme_implementation_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def dashboard_programme_implementation_json(client, prog, date):
     programme = client.programmes.all()[prog]
     projects = models.Project.objects.client(client).programme(programme)
 
@@ -232,7 +227,7 @@ def dashboard_programme_implementation_json(dept, prog, date):
             projects.filter(current_step__name="Tendering").count()),
         }
 
-def dashboard_district_json(dept, district, date):
+def dashboard_district_json(client, district, date):
     projects = models.Project.objects.district(models.District.objects.get(name=district))
     
     values = {
@@ -258,31 +253,30 @@ def dashboard_district_json(dept, district, date):
     
 
 @cache_page(settings.API_CACHE)
-def cluster_dashboard(request, year, month):
+def cluster_dashboard(request, client_code, year, month):
     year, month = int(year), int(month)
     date = datetime(year, month, 1)
     
-    department = "doh"
+    client = models.Client.objects.by_code(client_code)
 
     js = OrderedDict()
-    js.update(dashboard_summary_json(department, date))
-    js.update(dashboard_programme_json(department, 0, date))
-    js.update(dashboard_programme_json(department, 1, date))
-    js.update(dashboard_programme_json(department, 2, date))
-    js.update(dashboard_planning_json(department, date))
-    js.update(dashboard_implementation_json(department, date))
-    js.update(dashboard_programme_implementation_json(department, 0, date))
-    js.update(dashboard_programme_implementation_json(department, 1, date))
-    js.update(dashboard_programme_implementation_json(department, 2, date))
-    js.update(dashboard_district_json(department, "Nkangala", date))
-    js.update(dashboard_district_json(department, "Gert Sibande", date))
-    js.update(dashboard_district_json(department, "Ehlanzeni", date))
+    js.update(dashboard_summary_json(client, date))
+    js.update(dashboard_programme_json(client, 0, date))
+    js.update(dashboard_programme_json(client, 1, date))
+    js.update(dashboard_programme_json(client, 2, date))
+    js.update(dashboard_planning_json(client, date))
+    js.update(dashboard_implementation_json(client, date))
+    js.update(dashboard_programme_implementation_json(client, 0, date))
+    js.update(dashboard_programme_implementation_json(client, 1, date))
+    js.update(dashboard_programme_implementation_json(client, 2, date))
+    js.update(dashboard_district_json(client, "Nkangala", date))
+    js.update(dashboard_district_json(client, "Gert Sibande", date))
+    js.update(dashboard_district_json(client, "Ehlanzeni", date))
     response = common.JsonResponse(js)
     
     return response
 
-def progress_summary_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_summary_json(client, date):
     projects = models.Project.objects.client(client)
     
     return {
@@ -297,8 +291,7 @@ def progress_summary_json(dept, date):
         "summary-projects-total": projects.count()
         }
 
-def progress_planning_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_planning_json(client, date):
     projects = models.Project.objects.client(client).in_planning
     
     return {
@@ -310,8 +303,7 @@ def progress_planning_json(dept, date):
         "planning-total": projects.count()
         }
 
-def progress_planning_programme_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_planning_programme_json(client, prog, date):
     try:
         programme = client.programmes.all()[prog]
     except IndexError:
@@ -340,8 +332,7 @@ def progress_planning_programme_json(dept, prog, date):
         "planning-programme-%(prog_id)s-total" % values: projects.count()
         }
 
-def progress_for_implementation_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_for_implementation_json(client, date):
     projects = models.Project.objects.client(client).in_planning.filter(current_step__name="Planning Complete")[0:15]
 
     response = {}
@@ -349,8 +340,7 @@ def progress_for_implementation_json(dept, date):
         response["for-implementation-project-%s-name" % ('abcdefghijklmnop'[i])] = p.name
     return response
 
-def progress_for_tender_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_for_tender_json(client, date):
     projects = models.Project.objects.client(client).in_planning.filter(current_step__name="Tendering")[0:15]
 
     response = {}
@@ -358,12 +348,11 @@ def progress_for_tender_json(dept, date):
         response["for-tender-project-%s-name" % ('abcdefghijklmnop'[i])] = p.name
     return response
 
-def progress_implementation_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_implementation_json(client, date):
     projects = models.Project.objects.client(client).in_implementation
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -388,8 +377,7 @@ def progress_implementation_json(dept, date):
         
         }
 
-def progress_implementation_programme_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def progress_implementation_programme_json(client, prog, date):
     try:
         programme = client.programmes.all()[prog]
     except IndexError:
@@ -421,7 +409,7 @@ def progress_implementation_programme_json(dept, prog, date):
         "implementation-programme-%(prog_id)s-total" % values: projects.count()
         }
 
-def progress_district_json(dept, district, date):
+def progress_district_json(client, district, date):
     projects = models.Project.objects.district(models.District.objects.get(name=district))
     
     values = {
@@ -449,40 +437,38 @@ def progress_district_json(dept, district, date):
         }
 
 @cache_page(settings.API_CACHE)
-def cluster_progress(request, year, month):
+def cluster_progress(request, client_code, year, month):
     year, month = int(year), int(month)
     date = datetime(year, month, 1)
+    client = models.Client.objects.by_code(client_code)
     
-    department = "doh"
-
     js = OrderedDict()
-    js.update(progress_summary_json(department, date))
-    js.update(progress_planning_json(department, date))
-    js.update(progress_planning_programme_json(department, 0, date))
-    js.update(progress_planning_programme_json(department, 1, date))
-    js.update(progress_planning_programme_json(department, 2, date))
-    js.update(progress_planning_programme_json(department, 3, date))
-    js.update(progress_planning_programme_json(department, 4, date))
-    js.update(progress_planning_programme_json(department, 5, date))
-    js.update(progress_for_tender_json(department, date))
-    js.update(progress_for_implementation_json(department, date))
-    js.update(progress_implementation_json(department, date))
-    js.update(progress_implementation_programme_json(department, 0, date))
-    js.update(progress_implementation_programme_json(department, 1, date))
-    js.update(progress_implementation_programme_json(department, 2, date))
-    js.update(progress_district_json(department, "Nkangala", date))
-    js.update(progress_district_json(department, "Gert Sibande", date))
-    js.update(progress_district_json(department, "Ehlanzeni", date))
+    js.update(progress_summary_json(client, date))
+    js.update(progress_planning_json(client, date))
+    js.update(progress_planning_programme_json(client, 0, date))
+    js.update(progress_planning_programme_json(client, 1, date))
+    js.update(progress_planning_programme_json(client, 2, date))
+    js.update(progress_planning_programme_json(client, 3, date))
+    js.update(progress_planning_programme_json(client, 4, date))
+    js.update(progress_planning_programme_json(client, 5, date))
+    js.update(progress_for_tender_json(client, date))
+    js.update(progress_for_implementation_json(client, date))
+    js.update(progress_implementation_json(client, date))
+    js.update(progress_implementation_programme_json(client, 0, date))
+    js.update(progress_implementation_programme_json(client, 1, date))
+    js.update(progress_implementation_programme_json(client, 2, date))
+    js.update(progress_district_json(client, "Nkangala", date))
+    js.update(progress_district_json(client, "Gert Sibande", date))
+    js.update(progress_district_json(client, "Ehlanzeni", date))
     response = common.JsonResponse(js)
     return response  
 
 
-def performance_summary_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_summary_json(client, date):
     projects = models.Project.objects.client(client)
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -509,12 +495,11 @@ def performance_summary_json(dept, date):
                                                                     projects.total_expenditure(date)))    
         }
 
-def performance_planning_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_planning_json(client, date):
     projects = models.Project.objects.client(client).in_planning
 
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -540,8 +525,7 @@ def performance_planning_json(dept, date):
                                                                      projects.total_expenditure(date)))
         }
 
-def performance_planning_programmes_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_planning_programmes_json(client, prog, date):
     programme = client.programmes.all()[prog]
     projects = models.Project.objects.client(client).programme(programme).in_planning
 
@@ -574,12 +558,11 @@ def performance_planning_programmes_json(dept, prog, date):
                                                                                                     projects.total_expenditure(date))) 
         }
 
-def performance_implementation_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_implementation_json(client, date):
     projects = models.Project.objects.client(client).in_implementation
     
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -596,8 +579,7 @@ def performance_implementation_json(dept, date):
                                                                            projects.total_expenditure(date)))
         }
 
-def performance_implementation_programmes_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_implementation_programmes_json(client, prog, date):
     programme = client.programmes.all()[prog]
     projects = models.Project.objects.client(client).programme(programme).in_planning
 
@@ -630,12 +612,11 @@ def performance_implementation_programmes_json(dept, prog, date):
                                                                                                           projects.total_expenditure(date)))
         }
 
-def performance_analysis_json(dept, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_analysis_json(client, date):
     projects = models.Project.objects.client(client)
     
     values = {
-        "dept_id" : dept_map[dept],
+        "dept_id" : dept_map[client.code.lower()],
         "client" : client.description,
     }
     
@@ -648,8 +629,7 @@ def performance_analysis_json(dept, date):
                                                             projects.total_expenditure(date))
         }
 
-def performance_analysis_programmes_json(dept, prog, date):
-    client = models.Client.objects.get(name__iexact=dept)
+def performance_analysis_programmes_json(client, prog, date):
     programme = client.programmes.all()[prog]
     projects = models.Project.objects.client(client).programme(programme).in_planning
 
@@ -679,25 +659,24 @@ def performance_analysis_programmes_json(dept, prog, date):
         }
 
 @cache_page(settings.API_CACHE)
-def cluster_performance(request, year, month):
+def cluster_performance(request, client_code, year, month):
     year, month = int(year), int(month)
     date = datetime(year, month, 1)
-
-    department = "doh"
+    client = models.Client.objects.by_code(client_code)
 
     js = OrderedDict()
-    js.update(performance_summary_json(department, date))
-    js.update(performance_planning_json(department, date))
-    js.update(performance_planning_programmes_json(department, 0, date))
-    js.update(performance_planning_programmes_json(department, 1, date))
-    js.update(performance_planning_programmes_json(department, 2, date))
-    js.update(performance_implementation_json(department, date))
-    js.update(performance_implementation_programmes_json(department, 0, date))
-    js.update(performance_implementation_programmes_json(department, 1, date))
-    js.update(performance_implementation_programmes_json(department, 2, date))
-    js.update(performance_analysis_json(department, date))
-    js.update(performance_analysis_programmes_json(department, 0, date))
-    js.update(performance_analysis_programmes_json(department, 1, date))
+    js.update(performance_summary_json(client, date))
+    js.update(performance_planning_json(client, date))
+    js.update(performance_planning_programmes_json(client, 0, date))
+    js.update(performance_planning_programmes_json(client, 1, date))
+    js.update(performance_planning_programmes_json(client, 2, date))
+    js.update(performance_implementation_json(client, date))
+    js.update(performance_implementation_programmes_json(client, 0, date))
+    js.update(performance_implementation_programmes_json(client, 1, date))
+    js.update(performance_implementation_programmes_json(client, 2, date))
+    js.update(performance_analysis_json(client, date))
+    js.update(performance_analysis_programmes_json(client, 0, date))
+    js.update(performance_analysis_programmes_json(client, 1, date))
     response = common.JsonResponse(js)
     return response
 
