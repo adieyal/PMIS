@@ -112,6 +112,7 @@ def dashboard_summary_json(client, date):
         }
     
     return { 
+        "client" : client.description,
         "total-budget": format.format_currency(projects.total_budget(date.year)), 
         "total-budget-slider": build_slider(projects.total_expenditure(date),
                                             projects.total_budget(date.year),
@@ -280,6 +281,7 @@ def progress_summary_json(client, date):
     projects = models.Project.objects.client(client)
     
     return {
+        "client" : client.description,
         "summary-progress": format.format_percentage(projects.average_actual_progress(date)), 
         "summary-projects-3months": projects.due_in_3_months(date).count(), 
         "summary-projects-accounts": projects.in_finalaccounts.count(), 
@@ -482,6 +484,7 @@ def performance_summary_json(client, date):
         }
     
     return {
+        "client" : client.description,
         "summary-budget": format.format_currency(projects.total_budget(date.year)), 
         "summary-budget-final-accounts": "?", 
         "summary-budget-implementation": "?", 
