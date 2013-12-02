@@ -14,7 +14,7 @@ define(['jquery', 'text!../slider/base.svg'], function($, svg) {
 	    this.src = node.data('src');
 	    this.svg = node.find('svg');
 	    this.aspect = (parseFloat(node.data('aspect')) || 1) * 90;
-	    this.svg[0].setAttribute('viewBox', '0 0 '+(this.aspect+4)+' 30');
+	    this.svg[0].setAttribute('viewBox', '-7 0 '+(this.aspect+18)+' 30');
 	    this.svg.find('.outer-bar').attr('width', this.aspect);
 	    this.svg.find('.inner-bar').attr('width', this.aspect-4);	    
 
