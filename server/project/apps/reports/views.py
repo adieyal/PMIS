@@ -45,8 +45,13 @@ def generic_report(request, report, report_id, subreport, year, month):
     return TemplateResponse(request, template, context)
 
 @cache_page(settings.API_CACHE)
-def generic_json(request, report, report_id, subreport, year, month):
+def generic_json(request, report, subreport, year, month, report_id=None, client_code=None):
     if report_id == None:
+        if client_code != None:
+            return redirect('/api/reports/{report}/{subreport}/{client_code}/{year}/{month}/'.format(
+                     report=report, subreport=subreport, year=year, month=month,
+                     client_code=client_code
+                   ))        
         return redirect('/api/reports/{report}/{subreport}/{year}/{month}/'.format(
                   report=report, subreport=subreport, year=year, month=month
                 ))

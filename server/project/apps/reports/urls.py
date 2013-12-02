@@ -6,7 +6,9 @@ urlpatterns = patterns('project.apps.reports.views',
     url(r'^district/(?P<district_id>\d+)/progress/(?P<year>\d+)/(?P<month>\d+)/$', 'district_progress', name='district_progress'),
     url(r'^district/(?P<district_id>\d+)/perform/(?P<year>\d+)/(?P<month>\d+)/$', 'district_perform', name='district_perform'),
 
-    url(r'^cluster/(?P<sub_report>\w+)/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report', name='cluster_report'),
+    url(r'^cluster/(?P<subreport>\w+)/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report', name='cluster_report'),
+
+    url(r'^cluster/(?P<subreport>\w+)/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/json$', 'generic_json', {'report': 'cluster'}, name='cluster_report_json'),
     
     url(r'^(?P<report>\w+)/(?P<report_id>\w+)/(?P<subreport>\w+)/(?P<year>\d{d})/(?P<month>\d{2})/$',
         'generic_report', name='generic_report'),
