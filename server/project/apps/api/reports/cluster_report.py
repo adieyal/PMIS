@@ -94,6 +94,15 @@ def build_donut(*args):
              "values": args }
 
 
+def date_json(date):
+    end_year = models.FinancialYearManager.financial_year(date.year, date.month)
+    start_year = end_year - 1 
+    month = date.strftime("%b")
+    return {
+        "month" : month,
+        "start_year" : start_year,
+        "end_year" : end_year,
+    }
 def dashboard_summary_json(client, date):
     projects = models.Project.objects.client(client)
 
@@ -110,22 +119,26 @@ def dashboard_summary_json(client, date):
         "e": "#B5B278",
         "f": "#BC6293"
         }
-    
+     
     return { 
         "client" : client.description,
         "total-budget": format.format_currency(projects.total_budget(date.year)), 
-        "total-budget-slider": build_slider(projects.total_expenditure(date),
-                                            projects.total_budget(date.year),
-                                            color[values['dept_id']]),
+        "total-budget-slider": build_slider(
+            projects.total_expenditure(date),
+            projects.total_budget(date.year),
+            color[values['dept_id']]
+        ),
         "total-expenditure": format.format_currency(projects.total_expenditure(date)), 
         "total-progress": format.format_percentage(projects.average_actual_progress(date)), 
-        "total-progress-gauge": build_gauge(projects.average_planned_progress(date),
-                                            projects.average_actual_progress(date)),
+        "total-progress-gauge": build_gauge(
+            projects.average_planned_progress(date),
+            projects.average_actual_progress(date)
+         ),
         "total-projects": projects.count(), 
         "total-projects-accounts": projects.in_finalaccounts.count(), 
         "total-projects-implementation": projects.in_implementation.count(), 
         "total-projects-planning": projects.in_planning.count()
-        }
+    }
 
 def dashboard_programme_json(client, prog, date):
     programme = client.programmes.all()[prog]
@@ -261,6 +274,7 @@ def cluster_dashboard(request, client_code, year, month):
     client = models.Client.objects.by_code(client_code)
 
     js = OrderedDict()
+    js.update(date_json(date))
     js.update(dashboard_summary_json(client, date))
     js.update(dashboard_programme_json(client, 0, date))
     js.update(dashboard_programme_json(client, 1, date))
@@ -273,6 +287,7 @@ def cluster_dashboard(request, client_code, year, month):
     js.update(dashboard_district_json(client, "Nkangala", date))
     js.update(dashboard_district_json(client, "Gert Sibande", date))
     js.update(dashboard_district_json(client, "Ehlanzeni", date))
+
     response = common.JsonResponse(js)
     
     return response
@@ -444,8 +459,9 @@ def cluster_progress(request, client_code, year, month):
     date = datetime(year, month, 1)
     client = models.Client.objects.by_code(client_code)
     
-    js = OrderedDict()
+    js = OrderedDict() 
     js.update(progress_summary_json(client, date))
+    js.update(date_json(date))
     js.update(progress_planning_json(client, date))
     js.update(progress_planning_programme_json(client, 0, date))
     js.update(progress_planning_programme_json(client, 1, date))
@@ -483,8 +499,15 @@ def performance_summary_json(client, date):
         "f": "#BC6293"
         }
     
+    end_year = models.FinancialYearManager.financial_year(date.year, date.month)
+    start_year = end_year - 1 
+    month = date.strftime("%b")
+
     return {
         "client" : client.description,
+        "month" : month,
+        "start_year" : start_year,
+        "end_year" : end_year,
         "summary-budget": format.format_currency(projects.total_budget(date.year)), 
         "summary-budget-final-accounts": "?", 
         "summary-budget-implementation": "?", 
@@ -493,10 +516,12 @@ def performance_summary_json(client, date):
         "summary-slider": build_slider(projects.total_expenditure(date),
                                        projects.total_budget(date.year)),
         "summary-total-projects": projects.count(), 
-        "summary-under-expenditure": "%s (%s)" % (format.format_currency(projects.total_budget(date.year)-projects.total_expenditure(date)),
-                                                  under_expenditure(projects.total_budget(date.year),
-                                                                    projects.total_expenditure(date)))    
-        }
+        "summary-under-expenditure": "%s (%s)" % (
+            format.format_currency(projects.total_budget(date.year)-projects.total_expenditure(date)),
+            under_expenditure(projects.total_budget(date.year),
+            projects.total_expenditure(date))
+        )    
+    }
 
 def performance_planning_json(client, date):
     projects = models.Project.objects.client(client).in_planning
@@ -669,6 +694,7 @@ def cluster_performance(request, client_code, year, month):
 
     js = OrderedDict()
     js.update(performance_summary_json(client, date))
+    js.update(date_json(date))
     js.update(performance_planning_json(client, date))
     js.update(performance_planning_programmes_json(client, 0, date))
     js.update(performance_planning_programmes_json(client, 1, date))
