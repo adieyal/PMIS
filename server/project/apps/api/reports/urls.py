@@ -8,8 +8,8 @@ urlpatterns = patterns('project.apps.api.reports',
     url(r'^headoffice/dashboard/(?P<year>\d+)/(?P<month>\d+)/$', 'headoffice_report.headoffice_dashboard', name='headoffice_dashboard'),
     url(r'^headoffice/progress/(?P<year>\d+)/(?P<month>\d+)/$', 'headoffice_report.headoffice_progress', name='headoffice_progress'),
     url(r'^headoffice/performance/(?P<year>\d+)/(?P<month>\d+)/$', 'headoffice_report.headoffice_performance', name='headoffice_performance'),
-    url(r'^cluster/dashboard/(?P<client_code[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_dashboard', name='cluster_dashboard'),
-    url(r'^cluster/progress/(?P<client_code[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_progress', name='cluster_progress'),
-    url(r'^cluster/performance/(?P<client_code[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_performance', name='cluster_performance'),
+    url(r'^cluster/dashboard/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_dashboard', name='cluster_dashboard'),
+    url(r'^cluster/progress/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_progress', name='cluster_progress'),
+    url(r'^cluster/performance/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report.cluster_performance', name='cluster_performance'),
 )
 

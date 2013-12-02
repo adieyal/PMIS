@@ -120,7 +120,7 @@ class Versioned(models.Model):
 
 class ClientManager(models.Manager):
     def by_code(self, code):
-        return self.filter(code__iequals=code)
+        return self.get(code__iexact=code)
 
 class Client(models.Model):
     code = models.CharField(max_length=10, null=False)
