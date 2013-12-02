@@ -31,7 +31,8 @@ class CustomVersionAdmin(reversion.VersionAdmin):
 
 
 class ClientAdmin(admin.ModelAdmin):
-    fields = ('name', 'description')
+    fields = ('name', 'code', 'description')
+    list_display = ('name', 'code', 'description')
 
 
 class ProgrammeAdmin(admin.ModelAdmin):

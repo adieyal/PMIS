@@ -118,10 +118,15 @@ class Versioned(models.Model):
     update_comment = models.TextField()
     update_user = models.ForeignKey(User)
 
+class ClientManager(models.Manager):
+    def by_code(self, code):
+        return self.filter(code__iequals=code)
 
 class Client(models.Model):
-    name = models.CharField(max_length=255)
+    code = models.CharField(max_length=10, null=False)
+    name = models.CharField(max_length=255, null=False)
     description = models.TextField(blank=True)
+    objects = ClientManager()
 
     def __unicode__(self):
         return self.name
