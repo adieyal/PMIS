@@ -8,6 +8,7 @@ class ImplementationProjectSaver(object):
 
     def save_project(self, client, details):
         try:
+            print details["description"]
             programme = self.ud.ask_programme(details["programme"], client)
             if not programme:
                 programme = models.Programme.objects.create(name=details["programme"], client=client)

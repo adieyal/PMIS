@@ -49,7 +49,7 @@ class Command(BaseCommand):
     def process_retention(self, sheet):
         print "Processing Retention Sheet"
         sheet_parser = parsers.RetentionProjectSheetParser(sheet)
-        project_parser = parsers.RetentionProjectParser(sheet, self.fyear)
+        project_parser = parsers.RetentionProjectParser(sheet, self.month, self.fyear)
         saver = savers.RetentionProjectSaver(ud)
 
         for project_range in sheet_parser.projects:
@@ -62,8 +62,10 @@ class Command(BaseCommand):
         for sheet in workbook.sheets():
             name = sheet.name.upper()
             if "IMPLEMENTATION" in name:
+                continue
                 self.process_implementation(sheet)
             elif "PLANNING" in name:
+                continue
                 self.process_planning(sheet)
             elif "RETENTION" in name:
                 self.process_retention(sheet)

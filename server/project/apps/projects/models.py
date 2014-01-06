@@ -318,15 +318,15 @@ class ProjectQuerySet(QuerySet):
 
     @property
     def in_practicalcompletion(self):
-        return self.filter(current_step=Milestone.final_completion())
+        return self.filter(current_step=Milestone.practical_completion())
 
     @property
     def in_finalcompletion(self):
-        return self.filter(current_step=Milestone.final_accounts())
+        return self.filter(current_step=Milestone.final_completion())
 
     @property
     def in_finalaccounts(self):
-        return self.filter(current_step=Milestone.complete())
+        return self.filter(current_step=Milestone.final_accounts())
 
     def total_budget(self, year):
         return sum(p.total_budget(year) for p in self) 

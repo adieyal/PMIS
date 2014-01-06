@@ -2,9 +2,9 @@ from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('project.apps.reports.views',
     url(r'^test/$', 'test'),
-    url(r'^district/(?P<district_id>\d+)/dashboard/(?P<year>\d+)/(?P<month>\d+)/$', 'district_dashboard', name='district_dashboard'),
-    url(r'^district/(?P<district_id>\d+)/progress/(?P<year>\d+)/(?P<month>\d+)/$', 'district_progress', name='district_progress'),
-    url(r'^district/(?P<district_id>\d+)/perform/(?P<year>\d+)/(?P<month>\d+)/$', 'district_perform', name='district_perform'),
+    url(r'^district/dashboard/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_dashboard', name='district_dashboard'),
+    url(r'^district/progress/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_progress', name='district_progress'),
+    url(r'^district/perform/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_perform', name='district_perform'),
 
     url(r'^cluster/(?P<subreport>\w+)/(?P<client_code>[a-z]+)/(?P<year>\d+)/(?P<month>\d+)/$', 'cluster_report', name='cluster_report'),
 

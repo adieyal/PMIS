@@ -301,8 +301,10 @@ def progress_summary_json(client, date):
         "summary-projects-3months": projects.due_in_3_months(date).count(), 
         "summary-projects-accounts": projects.in_finalaccounts.count(), 
         "summary-projects-completed": projects.completed().count(), 
-        "summary-projects-gauge": build_gauge(projects.average_planned_progress(date),
-                                              projects.average_actual_progress(date)), 
+        "summary-projects-gauge": build_gauge(
+            projects.average_planned_progress(date),
+            projects.average_actual_progress(date)
+        ), 
         "summary-projects-implementation": projects.in_implementation.count(), 
         "summary-projects-planning": projects.in_planning.count(), 
         "summary-projects-total": projects.count()

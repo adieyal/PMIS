@@ -195,6 +195,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'reversion',
     'rest_framework.authtoken',
+    'gunicorn',
 )
 
 # Apps specific for this project go here.

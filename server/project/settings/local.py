@@ -44,7 +44,7 @@ CACHES = {
     }
 }
 
-API_CACHE = 5
+API_CACHE = 60 * 5
 ########## END CACHE CONFIGURATION
 
 

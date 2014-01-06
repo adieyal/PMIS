@@ -118,7 +118,7 @@ class UserDialogue(object):
                 print ""
                 result = self._listresponse(lst, allow_none=True)
                 return result
-            return self.map[input]
+            return map[input]
 
     def _ask_yesno(self, question=""):
         while True:
