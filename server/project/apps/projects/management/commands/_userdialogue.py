@@ -109,11 +109,13 @@ class UserDialogue(object):
                 print ""
                 print "%s was not one of the available options - please choose again:" % result
 
-    def _ask(self, lst, input=None, map=None):
+    def _ask(self, lst, input=None, map=None, msg=None):
         if input == None:
+            if msg: print msg
             return self._listresponse(lst, allow_none=True)
         else:
             if not input in map:
+                if msg: print msg
                 print input
                 print ""
                 result = self._listresponse(lst, allow_none=True)
@@ -162,18 +164,20 @@ class UserDialogue(object):
 
     def ask_district(self, dist=None):
         districts = models.District.objects.all()
-        print "Which district are you processing?"
-        return self._ask(districts)
-
+        if dist:
+            return self._ask(districts, input=dist, map=self.distmap)
+        else:
+            return self._ask(districts)
+            
     def ask_municipality(self, district=None, munic=None):
-        print "Which municipalities are you processing?"
+        msg = "Which municipalities are you processing?"
         municipalities = models.Municipality.objects.all()
         if district:
             municipalities = municipalities.filter(district=district)
         if munic:
-            return self._ask(municipalities, input=munic, map=self.municmap)
+            return self._ask(municipalities, input=munic, map=self.municmap, msg=msg)
         else:
-            return self._ask(municipalities)
+            return self._ask(municipalities, msg=msg)
 
     def ask_project(self, proj=None, **kwargs):
         print "Which project are you processing?"
