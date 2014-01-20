@@ -14,7 +14,7 @@ class ImplementationProjectSaver(object):
                 programme = models.Programme.objects.create(name=details["programme"], client=client)
                 
             district = self.ud.ask_district(details["district"])
-            municipality = self.ud.ask_municipality(details["municipality"], district)
+            municipality = self.ud.ask_municipality(district, details["municipality"])
             project = self.find_project(details, programme, district)
             if project == None:
                 project = self.create_new_project(details, programme, municipality)
@@ -49,7 +49,8 @@ class ImplementationProjectSaver(object):
                 if not project:
                     raise SkipException("Seems like multiple projects already exist")
                 return project
-        return self.ud.ask_project(details, programme=programme, municipality__district=district)
+
+        return self.ud.ask_project(proj=details["description"], programme=programme, municipality__district=district)
 
     def create_new_project(self, details, programme, municipality):
         return models.Project.objects.create(
