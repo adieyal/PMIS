@@ -29,3 +29,5 @@ coverage/
 
 # Any backups of anything
 *.bak
+
+default.db*
