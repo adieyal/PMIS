@@ -64,12 +64,10 @@ class Command(BaseCommand):
         for sheet in workbook.sheets():
             name = sheet.name.upper()
             if "IMPLEMENTATION" in name:
-                continue
                 self.process_implementation(sheet)
             elif "PLANNING" in name:
                 self.process_planning(sheet)
             elif "RETENTION" in name:
-                continue
                 self.process_retention(sheet)
 
     @property
