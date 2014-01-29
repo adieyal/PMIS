@@ -16,10 +16,6 @@ class PlanningProjectParser(ImplementationProjectParser):
         cell_as_date = partial(self._cell_as_date, row)
 
         details = super(PlanningProjectParser, self).parse(*args, **kwargs)
-        details["municipality"] = "Unknown"
-        details["circuit"] = ""
-        details["source"] = cell("D", 3)
-        details["manager"] = cell("D", 4)
         details["total_previous_expenses"] = to_currency(cell("L"))
         details["allocated_budget_for_year"] = to_currency(cell("M"))
         details["comments"] = cell("AG")

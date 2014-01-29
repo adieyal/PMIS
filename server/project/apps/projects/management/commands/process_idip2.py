@@ -1,4 +1,5 @@
 import sys
+import json
 from datetime import datetime
 
 from django.core.management.base import BaseCommand, CommandError
@@ -12,7 +13,7 @@ import parsers
 import savers
 
 class TestDialogue(UserDialogue):
-    def ask_month(self): return 10
+    def ask_month(self): return 12
     def ask_year(self): return 2013
     def ask_client(self): return models.Client.objects.get(name="DoE")
 
@@ -34,6 +35,7 @@ class Command(BaseCommand):
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
+            print utils.dump_to_json(project)
             saver.save_project(self.client, project)
 
     def process_planning(self, sheet):
@@ -65,9 +67,9 @@ class Command(BaseCommand):
                 continue
                 self.process_implementation(sheet)
             elif "PLANNING" in name:
-                continue
                 self.process_planning(sheet)
             elif "RETENTION" in name:
+                continue
                 self.process_retention(sheet)
 
     @property
