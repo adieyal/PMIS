@@ -19,19 +19,14 @@ define(['jquery'], function($) {
 	    if (!me.data) { me.load(); }
 	    if (!me.data) { return; }
 	    
-	    node.find('.replace').each(function() {
-		var element = $(this);
-		var id = element.attr('id');
-		var attr = element.data('replace-attr');
-		
-		if ((typeof(id) != 'undefined') && (typeof(me.data[id] != 'undefined'))) {
-		    if (attr) {
-			element.attr(attr, me.data[id]);
-		    } else {
-			element.text(me.data[id]);
-		    }
-		}
-	    });
+	    var stage = me.data[0];
+	    var progress = me.data[1] || 0;
+	    
+	    console.log(stage, progress);
+	    
+	    node.addClass('project-stage-'+stage);
+	    node.find('.stage-progress').text(Math.round(progress)+'%');
+	    node.find('.stage-progress').css('left', progress+'%');
 	},
 	load: function() {
 	    var me = this;

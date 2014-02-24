@@ -71,7 +71,7 @@ define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, unused, svg)
 
 	    arcs.append("svg:text") 
 		.attr("transform", function(d) { return "translate(" + arc.centroid(d) + ")"; }) 
-		.attr("dy", 3) 
+		.attr("dy", "0.5em") 
 		.attr("text-anchor", "middle") 
 		.attr("display", function(d) { return d.value >= 0.02 ? null : "none"; }) 
 		.text(function(d, i) {
