@@ -44,13 +44,14 @@ class ImplementationProjectParser(BaseProjectParser):
         actual = partial(self._actual, row)
 
         details = {
-            "state": "implementation",
+            "phase": "implementation",
             "fyear" : self.fyear,
             "description" : cell("D"),
             "district" : project_range["district"],
             "programme" : project_range["programme"],
             "contract" : cell("D", 1),
             "municipality" : cell("D", 2),
+            "location" : cell("D", 3),
             "circuit" : cell("D", 3),
             "source" : cell("D", 4),
             "manager" : cell("D", 5),
@@ -58,6 +59,10 @@ class ImplementationProjectParser(BaseProjectParser):
             "total_anticipated_cost" : to_currency(cell("J")),
             "total_previous_expenses" : to_currency(cell("K")),
             "allocated_budget_for_year" : to_currency(cell("L")),
+            "expenditure_in_year" : to_currency(cell("N")),
+            "expenditure_to_date" : to_currency(cell("O")),
+            
+            "expenditure_percent_of_budget" : to_percentage(cell("O", 1)),
 
             "planning" : planning(),
             "actual" : actual(),
@@ -76,9 +81,11 @@ class ImplementationProjectParser(BaseProjectParser):
             "planned_start" : cell_as_date("AC", 1),
             "planned_completion" : cell_as_date("AD", 1),
             "planned_final_accounts" : cell_as_date("AE", 1),
-            "actual_start" : cell_as_date("AC", 3),
-            "actual_completion" : cell_as_date("AD", 3),
+            "actual_start" : cell_as_date("AC", 4),
+            "revised_completion" : cell_as_date("AD", 4),
+            "actual_completion" : cell_as_date("AE", 4),
             "actual_final_accounts" : cell_as_date("AE", 3),
+            "implementation_handover" : cell_as_date("AC", 4),
         }
 
         return details

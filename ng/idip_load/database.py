@@ -35,6 +35,13 @@ class Project(object):
     def __init__(self, details):
         self._details = details
     
+    def __getattr__(self, attr):
+        try:
+            return self._details[attr]
+        except KeyError:
+            return ''
+            raise AttributeError('Attribute does not exist.')
+    
     def _build_uuids(self):
         uuids = {}
         keys = connection.smembers('/project')
@@ -121,3 +128,9 @@ class Project(object):
         data = connection.get(timestamps[0]['key'])
         details = json.loads(data)
         return cls(details)
+        
+    @classmethod
+    def list(cls):
+        items = connection.smembers('/project')
+        return items
+        
