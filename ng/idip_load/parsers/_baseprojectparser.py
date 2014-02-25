@@ -11,11 +11,11 @@ class BaseProjectParser(object):
         try:
             return float(x) * 1000
         except ValueError:
-            return 0
+            return None
 
     def _to_percentage(self, x):
         try:
             return float(x)
         except ValueError:
-            return 0
+            return None
 

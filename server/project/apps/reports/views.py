@@ -123,13 +123,38 @@ def project_json(request, project_id, year, month):
         return ''
 
     def _progress_for_month(data, month):
-        for item in data:
-            if iso8601.parse_date(item['date']).month == month:
-                try:
-                    return float(item['progress'])/100
-                except ValueError:
-                    return ''
-        return ''
+        def _safe_float(val):
+            try:
+                return float(val)
+            except (TypeError, ValueError):
+                return None
+
+        clean_data = [{
+            'date': iso8601.parse_date(item['date']),
+            'progress': _safe_float(item['progress'])
+        } for item in data]
+        
+        print data
+        
+        required_date = None
+        for item in clean_data:
+            if item['date'].month == month:
+                required_date = item['date']
+                progress = item['progress']
+                if progress:
+                    return progress/100
+
+        if required_date:
+            latest = None
+            for item in clean_data:
+                if item['date'] < required_date and item['progress'] != None:
+                    if not latest or latest['date'] < item['date']:
+                        latest = item
+                        print latest
+            if latest:
+                return latest['progress']/100
+        
+        return 0
         
     
     items = Project.list()
@@ -183,8 +208,8 @@ def project_json(request, project_id, year, month):
         'expenditure-cashflow-line': {
             'title': 'Expenditure vs Cashflow',
             'data': [
-                {'values': [[i, d['expenditure']/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
-                {'values': [[i, d['expenditure']/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
+                {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
+                {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
             ]
         },
         'expenditure-implementation-bar': {
