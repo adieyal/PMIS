@@ -84,6 +84,12 @@ def project_list(request):
 #@cache_page(settings.API_CACHE)
 def project_json(request, project_id, year, month):
     
+    def _safe_float(val):
+        try:
+            return float(val)
+        except (TypeError, ValueError):
+            return None
+                
     def _date(date):
         try:
             dt = iso8601.parse_date(date)
@@ -105,14 +111,14 @@ def project_json(request, project_id, year, month):
     def _currency(value):
         try:
             value = int(value)
-        except ValueError:
+        except (ValueError, TypeError):
             return ''
         return 'R{:,.0f}'.format(value)
         
     def _percent(value):
         try:
             value = float(value)
-        except ValueError:
+        except (ValueError, TypeError):
             return ''
         return '%.0f%%' % (value*100)
         
@@ -123,18 +129,10 @@ def project_json(request, project_id, year, month):
         return ''
 
     def _progress_for_month(data, month):
-        def _safe_float(val):
-            try:
-                return float(val)
-            except (TypeError, ValueError):
-                return None
-
         clean_data = [{
             'date': iso8601.parse_date(item['date']),
             'progress': _safe_float(item['progress'])
         } for item in data]
-        
-        print data
         
         required_date = None
         for item in clean_data:
@@ -155,7 +153,15 @@ def project_json(request, project_id, year, month):
                 return latest['progress']/100
         
         return 0
-        
+    
+    def _project_status(actual, planned):
+        print planned, actual
+        if (planned - actual) > 0.2:
+            return ('In danger', 'red')
+        elif (planned - actual) > 0.1:
+            return ('Monitor Project', 'yellow')
+        else:
+            return ('On Target', 'green')
     
     items = Project.list()
     project = Project.get(project_id)
@@ -250,6 +256,10 @@ def project_json(request, project_id, year, month):
         'progress-to-date': _percent(_progress_for_month(project.actual, int(month))),
         'scope': project.scope,
         'stage': [project.phase, _progress_for_month(project.actual, int(month))*100 if project.phase == 'implementation' else None],
+        'status': _project_status(_progress_for_month(project.actual, int(month)),
+                                  _progress_for_month(project.planning, int(month)))[0],
+        'status-color': _project_status(_progress_for_month(project.actual, int(month)),
+                                        _progress_for_month(project.planning, int(month)))[1],
         'start-date-actual': _date(project.actual_start),
         'start-date-planned': _date(project.planned_start),
         'year': '%d/%d' % (int(project.fyear)-1, int(project.fyear))

@@ -125,4 +125,29 @@ $orange: #E6B744;
 	    background-color: #88BF52;
 	}
     }
+    
+    .block.block-project-status {
+	color: white;
+	margin-left: 0;
+	padding: 2px 5px;
+	
+	h3 {
+	    font-size: 1.65em;
+	    line-height: 1.3em;
+	    margin: 0;
+	}
+    }
+    
+    .block[data-color="red"] {
+	background-color: #F14637;
+    }
+
+    .block[data-color="yellow"] {
+	background-color: #FDDC10;
+	color: $black;
+    }
+
+    .block[data-color="green"] {
+	background-color:  #88BF52;
+    }
 }
