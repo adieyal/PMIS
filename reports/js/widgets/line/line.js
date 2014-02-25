@@ -1,4 +1,4 @@
-define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
+define(['d3', 'text!widgets/line/base.svg'], function(ignore, svg) {
     Widget = function(element) {
 	this.node = element;
     }
@@ -46,7 +46,7 @@ define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
 		    ydiffmax = ydiff;
 		}
 	    }
-	    console.log(labelx);
+	    
 	    var xmax = d3.max(data.map(function(x) { return d3.max(x.values.map(function(y) { return y[0]; })); }));
 	    var ymax = d3.max(data.map(function(x) { return d3.max(x.values.map(function(y) { return y[1]; })); }));
 	    var y = d3.scale.linear()
@@ -75,19 +75,36 @@ define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
 		    .attr('dy', '0.35em');
 	    });
 	    
+	    d.append('g')
+		.attr('transform', 'translate(12, 55) rotate(270)')
+		.attr('class', 'ymainlabel')
+		.append('text')
+		.text('Rands (in thousands)');
+	    
+	    /* Build the x-axis labels. */
+	    var xlabels = d.selectAll('g.xlabel').data(me.data.labels);
+	    xlabels.enter().append('g').attr('class', 'xlabel');
+	    /*xlabels.attr('transform', function(d, i) { return 'translate('+x(i)+',90) rotate(270)'; });*/
+	    xlabels.each(function(d, i) {
+		var label = d3.select(this);
+		label.append('text')
+		    .attr('x', x(i))
+		    .attr('y', 90)
+		    .attr('dy', '1.05em')
+		    .text(d);
+	    });
+
 	    /* Build the lines and their labels. */
 	    var lines = d.selectAll('g.line').data(data);
 	    lines.enter().append('g');
 	    lines.attr('class', function(d, i) { return 'line line-'+i; });
 	    lines.each(function(d, i) {
-		console.log(d);
 		var l = d3.svg.line()
 		    .x(function(d) { return x(d[0]); })
 		    .y(function(d) { return y(d[1]); });
 		var line = d3.select(this);
 		line.append('path')
 		    .attr('d', function(d, i) { return l(d.values); });
-		console.log(d.values[Math.floor(xmax/2)][1]);
 		line.append('text')
 		    .text(d.label)
 		    .attr('dy', '-0.35em')

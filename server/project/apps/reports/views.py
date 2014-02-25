@@ -210,7 +210,9 @@ def project_json(request, project_id, year, month):
             'data': [
                 {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
                 {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
-            ]
+            ],
+            'labels': ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
+                       'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar' ]
         },
         'expenditure-implementation-bar': {
             'title': 'Expenditure on implementation vs Budget on implementation',

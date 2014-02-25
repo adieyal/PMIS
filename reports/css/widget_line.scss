@@ -8,6 +8,23 @@ $orange: #E6B744;
 	text-anchor: middle;
     }
     
+    .xlabel {
+	
+	text {
+	    fill: $black;
+	    font-size: 0.8em;
+	    text-anchor: middle;
+	}
+    }
+    
+    .ymainlabel {
+	text {
+	    fill: $black;
+	    font-size: 0.8em;
+	    text-anchor: middle;	    
+	}
+    }
+    
     .label {
 	
 	line {
