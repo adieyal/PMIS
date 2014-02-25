@@ -12,7 +12,7 @@ $orange: #E6B744;
 	
 	text {
 	    fill: $black;
-	    font-size: 0.8em;
+	    font-size: 0.75em;
 	    text-anchor: middle;
 	}
     }
@@ -20,7 +20,7 @@ $orange: #E6B744;
     .ymainlabel {
 	text {
 	    fill: $black;
-	    font-size: 0.8em;
+	    font-size: 0.75em;
 	    text-anchor: middle;	    
 	}
     }
@@ -34,7 +34,7 @@ $orange: #E6B744;
 	}
 	
 	text {
-	    font-size: 0.8em;
+	    font-size: 0.75em;
 	    fill: $black;
 	    text-anchor: end;
 	}
@@ -57,9 +57,12 @@ $orange: #E6B744;
 	}
 	
 	text {
-	    font-size: 0.8em;
+	    font-size: 0.7em;
 	    font-weight: bold;
 	    fill: $black;
+	}
+	
+	text.value {
 	    text-anchor: middle;
 	}
     }
