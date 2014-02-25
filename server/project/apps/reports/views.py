@@ -164,7 +164,7 @@ def project_json(request, project_id, year, month):
         'budget-planning': 'MISSING',
         'budget-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
         'budget-source': project.source,
-        'budget-variation-orders': 'MISSING',
+        'budget-variation-orders': 'None', #TODO: This value is still missing from the IDIP.
         'cluster': 'MISSING',
         'comments-current': project.comments,
         'comments-previous': '',
@@ -204,7 +204,7 @@ def project_json(request, project_id, year, month):
         'expenditure-previous': _currency(project.total_previous_expenses),
         'expenditure-this-month': _currency(_expenditure_for_month(project.actual, int(month))),
         'expenditure-this-year': _currency(project.expenditure_in_year),
-        'extensions': 'None', #TODO: This values is still missing from the IDIP.
+        'extensions': 'None', #TODO: This value is still missing from the IDIP.
         'implementation-handover-date': _date(project.implementation_handover),
         'jobs': 'MISSING',
         'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
@@ -216,9 +216,7 @@ def project_json(request, project_id, year, month):
         'number': project.contract,
         'phase': project.phase,
         'planning-completion-date-actual': _date(project.planning_completion),
-        'planning-completion-date-planned': 'MISSING',
         'planning-start-date-actual': _date(project.planning_start),
-        'planning-start-date-planned': 'MISSING',
         'progress-gauge': build_gauge(_progress_for_month(project.planning, int(month))*100, _progress_for_month(project.actual, int(month))*100),
         'progress-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
         'progress-to-date': _percent(_progress_for_month(project.actual, int(month))),
