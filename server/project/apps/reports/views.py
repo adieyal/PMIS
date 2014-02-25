@@ -204,7 +204,7 @@ def project_json(request, project_id, year, month):
         'expenditure-previous': _currency(project.total_previous_expenses),
         'expenditure-this-month': _currency(_expenditure_for_month(project.actual, int(month))),
         'expenditure-this-year': _currency(project.expenditure_in_year),
-        'extensions': 'MISSING',
+        'extensions': 'None', #TODO: This values is still missing from the IDIP.
         'implementation-handover-date': _date(project.implementation_handover),
         'jobs': 'MISSING',
         'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
