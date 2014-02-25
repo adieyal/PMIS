@@ -106,7 +106,7 @@ def project_json(request, project_id, year, month):
         td = dt1 - dt2
         sec = td.total_seconds()
         months = (sec*12) / (86400*365)
-        return '%.1f months' % (months)
+        return '%.0f months' % (months)
         
     def _currency(value):
         try:
