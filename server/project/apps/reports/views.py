@@ -176,7 +176,8 @@ def project_json(request, project_id, year, month):
         'contractor': project.contractor,
         'coordinator': project.manager,
         'district': project.district,
-        'duration': _months(project.actual_completion, project.actual_start),
+        'duration': _months(project.actual_completion, project.actual_start, None) or
+                    _months(project.planned_completion, project.planned_start),
         'end_year': 'MISSING',
         'expenditure-actual': _currency(project.expenditure_to_date),
         'expenditure-cashflow-line': {
