@@ -1,14 +1,4 @@
 define(['d3', 'text!widgets/line/base.svg'], function(ignore, svg) {
-    Number.prototype.formatMoney = function(c, d, t){
-	var n = this, 
-	c = isNaN(c = Math.abs(c)) ? 2 : c, 
-	d = d == undefined ? "." : d, 
-	t = t == undefined ? "," : t, 
-	s = n < 0 ? "-" : "", 
-	i = parseInt(n = Math.abs(+n || 0).toFixed(c)) + "", 
-	j = (j = i.length) > 3 ? j % 3 : 0;
-	return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
-    };
     
     Widget = function(element) {
 	this.node = element;
@@ -80,7 +70,7 @@ define(['d3', 'text!widgets/line/base.svg'], function(ignore, svg) {
 		    .attr('y1', y)
 		    .attr('y2', y);
 		label.append('text')
-		    .text('R'+d.formatMoney(0))
+		    .text(d.formatMoney(0))
 		    .attr('x', 35)
 		    .attr('y', y)
 		    .attr('dy', '0.35em');
@@ -122,13 +112,12 @@ define(['d3', 'text!widgets/line/base.svg'], function(ignore, svg) {
 		    /*.attr('x', x(labelx-2*i))
 		    .attr('y', y(d.values[labelx-2*i][1]));*/
 		
-		console.log(d.values);
 		var value_labels = line.selectAll('text.value').data(d.values);
 		value_labels.enter().append('text').attr('class', 'value');
 		value_labels.attr('x', function(d, i) { return x(d[0]); })
 		    .attr('y', function(d, i) { return y(d[1]); })
 		    .attr('dy', '-0.35em')
-		    .text(function(d, i) { if (d[1]) { return 'R'+d[1].formatMoney(0); }; return ''; });
+		    .text(function(d, i) { if (d[1]) { return d[1].formatMoney(0); }; return ''; });
 	    });
 	},
 	load: function() {

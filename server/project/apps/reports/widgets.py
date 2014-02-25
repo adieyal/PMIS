@@ -12,32 +12,38 @@ def build_slider(expenditure, budget, color="#e5b744"):
                          "marker-color": "#656263", 
                          "marker-style": "short", 
                          "marker-text": text1 or "Budget", 
+                         "value-text": 'R{:20,.0f}'.format(budget),
                          "position": budget/normalize })
         markers.append({ "bar-color": "#f04338", 
                          "marker-color": "#f04338", 
                          "marker-style": "long", 
                          "marker-text": "Actual", 
+                         "value-text": 'R{:20,.0f}'.format(expenditure),
                          "position": expenditure/normalize })
     elif expenditure == budget:
         markers.append({ "bar-color": color, 
                          "marker-color": color, 
                          "marker-style": "long", 
                          "marker-text": "Actual",
+                         "value-text": 'R{:20,.0f}'.format(expenditure),
                          "position": expenditure/normalize })
         markers.append({ "bar-color": "#e5b744", 
                          "marker-color": "#656263", 
                          "marker-style": "short", 
                          "marker-text": text1 or "Budget", 
+                         "value-text": 'R{:20,.0f}'.format(budget),
                          "position": budget/normalize })
     else:
         markers.append({ "bar-color": color, 
                          "marker-color": color, 
                          "marker-style": "long", 
                          "marker-text": "Actual", 
+                         "value-text": 'R{:20,.0f}'.format(expenditure),
                          "position": expenditure/normalize })
         markers.append({ "marker-color": "#656263", 
                          "marker-style": "short", 
                          "marker-text": text1 or "Budget", 
+                         "value-text": 'R{:20,.0f}'.format(budget),
                          "position": budget/normalize })
     return markers
 

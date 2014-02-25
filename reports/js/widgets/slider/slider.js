@@ -14,7 +14,7 @@ define(['jquery', 'text!widgets/slider/base.svg'], function($, svg) {
 	    this.src = node.data('src');
 	    this.svg = node.find('svg');
 	    this.aspect = (parseFloat(node.data('aspect')) || 1) * 90;
-	    this.svg[0].setAttribute('viewBox', '-7 0 '+(this.aspect+18)+' 30');
+	    this.svg[0].setAttribute('viewBox', '-7 0 '+(this.aspect+18)+' 38');
 	    this.svg.find('.outer-bar').attr('width', this.aspect);
 	    this.svg.find('.inner-bar').attr('width', this.aspect-4);	    
 
@@ -50,6 +50,11 @@ define(['jquery', 'text!widgets/slider/base.svg'], function($, svg) {
 		    m.find('.marker-text').text(data['marker-text']);
 		} else {
 		    m.find('.marker-text').remove();
+		}
+		if (data['value-text']) {
+		    m.find('.value-text').text(data['value-text']);
+		} else {
+		    m.find('.value-text').remove();
 		}
 		
 		b.attr('id', 'bar'+i);

@@ -74,7 +74,7 @@ define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
 		    .attr('x', x(i+0.5))
 		    .attr('y', 90);
 		bar.append('text')
-		    .text(d.value)
+		    .text(d.value.formatMoney(0))
 		    .attr('dy', '-0.1em')
 		    .attr('x', x(i+0.5))
 		    .attr('y', scale(d.value));
