@@ -1,4 +1,4 @@
-define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
+define(['d3', 'text!widgets/bar/base.svg'], function(d3, svg) {
     Widget = function(element) {
 	this.node = element;
     }

@@ -66,4 +66,41 @@ $orange: #E6B744;
 	    text-anchor: middle;
 	}
     }
+    
+    g.labels {
+	line.link {
+	    stroke-width: 0.5;
+	    
+	    &.link-zero {
+		stroke-width: 0;
+	    }
+	}
+	
+	circle.anchor {
+	    fill: none;
+	    stroke: none;
+	}
+	
+	text.label {
+	    fill: $black;
+	    font-size: 0.75em;
+	    text-anchor: middle;
+	    
+	    &.label-zero {
+		fill: none;
+	    }
+	}
+	
+	g.labels-0 {
+	    line.link {
+		stroke: $blue;
+	    }
+	}
+	
+	g.labels-1 {
+	    line.link {
+		stroke: $orange;
+	    }
+	}
+    }
 }

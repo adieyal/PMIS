@@ -1,4 +1,4 @@
-define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, unused, svg) {
+define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, d3, svg) {
     Widget = function(element) {
 	this.node = element;
     }
