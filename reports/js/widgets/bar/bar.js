@@ -49,11 +49,17 @@ define(['d3', 'text!widgets/bar/base.svg'], function(ignore, svg) {
 		    .attr('y1', scale)
 		    .attr('y2', scale);
 		label.append('text')
-		    .text(d)
+		    .text(d.formatMoney(0))
 		    .attr('x', 35)
 		    .attr('y', scale)
 		    .attr('dy', '0.35em');
 	    });
+	    
+	    d.append('g')
+		.attr('transform', 'translate(9, 55) rotate(270)')
+		.attr('class', 'ymainlabel')
+		.append('text')
+		.text('(in thousands)');
 	    
 	    /* Build the bars and their labels. */
 	    var x = d3.scale.linear()
