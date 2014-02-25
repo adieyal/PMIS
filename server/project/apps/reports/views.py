@@ -193,7 +193,7 @@ def project_json(request, project_id, year, month):
         'cluster': 'MISSING',
         'comments-current': project.comments,
         'comments-previous': '',
-        'comments-status': 'MISSING',
+        'comments-stage': (project.phase or '').title(),
         'completion-date-actual': _date(project.actual_completion),
         'completion-date-planned': _date(project.planned_completion),
         'completion-date-revised': _date(project.revised_completion),
