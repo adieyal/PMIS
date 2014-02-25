@@ -91,12 +91,12 @@ def project_json(request, project_id, year, month):
             return ''
         return dt.strftime('%d %B %Y')
     
-    def _months(date1, date2):
+    def _months(date1, date2, alt_text=''):
         try:
             dt1 = iso8601.parse_date(date1)
             dt2 = iso8601.parse_date(date2)
         except iso8601.ParseError:
-            return ''
+            return alt_text
         td = dt1 - dt2
         sec = td.total_seconds()
         months = (sec*12) / (86400*365)
@@ -159,7 +159,7 @@ def project_json(request, project_id, year, month):
         'budget-donut': build_donut([0.15, 0.85], percentage=True),
         'budget-financial-year': _currency(project.allocated_budget_for_year),
         'budget-implementation': 'MISSING',
-        'budget-increase-timeframe': _months(project.actual_completion, project.planned_completion),
+        'budget-increase-timeframe': _months(project.actual_completion, project.planned_completion, 'No increase'),
         'budget-overall': _currency(project.total_anticipated_cost),
         'budget-planning': 'MISSING',
         'budget-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
