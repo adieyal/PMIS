@@ -14,3 +14,6 @@ python-dateutil==2.1
 django-memcached
 xlrd
 fuzzywuzzy
+iso8601
+redis
+slugify
