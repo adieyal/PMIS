@@ -250,6 +250,7 @@ def project_json(request, project_id, year, month):
         'number': project.contract,
         'phase': project.phase,
         'planning-completion-date-actual': _date(project.planning_completion),
+        'planning-phase': 'consultant-appointment' if project.phase == 'planning' else 'none',
         'planning-start-date-actual': _date(project.planning_start),
         'progress-gauge': build_gauge(_progress_for_month(project.planning, int(month))*100, _progress_for_month(project.actual, int(month))*100),
         'progress-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),

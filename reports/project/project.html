@@ -260,19 +260,48 @@
       
       <div class="column column-33 column-split-right">
 	<h2>Progress Information</h2>
-	<div class="container container-grey">
+	<div class="container container-grey replace" data-replace-attr="data-phase" id="phase">
 	  <div class="block block-white">
 	    Project progress to date: <span class="replace" id="progress-to-date"></span>
 	  </div>
-	  <div class="container container-white container-border container-margin">
-	    <div class="block block-darkgrey">
-	      Overall Progress vs Overall Expenditure:
+	  <div class="phase-other">
+	    <div class="container container-white container-border container-margin">
+	      <div class="block block-darkgrey">
+		Overall Progress vs Overall Expenditure:
+	      </div>
+	      <div class="block block-lightgrey block-5">
+		<div class="widget widget-gauge" data-widget="gauge" data-src="json#progress-gauge"></div>
+	      </div>
+	      <div class="block block-lightgrey block-5">
+		<div class="widget widget-slider" data-widget="slider" data-aspect="1.7" data-src="json#progress-slider"></div>
+	      </div>
 	    </div>
-	    <div class="block block-lightgrey block-5">
-	      <div class="widget widget-gauge" data-widget="gauge" data-src="json#progress-gauge"></div>
-	    </div>
-	    <div class="block block-lightgrey block-5">
-	      <div class="widget widget-slider" data-widget="slider" data-aspect="1.7" data-src="json#progress-slider"></div>
+	  </div>
+	  <div class="phase-planning">
+	    <div class="container container-white container-border container-margin">
+	      <div class="block block-darkgrey">
+		Planning phase:
+	      </div>
+	      <div class="block block-lightgrey planning-phase-widget replace" data-replace-attr="data-planning-phase" id="planning-phase">
+		<div class="block block-lightgrey block-5">
+		  <div class="planning-phase-inline planning-phase-consultant-appointment"></div>
+		  <div class="planning-phase-inline planning-phase-design-costing"></div>
+		  <div class="planning-phase-inline planning-phase-documentation"></div>
+		  <div class="planning-phase-inline planning-phase-tender"></div>
+		</div>
+	      </div>
+		<div class="block block-1 block-green">
+		  Consultant Appointment
+		</div>
+		<div class="block block-1 block-orange">
+		  Design + Costing
+		</div>
+		<div class="block block-1 block-purple">
+		  Documentation
+		</div>
+		<div class="block block-1 block-brown">
+		  Tender
+		</div>
 	    </div>
 	  </div>
 	</div>
@@ -287,7 +316,7 @@
 	    Comments previous month: <span class="replace" id="comments-previous"></span>
 	  </div>
 	  <div class="block block-white" style="height: 138px;">
-	    Comments previous month: <span class="replace" id="mitigations-previous"></span>
+	    Mitigation previous month: <span class="replace" id="mitigations-previous"></span>
 	  </div>
 	  <div class="block block-white" style="height: 138px;">
 	    Current comments: <span class="replace" id="comments-current"></span>

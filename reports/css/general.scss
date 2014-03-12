@@ -488,6 +488,10 @@ h2 {
 	height: 296px;
     }
     
+    &.block-10 {
+	height: (46px + 51px*9 - 10px);
+    }
+    
     &.block-12 {
 	height: (46px + 51px*11);
     }

@@ -4,6 +4,13 @@ $darkgrey: #4F4C4C;
 $blue: #85CABB;
 $orange: #E6B744;
 
+$color1: #B6DED3;
+$color2: #E7CE8B;
+$color3: #BCB3D1;
+$color4: #D0D0AE;
+$color5: #BFDFF6;
+$color6: #BCBCBC;
+
 .page-project {
     .block-legend {
 	padding: 25px 5px;
@@ -149,5 +156,112 @@ $orange: #E6B744;
 
     .block[data-color="green"] {
 	background-color:  #88BF52;
+    }
+    
+    .phase-planning {
+	display: none;
+    }
+    
+    .phase-other {
+	dispaly: block;
+    }
+    
+    [data-phase="planning"] {
+	.phase-planning {
+	    display: block;
+	}
+	
+	.phase-other {
+	    display: none;
+	}
+    }
+    
+    .planning-phase-widget {
+	text-align: center;
+	height: 291px;
+
+	.planning-phase-inline {
+	    margin-top: 100px;
+	    position: relative;
+	    display: inline-block;
+	    width: 140px;
+	    height: 40px;
+	    
+	    &.planning-phase-consultant-appointment {
+		background-color: $color1;
+	    }
+	    
+	    &.planning-phase-design-costing {
+		background-color: $color2;
+	    }
+	    
+	    &.planning-phase-documentation {
+		background-color: $color3;
+	    }
+	    
+	    &.planning-phase-tender {
+		background-color: $color4;
+	    }
+	}
+	
+	&[data-planning-phase="consultant-appointment"] .planning-phase-consultant-appointment {
+	    &:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 14px solid $darkgrey;
+		border-left: 14px solid transparent;
+		border-right: 14px solid transparent;
+		position: absolute;
+		top: -20%;
+		left: 50%;
+		margin-left: -10px;
+	    }
+	}
+	
+	&[data-planning-phase="design-costing"] .planning-phase-design-costing {
+	    &:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 14px solid $darkgrey;
+		border-left: 14px solid transparent;
+		border-right: 14px solid transparent;
+		position: absolute;
+		top: -20%;
+		left: 50%;
+		margin-left: -10px;
+	    }
+	}
+	
+	&[data-planning-phase="documentation"] .planning-phase-documentation {
+	    &:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 14px solid $darkgrey;
+		border-left: 14px solid transparent;
+		border-right: 14px solid transparent;
+		position: absolute;
+		top: -20%;
+		left: 50%;
+		margin-left: -10px;
+	    }
+	}
+	
+	&[data-planning-phase="tender"] .planning-phase-tender {
+	    &:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 14px solid $darkgrey;
+		border-left: 14px solid transparent;
+		border-right: 14px solid transparent;
+		position: absolute;
+		top: -20%;
+		left: 50%;
+		margin-left: -10px;
+	    }
+	}
     }
 }
