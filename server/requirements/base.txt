@@ -13,3 +13,7 @@ hg+https://bitbucket.org/crazymath/django-registration#egg=django-registration
 python-dateutil==2.1
 django-memcached
 xlrd
+fuzzywuzzy
+iso8601
+redis
+slugify
