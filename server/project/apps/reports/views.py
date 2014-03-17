@@ -9,6 +9,7 @@ from project.apps.api.reports.district_report import district_report_json
 from project.apps.projects import models
 from django.views.decorators.cache import cache_page
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 from django.conf import settings
 import fuzzywuzzy.process
 
@@ -82,7 +83,7 @@ def project_list(request):
     
 
 #@cache_page(settings.API_CACHE)
-def project_json(request, project_id, year, month):
+def project_json(request, project_id, year=None, month=None):
     
     def _safe_float(val):
         try:
@@ -165,6 +166,11 @@ def project_json(request, project_id, year, month):
     
     items = Project.list()
     project = Project.get(project_id)
+
+    from pprint import pprint
+    pprint(project._details)
+    print project.timestamp
+    print project.timestamp.month
     
     map_url = None
     result = fuzzywuzzy.process.extractOne(project.location, location_data['mainplaces'])
@@ -196,7 +202,7 @@ def project_json(request, project_id, year, month):
         'budget-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
         'budget-source': project.source,
         'budget-variation-orders': 'None', #TODO: This value is still missing from the IDIP.
-        'cluster': 'MISSING',
+        'cluster': project.cluster,
         'comments-current': project.comments,
         'comments-previous': '',
         'comments-stage': (project.phase or '').title(),
@@ -214,8 +220,8 @@ def project_json(request, project_id, year, month):
         'expenditure-cashflow-line': {
             'title': 'Expenditure vs Cashflow',
             'data': [
-                {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
-                {'values': [[i, (d['expenditure'] or 0)/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
+                {'values': [[i, (_safe_float(d['expenditure']) or 0)/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
+                {'values': [[i, (_safe_float(d['expenditure']) or 0)/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
             ],
             'labels': ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
                        'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar' ]
@@ -250,7 +256,7 @@ def project_json(request, project_id, year, month):
         'number': project.contract,
         'phase': project.phase,
         'planning-completion-date-actual': _date(project.planning_completion),
-        'planning-phase': 'consultant-appointment' if project.phase == 'planning' else 'none',
+        'planning-phase': project.planning_phase if project.phase == 'planning' else 'none',
         'planning-start-date-actual': _date(project.planning_start),
         'progress-gauge': build_gauge(_progress_for_month(project.planning, int(month))*100, _progress_for_month(project.actual, int(month))*100),
         'progress-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
@@ -266,3 +272,40 @@ def project_json(request, project_id, year, month):
         'year': '%d/%d' % (int(project.fyear)-1, int(project.fyear))
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
+
+
+def project_edit(request, project_id):
+    project = Project.edit(project_id)
+    if request.method == 'POST':
+        for key, value in request.POST.items():
+            if key == '__reset':
+                project.clear()
+                project = Project.edit(project_id)
+            elif key == '__save':
+                project.edit = False
+            elif key == 'csrfmiddlewaretoken':
+                pass
+            else:
+                keys = key.split('.')
+                if len(keys) == 1:
+                    project._details[keys[0]] = value
+                else:
+                    keys.reverse()
+                    d = project._details
+                    while len(keys) > 1:
+                        k = keys.pop()
+                        print d
+                        print k
+                        if type(d) == dict:
+                            d = d.get(k)
+                        elif type(d) == list:
+                            d = d[int(k)]
+                    d[keys[0]] = value
+                        
+        project.save()
+        from pprint import pprint; pprint(project._details)
+        return HttpResponse(json.dumps(project._details), mimetype='application/json')
+    context = {
+        'data': json.dumps(project._details)
+    }
+    return TemplateResponse(request, 'edit/project.html', context)

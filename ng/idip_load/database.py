@@ -85,6 +85,10 @@ class Project(object):
             self.__uuids = self._build_uuids()
         return self.__uuids
         
+    @property
+    def timestamp(self):
+        return UUID(self._details.get('_timestamp')).timestamp()
+        
     def revisions(self):
         revisions = connection.smembers('/project/%s' % (self._uuid))
         return revisions
@@ -95,12 +99,21 @@ class Project(object):
         self._details['_uuid'] = uuid
         self._details['_timestamp'] = timestamp
         data = dump_to_json(self._details)
-        connection.sadd('/project', uuid)
-        connection.sadd('/project/%s' % (uuid), timestamp)
-        connection.set('/project/%s/%s' % (uuid, timestamp), data)
+        if self.edit:
+            connection.set('/project/%s/edit' % (uuid), data)
+        else:
+            connection.sadd('/project', uuid)
+            connection.sadd('/project/%s' % (uuid), timestamp)
+            connection.set('/project/%s/%s' % (uuid, timestamp), data)
+            
+    def clear(self):
+        uuid = self._uuid
+        if self.edit:
+            connection.delete('/project/%s/edit' % (uuid))
+            
     
     @classmethod
-    def get(cls, uuid):
+    def get(cls, uuid, as_json=False):
         revisions = connection.smembers('/project/%s' % (uuid))
         if not revisions:
             raise DoesNotExistException('There is no data for project %s.' % (uuid))
@@ -113,21 +126,22 @@ class Project(object):
         
         data = connection.get(revision_map[0]['key'])
         details = json.loads(data)
+        if as_json:
+            return details
         return cls(details)
-
-        keys = connection.keys('/project/%s/*' % (uuid))
-        if not keys:
-            raise DoesNotExistException('There is no data for project %s.' % (uuid))
         
-        timestamps = [{ 
-            'timestamp': UUID(k.split('/')[-1]).timestamp(),
-            'key': k
-        } for k in keys]
-        timestamps.sort(key=lambda x: x['timestamp'], reverse=True)
-        
-        data = connection.get(timestamps[0]['key'])
-        details = json.loads(data)
-        return cls(details)
+    @classmethod
+    def edit(cls, uuid):
+        data = connection.get('/project/%s/edit' % (uuid))
+        if not data:
+            details = Project.get(uuid, as_json=True)
+            data = dump_to_json(details)
+            connection.set('/project/%s/edit' % (uuid), data)
+        else:
+            details = json.loads(data)
+        project = cls(details)
+        project.edit = True
+        return project
         
     @classmethod
     def list(cls):
