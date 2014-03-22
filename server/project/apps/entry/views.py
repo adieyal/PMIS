@@ -1,7 +1,9 @@
+import re
 import json
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.template.response import TemplateResponse
+from django.views.decorators.csrf import csrf_exempt
 from project.libs.database.database import Project
 
 
@@ -86,3 +88,21 @@ def edit(request, project_id):
         'data': json.dumps(project._details)
     }
     return TemplateResponse(request, 'entry/project.html', context)
+
+@csrf_exempt
+def contractor(request):
+    query = request.POST.get('query')
+    if not query:
+        return HttpResponse(json.dumps([]), mimetype='application/json')
+    project_list = (Project.get(uuid) for uuid in Project.list())
+    result = [ p.contractor for p in project_list if re.search(query, p.contractor, re.IGNORECASE) ]
+    return HttpResponse(json.dumps(result), mimetype='application/json')
+        
+@csrf_exempt
+def coordinator(request):
+    query = request.POST.get('query')
+    if not query:
+        return HttpResponse(json.dumps([]), mimetype='application/json')
+    project_list = (Project.get(uuid) for uuid in Project.list())
+    result = [ p.manager for p in project_list if re.search(query, p.manager, re.IGNORECASE) ]
+    return HttpResponse(json.dumps(result), mimetype='application/json')

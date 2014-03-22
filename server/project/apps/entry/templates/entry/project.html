@@ -137,14 +137,14 @@
     <div class="control-group">
       <label class="control-label" for="contractor">Contractor</label>
       <div class="controls">
-	<input class="input-xxlarge" type="text" id="contractor" name="contractor"/>
+	<input class="input-xxlarge" type="text" id="contractor" name="contractor" autocomplete="off"/>
       </div>
     </div>
 
     <div class="control-group">
       <label class="control-label" for="coordinator">Coordinator</label>
       <div class="controls">
-	<input class="input-xxlarge" type="text" id="manager" name="manager"/>
+	<input class="input-xxlarge" type="text" id="manager" name="manager" autocomplete="off"/>
       </div>
     </div>
 
@@ -345,8 +345,10 @@
     </div>
   </div>
 </div>
+{% endblock %}
 
-<script src="/static/js/jquery.js"></script>
+
+{% block extra_js %}
 <script>
   var data = {{ data|safe }};    
   var changes = [];
@@ -488,6 +490,34 @@
 	  alert('Your request has failed. Please try again.');
       });
   })
+
+  $('#manager').typeahead({
+      source: function( query, process ) {
+	  $.post(
+	      "{% url 'entry:coordinator' %}",
+	      {
+		  query: query
+	      },
+	      function(data) {
+		  process(data);
+	      }
+	  );
+      },
+  });
+
+  $('#contractor').typeahead({
+      source: function( query, process ) {
+	  $.post(
+	      "{% url 'entry:contractor' %}",
+	      {
+		  query: query
+	      },
+	      function(data) {
+		  process(data);
+	      }
+	  );
+      },
+  });
 				  
   function updatePlanningPhase() {
       if ($(this).val() == 'planning') {
