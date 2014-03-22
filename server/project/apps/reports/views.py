@@ -85,9 +85,24 @@ def project_list(request):
 #@cache_page(settings.API_CACHE)
 def project_json(request, project_id, year=None, month=None):
     
+    # Convert month number to 0 indexed month.
+    MONTHS0 = {
+        '04': 0,  '05': 1,  '06': 2,
+        '07': 3,  '08': 4,  '09': 5,
+        '10': 6,  '11': 7,  '12': 8,
+        '01': 9,  '02': 10, '03': 11
+    }
+    month0 = MONTHS0[month]
+    
     def _safe_float(val):
         try:
             return float(val)
+        except (TypeError, ValueError):
+            return None
+            
+    def _safe_int(val, add=0):
+        try:
+            return int(val) + add
         except (TypeError, ValueError):
             return None
                 
@@ -124,34 +139,24 @@ def project_json(request, project_id, year=None, month=None):
         return '%.0f%%' % (value*100)
         
     def _expenditure_for_month(data, month):
-        for item in data:
-            if iso8601.parse_date(item['date']).month == month:
-                return item['expenditure']
-        return ''
+        try:
+            return data[month]['expenditure']
+        except:
+            return ''
 
     def _progress_for_month(data, month):
         clean_data = [{
-            'date': iso8601.parse_date(item['date']),
-            'progress': _safe_float(item['progress'])
-        } for item in data]
-        
-        required_date = None
-        for item in clean_data:
-            if item['date'].month == month:
-                required_date = item['date']
-                progress = item['progress']
-                if progress:
-                    return progress/100
+            'month': m,
+            'progress': _safe_float(i['progress'])
+        } for m, i in enumerate(data)]
 
-        if required_date:
-            latest = None
-            for item in clean_data:
-                if item['date'] < required_date and item['progress'] != None:
-                    if not latest or latest['date'] < item['date']:
-                        latest = item
-                        print latest
-            if latest:
-                return latest['progress']/100
+        latest = None
+        for item in clean_data:
+            if item['month']<=month and item['progress'] != None:
+                if not latest or latest['monht'] < item['month']:
+                    latest = item
+        if latest:
+            return latest['progress']/100
         
         return 0
     
@@ -166,11 +171,6 @@ def project_json(request, project_id, year=None, month=None):
     
     items = Project.list()
     project = Project.get(project_id)
-
-    from pprint import pprint
-    pprint(project._details)
-    print project.timestamp
-    print project.timestamp.month
     
     map_url = None
     result = fuzzywuzzy.process.extractOne(project.location, location_data['mainplaces'])
@@ -242,7 +242,7 @@ def project_json(request, project_id, year=None, month=None):
             ]
         },
         'expenditure-previous': _currency(project.total_previous_expenses),
-        'expenditure-this-month': _currency(_expenditure_for_month(project.actual, int(month))),
+        'expenditure-this-month': _currency(_expenditure_for_month(project.actual, month0)),
         'expenditure-this-year': _currency(project.expenditure_in_year),
         'extensions': 'None', #TODO: This value is still missing from the IDIP.
         'implementation-handover-date': _date(project.implementation_handover),
@@ -258,17 +258,17 @@ def project_json(request, project_id, year=None, month=None):
         'planning-completion-date-actual': _date(project.planning_completion),
         'planning-phase': project.planning_phase if project.phase == 'planning' else 'none',
         'planning-start-date-actual': _date(project.planning_start),
-        'progress-gauge': build_gauge(_progress_for_month(project.planning, int(month))*100, _progress_for_month(project.actual, int(month))*100),
+        'progress-gauge': build_gauge(_progress_for_month(project.planning, month0)*100, _progress_for_month(project.actual, month0)*100),
         'progress-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
-        'progress-to-date': _percent(_progress_for_month(project.actual, int(month))),
+        'progress-to-date': _percent(_progress_for_month(project.actual, month0)),
         'scope': project.scope,
-        'stage': [project.phase, _progress_for_month(project.actual, int(month))*100 if project.phase == 'implementation' else None],
-        'status': _project_status(_progress_for_month(project.actual, int(month)),
-                                  _progress_for_month(project.planning, int(month)))[0],
-        'status-color': _project_status(_progress_for_month(project.actual, int(month)),
-                                        _progress_for_month(project.planning, int(month)))[1],
+        'stage': [project.phase, _progress_for_month(project.actual, month0)*100 if project.phase == 'implementation' else None],
+        'status': _project_status(_progress_for_month(project.actual, month0),
+                                  _progress_for_month(project.planning, month0))[0],
+        'status-color': _project_status(_progress_for_month(project.actual, month0),
+                                        _progress_for_month(project.planning, month0))[1],
         'start-date-actual': _date(project.actual_start),
         'start-date-planned': _date(project.planned_start),
-        'year': '%d/%d' % (int(project.fyear)-1, int(project.fyear))
+        'year': '%d/%d' % (_safe_int(project.fyear, -1), _safe_int(project.fyear)) if _safe_int(project.fyear) else 'Unknown'
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')

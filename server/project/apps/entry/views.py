@@ -1,5 +1,6 @@
 import json
 from django.http import HttpResponse
+from django.shortcuts import redirect
 from django.template.response import TemplateResponse
 from project.libs.database.database import Project
 
@@ -15,8 +16,44 @@ def list(request):
         } for p in project_list]
     }
     return TemplateResponse(request, 'entry/list.html', context)
+    
+def new(request):
+    details = {
+        'planning': [
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+        ],
+        'actual': [
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None },
+        ]
+    }
+    project = Project(details)
+    project.edit = True
+    project.save()
+    return redirect('entry:edit', project_id=project._uuid)
 
-def project(request, project_id):
+def edit(request, project_id):
     project = Project.edit(project_id)
     if request.method == 'POST':
         for key, value in request.POST.items():

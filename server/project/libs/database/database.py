@@ -32,7 +32,7 @@ class DoesNotExistException(Exception):
 class Project(object):
     _uuids = {}
     
-    def __init__(self, details):
+    def __init__(self, details={}):
         self._details = details
         self.edit = False
     

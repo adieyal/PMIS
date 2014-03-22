@@ -73,7 +73,12 @@
     <div class="control-group">
       <label class="control-label" for="district">District</label>
       <div class="controls">
-	<input class="input-xxlarge" type="text" id="district" name="district"/>
+	<select class="span4" id="district" name="district">
+	  <option selected="selected">--------</option>
+	  <option value="Ehlanzeni">Ehlanzeni</option>
+	  <option value="Gert Sibande">Gert Sibande</option>
+	  <option value="Nkangala">Nkangala</option>
+	</select>
       </div>
     </div>
 
@@ -263,6 +268,7 @@
       <label class="control-label" for="phase">Phase</label>
       <div class="controls">
 	<select class="span4" id="phase" name="phase">
+	  <option selected="selected">--------</option>
 	  <option value="planning">Planning</option>
 	  <option value="implementation">Implementation</option>
 	  <option value="completed">Completed</option>
@@ -275,6 +281,7 @@
       <label class="control-label" for="planning_phase">Planning Phase</label>
       <div class="controls">
 	<select class="span4" id="planning_phase" name="planning_phase">
+	  <option selected="selected">--------</option>
 	  <option value="consultant-appointment">Consultant Appointment</option>
 	  <option value="design-costing">Design + Costing</option>
 	  <option value="documentation">Documentation</option>

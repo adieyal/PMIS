@@ -1,4 +1,14 @@
+
+def _safe_float(val):
+    try:
+        return float(val)
+    except (TypeError, ValueError):
+        return 0
+
+
 def build_slider(expenditure, budget, color="#e5b744"):
+    expenditure = _safe_float(expenditure)
+    budget = _safe_float(budget)
     markers = []
     normalize = (expenditure+budget)/(2.0/1.1/2.0) or 1
     if budget and abs(expenditure-budget)/normalize < 0.1:

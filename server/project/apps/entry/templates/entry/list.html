@@ -3,11 +3,12 @@
 {% block page_title %}Edit Project{% endblock page_title %}
 
 {% block content %}
+<a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
 <ul>
   {% for project in projects %}
   {% if project.uuid %}
   <li>
-    <a href="{% url 'entry:project' project.uuid %}">{{ project.uuid }} - {{ project.description }}</a>
+    <a href="{% url 'entry:edit' project.uuid %}">{{ project.uuid }} - {{ project.description }}</a>
   </li>
   {% endif %}
   {% endfor %}
