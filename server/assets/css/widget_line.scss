@@ -1,0 +1,69 @@
+$black: #333;
+$blue: #85CABB;
+$orange: #E6B744;
+
+.widget.widget-line {
+    text.title {
+	fill: $black;
+	text-anchor: middle;
+    }
+    
+    .xlabel {
+	
+	text {
+	    fill: $black;
+	    font-size: 0.75em;
+	    text-anchor: middle;
+	}
+    }
+    
+    .ymainlabel {
+	text {
+	    fill: $black;
+	    font-size: 0.75em;
+	    text-anchor: middle;	    
+	}
+    }
+    
+    .label {
+	
+	line {
+	    stroke: $black;
+	    stroke-width: 0.5;
+	    stroke-dasharray: 0.5 0.5;
+	}
+	
+	text {
+	    font-size: 0.75em;
+	    fill: $black;
+	    text-anchor: end;
+	}
+    }
+    
+    .line {
+	&.line-0 {
+	    path { stroke: $blue; }
+	    text { fill: $blue; }
+	}
+
+	&.line-1 {
+	    path { stroke: $orange; }
+	    text { fill: $orange; }
+	}
+	
+	path {
+	    fill: none;
+	    stroke-width: 2;
+	}
+	
+	text {
+	    font-size: 0.7em;
+	    font-weight: bold;
+	    fill: $black;
+	}
+	
+	text.value {
+	    text-anchor: middle;
+	}
+    }
+}

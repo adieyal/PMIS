@@ -1,0 +1,36 @@
+.widget.widget-line text.title {
+  fill: #333333;
+  text-anchor: middle; }
+.widget.widget-line .xlabel text {
+  fill: #333333;
+  font-size: 0.75em;
+  text-anchor: middle; }
+.widget.widget-line .ymainlabel text {
+  fill: #333333;
+  font-size: 0.75em;
+  text-anchor: middle; }
+.widget.widget-line .label line {
+  stroke: #333333;
+  stroke-width: 0.5;
+  stroke-dasharray: 0.5 0.5; }
+.widget.widget-line .label text {
+  font-size: 0.75em;
+  fill: #333333;
+  text-anchor: end; }
+.widget.widget-line .line.line-0 path {
+  stroke: #85cabb; }
+.widget.widget-line .line.line-0 text {
+  fill: #85cabb; }
+.widget.widget-line .line.line-1 path {
+  stroke: #e6b744; }
+.widget.widget-line .line.line-1 text {
+  fill: #e6b744; }
+.widget.widget-line .line path {
+  fill: none;
+  stroke-width: 2; }
+.widget.widget-line .line text {
+  font-size: 0.7em;
+  font-weight: bold;
+  fill: #333333; }
+.widget.widget-line .line text.value {
+  text-anchor: middle; }

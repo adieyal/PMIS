@@ -1,0 +1,128 @@
+$black: #333;
+$grey: #CCCCCC;
+$darkgrey: #4F4C4C;
+$blue: #85CABB;
+$orange: #E6B744;
+
+.page-project {
+    .block-legend {
+	padding: 25px 5px;
+	
+	ul {
+	    li:nth-child(1):before {
+		background: $blue;
+	    }
+	    li:nth-child(2):before {
+		background: $orange;
+	    }
+	}
+    }
+    
+    .project-stage,
+    .project-stage-heading {
+	display: inline-block;
+	width: 195px;
+	height: 40px;
+	font-size: 22px;
+	line-height: 40px;
+    }
+    
+    .project-stage {
+	margin-left: 20px;
+	margin-top: 40px;
+	background-color: #F14637;
+	border: 1px solid white;
+	position: relative;
+	text-align: center;
+	width: 264px;
+	
+	.stage-progress {
+	    display: none;
+	    position: absolute;
+	    top: -40px;
+	    margin-left: -20px;
+	    width: 40px;
+	    text-align: center;
+	    font-size: 24px;
+	    line-height: 34px;
+	    font-weight: bold;
+	    
+	    &:after {
+		content: '';
+		width: 0;
+		height: 0;
+		border-top: 14px solid $darkgrey;
+		border-left: 14px solid transparent;
+		border-right: 14px solid transparent;
+		position: absolute;
+		top: 100%;
+		left: 50%;
+		margin-left: -10px;
+	    }
+	}
+    }
+    
+    .project-stage-planning {
+	.stage-planning {
+	    background-color: #FDDC10;
+	    
+	    .stage-progress {
+		display: block
+	    }
+	}
+    }
+    
+    .project-stage-implementation {
+	.stage-planning {
+	    background-color: #88BF52;
+	}
+
+	.stage-implementation {
+	    background-color: #FDDC10;
+	    
+	    .stage-progress {
+		display: block
+	    }
+	}
+    }
+    
+    .project-stage-completed {
+	.stage-planning,
+	.stage-implementation {
+	    background-color: #88BF52;
+	}
+
+	.stage-completed {
+	    background-color: #FDDC10;
+	    
+	    .stage-progress {
+		display: block
+	    }
+	}
+    }
+    
+    .project-stage-final-accounts {
+	.stage-planning,
+	.stage-implementation,
+	.stage-completed {
+	    background-color: #88BF52;
+	}
+
+	.stage-final-accounts {
+	    background-color: #FDDC10;
+	    
+	    .stage-progress {
+		display: block
+	    }
+	}
+    }
+
+    .project-stage-done {
+	.stage-planning,
+	.stage-implementation,
+	.stage-completed,
+	.stage-final-accounts {
+	    background-color: #88BF52;
+	}
+    }
+}

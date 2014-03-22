@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block page_title %}Edit Project{% endblock page_title %}
+
+{% block content %}
+<form class="form-horizontal" method="post">
+  {% csrf_token %}
+  <fieldset>
+    <legend>General</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="_uuid">Id</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="_uuid" name="_uuid" readonly="readonly"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="month">Month</label>
+      <div class="controls">
+	<select class="span2" id="month" name="month">
+	  <option value="04">April</option>
+	  <option value="05">May</option>
+	  <option value="06">June</option>
+	  <option value="07">July</option>
+	  <option value="08">August</option>
+	  <option value="09">September</option>
+	  <option value="10">October</option>
+	  <option value="11">November</option>
+	  <option value="12">December</option>
+	  <option value="01">January</option>
+	  <option value="02">February</option>
+	  <option value="03">March</option>
+	</select>
+	of the financial year ending in
+	<input class="span1" type="text" id="fyear" name="fyear"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="name">Name</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="name" name="name"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="description">Description</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="description" name="description"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="contract">Contract Number</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="contract" name="contract"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="scope">Scope</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="scope" name="scope"></textarea>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Location</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="district">District</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="district" name="district"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="municipality">Municipality</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="municipality" name="municipality"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="location">Location / Village</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="location" name="location"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Parties</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="cluster">Cluster</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="cluster" name="cluster"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="implementing_agent">Implementing Agent</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="implementing_agent" name="implementing_agent"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="principal_agent">Consultant</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="principal_agent" name="principal_agent"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="contractor">Contractor</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="contractor" name="contractor"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="coordinator">Coordinator</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="manager" name="manager"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Financial</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="source">Source</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="source" name="source"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+	<span class="span1" style="margin-left: 15px;">Apr</span>
+	<span class="span1" style="margin-left: 5px;">May</span>
+	<span class="span1" style="margin-left: 5px;">Jun</span>
+	<span class="span1" style="margin-left: 5px;">Jul</span>
+	<span class="span1" style="margin-left: 5px;">Aug</span>
+	<span class="span1" style="margin-left: 5px;">Sep</span>
+	<span class="span1" style="margin-left: 5px;">Oct</span>
+	<span class="span1" style="margin-left: 5px;">Nov</span>
+	<span class="span1" style="margin-left: 5px;">Dec</span>
+	<span class="span1" style="margin-left: 5px;">Jan</span>
+	<span class="span1" style="margin-left: 5px;">Feb</span>
+	<span class="span1" style="margin-left: 5px;">Mar</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Planned Expenditure</label>
+      <div class="controls">
+	<input class="span1" type="text" id="planning.0.expenditure" name="planning.0.expenditure"/>
+	<input class="span1" type="text" id="planning.1.expenditure" name="planning.1.expenditure"/>
+	<input class="span1" type="text" id="planning.2.expenditure" name="planning.2.expenditure"/>
+	<input class="span1" type="text" id="planning.3.expenditure" name="planning.3.expenditure"/>
+	<input class="span1" type="text" id="planning.4.expenditure" name="planning.4.expenditure"/>
+	<input class="span1" type="text" id="planning.5.expenditure" name="planning.5.expenditure"/>
+	<input class="span1" type="text" id="planning.6.expenditure" name="planning.6.expenditure"/>
+	<input class="span1" type="text" id="planning.7.expenditure" name="planning.7.expenditure"/>
+	<input class="span1" type="text" id="planning.8.expenditure" name="planning.8.expenditure"/>
+	<input class="span1" type="text" id="planning.9.expenditure" name="planning.9.expenditure"/>
+	<input class="span1" type="text" id="planning.10.expenditure" name="planning.10.expenditure"/>
+	<input class="span1" type="text" id="planning.11.expenditure" name="planning.11.expenditure"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Actual Expenditure</label>
+      <div class="controls">
+	<input class="span1" type="text" id="actual.0.expenditure" name="actual.0.expenditure"/>
+	<input class="span1" type="text" id="actual.1.expenditure" name="actual.1.expenditure"/>
+	<input class="span1" type="text" id="actual.2.expenditure" name="actual.2.expenditure"/>
+	<input class="span1" type="text" id="actual.3.expenditure" name="actual.3.expenditure"/>
+	<input class="span1" type="text" id="actual.4.expenditure" name="actual.4.expenditure"/>
+	<input class="span1" type="text" id="actual.5.expenditure" name="actual.5.expenditure"/>
+	<input class="span1" type="text" id="actual.6.expenditure" name="actual.6.expenditure"/>
+	<input class="span1" type="text" id="actual.7.expenditure" name="actual.7.expenditure"/>
+	<input class="span1" type="text" id="actual.8.expenditure" name="actual.8.expenditure"/>
+	<input class="span1" type="text" id="actual.9.expenditure" name="actual.9.expenditure"/>
+	<input class="span1" type="text" id="actual.10.expenditure" name="actual.10.expenditure"/>
+	<input class="span1" type="text" id="actual.11.expenditure" name="actual.11.expenditure"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Progress</legend>
+
+    <div class="control-group">
+      <div class="controls">
+	<span class="span1" style="margin-left: 15px;">Apr</span>
+	<span class="span1" style="margin-left: 5px;">May</span>
+	<span class="span1" style="margin-left: 5px;">Jun</span>
+	<span class="span1" style="margin-left: 5px;">Jul</span>
+	<span class="span1" style="margin-left: 5px;">Aug</span>
+	<span class="span1" style="margin-left: 5px;">Sep</span>
+	<span class="span1" style="margin-left: 5px;">Oct</span>
+	<span class="span1" style="margin-left: 5px;">Nov</span>
+	<span class="span1" style="margin-left: 5px;">Dec</span>
+	<span class="span1" style="margin-left: 5px;">Jan</span>
+	<span class="span1" style="margin-left: 5px;">Feb</span>
+	<span class="span1" style="margin-left: 5px;">Mar</span>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Planned Progress</label>
+      <div class="controls">
+	<input class="span1" type="text" id="planning.0.progress" name="planning.0.progress"/>
+	<input class="span1" type="text" id="planning.1.progress" name="planning.1.progress"/>
+	<input class="span1" type="text" id="planning.2.progress" name="planning.2.progress"/>
+	<input class="span1" type="text" id="planning.3.progress" name="planning.3.progress"/>
+	<input class="span1" type="text" id="planning.4.progress" name="planning.4.progress"/>
+	<input class="span1" type="text" id="planning.5.progress" name="planning.5.progress"/>
+	<input class="span1" type="text" id="planning.6.progress" name="planning.6.progress"/>
+	<input class="span1" type="text" id="planning.7.progress" name="planning.7.progress"/>
+	<input class="span1" type="text" id="planning.8.progress" name="planning.8.progress"/>
+	<input class="span1" type="text" id="planning.9.progress" name="planning.9.progress"/>
+	<input class="span1" type="text" id="planning.10.progress" name="planning.10.progress"/>
+	<input class="span1" type="text" id="planning.11.progress" name="planning.11.progress"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Actual Progress</label>
+      <div class="controls">
+	<input class="span1" type="text" id="actual.0.progress" name="actual.0.progress"/>
+	<input class="span1" type="text" id="actual.1.progress" name="actual.1.progress"/>
+	<input class="span1" type="text" id="actual.2.progress" name="actual.2.progress"/>
+	<input class="span1" type="text" id="actual.3.progress" name="actual.3.progress"/>
+	<input class="span1" type="text" id="actual.4.progress" name="actual.4.progress"/>
+	<input class="span1" type="text" id="actual.5.progress" name="actual.5.progress"/>
+	<input class="span1" type="text" id="actual.6.progress" name="actual.6.progress"/>
+	<input class="span1" type="text" id="actual.7.progress" name="actual.7.progress"/>
+	<input class="span1" type="text" id="actual.8.progress" name="actual.8.progress"/>
+	<input class="span1" type="text" id="actual.9.progress" name="actual.9.progress"/>
+	<input class="span1" type="text" id="actual.10.progress" name="actual.10.progress"/>
+	<input class="span1" type="text" id="actual.11.progress" name="actual.11.progress"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Status</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="phase">Phase</label>
+      <div class="controls">
+	<select class="span4" id="phase" name="phase">
+	  <option value="planning">Planning</option>
+	  <option value="implementation">Implementation</option>
+	  <option value="completed">Completed</option>
+	  <option value="final-accounts">Final Accounts</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planning_phase">Planning Phase</label>
+      <div class="controls">
+	<select class="span4" id="planning_phase" name="planning_phase">
+	  <option value="consultant-appointment">Consultant Appointment</option>
+	  <option value="design-costing">Design + Costing</option>
+	  <option value="documentation">Documentation</option>
+	  <option value="tender">Tender</option>
+	</select>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Comments</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="comments">Comments</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="comments" name="comments"></textarea>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="remedial_action">Mitigation</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="remedial_action" name="remedial_action"></textarea>
+      </div>
+    </div>
+    
+  </fieldset>
+  
+  <div class="control-group">
+    <div class="controls">
+      <input type="button" id="save" name="__save" value="Save"/>
+      <input type="button" id="reset" name="__reset" value="Reset"/>
+    </div>
+  </div>
+  
+</form>
+
+<script src="/static/js/jquery.js"></script>
+<script>
+  var data = {{ data|safe }};    
+  var changes = [];
+
+  function updateValue(key, value) {
+      if ($.isArray(value)) {
+	  for (i=0; i<value.length; i++) {
+	      var newkey = key + '.' + i;
+	      var newvalue = value[i];
+	      updateValue(newkey, newvalue)
+	  }
+      } else if ($.isPlainObject(value)) {
+	  for (subkey in value) {
+	      var newkey = key + '.' + subkey;
+	      var newvalue = value[subkey];
+	      updateValue(newkey, newvalue)
+	  }
+      } else {
+          if (key.substring(0,2) != '__') {
+	      var input = $('[name="'+key+'"]');
+	      input.val(value);
+	      input.closest('.control-group').removeClass('warning');
+	  }
+      }
+  }
+  
+  function updateForm(d) {
+      for (key in d) {
+	  var value = d[key];
+	  updateValue(key, value);
+      }
+  }
+  updateForm(data);
+
+  $('input').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  })
+
+  $('textarea').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  })
+
+  $('select').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  })
+
+  $('input[type="button"]').on('click', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  alert('Your request has failed. Please try again.');
+      });
+  })
+  
+</script>
+{% endblock %}

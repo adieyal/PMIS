@@ -2,16 +2,12 @@
 
 {% block content %}
 <h1>Temporary Links</h1>
-<h2>Reports</h2>
 <ul>
-<li><a href="{% url "reports:district_dashboard" 2 2013 6 %}">Dashboard</a></li>
-<li><a href="{% url "reports:district_progress" 2 2013 6 %}">Progress</a></li>
-<li><a href="{% url "reports:district_perform" 2 2013 6 %}">Perform</a></li>
+  <li>
+    <a href="{% url 'entry:list' %}">Enter project data</a>
+  </li>
+  <li>
+    <a href="{% url 'reports:project_list' %}">View project data</a>
+  </li>
 </ul>
-<h2>JSON</h2>
-<ul>
-<li><a href="{% url "api:reports:district" 2 2013 6 %}">District</a></li>
-<li><a href="{% url "api:reports:district_graphs" 2 2013 6 %}">District Graphs</a></li>
-<li><a href="{% url "api:reports:headoffice_dashboard" 2013 6 %}">Headoffice Dashboard</a></li>
-</li>
 {% endblock %}

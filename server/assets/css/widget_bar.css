@@ -1,0 +1,19 @@
+.widget.widget-bar text.title {
+  fill: #333333;
+  text-anchor: middle; }
+.widget.widget-bar .label line {
+  stroke: #333333;
+  stroke-width: 0.5;
+  stroke-dasharray: 0.5 0.5; }
+.widget.widget-bar .label text {
+  font-size: 0.8em;
+  fill: #333333;
+  text-anchor: end; }
+.widget.widget-bar .bar.bar-0 rect {
+  fill: #85cabb; }
+.widget.widget-bar .bar.bar-1 rect {
+  fill: #e6b744; }
+.widget.widget-bar .bar text {
+  font-size: 0.8em;
+  fill: #333333;
+  text-anchor: middle; }

@@ -5,8 +5,8 @@ from decimal import Decimal
 from collections import OrderedDict
 import json
 from django.template.response import TemplateResponse
-from project.apps.api.reports.district_report import district_report_json
-from project.apps.projects import models
+#from project.apps.api.reports.district_report import district_report_json
+#from project.apps.projects import models
 from django.views.decorators.cache import cache_page
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -14,7 +14,7 @@ from django.conf import settings
 import fuzzywuzzy.process
 
 from widgets import *
-from database import Project
+from project.libs.database.database import Project
 import iso8601
 
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
@@ -272,40 +272,3 @@ def project_json(request, project_id, year=None, month=None):
         'year': '%d/%d' % (int(project.fyear)-1, int(project.fyear))
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
-
-
-def project_edit(request, project_id):
-    project = Project.edit(project_id)
-    if request.method == 'POST':
-        for key, value in request.POST.items():
-            if key == '__reset':
-                project.clear()
-                project = Project.edit(project_id)
-            elif key == '__save':
-                project.edit = False
-            elif key == 'csrfmiddlewaretoken':
-                pass
-            else:
-                keys = key.split('.')
-                if len(keys) == 1:
-                    project._details[keys[0]] = value
-                else:
-                    keys.reverse()
-                    d = project._details
-                    while len(keys) > 1:
-                        k = keys.pop()
-                        print d
-                        print k
-                        if type(d) == dict:
-                            d = d.get(k)
-                        elif type(d) == list:
-                            d = d[int(k)]
-                    d[keys[0]] = value
-                        
-        project.save()
-        from pprint import pprint; pprint(project._details)
-        return HttpResponse(json.dumps(project._details), mimetype='application/json')
-    context = {
-        'data': json.dumps(project._details)
-    }
-    return TemplateResponse(request, 'edit/project.html', context)

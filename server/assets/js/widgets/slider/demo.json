@@ -1,0 +1,13 @@
+[ { "position": 0.5,
+    "bar-color": "#e5b744",
+    "marker-color": "#656263",
+    "marker-style": "short",
+    "marker-text": "Budget"
+  },
+  { "position": 0.65,
+    "bar-color": "#f04338",
+    "marker-color": "#f04338",
+    "marker-style": "long",
+    "marker-text": "Actual"
+  }
+]

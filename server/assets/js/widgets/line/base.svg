@@ -1,0 +1,8 @@
+<?xml version="1.0" standalone="no"?>
+<svg width="100%" height="100%" version="1.1" viewBox="0 0 300 105" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <text class="title" x="160" y="0" dy="1em"></text>
+  <g class="label">
+    <line x1="40" x2="40" y1="20" y2="90" />
+  </g>
+  <g class="dynamic"/>
+</svg>

@@ -1,0 +1,608 @@
+{
+    "department-a-implementation-budget": "R800,000", 
+    "department-a-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-a-implementation-expenditure": "R800,000", 
+    "department-a-implementation-pecent-expenditure": "30%", 
+    "department-a-implementation-progress": "70%", 
+    "department-a-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-a-jobs": "1278", 
+    "department-a-name": "Department of Department Name", 
+    "department-a-planning-budget": "R800,000", 
+    "department-a-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-a-planning-expenditure": "R800,000", 
+    "department-a-planning-pecent-expenditure": "30%", 
+    "department-a-projects-accounts": "4", 
+    "department-a-projects-budget": "R800,000", 
+    "department-a-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-a-projects-completed": "5", 
+    "department-a-projects-expenditure": "R800,000", 
+    "department-a-projects-implementation": "40", 
+    "department-a-projects-pecent-expenditure": "30%", 
+    "department-a-projects-planning": "5", 
+    "department-a-projects-total": "20", 
+    "department-b-implementation-budget": "R800,000", 
+    "department-b-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-b-implementation-expenditure": "R800,000", 
+    "department-b-implementation-pecent-expenditure": "30%", 
+    "department-b-implementation-progress": "70%", 
+    "department-b-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-b-jobs": "1278", 
+    "department-b-name": "Department of Department Name", 
+    "department-b-planning-budget": "R800,000", 
+    "department-b-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-b-planning-expenditure": "R800,000", 
+    "department-b-planning-pecent-expenditure": "30%", 
+    "department-b-projects-accounts": "4", 
+    "department-b-projects-budget": "R800,000", 
+    "department-b-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-b-projects-completed": "5", 
+    "department-b-projects-expenditure": "R800,000", 
+    "department-b-projects-implementation": "40", 
+    "department-b-projects-pecent-expenditure": "30%", 
+    "department-b-projects-planning": "5", 
+    "department-b-projects-total": "20", 
+    "department-c-implementation-budget": "R800,000", 
+    "department-c-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-c-implementation-expenditure": "R800,000", 
+    "department-c-implementation-pecent-expenditure": "30%", 
+    "department-c-implementation-progress": "70%", 
+    "department-c-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-c-jobs": "1278", 
+    "department-c-name": "Department of Department Name", 
+    "department-c-planning-budget": "R800,000", 
+    "department-c-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-c-planning-expenditure": "R800,000", 
+    "department-c-planning-pecent-expenditure": "30%", 
+    "department-c-projects-accounts": "4", 
+    "department-c-projects-budget": "R800,000", 
+    "department-c-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-c-projects-completed": "5", 
+    "department-c-projects-expenditure": "R800,000", 
+    "department-c-projects-implementation": "40", 
+    "department-c-projects-pecent-expenditure": "30%", 
+    "department-c-projects-planning": "5", 
+    "department-c-projects-total": "20", 
+    "department-d-implementation-budget": "R800,000", 
+    "department-d-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-d-implementation-expenditure": "R800,000", 
+    "department-d-implementation-pecent-expenditure": "30%", 
+    "department-d-implementation-progress": "70%", 
+    "department-d-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-d-jobs": "1278", 
+    "department-d-name": "Department of Department Name", 
+    "department-d-planning-budget": "R800,000", 
+    "department-d-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-d-planning-expenditure": "R800,000", 
+    "department-d-planning-pecent-expenditure": "30%", 
+    "department-d-projects-accounts": "4", 
+    "department-d-projects-budget": "R800,000", 
+    "department-d-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-d-projects-completed": "5", 
+    "department-d-projects-expenditure": "R800,000", 
+    "department-d-projects-implementation": "40", 
+    "department-d-projects-pecent-expenditure": "30%", 
+    "department-d-projects-planning": "5", 
+    "department-d-projects-total": "20", 
+    "department-e-implementation-budget": "R800,000", 
+    "department-e-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-e-implementation-expenditure": "R800,000", 
+    "department-e-implementation-pecent-expenditure": "30%", 
+    "department-e-implementation-progress": "70%", 
+    "department-e-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-e-jobs": "1278", 
+    "department-e-name": "Department of Department Name", 
+    "department-e-planning-budget": "R800,000", 
+    "department-e-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-e-planning-expenditure": "R800,000", 
+    "department-e-planning-pecent-expenditure": "30%", 
+    "department-e-projects-accounts": "4", 
+    "department-e-projects-budget": "R800,000", 
+    "department-e-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-e-projects-completed": "5", 
+    "department-e-projects-expenditure": "R800,000", 
+    "department-e-projects-implementation": "40", 
+    "department-e-projects-pecent-expenditure": "30%", 
+    "department-e-projects-planning": "5", 
+    "department-e-projects-total": "20", 
+    "department-f-implementation-budget": "R800,000", 
+    "department-f-implementation-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-f-implementation-expenditure": "R800,000", 
+    "department-f-implementation-pecent-expenditure": "30%", 
+    "department-f-implementation-progress": "70%", 
+    "department-f-implementation-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "department-f-jobs": "1278", 
+    "department-f-name": "Department of Department Name", 
+    "department-f-planning-budget": "R800,000", 
+    "department-f-planning-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-f-planning-expenditure": "R800,000", 
+    "department-f-planning-pecent-expenditure": "30%", 
+    "department-f-projects-accounts": "4", 
+    "department-f-projects-budget": "R800,000", 
+    "department-f-projects-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "department-f-projects-completed": "5", 
+    "department-f-projects-expenditure": "R800,000", 
+    "department-f-projects-implementation": "40", 
+    "department-f-projects-pecent-expenditure": "30%", 
+    "department-f-projects-planning": "5", 
+    "department-f-projects-total": "20", 
+    "district-a-budget": "R800,000", 
+    "district-a-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-a-expenditure": "R800,000", 
+    "district-a-percent-expenditure": "30%", 
+    "district-a-progress": "70%", 
+    "district-a-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-a-projects-completed": "3", 
+    "district-a-projects-implementation": "1", 
+    "district-a-projects-planning": "5", 
+    "district-a-projects-total": "5", 
+    "district-b-budget": "R800,000", 
+    "district-b-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-b-expenditure": "R800,000", 
+    "district-b-percent-expenditure": "30%", 
+    "district-b-progress": "70%", 
+    "district-b-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-b-projects-completed": "3", 
+    "district-b-projects-implementation": "1", 
+    "district-b-projects-planning": "5", 
+    "district-b-projects-total": "5", 
+    "district-c-budget": "R800,000", 
+    "district-c-budget-slider": [
+        {
+            "bar-color": "#e5b744", 
+            "marker-color": "#656263", 
+            "marker-style": "short", 
+            "marker-text": "Budget", 
+            "position": 0.5
+        }, 
+        {
+            "bar-color": "#f04338", 
+            "marker-color": "#f04338", 
+            "marker-style": "long", 
+            "marker-text": "Actual", 
+            "position": 0.65
+        }
+    ], 
+    "district-c-expenditure": "R800,000", 
+    "district-c-percent-expenditure": "30%", 
+    "district-c-progress": "70%", 
+    "district-c-progress-gauge": [
+        {
+            "needle-style": "dashed", 
+            "position": 0.5, 
+            "text": "Planned"
+        }, 
+        {
+            "needle-color": [
+                "#86bf53", 
+                "#cce310"
+            ], 
+            "needle-style": "plain", 
+            "position": 0.85, 
+            "text": "Actual"
+        }
+    ], 
+    "district-c-projects-completed": "3", 
+    "district-c-projects-implementation": "1", 
+    "district-c-projects-planning": "5", 
+    "district-c-projects-total": "5"
+}

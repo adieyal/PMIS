@@ -1,0 +1,23 @@
+.widget.widget-donut .slice text {
+  font-size: 1.6em; }
+.widget.widget-donut .slice path {
+  stroke-width: 0; }
+.widget.widget-donut .slice-grey path {
+  fill: #cccccc; }
+.widget.widget-donut .slice0 path {
+  fill: #85cabb; }
+.widget.widget-donut .slice1 path {
+  fill: #e6b744; }
+.widget.widget-donut .slice2 path {
+  fill: #D0D0AE; }
+.widget.widget-donut .slice3 path {
+  fill: #BFDFF6; }
+.widget.widget-donut .slice4 path {
+  fill: #BCBCBC; }
+.widget.widget-donut .slice5 path {
+  fill: #B6DED3; }
+
+.widget-donut-legend .slice0 {
+  color: #85cabb; }
+.widget-donut-legend .slice1 {
+  color: #e6b744; }
