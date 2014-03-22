@@ -325,12 +325,26 @@
   
   <div class="control-group">
     <div class="controls">
-      <input type="button" id="save" name="__save" value="Save"/>
-      <input type="button" id="reset" name="__reset" value="Reset"/>
+      <input class="btn btn-primary" type="button" id="save" name="__save" value="Save"/>
+      <input class="btn btn-danger" type="button" id="reset" name="__reset" value="Reset"/>
     </div>
   </div>
   
 </form>
+
+<div class="modal fade" id="savingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Saving</h4>
+      </div>
+      <div class="modal-body">
+	<p>Your changes are being saved. Please wait.</p>
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="/static/js/jquery.js"></script>
 <script>
@@ -445,6 +459,12 @@
       var val = element.val();
       var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
 
+      if (name == '__save') {
+	  var modal = $('#savingModal');
+	  modal.find('p').text('Your changes are being saved. Please wait.');
+	  modal.modal('show');
+      }
+
       data[name] = val;
       for (i=0; i<changes.length; i++) {
 	  var c = changes[i];
@@ -456,7 +476,15 @@
 	  data: data
       }).success(function(data) {
 	  updateForm(data);
+	  var modal = $('#savingModal');
+	  modal.find('p').text('The project data has been succesfully saved.');
+	  setTimeout(function() {
+	      modal.modal('hide')
+	  }, 2000);
       }).error(function() {
+	  var modal = $('#savingModal');
+	  modal.find('p').text('Failed.');
+	  modal.modal('hide');
 	  alert('Your request has failed. Please try again.');
       });
   })
