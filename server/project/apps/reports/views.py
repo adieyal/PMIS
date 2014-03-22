@@ -49,7 +49,7 @@ def cluster_report(request, subreport, client_code, year, month):
     context = {'json': None}
     return TemplateResponse(request, template, context)
 
-#@cache_page(settings.API_CACHE)
+@cache_page(settings.API_CACHE)
 def generic_report(request, report, report_id, subreport, year, month):
     date = datetime(int(year), int(month), 1)
     template = 'reports/{report}/{subreport}.html'.format(report=report, subreport=subreport)
@@ -153,7 +153,7 @@ def project_json(request, project_id, year=None, month=None):
         latest = None
         for item in clean_data:
             if item['month']<=month and item['progress'] != None:
-                if not latest or latest['monht'] < item['month']:
+                if not latest or latest['month'] < item['month']:
                     latest = item
         if latest:
             return latest['progress']/100
