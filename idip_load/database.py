@@ -34,6 +34,7 @@ class Project(object):
     
     def __init__(self, details):
         self._details = details
+        self.edit = False
     
     def __getattr__(self, attr):
         try:

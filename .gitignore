@@ -38,3 +38,6 @@ coverage/
 *.bak
 
 default.db*
+
+# Django assets
+server/assets/*
