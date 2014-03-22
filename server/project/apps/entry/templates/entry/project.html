@@ -452,6 +452,16 @@
 	  alert('Your request has failed. Please try again.');
       });
   })
+				  
+  function updatePlanningPhase() {
+      if ($(this).val() == 'planning') {
+	  $('#planning_phase').closest('.control-group').show();
+      } else {
+	  $('#planning_phase').closest('.control-group').hide();
+      }
+  };
+  $('select[name="phase"]').on('change', updatePlanningPhase);
+  updatePlanningPhase.call($('select[name="phase"]')[0]);
   
 </script>
 {% endblock %}
