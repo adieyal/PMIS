@@ -9,15 +9,19 @@ from project.libs.database.database import Project
 
 def list(request):
     project_list = (Project.get(uuid) for uuid in Project.list())
-    context = {
-        'projects': [{
+    context = {}
+    for p in project_list:
+        cluster = p.cluster or 'Unknown'
+        if context.get(cluster) == None:
+            context[cluster] = []
+        context[cluster].append({
             'uuid': p._uuid,
             'name': p.name,
             'description': p.description,
             'contract': p.contract
-        } for p in project_list]
-    }
-    return TemplateResponse(request, 'entry/list.html', context)
+        })
+    print context
+    return TemplateResponse(request, 'entry/list.html', {'projects': context})
     
 def new(request):
     details = {
