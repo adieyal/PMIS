@@ -1,9 +1,0 @@
-{% extends "base.html" %}
-
-{% block content %}
-<ul>
-  {% for p in projects %}
-  <li><a href="{{ p }}/project/{{ year }}/{{ month }}/">{{ p }}</a></li>
-  {% endfor %}
-</ul>
-{% endblock %}
