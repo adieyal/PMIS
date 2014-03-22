@@ -36,10 +36,12 @@ def project(request, project_id):
                     d = project._details
                     while len(keys) > 1:
                         k = keys.pop()
-                        if type(d) == dict:
+                        if type(d) == type({}):
                             d = d.get(k)
-                        elif type(d) == list:
+                        elif type(d) == type([]):
                             d = d[int(k)]
+                        else:
+                            pass
                     d[keys[0]] = value
         project.save()
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
