@@ -95,7 +95,9 @@ def project_json(request, project_id, year=None, month=None):
         year = project.timestamp.year
         month = '%02d' % (project.timestamp.month)
     else:
-        project = None
+        year = int(year)
+        month = month
+        project = Project.get(project_id)
         
     # Convert month number to 0 indexed month.
     MONTHS0 = {
@@ -106,9 +108,6 @@ def project_json(request, project_id, year=None, month=None):
     }
     month0, year_add = MONTHS0[month]
     year += year_add
-
-    if not project:
-        raise Exception('Specific month not implemented.')
 
     def _safe_float(val):
         try:
