@@ -177,7 +177,6 @@ def project_json(request, project_id, year=None, month=None):
         return 0
     
     def _project_status(actual, planned):
-        print planned, actual
         if (planned - actual) > 0.2:
             return ('In danger', 'red')
         elif (planned - actual) > 0.1:
@@ -211,10 +210,13 @@ def project_json(request, project_id, year=None, month=None):
         planning = _safe_float(planning) or 0
         implementation = _safe_float(implementation) or 0
         total = planning+implementation
+        if total == 0:
+            return build_donut([], percentage=True)
         return build_donut([
             planning / total,
             implementation / total
         ], percentage=True)
+            
     
     context = {
         'agent': project.implementing_agent,
