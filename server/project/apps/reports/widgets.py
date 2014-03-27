@@ -62,11 +62,11 @@ def build_gauge(planned, actual, text1=None, text2=None):
     if abs(actual-planned) < 10:
         text1 = " "
     needles.append({ "needle-style": "dashed", 
-                     "position": planned/100.0, 
+                     "position": min(planned/100.0, 1), 
                      "text": text1 or "Planned" })
     needles.append({ "needle-color": [ "#86bf53", "#cce310" ], 
                      "needle-style": "plain", 
-                     "position": actual/100.0, 
+                     "position": min(actual/100.0, 1), 
                      "text": text2 or "Actual" })
     return needles
 
