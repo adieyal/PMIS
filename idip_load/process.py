@@ -35,7 +35,7 @@ class Command(object):
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
-            #print utils.dump_to_json(project)
+            project['cluster'] = self.client
             saver.save_project(self.client, project)
 
     def process_planning(self, sheet):
@@ -47,6 +47,7 @@ class Command(object):
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
+            project['cluster'] = self.client
             saver.save_project(self.client, project)
 
     def process_retention(self, sheet):
@@ -58,6 +59,7 @@ class Command(object):
 
         for project_range in sheet_parser.projects:
             project = project_parser.parse(project_range)
+            project['cluster'] = self.client
             saver.save_project(self.client, project)
 
     def process_file(self, filename):
@@ -83,9 +85,8 @@ class Command(object):
         """ % self.__dict__
 
     def acquire_parameters(self):
-        self.year = ud.ask_year()
-        self.month = ud.ask_month()
-        self.client = ud.ask_client()
+        self.year = datetime.now().year
+        self.month = datetime.now().month
 
         self.fyear = utils.fyear(self.month, self.year)
         self.fmonths = utils.fmonths(self.fyear)
@@ -95,6 +96,7 @@ class Command(object):
             raise CommandError("Expected IDIP filename")
 
         filename = args[0]
+        self.client = args[1]
 
         self.acquire_parameters()
         print self.process_details
@@ -103,4 +105,4 @@ class Command(object):
 
 if __name__=='__main__':
     c = Command()
-    c.handle(sys.argv[1])
+    c.handle(*sys.argv[1:])

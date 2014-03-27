@@ -21,7 +21,7 @@ def list(request):
             'description': p.description,
             'contract': p.contract
         })
-    print context
+
     return TemplateResponse(request, 'entry/list.html', {'projects': context})
     
 def new(request):
