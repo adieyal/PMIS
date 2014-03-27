@@ -3,6 +3,9 @@
 {% block page_title %}Edit Project{% endblock page_title %}
 
 {% block content %}
+<a href="#" id="__project_url" class="btn disabled pull-right" target="_blank">View report</a>
+<div class="clearfix"></div>
+
 <form class="form-horizontal" method="post">
   {% csrf_token %}
   <fieldset>
@@ -80,6 +83,13 @@
       </div>
     </div>
 
+    <div class="control-group">
+      <label class="control-label" for="jobs">Jobs Created</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="jobs" name="jobs"/>
+      </div>
+    </div>
+
   </fieldset>
 
   <fieldset>
@@ -151,12 +161,157 @@
   </fieldset>
 
   <fieldset>
-    <legend>Financial</legend>
+    <legend>Dates</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="planning_start">Planning Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planning_start" name="planning_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planning_completion">Planning Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planning_completion" name="planning_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="implementation_handover">Implementation Handover</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="implementation_handover" name="implementation_handover"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planned_start">Planned Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planned_start" name="planned_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual_start">Actual Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="actual_start" name="actual_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planned_completion">Planned Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planned_completion" name="planned_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="revised_completion">Revised Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="revised_completion" name="revised_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual_completion">Actual Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="actual_completion" name="actual_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="extensions">Time Extensions</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control" type="text" id="extensions" name="extensions"/>
+	  <span class="input-group-addon">months</span>
+	</div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Budget</legend>
 
     <div class="control-group">
       <label class="control-label" for="source">Source</label>
       <div class="controls">
 	<input class="input-xxlarge" type="text" id="source" name="source"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="total_anticipated_cost">Overall</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="total_anticipated_cost" name="total_anticipated_cost"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="allocated_budget_for_year">Current Financial Year</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="allocated_budget_for_year" name="allocated_budget_for_year"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="budget_implementation">Implementation</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_implementation" name="budget_implementation"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="budget_planning">Planning</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_planning" name="budget_planning"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="budget_variation_orders">Variation Orders</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_variation_orders" name="budget_variation_orders"/>
+	</div>
       </div>
     </div>
 
@@ -192,6 +347,58 @@
 	<input class="span1" type="text" id="planning.9.expenditure" name="planning.9.expenditure"/>
 	<input class="span1" type="text" id="planning.10.expenditure" name="planning.10.expenditure"/>
 	<input class="span1" type="text" id="planning.11.expenditure" name="planning.11.expenditure"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset>
+    <legend>Expenditure</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="total_previous_expenses">Previous Years</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="total_previous_expenses" name="total_previous_expenses"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="expenditure_in_year">This Year</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="expenditure_in_year" name="expenditure_in_year"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="expenditure_to_date">Total to Date</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="expenditure_to_date" name="expenditure_to_date"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <div class="controls">
+	<span class="span1" style="margin-left: 15px;">Apr</span>
+	<span class="span1" style="margin-left: 5px;">May</span>
+	<span class="span1" style="margin-left: 5px;">Jun</span>
+	<span class="span1" style="margin-left: 5px;">Jul</span>
+	<span class="span1" style="margin-left: 5px;">Aug</span>
+	<span class="span1" style="margin-left: 5px;">Sep</span>
+	<span class="span1" style="margin-left: 5px;">Oct</span>
+	<span class="span1" style="margin-left: 5px;">Nov</span>
+	<span class="span1" style="margin-left: 5px;">Dec</span>
+	<span class="span1" style="margin-left: 5px;">Jan</span>
+	<span class="span1" style="margin-left: 5px;">Feb</span>
+	<span class="span1" style="margin-left: 5px;">Mar</span>
       </div>
     </div>
 
@@ -322,8 +529,10 @@
     </div>
     
   </fieldset>
+
+  <div id="control-group-fixed-spacer"></div>
   
-  <div class="control-group">
+  <div class="control-group" id="control-group-fixed">
     <div class="controls">
       <input class="btn btn-primary" type="button" id="save" name="__save" value="Save"/>
       <input class="btn btn-danger" type="button" id="reset" name="__reset" value="Reset"/>
@@ -371,6 +580,10 @@
 	      var input = $('[name="'+key+'"]');
 	      input.val(value);
 	      input.closest('.control-group').removeClass('warning');
+	  } else if (key == '__project_url') {
+	      var link = $('a#__project_url');
+	      link.attr('href', value);
+	      link.removeClass('disabled');
 	  }
       }
   }
@@ -528,6 +741,13 @@
   };
   $('select[name="phase"]').on('change', updatePlanningPhase);
   updatePlanningPhase.call($('select[name="phase"]')[0]);
+				  
+  $(document).ready(function() {
+      $('.input-datepicker').datepicker({
+	  format: "yyyy-mm-dd",
+	  autoclose: true
+      });
+  });
   
 </script>
 {% endblock %}

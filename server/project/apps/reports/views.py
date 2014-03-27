@@ -57,6 +57,12 @@ def generic_report(request, report, report_id, subreport, year, month):
     return TemplateResponse(request, template, context)
 
 @cache_page(settings.API_CACHE)
+def project_report(request, project_id):
+    template = 'reports/project/project.html'
+    context = { 'json': None }
+    return TemplateResponse(request, template, context)
+
+@cache_page(settings.API_CACHE)
 def generic_json(request, report, subreport, year, month, report_id=None, client_code=None):
     if report_id == None:
         if client_code != None:
@@ -84,16 +90,26 @@ def project_list(request):
 
 #@cache_page(settings.API_CACHE)
 def project_json(request, project_id, year=None, month=None):
-    
+    if not year or not month:
+        project = Project.get(project_id)
+        year = project.timestamp.year
+        month = '%02d' % (project.timestamp.month)
+    else:
+        project = None
+        
     # Convert month number to 0 indexed month.
     MONTHS0 = {
-        '04': 0,  '05': 1,  '06': 2,
-        '07': 3,  '08': 4,  '09': 5,
-        '10': 6,  '11': 7,  '12': 8,
-        '01': 9,  '02': 10, '03': 11
+        '04': (0, 1),  '05': (1, 1),  '06': (2, 1),
+        '07': (3, 1),  '08': (4, 1),  '09': (5, 1),
+        '10': (6, 1),  '11': (7, 1),  '12': (8, 1),
+        '01': (9, 0),  '02': (10, 0), '03': (11, 0)
     }
-    month0 = MONTHS0[month]
-    
+    month0, year_add = MONTHS0[month]
+    year += year_add
+
+    if not project:
+        raise Exception('Specific month not implemented.')
+
     def _safe_float(val):
         try:
             return float(val)
@@ -191,17 +207,26 @@ def project_json(request, project_id, year=None, month=None):
         
     map_url = 'http://s3.amazonaws.com/tasks.acscomputers.co.za/out/' + map_url
     
+    def _budget_donut(planning, implementation):
+        planning = _safe_float(planning) or 0
+        implementation = _safe_float(implementation) or 0
+        total = planning+implementation
+        return build_donut([
+            planning / total,
+            implementation / total
+        ], percentage=True)
+    
     context = {
         'agent': project.implementing_agent,
-        'budget-donut': build_donut([0.15, 0.85], percentage=True),
+        'budget-donut': _budget_donut(project.budget_planning, project.budget_implementation),
         'budget-financial-year': _currency(project.allocated_budget_for_year),
-        'budget-implementation': 'MISSING',
+        'budget-implementation': _currency(project.budget_implementation),
         'budget-increase-timeframe': _months(project.actual_completion, project.planned_completion, 'No increase'),
         'budget-overall': _currency(project.total_anticipated_cost),
-        'budget-planning': 'MISSING',
+        'budget-planning': _currency(project.budget_planning),
         'budget-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
         'budget-source': project.source,
-        'budget-variation-orders': 'None', #TODO: This value is still missing from the IDIP.
+        'budget-variation-orders': _currency(project.budget_variation_orders),
         'cluster': project.cluster,
         'comments-current': project.comments,
         'comments-previous': '',
@@ -244,9 +269,9 @@ def project_json(request, project_id, year=None, month=None):
         'expenditure-previous': _currency(project.total_previous_expenses),
         'expenditure-this-month': _currency(_expenditure_for_month(project.actual, month0)),
         'expenditure-this-year': _currency(project.expenditure_in_year),
-        'extensions': 'None', #TODO: This value is still missing from the IDIP.
+        'extensions': '%.0f months' % (_safe_float(project.extensions)) if _safe_float(project.extensions) else 'None',
         'implementation-handover-date': _date(project.implementation_handover),
-        'jobs': 'MISSING',
+        'jobs': _safe_int(project.jobs) or '',
         'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
         'location_map': map_url,
         'mitigations-current': project.remedial_action,

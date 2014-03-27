@@ -2,6 +2,7 @@ import re
 import json
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 from project.libs.database.database import Project
@@ -88,6 +89,7 @@ def edit(request, project_id):
                     d[keys[0]] = value
         project.save()
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
+    project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
     context = {
         'data': json.dumps(project._details)
     }

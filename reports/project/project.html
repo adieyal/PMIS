@@ -10,6 +10,10 @@
 	 template JSON file that can be customized to populate this report. -->
     <script type="text/javascript" src="{% static 'js/generate.js' %}"></script>
 
+    <!-- This script scales the report to fit to the size of the
+	 browser window. -->
+    <script type="text/javascript" src="{% static 'js/scale.js' %}"></script>
+
     <script>
       require.config({
 	  baseUrl: "{% static 'js' %}",

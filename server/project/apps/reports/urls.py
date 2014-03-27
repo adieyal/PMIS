@@ -12,7 +12,11 @@ urlpatterns = patterns('project.apps.reports.views',
 
     url(r'^project/(?P<project_id>[\w-]+)/project/(?P<year>\d{4})/(?P<month>\d{2})/json$',
         'project_json', {}, name='project_report_json'),
+    url(r'^project/(?P<project_id>[\w-]+)/latest/json$',
+        'project_json', {}, name='project_report_json'),
 
+    url(r'^project/(?P<project_id>[\w-]+)/latest$',
+        'project_report', {}, name='project'),
     url(r'^project/(?P<project_id>[\w-]+)/json$',
         'project_json', {}, name='project_json'),
 
