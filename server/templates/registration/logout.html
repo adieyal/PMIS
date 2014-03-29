@@ -1,6 +1,10 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block page_title %}Log out{% endblock page_title %}
+
 {% block content %}
-<p>{% trans "Logged out" %}</p>
+<div class="alert alert-success">
+  <p>You have succesfully logged out.</p>
+</div>
 {% endblock %}

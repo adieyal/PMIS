@@ -1,15 +1,48 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block page_title %}Login{% endblock page_title %}
+
 {% block content %}
-<form method="post" action=".">
-  {% csrf_token %} 
-  {{ form.as_p }}
-
-  <input type="submit" value="{% trans 'Log in' %}" />
+<form class="form-horizontal" method="post" action=".">
+  {% csrf_token %}
   <input type="hidden" name="next" value="{{ next }}" />
-</form>
+  
+  {% if form.non_field_errors %}
+  <div class="alert alert-error">
+    <ol>
+      {% for error in form.non_field_errors %}
+      <li>{{ error }}</li>
+      {% endfor %}
+    </ol>
+  </div>
+  {% endif %}
 
-<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
-<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+  <div class="control-group{% if form.username.errors %} error{% endif %}">
+    <label class="control-label" for="comments">Username</label>
+    <div class="controls">
+      {{ form.username }}
+      {% if form.username.errors %}<span class="help-inline">{{ form.username.errors.0 }}</span>{% endif %}
+    </div>
+  </div>
+  
+  <div class="control-group{% if form.password.errors %} error{% endif %}">
+    <label class="control-label" for="comments">Password</label>
+    <div class="controls">
+      {{ form.password }}
+      {% if form.password.errors %}<span class="help-inline">{{ form.password.errors.0 }}</span>{% endif %}
+    </div>
+  </div>
+
+  <div class="control-group">
+    <div class="controls">
+      <input class="btn btn-primary" type="submit" value="Log In"/>
+    </div>
+  </div>
+  
+</form>
+<!--
+<p>{% trans "Forgot password" %}? <a href="{% url 'accounts:auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
+<p>{% trans "Not member" %}? <a href="{% url 'accounts:registration_register' %}">{% trans "Register" %}</a>!</p>
+-->
 {% endblock %}

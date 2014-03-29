@@ -1,5 +1,6 @@
 import re
 import json
+from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -89,6 +90,8 @@ def edit(request, project_id):
                         else:
                             pass
                     d[keys[0]] = value
+        project._details['last_modified_user'] = request.user.username if request.user.is_authenticated() else ''
+        project._details['last_modified_time'] = datetime.now().isoformat()
         project.save()
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
     project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
