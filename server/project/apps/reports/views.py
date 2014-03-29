@@ -201,7 +201,7 @@ def project_json(request, project_id, year=None, month=None):
                 map_url = 'MN_CODE/%d.png' % (location_data['municipality_codes'][mn])
     
     if map_url == None:
-        map_url = 'fallback.png'
+        map_url = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
         
     map_url = 'http://s3.amazonaws.com/tasks.acscomputers.co.za/out/' + map_url
     

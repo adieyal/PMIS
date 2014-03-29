@@ -7,8 +7,10 @@ from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 from project.libs.database.database import Project
 
+from models import Cluster, Programme, ImplementingAgent
 
-def list(request):
+
+def projects(request):
     project_list = (Project.get(uuid) for uuid in Project.list())
     context = {}
     for p in project_list:
@@ -91,7 +93,9 @@ def edit(request, project_id):
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
     project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
     context = {
-        'data': json.dumps(project._details)
+        'data': json.dumps(project._details),
+        'clusters': Cluster.objects.all(),
+        'implementing_agents': ImplementingAgent.objects.all()
     }
     return TemplateResponse(request, 'entry/project.html', context)
 
@@ -112,3 +116,13 @@ def coordinator(request):
     project_list = (Project.get(uuid) for uuid in Project.list())
     result = [ p.manager for p in project_list if re.search(query, p.manager, re.IGNORECASE) ]
     return HttpResponse(json.dumps(result), mimetype='application/json')
+
+@csrf_exempt
+def programme(request):
+    cluster = request.GET.get('cluster')
+    if not cluster:
+        return HttpResponse(json.dumps([]), mimetype='application/json')
+    programmes = list(Programme.objects.filter(cluster__name=cluster).values_list('name', flat=True))
+    return HttpResponse(json.dumps(programmes), mimetype='application/json')
+    
+   

@@ -37,12 +37,9 @@
       <div class="controls">
 	<select class="span5" id="cluster" name="cluster">
 	  <option selected="selected">--------</option>
-	  <option value="Department of Health">Department of Health</option>
-	  <option value="Department of Education">Department of Education</option>
-	  <option value="Department of Social Development">Department of Social Development</option>
-	  <option value="Department of Sports, Science and Recreation">Department of Sports, Science and Recreation</option>
-	  <option value="Department of Community Safety, Security and Liaison">Department of Community Safety, Security and Liaison</option>
-	  <option value="Department of Economic Development, Environment and Tourism">Department of Economic Development, Environment and Tourism</option>
+	  {% for cluster in clusters %}
+	  <option value="{{ cluster.name }}">{{ cluster.name }}</option>
+	  {% endfor %}
 	</select>
       </div>
     </div>
@@ -50,7 +47,9 @@
     <div class="control-group">
       <label class="control-label" for="programme">Programme</label>
       <div class="controls">
-	<input class="input-xxlarge" type="text" id="programme" name="programme"/>
+	<select class="span5" id="programme" name="programme">
+	  <option selected="selected">--------</option>
+	</select>
       </div>
     </div>
 
@@ -116,11 +115,9 @@
       <div class="controls">
 	<select class="span4" id="implementing_agent" name="implementing_agent">
 	  <option selected="selected">--------</option>
-	  <option value="DPWRT">DPWRT</option>
-	  <option value="IDT">IDT</option>
-	  <option value="RIU">RIU</option>
-	  <option value="To be Decided">To be Decided</option>
-	  <option value="Client Department">Client Department</option>
+	  {% for agent in implementing_agents %}
+	  <option value="{{ agent.name }}">{{ agent.name }}</option>
+	  {% endfor %}
 	</select>
       </div>
     </div>
@@ -551,6 +548,7 @@
   var changes = [];
 
   function updateValue(key, value) {
+      value = value || data[key];
       if ($.isArray(value)) {
 	  for (i=0; i<value.length; i++) {
 	      var newkey = key + '.' + i;
@@ -577,7 +575,11 @@
   }
   
   function updateForm(d) {
-      for (key in d) {
+      if (d) {
+	  data = d;
+      }
+      var values = data;
+      for (key in values) {
 	  var value = d[key];
 	  updateValue(key, value);
       }
@@ -729,6 +731,38 @@
   };
   $('select[name="phase"]').on('change', updatePlanningPhase);
   updatePlanningPhase.call($('select[name="phase"]')[0]);
+				  
+  function updateProgramme() {
+      var data = { 'cluster': $(this).val() };
+      $.ajax({
+	  url: "{% url 'entry:programme' %}",
+	  method: 'GET',
+	  data: data
+      }).success(function(data) {
+	  var programme = $('#programme');
+	  var selected = programme.val();
+	  programme.find('option').each(function() {
+	      var option = $(this);
+	      if (option.attr('value')) {
+		  option.remove()
+	      }
+	  });
+	  $(data).each(function() {
+	      var option = $('<option/>');
+	      option.attr('value', this);
+	      option.text(this);
+	      if (this === selected) {
+		  option.attr('selected', 'selected');
+	      }
+	      programme.append(option);
+	  });
+	  updateValue('programme');
+      }).error(function() {
+	  alert('Unable to retrieve programmes for this cluster.');
+      });
+  };
+  $('select[name="cluster"]').on('change', updateProgramme);
+  updateProgramme.call($('select[name="cluster"]')[0]);
 				  
   $(document).ready(function() {
       $('.input-datepicker').datepicker({

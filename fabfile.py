@@ -13,6 +13,8 @@ def deploy():
         run('git pull')
     with cd(django_dir):
         with prefix('source ' + venv):
+            run('python manage.py syncdb')
+            run('python manage.py migrate')
             run('python manage.py collectstatic --noinput')
     with cd(base_dir):
         sudo('supervisorctl restart pmis')

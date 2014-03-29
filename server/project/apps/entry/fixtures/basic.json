@@ -1,0 +1,439 @@
+[
+{
+    "pk": 1, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Health"
+    }
+},
+{
+    "pk": 2, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Education"
+    }
+},
+{
+    "pk": 3, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Social Development"
+    }
+},
+{
+    "pk": 4, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Culture, Sports, Science and Recreation"
+    }
+},
+{
+    "pk": 5, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Community Safety, Security and Liaison"
+    }
+},
+{
+    "pk": 6, 
+    "model": "entry.cluster", 
+    "fields": {
+        "name": "Department of Economic Development, Environment and Tourism"
+    }
+},
+{
+    "pk": 1, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "MUD AND UNSAFE STRUCTURES: CONVENTIONAL"
+    }
+},
+{
+    "pk": 2, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "UPGRADE AND ADDITIONS"
+    }
+},
+{
+    "pk": 3, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "GRADE R FACILITIES"
+    }
+},
+{
+    "pk": 4, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "SUBSTITUTION OF UNSAFE STRUCTURES"
+    }
+},
+{
+    "pk": 5, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "TECHNICAL SCHOOLS"
+    }
+},
+{
+    "pk": 6, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "SPECIAL SCHOOLS"
+    }
+},
+{
+    "pk": 7, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "NEW SCHOOLS"
+    }
+},
+{
+    "pk": 8, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "DINALEDI PROGRAMME"
+    }
+},
+{
+    "pk": 9, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "BOARDING SCHOOLS"
+    }
+},
+{
+    "pk": 10, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "REFURBSHMENTS AND RENOVATIONS"
+    }
+},
+{
+    "pk": 11, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "ENVIROLOO SANITATION SYSTEM (ON-GOING)"
+    }
+},
+{
+    "pk": 12, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "SINGITA PROGRAMME (ON-GOING)"
+    }
+},
+{
+    "pk": 13, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "MAINTENANCE SCHOOLS (ONGOING)"
+    }
+},
+{
+    "pk": 14, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "BOARDING SCHOOL (ON-GOING)"
+    }
+},
+{
+    "pk": 15, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "Department Of Education (SPECIAL PROGRAMMES)"
+    }
+},
+{
+    "pk": 16, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "SPECIAL SCHOOLS (ON-GOING)"
+    }
+},
+{
+    "pk": 17, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "CURRENT PROGRAMME (ON-GOING)"
+    }
+},
+{
+    "pk": 18, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "REPAIR OF STORM DAMAGED SCHOOLS INFRASTRACTURE"
+    }
+},
+{
+    "pk": 19, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "GRADE- R FACILITIES"
+    }
+},
+{
+    "pk": 20, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "Mud and Unsafe Structures-Unconventional"
+    }
+},
+{
+    "pk": 21, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "Intervention"
+    }
+},
+{
+    "pk": 22, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "Sanitation"
+    }
+},
+{
+    "pk": 23, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 2, 
+        "name": "Maintenance"
+    }
+},
+{
+    "pk": 24, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "HEALTH INFRASTRUCTURE GRANT PROJECTS - Planning and Design"
+    }
+},
+{
+    "pk": 25, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "HOSPITAL REVITALISATION GRANT PROJECTS - Planning and Design"
+    }
+},
+{
+    "pk": 26, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "EQUITABLE SHARE FUNDED PROGRAMME - Planning and Design Projects"
+    }
+},
+{
+    "pk": 27, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "EPWP - Planning and Design Projects"
+    }
+},
+{
+    "pk": 28, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "COLLEGE INFRASTRUCTURE - Planning and Design Projects"
+    }
+},
+{
+    "pk": 29, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "NHI PROGRAMME - Planning and Design Projects"
+    }
+},
+{
+    "pk": 30, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "HEALTH INFRASTRUCTURE GRANT - Construction Projects"
+    }
+},
+{
+    "pk": 31, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "HOSPITAL REVITALISATION GRANT - Construction Projects"
+    }
+},
+{
+    "pk": 32, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "EQUITABLE SHARE FUNDED PROGRAMME - Construction Projects"
+    }
+},
+{
+    "pk": 33, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "EPWP - Construction Projects"
+    }
+},
+{
+    "pk": 34, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "COLLEGE INFRASTRUCTURE - Construction Projects"
+    }
+},
+{
+    "pk": 35, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 1, 
+        "name": "NHI GRANT - Construction Projects"
+    }
+},
+{
+    "pk": 36, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 5, 
+        "name": "DCSSL INFRASTRUCTURE PROJECTS - Planning and Design"
+    }
+},
+{
+    "pk": 37, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 5, 
+        "name": "DCSSL INFRASTRUCTURE PROJECTS - Completed"
+    }
+},
+{
+    "pk": 38, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 4, 
+        "name": "DCSR INFRASTRUCTURE PROJECTS - Planning and Design"
+    }
+},
+{
+    "pk": 39, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 4, 
+        "name": "DCSR INFRASTRUCTURE PROJECTS - Construction"
+    }
+},
+{
+    "pk": 40, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 4, 
+        "name": "DCSR INFRASTRUCTURE PROJECTS - Completed"
+    }
+},
+{
+    "pk": 41, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 6, 
+        "name": "DEDET INFRASTRUCTURE PROJECTS - Construction"
+    }
+},
+{
+    "pk": 42, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 3, 
+        "name": "DSD INFRASTRUCTURE PROJECTS - Planning and Design"
+    }
+},
+{
+    "pk": 43, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 3, 
+        "name": "DSD INFRASTRUCTURE PROJECTS - Construction"
+    }
+},
+{
+    "pk": 44, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 3, 
+        "name": "DSD INFRASTRUCTURE PROJECTS - Construction"
+    }
+},
+{
+    "pk": 45, 
+    "model": "entry.programme", 
+    "fields": {
+        "cluster": 3, 
+        "name": "DSD INFRASTRUCTURE PROJECTS - Completed"
+    }
+},
+{
+    "pk": 1, 
+    "model": "entry.implementingagent", 
+    "fields": {
+        "name": "DPWRT"
+    }
+},
+{
+    "pk": 2, 
+    "model": "entry.implementingagent", 
+    "fields": {
+        "name": "IDT"
+    }
+},
+{
+    "pk": 3, 
+    "model": "entry.implementingagent", 
+    "fields": {
+        "name": "RIU"
+    }
+},
+{
+    "pk": 4, 
+    "model": "entry.implementingagent", 
+    "fields": {
+        "name": "To be Decided"
+    }
+},
+{
+    "pk": 5, 
+    "model": "entry.implementingagent", 
+    "fields": {
+        "name": "Client Department"
+    }
+}
+]
