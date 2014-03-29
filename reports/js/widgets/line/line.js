@@ -99,7 +99,7 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 	    
 	    if (!me.data) { me.load(); }
 	    if (!me.data) { return; }
-	    
+
 	    /* Clear all dynamic items for redraw. */
 	    d.selectAll().remove()
 	    
@@ -107,6 +107,14 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 	    var data = me.data.data;
 	    svg.select('text.title').text(me.data.title);
 	    
+	    console.log(data);
+	    
+	    for (i=0; i<data[0]['values'].length; i++) {
+		data[0]['values'][i].push(data[1]['values'][i][1]);
+		data[1]['values'][i].push(data[0]['values'][i][1]);
+	    }
+	    
+	    console.log(data);
 	    /* Build the y-axis labels and grid. */
 	    var xvalues = data.map(function(x) { return x.values.map(function(y) { return y[0]; }); });
 	    var yvalues = data.map(function(x) { return x.values.map(function(y) { return y[1]; }); });
@@ -227,6 +235,7 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 		    .append('g')
 		    .attr('class', 'labels');
 		dynamic.selectAll('g.line').each(function(d, i) {
+		    var il = i;
 		    var data = d.values;
 		    var group = container.selectAll('g.labels-'+i).data([0])
 			.enter().append('g').attr('class', 'labels-'+i);
@@ -238,9 +247,9 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 			.attr('cy', function(d, i) { return y(d[1]); })
 			.attr('r', 1);
 
-		    var label = group_top.selectAll('text.label').data(data);
+		    var label = group_top.selectAll('g.label-group').data(data);
 		    label.enter().append('text').attr('class', function(d, i) {
-			if (d[1]) { return 'label'; } else { return 'label label-zero' }
+			if ((d[1]>(ymax/10)) && ((il === 1) || (d[1] !== d[2]))) { return 'label label-active'; } else { return 'label label-zero'; }
 		    });
 		    label.attr('x', function(d, i) { return x(d[0]); })
 			.attr('y', function(d, i) { return y(d[1]); })
@@ -249,7 +258,7 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 		    
 		    var link = group.selectAll('line.link').data(data);
 		    link.enter().append('line').attr('class', function(d, i) {
-			if (d[1]) { return 'link'; } else { return 'link link-zero' }
+			if ((d[1]>(ymax/10)) && ((il === 1) || (d[1] !== d[2]))) { return 'link link-active'; } else { return 'link link-zero'; }
 		    });
 		    /*
 		    label.attr('x1', function(d, i) { return x(d[0]); })
@@ -258,8 +267,8 @@ define(['d3', 'text!widgets/line/base.svg'], function(d3, svg) {
 			.attr('y2', function(d, i) { return y(d[1]); });
 		    */
 		});
-		links = container.selectAll('.link');
-		labels = container.selectAll('text.label');
+		links = container.selectAll('.link-active');
+		labels = container.selectAll('text.label-active');
 		container.selectAll('circle.anchor').call(labelForce.update);
 	    })(d);
 	},
