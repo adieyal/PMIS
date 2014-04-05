@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -127,5 +128,29 @@ def programme(request):
         return HttpResponse(json.dumps([]), mimetype='application/json')
     programmes = list(Programme.objects.filter(cluster__name=cluster).values_list('name', flat=True))
     return HttpResponse(json.dumps(programmes), mimetype='application/json')
-    
-   
+
+@csrf_exempt
+def cluster(request):
+    clusters = list(Cluster.objects.all().values('name'))
+    return HttpResponse(json.dumps(clusters), mimetype='application/json')
+
+@csrf_exempt
+def projects_json(request):
+    project_list = (Project.get(uuid) for uuid in Project.list())
+    projects = [{
+        'uuid': p._uuid,
+        'name': p.name,
+        'description': p.description,
+        'contract': p.contract,
+        'cluster': p.cluster,
+        'municipality': p.municipality,
+        'programme': p.programme,
+        'phase': (p.phase or '').title(),
+        'year': p.fyear
+    } for p in project_list]
+    years = set((i['year'] for i in projects))
+    result = [{
+        'year': year,
+        'projects': [p for p in projects if p['year'] == year]
+    } for year in years]
+    return HttpResponse(json.dumps(projects), mimetype='application/json')

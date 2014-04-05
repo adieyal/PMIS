@@ -167,6 +167,10 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = '%s.urls' % SITE_NAME
 ########## END URL CONFIGURATION
 
+########## AUTHENTICATION CONFIGURATION
+# Configuration variables for LoginRequiredMiddleware
+LOGIN_EXEMPT_URLS = ['^ui/(.*)', '^account/(.*)']
+########## END AUTHENTICATION CONFIGURATION
 
 ########## APP CONFIGURATION
 DJANGO_APPS = (
@@ -202,6 +206,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'apps.reports',
     'apps.entry',
+    'apps.ui',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -270,8 +275,9 @@ WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
 
 
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_URL = '/'
+LOGIN_URL = '/ui/login.html'
+LOGIN_REDIRECT_URL = '/ui/index.html'
+LOGOUT_URL = '/ui/login.html'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda o: "/",
     }

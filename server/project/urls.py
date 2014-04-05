@@ -13,6 +13,8 @@ urlpatterns = patterns('',
     #url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
     url(r'^accounts/', include('registration.backends.simple.urls', namespace='accounts')),
     #url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
+    url(r'^account/', include('project.apps.account.urls', namespace='account')),
     url(r'^reports/', include('project.apps.reports.urls', namespace='reports')),
     url(r'^entry/', include('project.apps.entry.urls', namespace='entry')),
+    url(r'^ui/', include('project.apps.ui.urls', namespace='ui')),
 )

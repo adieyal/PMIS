@@ -1,0 +1,73 @@
+.login-panel .form-control.has-error {
+    border: 1px solid #A94442;
+    z-index: 10;
+}
+
+.sidenav > ul {
+    max-width: 1000px;
+}
+
+.sidenav ul > li.user {
+    text-align: center;
+    font-size: x-large;
+}
+
+.sidenav ul > li.user:after {
+    content: none;
+}
+
+.well.well-cluster {
+    height: 300px;
+}
+
+.well.well-cluster div.header {
+    height: 45px;
+}
+
+.well.well-cluster .flot-charts {
+    height: 200px;
+}
+
+.col-cluster {
+    opacity: 0.5;
+    cursor: pointer;
+    -webkit-transition: all 0.25s;
+    transition: all 0.25s;
+}
+
+.col-cluster:hover {
+    opacity: 1;
+    -webkit-transform: scale(1.025);
+}
+
+.report-frame {
+    width: 100%;
+    height: 100%;
+    min-height: 1000px;
+    border: 1px solid #CCC;
+    background-color: #FFF;
+}
+
+.list-projects {
+    width: 100%;
+}
+
+.list-projects tr {
+    cursor: pointer;
+}
+
+.list-projects > th:nth-child(1) {
+    width: 30%;
+}
+
+.list-projects > th:nth-child(2) {
+    width: 15%;
+}
+
+.list-projects > th:nth-child(3) {
+    width: 30%;
+}
+
+.list-projects > th:nth-child(3) {
+    width: 15%;
+}
