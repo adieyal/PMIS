@@ -294,6 +294,7 @@ def project_json(request, project_id, year=None, month=None):
                                         _progress_for_month(project.planning, month0))[1],
         'start-date-actual': _date(project.actual_start),
         'start-date-planned': _date(project.planned_start),
-        'year': '%d/%d' % (_safe_int(project.fyear, -1), _safe_int(project.fyear)) if _safe_int(project.fyear) else 'Unknown'
+        #'year': '%d/%d' % (_safe_int(project.fyear, -1), _safe_int(project.fyear)) if _safe_int(project.fyear) else 'Unknown'
+        'year': '%d/%d' % (year-1, year) if year else 'Unknown'
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
