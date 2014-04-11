@@ -140,11 +140,10 @@ def project_json(request, project_id, year=None, month=None):
         return '%.0f months' % (months)
         
     def _currency(value):
-        try:
-            value = int(value)
-        except (ValueError, TypeError):
-            return ''
-        return 'R{:,.0f}'.format(value)
+        value = _safe_int(value)
+        if value:
+            return 'R{:,.0f}'.format(value)
+        return ''
         
     def _percent(value):
         try:
