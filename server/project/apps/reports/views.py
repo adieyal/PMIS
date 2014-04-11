@@ -111,13 +111,13 @@ def project_json(request, project_id, year=None, month=None):
 
     def _safe_float(val):
         try:
-            return float(val)
+            return float(filter(lambda x: x.isdigit(), val))
         except (TypeError, ValueError):
             return None
             
     def _safe_int(val, add=0):
         try:
-            return int(val) + add
+            return int(filter(lambda x: x.isdigit(), val)) + add
         except (TypeError, ValueError):
             return None
                 
