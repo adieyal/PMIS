@@ -20,6 +20,15 @@ urlpatterns = patterns('project.apps.reports.views',
     url(r'^project/(?P<project_id>[\w-]+)/json$',
         'project_json', {}, name='project_json'),
 
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest$',
+        'cluster_report', {}, name='cluster_base'),
+    url(r'^cluster/(?P<cluster>[\w-]+)/(?P<subreport>\w+)/latest$',
+        'cluster_report', {}, name='cluster'),
+    url(r'^cluster/(?P<cluster>[\w-]+)/dashboard/json$',
+        'cluster_dashboard_json', {}, name='cluster_dashboard_json'),
+
+
+
     url(r'^(?P<report>\w+)/(?P<report_id>[\w-]+)/(?P<subreport>\w+)/(?P<year>\d{4})/(?P<month>\d{2})/$',
         'generic_report', name='generic_report'),
     url(r'^(?P<report>\w+)/(?P<subreport>\w+)/(?P<year>\d{4})/(?P<month>\d{2})/$',
