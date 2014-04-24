@@ -58,7 +58,9 @@ svg {
 
 .page.page-a4 {
     width: 2100px;
-    height: 2970px;
+    max-height: 2970px;
+    
+    padding: 2cm;
     
     position: relative;
     

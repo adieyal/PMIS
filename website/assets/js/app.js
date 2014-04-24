@@ -298,7 +298,12 @@ pmis = (function(jq) {
 	    
 	    iframe.removeAttr('srcdoc', false);
 	    iframe.attr('src', '/reports/project/'+uuid+'/latest');
-	    iframe.css('height', iframe.width()*(297/210)+'px');
+
+	    iframe.load(function() {
+		var page = iframe.contents().find('.page-a4');
+		var bounds = page[0].getBoundingClientRect();
+		iframe.css('height', bounds.height+2)
+	    });
 	}
     };
 

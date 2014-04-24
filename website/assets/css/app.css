@@ -71,3 +71,7 @@
 .list-projects > th:nth-child(3) {
     width: 15%;
 }
+
+.report-frame {
+    overflow-y: scroll;
+}
