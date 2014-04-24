@@ -178,7 +178,7 @@ $color6: #BCBCBC;
     
     .planning-phase-widget {
 	text-align: center;
-	height: 291px;
+	height: 495px;
 
 	.planning-phase-inline {
 	    margin-top: 100px;
@@ -186,6 +186,7 @@ $color6: #BCBCBC;
 	    display: inline-block;
 	    width: 140px;
 	    height: 40px;
+	    border: 1px solid #333;
 	    
 	    &.planning-phase-consultant-appointment {
 		background-color: $color1;
@@ -215,7 +216,7 @@ $color6: #BCBCBC;
 		position: absolute;
 		top: -20%;
 		left: 50%;
-		margin-left: -10px;
+		margin-left: -14px;
 	    }
 	}
 	
@@ -230,7 +231,7 @@ $color6: #BCBCBC;
 		position: absolute;
 		top: -20%;
 		left: 50%;
-		margin-left: -10px;
+		margin-left: -14px;
 	    }
 	}
 	
@@ -245,7 +246,7 @@ $color6: #BCBCBC;
 		position: absolute;
 		top: -20%;
 		left: 50%;
-		margin-left: -10px;
+		margin-left: -14px;
 	    }
 	}
 	
@@ -260,7 +261,39 @@ $color6: #BCBCBC;
 		position: absolute;
 		top: -20%;
 		left: 50%;
-		margin-left: -10px;
+		margin-left: -14px;
+	    }
+	}
+	
+	.block-legend {
+	    ul {
+		text-align: left;
+		
+		li {
+		    margin-left: 30px;
+		    
+		    &:before {
+			top: 0px;
+			left: -30px;
+			border: 1px solid #333;
+		    }
+	    
+		    &:nth-child(1):before {
+			background: $color1;
+		    }
+		    
+		    &:nth-child(2):before {
+			background: $color2;
+		    }
+		    
+		    &:nth-child(3):before {
+			background: $color3;
+		    }
+		    
+		    &:nth-child(4):before {
+			background: $color4;
+		    }
+		}
 	    }
 	}
     }

@@ -56,7 +56,7 @@ def generic_report(request, report, report_id, subreport, year, month):
     context = {'json': None}
     return TemplateResponse(request, template, context)
 
-@cache_page(settings.API_CACHE)
+#@cache_page(settings.API_CACHE)
 def project_report(request, project_id):
     template = 'reports/project/project.html'
     context = { 'json': None }
