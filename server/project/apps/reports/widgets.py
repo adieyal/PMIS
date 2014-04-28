@@ -58,6 +58,8 @@ def build_slider(expenditure, budget, color="#e5b744"):
     return markers
 
 def build_gauge(planned, actual, text1=None, text2=None):
+    planned = _safe_float(planned)
+    actual = _safe_float(actual)
     needles = []
     if abs(actual-planned) < 10:
         text1 = " "
@@ -73,5 +75,5 @@ def build_gauge(planned, actual, text1=None, text2=None):
 def build_donut(values, percentage=False):
     return {
         "as_percentage": percentage, 
-        "values": values
+        "values": [_safe_float(value) for value in values]
     }

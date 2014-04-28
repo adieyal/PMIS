@@ -10,6 +10,10 @@
 	 template JSON file that can be customized to populate this report. -->
     <script type="text/javascript" src="{% static 'js/generate.js' %}"></script>
 
+    <!-- This script scales the report to fit to the size of the
+	 browser window. -->
+    <script type="text/javascript" src="{% static 'js/scale.js' %}"></script>
+
     <script>
       require.config({
 	  baseUrl: "{% static 'js' %}",
@@ -25,7 +29,7 @@
 	  <div class="page-header-logo">
 	    <img src="{% static 'img/logo.png' %}" />
 	  </div>
-	  <div class="page-header-date"><span class="replace" id="month">-</span> (<span class="replace" id="start_year"></span>/<span class="replace" id="end_year"></span>)</span></div>
+	  <div class="page-header-date"><span class="replace" id="month"></span> (<span class="replace" id="year"></span>)</span></div>
 	  <div class="page-header-heading">Cluster Report</div>
 	  <ul class="page-header-tabs">
 	    <li>
@@ -44,32 +48,32 @@
 	</div>
       </div>
       <div class="line"></div>
-      <h1 class="heading-orange"><span class="replace" id="client">Department of Health</span></h1>
+      <h1 class="heading-orange"><span class="replace" id="client"></span></h1>
       <div class="container container-grey">
 	<div class="column column-75">
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-projects-total">30</span>
+	    Total number of projects: <span class="replace" id="summary-projects-total"></span>
 	  </div>
 	  <div class="column column-50 column-nomargin">
 	    <div class="block block-white center">
-	      Projects in planning: <span class="replace" id="summary-projects-planning">30</span>
+	      Projects in planning: <span class="replace" id="summary-projects-planning"></span>
 	    </div>
 	    <div class="block block-white center">
-	      Projects in implementation: <span class="replace" id="summary-projects-implementation">30</span>
+	      Projects in implementation: <span class="replace" id="summary-projects-implementation"></span>
 	    </div>
 	    <div class="block block-grey center">
-	      Final accounts: <span class="replace" id="summary-projects-accounts">7</span>
+	      Final accounts: <span class="replace" id="summary-projects-accounts"></span>
 	    </div>
 	  </div>
 	  <div class="column column-50 column-nomargin">
 	    <div class="block block-grey center">
-	      Completed projects: <span class="replace" id="summary-projects-completed">30</span>
+	      Completed projects: <span class="replace" id="summary-projects-completed"></span>
 	    </div>
 	    <div class="block block-grey center">
-	      Projects to be completed in 3 months: <span class="replace" id="summary-projects-3months">30</span>
+	      Projects to be completed in 3 months: <span class="replace" id="summary-projects-3months"></span>
 	    </div>
 	    <div class="block block-grey center">
-	      Total progress: <span class="replace" id="summary-progress">40%</span>
+	      Total progress: <span class="replace" id="summary-progress"></span>
 	    </div>
 	  </div>
 	</div>
@@ -84,26 +88,26 @@
       <div class="container container-grey">
 	<div class="column column-33">
 	  <div class="block block-darkgrey center">
-	    Total number of projects in planning: <span class="replace" id="planning-total">00</span>
+	    Total number of projects in planning: <span class="replace" id="planning-total"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Projects in planning completed: <span class="replace" id="planning-completed">00</span>
-	  </div>
-	</div>
-	<div class="column column-33">
-	  <div class="block block-white center">
-	    Consultant appointment: <span class="replace" id="planning-appointment">00</span>
-	  </div>
-	  <div class="block block-white center">
-	    Design and Costing: <span class="replace" id="planning-design">00</span>
+	    Projects in planning completed: <span class="replace" id="planning-completed"></span>
 	  </div>
 	</div>
 	<div class="column column-33">
 	  <div class="block block-white center">
-	    Documentation: <span class="replace" id="planning-documentation">00</span>
+	    Consultant appointment: <span class="replace" id="planning-appointment"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Projects for Tender: <span class="replace" id="planning-tender">00</span>
+	    Design and Costing: <span class="replace" id="planning-design"></span>
+	  </div>
+	</div>
+	<div class="column column-33">
+	  <div class="block block-white center">
+	    Documentation: <span class="replace" id="planning-documentation"></span>
+	  </div>
+	  <div class="block block-white center">
+	    Projects for Tender: <span class="replace" id="planning-tender"></span>
 	  </div>
 	</div>
       </div>
@@ -213,33 +217,33 @@
       </div>
       <div class="line"></div>
       
-      <h1 class="heading-orange">Department of Health</h1>
+      <h1 class="heading-orange"><span class="replace" id="client"></span></h1>
       
       <h2>Implementation</h2>
       <div class="container container-grey">
 	<div class="column column-33">
 	  <div class="block block-darkgrey center">
-	    Total projects in implementation: <span class="replace" id="implementation-total">00</span>
+	    Total projects in implementation: <span class="replace" id="implementation-total"></span>
 	  </div>
 	  <div class="block block-orange">
-	    Total projects due in financial year: <span class="replace right" id="implementation-fy">00</span>
+	    Total projects due in financial year: <span class="replace right" id="implementation-fy"></span>
 	  </div>
 	  <div class="block block-purple">
-	    Projects due in next 3 months: <span class="replace right" id="implementation-3months">00</span>
+	    Projects due in next 3 months: <span class="replace right" id="implementation-3months"></span>
 	  </div>
 	  <div class="block block-brown">
-	    Projects in practical completion: <span class="replace right" id="implementation-practical">00</span>
+	    Projects in practical completion: <span class="replace right" id="implementation-practical"></span>
 	  </div>
 	  <div class="block block-blue">
-	    Projects in final completion: <span class="replace right" id="implementation-final">00</span>
+	    Projects in final completion: <span class="replace right" id="implementation-final"></span>
 	  </div>
 	  <div class="block block-ggrey">
-	    Projects due this month: <span class="replace right" id="implementation-month">00</span>
+	    Projects due this month: <span class="replace right" id="implementation-month"></span>
 	  </div>
 	</div>
 	<div class="column column-33">
 	  <div class="block block-grey center">
-	    Completion: <span class="replace" id="implementation-completion-percent">00%</span>
+	    Total projects in implementation: <span class="replace" id="implementation-total"></span>
 	  </div>
 	  <div class="block block-quintuple block-nopad">
 	    <div class="widget" data-widget="donut" data-src="json#implementation-donut"></div>
@@ -247,7 +251,7 @@
 	</div>
 	<div class="column column-33">
 	  <div class="block block-grey center">
-	    Total Progress: <span class="replace" id="implementation-progress-percent">00%</span>
+	    Total Progress: <span class="replace" id="implementation-progress"></span>
 	  </div>
 	  <div class="block block-quintuple block-nopad">
 	    <div class="widget" data-widget="gauge" data-src="json#implementation-gauge"></div>
@@ -300,44 +304,44 @@
       </div>
       
       <div class="container container-transparent">
-	{% for district in 'abc' %}
+	{% for district in districts %}
 	<div class="column column-33 column-narrower">
 	  <div class="column column-bordered one-column">
 	    <div class="block block-darkgrey center">
-	      {% if district = 'a' %}Nkangala District{% endif %}
-	      {% if district = 'b' %}Gert Sibande District{% endif %}
-	      {% if district = 'c' %}Enhlanzeni District{% endif %}
+	      {% if district = 'nkangala' %}Nkangala District{% endif %}
+	      {% if district = 'gertsibande' %}Gert Sibande District{% endif %}
+	      {% if district = 'ehlanzeni' %}Ehlanzeni District{% endif %}
 	    </div>
 	    <div class="block block-green">
-	      Projects in implementation: <span class="replace right" id="district-{{district}}-implementation">00</span>
+	      Projects in implementation: <span class="replace right" id="district-{{district}}-projects-implementation"></span>
 	    </div>
 	    <div class="block block-orange">
-	      Projects in financial year end: <span class="replace right" id="district-{{district}}-fy">00</span>
+	      Projects in financial year end: <span class="replace right" id="district-{{district}}-projects-due-fy"></span>
 	    </div>
 	    <div class="block block-purple">
-	      Projects due in coming 3 months: <span class="replace right" id="district-{{district}}-3months">00</span>
+	      Projects due in coming 3 months: <span class="replace right" id="district-{{district}}-projects-due-3months"></span>
 	    </div>
 	    <div class="block block-brown">
-	      Projects due this month: <span class="replace right" id="district-{{district}}-month">00</span>
+	      Projects due this month: <span class="replace right" id="district-{{district}}-projects-due-month"></span>
 	    </div>
 	    <div class="block block-blue">
-	      Projects in practical completion: <span class="replace right" id="district-{{district}}-practical">00</span>
+	      Projects in practical completion: <span class="replace right" id="district-{{district}}-projects-practical"></span>
 	    </div>
 	    <div class="block block-ggrey">
-	      Projects in final completion: <span class="replace right" id="district-{{district}}-final">00</span>
+	      Projects in final completion: <span class="replace right" id="district-{{district}}-projects-final"></span>
 	    </div>
 	    <div class="container">
 	      <div class="column column-50">
 		<div class="block block-quintuple block-nopad">
-		  <div class="widget" data-widget="donut" data-src="json#district-{{district}}-donut"></div>
+		  <div class="widget" data-widget="donut" data-src="json#district-{{district}}-projects-donut"></div>
 		</div>
 	      </div>
 	      <div class="column column-50">
 		<div class="block block-white center">
-		  Total Progress: <span class="replace" id="district-{{district}}-progress">00%</span>
+		  Total Progress: <span class="replace" id="district-{{district}}-progress"></span>
 		</div>
 		<div class="block block-quad block-nopad">
-		  <div class="widget" data-widget="gauge" data-src="json#district-{{district}}-gauge"></div>
+		  <div class="widget" data-widget="gauge" data-src="json#district-{{district}}-progress-gauge"></div>
 		</div>
 	      </div>
 	    </div>

@@ -105,7 +105,24 @@ def _project_status(actual, planned):
         return ('On Target', 'green')
 
 def _avg(values):
+    if len(values) == 0:
+        return ''
     return sum(values)/float(len(values))
+
+def _in_month(date, year, month):
+    year = _safe_int(year)
+    month = _safe_int(month)
+    try:
+        date = iso8601.parse_date(date).replace(tzinfo=None)
+    except iso8601.ParseError:
+        return False
+    if date < datetime(year, month, 1, 0, 0, 0, 0):
+        return False
+    due_month = (month % 12) + 1
+    due_year = year + (month // 12)
+    due_day = calendar.monthrange(due_year, due_month)[1]
+    due = datetime(due_year, due_month, due_day, 23, 59, 59, 0)
+    return date < due
 
 def _in_3months(date, year, month):
     year = _safe_int(year)
@@ -118,6 +135,25 @@ def _in_3months(date, year, month):
         return False
     due_month = ((month + 2) % 12) + 1
     due_year = year + ((month + 2) // 12)
+    due_day = calendar.monthrange(due_year, due_month)[1]
+    due = datetime(due_year, due_month, due_day, 23, 59, 59, 0)
+    return date < due
+
+def _in_financial_year(date, year, month):
+    year = _safe_int(year)
+    month = _safe_int(month)
+    if month < 4:
+        fyear = year
+    else:
+        fyear = year + 1
+    try:
+        date = iso8601.parse_date(date).replace(tzinfo=None)
+    except iso8601.ParseError:
+        return False
+    if date < datetime(year, month, 1, 0, 0, 0, 0):
+        return False
+    due_month = 3 # March of the financial year.
+    due_year = fyear
     due_day = calendar.monthrange(due_year, due_month)[1]
     due = datetime(due_year, due_month, due_day, 23, 59, 59, 0)
     return date < due
@@ -398,12 +434,15 @@ def project_json(request, project_id, year=None, month=None):
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 
-@cache_page(settings.API_CACHE)
+#@cache_page(settings.API_CACHE)
 def cluster_report(request, cluster, subreport=None):
     if not subreport:
         return redirect('cluster', cluster=cluster, subreport='dashboard')
     template = 'reports/cluster/{subreport}.html'.format(subreport=subreport)
-    context = { 'json': None }
+    context = {
+        'json': None,
+        'districts': ['nkangala', 'gertsibande', 'ehlanzeni']
+    }
     return TemplateResponse(request, template, context)
 
 @cache_page(settings.API_CACHE)
@@ -431,12 +470,12 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         '01': (9, 0),  '02': (10, 0), '03': (11, 0)
     }
     month0, year_add = MONTHS0[month]
-    year += year_add
+    fyear = year + year_add
     
     context = {
         "client": projects[0].cluster,
-        'year': '%d/%d' % (year-1, year) if year else 'Unknown',
-        'month': MONTHS[int(month)-1],
+        "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
+        "month": MONTHS[int(month)-1],
 
         ### Summary section
         "total-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])),
@@ -445,10 +484,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
         ),
         "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
-        "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if project.phase == 'implementation'])),
+        "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "total-progress-gauge": build_gauge(
-            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if project.phase == 'implementation']),
-            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if project.phase == 'implementation'])
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
         ),
         "total-projects": len(projects),
         "total-projects-accounts": len([p for p in projects if p.phase == 'final-accounts']),
@@ -468,7 +507,7 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                 "projects-planning": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
                 "projects-total": len([p for p in projects if p.programme == programme]),
                 "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
-            } for programme in programmes
+            } for programme in programmes if programme != '--------'
         ],
         ###
         ### Planning section
@@ -495,17 +534,17 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "implementation-projects-completed": len([p for p in projects if p.phase == 'completed']),
         "implementation-projects-practical-completion": 0,
         "implementation-projects-final-completion": 0,
-        "implementation-projects-due-3months": len([p for p in projects if p.phase == 'implementation' and _in_3months(project.planned_completion, year, month)]),
-        "implementation-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if project.phase == 'implementation'])),
-        "implementation-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if project.phase == 'implementation'])),
-        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if project.phase == 'implementation'])),
+        "implementation-projects-due-3months": len([p for p in projects if p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "implementation-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if project.phase == 'implementation']),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if project.phase == 'implementation'])
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation']),
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])
         ),
         "implementation-progress-gauge": build_gauge(
-            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if project.phase == 'implementation']),
-            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if project.phase == 'implementation'])
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
         ),
         
         ###
@@ -530,7 +569,7 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                     len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
                     len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
                 ]),
-            } for programme in programmes_implementation
+            } for programme in programmes_implementation if programme != '--------'
         ],
         ###
         ### District summary section
@@ -587,6 +626,210 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
             len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
             len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         ]),
+        ###
+    }
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+#@cache_page(settings.API_CACHE)
+def cluster_progress_json(request, cluster, year=None, month=None):
+    projects = filter(
+        lambda x: x.cluster.lower().replace(' ', '-') == cluster,
+        [Project.get(p) for p in Project.list() if p]
+    )
+    programmes = set([p.programme for p in projects])
+    programmes_implementation = set([p.programme for p in projects if p.phase == 'implementation'])
+
+    if not year or not month:
+        timestamp = max([project.timestamp for project in projects])
+        year = timestamp.year
+        month = '%02d' % (timestamp.month)
+    else:
+        year = int(year)
+        month = month
+        
+    # Convert month number to 0 indexed month.
+    MONTHS0 = {
+        '04': (0, 1),  '05': (1, 1),  '06': (2, 1),
+        '07': (3, 1),  '08': (4, 1),  '09': (5, 1),
+        '10': (6, 1),  '11': (7, 1),  '12': (8, 1),
+        '01': (9, 0),  '02': (10, 0), '03': (11, 0)
+    }
+    month0, year_add = MONTHS0[month]
+    fyear = year + year_add
+    
+    context = {
+        "client": projects[0].cluster,
+        "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
+        "month": MONTHS[int(month)-1],
+
+        ### Summary section
+        "summary-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
+        "summary-projects-3months": len([p for p in projects if p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "summary-projects-accounts": len([p for p in projects if p.phase == 'final-accounts']),
+        "summary-projects-completed": len([p for p in projects if p.phase == 'completed']),
+        "summary-projects-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
+        ),
+        "summary-projects-implementation": len([p for p in projects if p.phase == 'implementation']),
+        "summary-projects-planning": len([p for p in projects if p.phase == 'planning']),
+        "summary-projects-total": len([p for p in projects]),
+        ###
+        ### Planning section
+        "planning-appointment": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
+        "planning-completed": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'completed']),
+        "planning-design": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'design-costing']),
+        "planning-documentation": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'documentation']),
+        "planning-tender": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'tender']),
+        "planning-total": len([p for p in projects if p.phase == 'planning']),
+        ###
+        ### Programmes in planning section
+        "programmes-planning": [
+            {
+                "name": programme,
+                "appointments": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
+                "completed": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'completed']),
+                "design": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'design-costing']),
+                "documentation": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'documentation']),
+                "tender": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'tender']),
+                "total": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
+                "donut": {
+                    "values": [
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'completed']),
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'design-costing']),
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'documentation']),
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'tender'])
+                    ]
+                },
+            } for programme in programmes if programme != '--------'
+        ],
+        ###
+        ### Implementation section
+        "implementation-3months": len([p for p in projects if p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "implementation-final": len([p for p in projects if p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        "implementation-fy": len([p for p in projects if p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+        "implementation-month": len([p for p in projects if p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+        "implementation-practical": len([p for p in projects if p.phase == 'implementation' and p.implementation_phase ==  'practical-completion']),
+        "implementation-total": len([p for p in projects if p.phase == 'implementation']),
+        "implementation-donut": {
+            "values": [
+                len([p for p in projects if p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+                len([p for p in projects if p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+                len([p for p in projects if p.phase == 'implementation' and p.implementation_phase ==  'practical-completion']),
+                len([p for p in projects if p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+                len([p for p in projects if p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+            ]
+        },
+        "implementation-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
+        ),
+        ###
+        ### Programmes in implementation section
+        "programmes-implementation": [
+            {
+                "name": programme,
+                "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
+                "projects-0-50": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+                "projects-51-75": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+                "projects-76-99": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+                "projects-100": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+                "projects-donut": build_donut([
+                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+                ]),
+                "progress": _avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                "progress-gauge": build_gauge(
+                    _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                    _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                ),
+            } for programme in programmes_implementation if programme != '--------'
+        ],
+        ###
+        ### Projects for tender section
+        "projects-tender": [
+            {
+                "name": p.name,
+            } for p in projects if p.phase == 'planning' and p.planning_phase == 'tender'
+        ],
+        ###
+        ### Projects completed for implementation section
+        "projects-tender": [
+            {
+                "name": p.name,
+                "budget": _currency(p.total_anticipated_cost)
+            } for p in projects if p.phase == 'planning' and p.planning_phase == 'completed'
+        ],
+        ###
+        ### Completed projects section
+        "projects-tender": [
+            {
+                "name": p.name,
+                "budget": _currency(p.total_anticipated_cost)
+            } for p in projects if p.phase == 'completed'
+        ],
+        ###
+        ### District summary section
+        "district-nkangala-projects-implementation": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
+        "district-nkangala-projects-due-fy": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+        "district-nkangala-projects-due-3months": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "district-nkangala-projects-due-month": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+        "district-nkangala-projects-practical": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+        "district-nkangala-projects-final": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        "district-nkangala-projects-donut": build_donut([
+            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        ]),
+        "district-nkangala-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation' and p.district == 'Nkangala'])),
+        "district-nkangala-progress-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Nkangala']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Nkangala'])
+        ),
+        
+        "district-gertsibande-projects-implementation": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
+        "district-gertsibande-projects-due-fy": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+        "district-gertsibande-projects-due-3months": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "district-gertsibande-projects-due-month": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+        "district-gertsibande-projects-practical": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+        "district-gertsibande-projects-final": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        "district-gertsibande-projects-donut": build_donut([
+            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        ]),
+        "district-gertsibande-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation' and p.district == 'Gert Sibande'])),
+        "district-gertsibande-progress-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Gert Sibande']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Gert Sibande'])
+        ),
+        
+        "district-ehlanzeni-projects-implementation": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
+        "district-ehlanzeni-projects-due-fy": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+        "district-ehlanzeni-projects-due-3months": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+        "district-ehlanzeni-projects-due-month": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+        "district-ehlanzeni-projects-practical": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+        "district-ehlanzeni-projects-final": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        "district-ehlanzeni-projects-donut": build_donut([
+            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_financial_year(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _in_month(p.planned_completion, year, month)]),
+            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and p.implementation_phase == 'practical-completion']),
+            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and p.implementation_phase == 'final-completion']),
+        ]),
+        "district-ehlanzeni-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation' and p.district == 'Ehlanzeni'])),
+        "district-ehlanzeni-progress-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Ehlanzeni']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation' and p.district == 'Ehlanzeni'])
+        ),
         ###
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')

@@ -15,17 +15,19 @@ urlpatterns = patterns('project.apps.reports.views',
     url(r'^project/(?P<project_id>[\w-]+)/latest/json$',
         'project_json', {}, name='project_report_json'),
 
-    url(r'^project/(?P<project_id>[\w-]+)/latest$',
+    url(r'^project/(?P<project_id>[\w-]+)/latest/$',
         'project_report', {}, name='project'),
-    url(r'^project/(?P<project_id>[\w-]+)/json$',
+    url(r'^project/(?P<project_id>[\w-]+)/latest/json$',
         'project_json', {}, name='project_json'),
 
     url(r'^cluster/(?P<cluster>[\w-]+)/latest$',
         'cluster_report', {}, name='cluster_base'),
-    url(r'^cluster/(?P<cluster>[\w-]+)/(?P<subreport>\w+)/latest$',
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest/(?P<subreport>\w+)/$',
         'cluster_report', {}, name='cluster'),
-    url(r'^cluster/(?P<cluster>[\w-]+)/dashboard/json$',
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest/dashboard/json$',
         'cluster_dashboard_json', {}, name='cluster_dashboard_json'),
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest/progress/json$',
+        'cluster_progress_json', {}, name='cluster_progress_json'),
 
 
 
