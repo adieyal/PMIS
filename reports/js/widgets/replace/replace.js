@@ -18,18 +18,54 @@ define(['jquery'], function($) {
 	    
 	    if (!me.data) { me.load(); }
 	    if (!me.data) { return; }
-	    
+
 	    node.find('.replace').each(function() {
 		var element = $(this);
 		var id = element.attr('id');
 		var attr = element.data('replace-attr');
-		
+
 		if ((typeof(id) != 'undefined') && (typeof(me.data[id] != 'undefined'))) {
 		    if (attr) {
 			element.attr(attr, me.data[id]);
 		    } else {
 			element.text(me.data[id]);
 		    }
+		}
+	    });
+	    
+	    node.find('template.repeat').each(function() {
+		var template = $(this);
+		var html = template.html();
+		var key = template.attr('id');
+		var all_data = me.data[key];
+		
+		for (var i=0; i<all_data.length; i++) {
+		    var data = all_data[i];
+		    var el = $(html);
+
+		    el.find('.replace').each(function() {
+			var element = $(this);
+			var id = element.attr('id');
+			var attr = element.data('replace-attr');
+
+			if ((typeof(id) != 'undefined') && (typeof(me.data[id] != 'undefined'))) {
+			    if (attr) {
+				element.attr(attr, data[id]);
+			    } else {
+				element.text(data[id]);
+			    }
+			}
+		    });
+		    
+		    var widgets =  el.find('.widget')
+		    for (j=0; j<widgets.length; j++) {
+			var widget = $(widgets[j]);
+			var src = widget.data('src');
+			widget.data('src', src.replace('.i.', '.'+i+'.'));
+			widget.widget({ data: data[src] });
+		    };
+		    
+		    template.parent().append(el);
 		}
 	    });
 	},

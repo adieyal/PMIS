@@ -32,6 +32,9 @@ require(['jquery'], function($) {
 		    element.pngWidget();
 		} else {
 		    element.data('widget-instance', w);
+		    if ((options) && (options.data)) {
+			w.data = options.data;
+		    }
 		    w.init(element);
 		}
 	    });
@@ -58,6 +61,7 @@ require(['jquery'], function($) {
 	return this;
     }
     $(document).ready(function() {
-	$('[data-widget]').widget()
+	$('[data-widget="replace"]').widget()
+	$('.widget[data-widget!="replace"]').widget()
     });
 });

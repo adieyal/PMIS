@@ -506,7 +506,7 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                 "projects-implementation": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
                 "projects-planning": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
                 "projects-total": len([p for p in projects if p.programme == programme]),
-                "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
+                "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])) or 'R 0',
             } for programme in programmes if programme != '--------'
         ],
         ###
