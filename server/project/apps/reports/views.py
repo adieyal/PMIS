@@ -638,6 +638,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
     )
     programmes = set([p.programme for p in projects])
     programmes_implementation = set([p.programme for p in projects if p.phase == 'implementation'])
+    programmes_planning = set([p.programme for p in projects if p.phase == 'planning'])
 
     if not year or not month:
         timestamp = max([project.timestamp for project in projects])
@@ -702,7 +703,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
                         len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'tender'])
                     ]
                 },
-            } for programme in programmes if programme != '--------'
+            } for programme in programmes_planning if programme != '--------'
         ],
         ###
         ### Implementation section
@@ -833,3 +834,146 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         ###
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
+
+#@cache_page(settings.API_CACHE)
+def cluster_performance_json(request, cluster, year=None, month=None):
+    projects = filter(
+        lambda x: x.cluster.lower().replace(' ', '-') == cluster,
+        [Project.get(p) for p in Project.list() if p]
+    )
+    programmes = set([p.programme for p in projects])
+    programmes_implementation = set([p.programme for p in projects if p.phase == 'implementation'])
+    programmes_planning = set([p.programme for p in projects if p.phase == 'planning'])
+
+    if not year or not month:
+        timestamp = max([project.timestamp for project in projects])
+        year = timestamp.year
+        month = '%02d' % (timestamp.month)
+    else:
+        year = int(year)
+        month = month
+        
+    # Convert month number to 0 indexed month.
+    MONTHS0 = {
+        '04': (0, 1),  '05': (1, 1),  '06': (2, 1),
+        '07': (3, 1),  '08': (4, 1),  '09': (5, 1),
+        '10': (6, 1),  '11': (7, 1),  '12': (8, 1),
+        '01': (9, 0),  '02': (10, 0), '03': (11, 0)
+    }
+    month0, year_add = MONTHS0[month]
+    fyear = year + year_add
+    
+    context = {
+        "client": projects[0].cluster,
+        "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
+        "month": MONTHS[int(month)-1],
+
+        ### Summary section
+        "summary-projects-total": len([p for p in projects]),
+        "summary-budget": _currency(sum([p.total_anticipated_cost for p in projects])),
+        "summary-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
+        "summary-under-expenditure": _currency(
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects]) -
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])
+        ),
+        "summary-budget-planning": _currency(sum([p.total_anticipated_cost for p in projects if p.phase == 'planning'])),
+        "summary-budget-implementation": _currency(sum([p.total_anticipated_cost for p in projects if p.phase == 'implementation'])),
+        "summary-budget-final-accounts": _currency(sum([p.total_anticipated_cost for p in projects if p.phase == 'final-accounts'])),
+        "summary-budget-slider": build_slider(
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
+        ),
+        ###
+        ### Planning section
+        "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
+        "planning-budget": _currency(sum([p.total_anticipated_cost for p in projects if p.phase == 'planning'])),
+        "planning-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])),
+        "planning-under-expenditure": _currency(
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning']) -
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])
+        ),
+        "planning-budget-slider": build_slider(
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning']),
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])
+        ),
+        ###
+        ### Programmes in planning section
+        "programmes-planning": [
+            {
+                "name": programme,
+                "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
+                "budget": _currency(sum([p.total_anticipated_cost for p in projects if p.programme == programme and p.phase == 'planning'])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
+                "under-expenditure": _currency(
+                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning']) -
+                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
+                ),
+                "budget-slider": build_slider(
+                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning']),
+                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
+                ),
+            } for programme in programmes_planning if programme != '--------'
+        ],
+        ###
+        ### Implementation section
+        "implementation-projects-total": len([p for p in projects if p.phase == 'implementation']),
+        "implementation-budget": _currency(sum([p.total_anticipated_cost for p in projects if p.phase == 'implementation'])),
+        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-under-expenditure": _currency(
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation']) -
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])
+        ),
+        "implementation-budget-slider": build_slider(
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation']),
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])
+        ),
+        ###
+        ### Programmes in implementation section
+        "programmes-implementation": [
+            {
+                "name": programme,
+                "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
+                "budget": _currency(sum([p.total_anticipated_cost for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "under-expenditure": _currency(
+                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']) -
+                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                ),
+                "budget-slider": build_slider(
+                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                ),
+            } for programme in programmes_implementation if programme != '--------'
+        ],
+        ###
+        ### Overall analysis section
+        "analysis-overall-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
+        "analysis-overall-performance": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
+        "analysis-overall-progress-gauge": build_gauge(
+            _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+            _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
+        ),
+        "analysis-overall-budget-slider": build_slider(
+            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
+            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
+        ),
+        ###
+        ### Programme analysis section
+        "programmes-analysis": [
+            {
+                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
+                "performance": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "progress-gauge": build_gauge(
+                    _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                    _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                ),
+                "budget-slider": build_slider(
+                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme])
+                ),
+            } for programme in programmes_implementation if programme != '--------'
+        ],
+        ###
+    }
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+

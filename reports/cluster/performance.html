@@ -10,6 +10,10 @@
 	 template JSON file that can be customized to populate this report. -->
     <script type="text/javascript" src="{% static 'js/generate.js' %}"></script>
 
+    <!-- This script scales the report to fit to the size of the
+	 browser window. -->
+    <script type="text/javascript" src="{% static 'js/scale.js' %}"></script>
+
     <script>
       require.config({
           baseUrl: "{% static 'js' %}",
@@ -31,7 +35,7 @@
 	  <div class="page-header-logo">
 	    <img src="{% static 'img/logo.png' %}" />
 	  </div>
-	  <div class="page-header-date"><span class="replace" id="month">-</span> (<span class="replace" id="start_year"></span>/<span class="replace" id="end_year"></span>)</span></div>
+	  <div class="page-header-date"><span class="replace" id="month">-</span> (<span class="replace" id="year"></span>)</span></div>
 	  <div class="page-header-heading">Cluster Report</div>
 	  <ul class="page-header-tabs">
 	    <li>
@@ -50,36 +54,36 @@
 	</div>
       </div>
       <div class="line"></div>
-      <h1 class="heading-orange"><span class="replace" id="client">Department of Health</span></h1>
+      <h1 class="heading-orange"><span class="replace" id="client"></span></h1>
       <div class="container container-grey">
 	<div class="three-column column">
 	  <div class="block block-darkgrey center">
-	    Total number of projects: <span class="replace" id="summary-total-projects">30</span>
+	    Total number of projects: <span class="replace" id="summary-projects-total"></span>
 	  </div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#summary-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="json#summary-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
 	<div class="three-column column">
 	  <div class="block block-white center">
-	    Total budget for financial year: <span class="replace" id="summary-budget">R800,000</span>
+	    Total budget for financial year: <span class="replace" id="summary-budget"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Expenditure to date: <span class="replace" id="summary-expenditure">R800,000</span>
+	    Expenditure to date: <span class="replace" id="summary-expenditure"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="summary-under-expenditure">R800,000 (00%)</span>
+	    Under expenditure: <span class="replace" id="summary-under-expenditure"></span>
 	  </div>
 	</div>
 	<div class="three-column column">
 	  <div class="block block-grey center">
-	    Budget for planning: <span class="replace" id="summary-budget-planning">R800,000</span>
+	    Budget for planning: <span class="replace" id="summary-budget-planning"></span>
 	  </div>
 	  <div class="block block-grey center">
-	    Budget for implementation: <span class="replace" id="summary-budget-implementation">R800,000</span>
+	    Budget for implementation: <span class="replace" id="summary-budget-implementation"></span>
 	  </div>
 	  <div class="block block-grey center">
-	    Budget for final accounts: <span class="replace" id="summary-budget-final-accounts">R800,000</span>
+	    Budget for final accounts: <span class="replace" id="summary-budget-final-accounts"></span>
 	  </div>
 	</div>
       </div>
@@ -87,23 +91,23 @@
       <div class="container container-grey">
 	<div class="three-column column">
 	  <div class="block block-darkgrey center">
-	    Total number of projects in planning: <span class="replace" id="planning-total-projects">30</span>
+	    Total number of projects in planning: <span class="replace" id="planning-projects-total"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Budget for financial year: <span class="replace" id="planning-total-budget">R800,000</span>
+	    Budget for financial year: <span class="replace" id="planning-budget"></span>
 	  </div>
 	</div>
 	<div class="three-column column">
 	  <div class="block block-white center">
-	    Expenditure to date: <span class="replace" id="planning-expenditure">R800,000 (00%)</span>
+	    Expenditure to date: <span class="replace" id="planning-expenditure"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="planning-under-expenditure">R800,000 (00%)</span>
+	    Under expenditure: <span class="replace" id="planning-under-expenditure"></span>
 	  </div>
 	</div>
 	<div class="three-column column">
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#planning-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="json#planning-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
       </div>
@@ -175,23 +179,23 @@
       <div class="container container-grey">
 	<div class="column column-33">
 	  <div class="block block-darkgrey center">
-	    Total number of projects in implementation: <span class="replace" id="implementation-projects">00</span>
+	    Total number of projects in implementation: <span class="replace" id="implementation-projects-total"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Budget for financial year: <span class="replace" id="implementation-budget">R800,000</span>
+	    Budget for financial year: <span class="replace" id="implementation-budget"></span>
 	  </div>
 	</div>
 	<div class="column column-33">
 	  <div class="block block-white center">
-	    Expenditure to date: <span class="replace" id="implementation-total-expenditure">R800,000 (00%)</span>
+	    Expenditure to date: <span class="replace" id="implementation-expenditure"></span>
 	  </div>
 	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="implementation-under-expenditure">R800,000 (00%)</span>
+	    Under expenditure: <span class="replace" id="implementation-under-expenditure"></span>
 	  </div>
 	</div>
 	<div class="column column-33">
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#implementation-slider" data-aspect="2"></div>	    
+	    <div class="widget" data-widget="slider" data-src="json#implementation-budget-slider" data-aspect="2"></div>	    
 	  </div>
 	</div>
       </div>
@@ -267,17 +271,17 @@
 	    Overall
 	  </div>
 	  <div class="block block-grey center">
-	    Performance: <span class="replace" id="analysis-overall-performace">30%</span>
+	    Performance: <span class="replace" id="analysis-overall-performance"></span>
 	  </div>
 	  <div class="block"></div>
 	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#analysis-overall-performance-slider" data-aspect="2"></div>
+	    <div class="widget" data-widget="slider" data-src="json#analysis-overall-budget-slider" data-aspect="2"></div>
 	  </div>
 	  <div class="block block-grey center">
-	    Expenditure: <span class="replace" id="analysis-overall-expenditure">10%</span>
+	    Expenditure: <span class="replace" id="analysis-overall-expenditure"></span>
 	  </div>
 	  <div class="block block-quad block-nopad">
-	    <div class="widget" data-widget="gauge" data-src="json#analysis-overall-expenditure-gauge"></div>
+	    <div class="widget" data-widget="gauge" data-src="json#analysis-overall-progress-gauge"></div>
 	  </div>
 	</div>
 	<div class="column column-66 column-dashed-separator">

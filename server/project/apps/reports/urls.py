@@ -28,6 +28,8 @@ urlpatterns = patterns('project.apps.reports.views',
         'cluster_dashboard_json', {}, name='cluster_dashboard_json'),
     url(r'^cluster/(?P<cluster>[\w-]+)/latest/progress/json$',
         'cluster_progress_json', {}, name='cluster_progress_json'),
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest/performance/json$',
+        'cluster_performance_json', {}, name='cluster_performance_json'),
 
 
 
