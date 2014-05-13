@@ -113,35 +113,44 @@
       </div>
 
       <h2>Programmes in planning</h2>
-      <div class="container container-grey">
-	{% for project in 'abcdef' %}
-	<div class="column column-33{% if project not in 'ad' %} column-dashed-separator{% endif %}">
-	  <div class="block block-darkgrey center">
-	    <span class="replace" id="planning-programme-{{project}}-name">-</span>
+      <div class="container container-grey container-nopad">
+	<template id="programmes-planning" class="repeat">
+	<div class="container">
+	  <div class="column column-75">
+	    <div class="block block-darkgrey center">
+	      <span class="replace" id="name"></span>
+	    </div>
+	    <div class="column column-50">
+	      <div class="block block-green">
+		Total number of projects in planning: <span class="replace right" id="total"></span>
+	      </div>
+	      <div class="block block-orange">
+		Projects in planning completed: <span class="replace right" id="completed"></span>
+	      </div>
+	      <div class="block block-purple">
+		Consultant Appointments: <span class="replace right" id="appointments"></span>
+	      </div>
+	    </div>
+	    <div class="column column-50">
+	      <div class="block block-brown">
+		Design and costing: <span class="replace right" id="design"></span>
+	      </div>
+	      <div class="block block-blue">
+		Documentation: <span class="replace right" id="documentation"></span>
+	      </div>
+	      <div class="block block-ggrey">
+		Projects for tender: <span class="replace right" id="tender"></span>
+	      </div>
+	    </div>
 	  </div>
-	  <div class="block block-green">
-	    Total number of projects in planning: <span class="replace right" id="planning-programme-{{project}}-total">-</span>
+	  <div class="column column-25">
+	    <div class="block block-4 block-nopad">
+	      <div class="widget" data-widget="donut" data-src="donut"></div>	    
+	    </div>
 	  </div>
-	  <div class="block block-orange">
-	    Projects in planning completed: <span class="replace right" id="planning-programme-{{project}}-completed">-</span>
-	  </div>
-	  <div class="block block-purple">
-	    Consultant Appointments: <span class="replace right" id="planning-programme-{{project}}-appointments">-</span>
-	  </div>
-	  <div class="block block-brown">
-	    Design and Costing: <span class="replace right" id="planning-programme-{{project}}-design">-</span>
-	  </div>
-	  <div class="block block-blue">
-	    Documentation: <span class="replace right" id="planning-programme-{{project}}-documentation">-</span>
-	  </div>
-	  <div class="block block-ggrey">
-	    Projects for tender: <span class="replace right" id="planning-programme-{{project}}-tender">-</span>
-	  </div>
-	  <div class="block block-quintuple block-nopad">
-	    <div class="widget" data-widget="donut" data-src="json#planning-programme-{{project}}-donut"></div>	    		
-	  </div>
+	  <div class="block block-dotted" data-template="remove-from-last"></div>
 	</div>
-	{% endfor %}
+	</template>
       </div>
       
       <div class="two-column">
@@ -149,40 +158,24 @@
 	<div class="column-left">
 	  <h2>Projects for tender</h2>
 	  <div class="container container-grey">
-	    <div class="column column-50">
-	      {% for project in 'abcdefgh' %}
-	      <div class="block{% if project not in 'hp' %} block-line{% endif %}">
-		<span class="replace" id="for-tender-project-{{project}}-name"></span>
+	    <template id="projects-tender" class="repeat">
+	      <div class="block block-lower">
+		<span class="replace" id="name"></span>
 	      </div>	  
-	      {% endfor %}
-	    </div>
-	    <div class="column column-50">
-	      {% for project in 'ijklmnop' %}
-	      <div class="block{% if project not in 'hp' %} block-line{% endif %}">
-		<span class="replace" id="for-tender-project-{{project}}-name"></span>
-	      </div>	  
-	      {% endfor %}
-	    </div>
+	      <div><div class="block block-lined" data-template="remove-from-last"></div></div>
+	    </template>
 	  </div>
 	</div>
 	
 	<div class="column-right">
 	  <h2>Projects completed for implementation</h2>
 	  <div class="container">
-	    <div class="column column-50">
-	      {% for project in 'abcdefgh' %}
-	      <div class="block{% if project not in 'hp' %} block-line{% endif %}">
-		<span class="replace" id="for-implementation-project-{{project}}-name"></span>
+	    <template id="projects-planning-completed" class="repeat">
+	      <div class="block block-lower">
+		<span class="replace" id="name"></span> - <span class="replace" id="budget"></span>
 	      </div>	  
-	      {% endfor %}
-	    </div>
-	    <div class="column column-50">
-	      {% for project in 'ijklmnop' %}
-	      <div class="block{% if project not in 'hp' %} block-line{% endif %}">
-		<span class="replace" id="for-implementation-project-{{project}}-name"></span>
-	      </div>	  
-	      {% endfor %}
-	    </div>
+	      <div><div class="block block-lined" data-template="remove-from-last"></div></div>
+	    </template>
 	  </div>    
 	</div>
 	
@@ -196,7 +189,7 @@
 	  <div class="page-header-logo">
 	    <img src="{% static 'img/logo.png' %}" />
 	  </div>
-	  <div class="page-header-date">July (2012/2013)</div>
+	  <div class="page-header-date"><span class="replace" id="month"></span> (<span class="replace" id="year"></span>)</span></div>
 	  <div class="page-header-heading">Cluster Report</div>
 	  <ul class="page-header-tabs">
 	    <li>
@@ -260,48 +253,45 @@
       </div>
       
       <h2>Programmes in implementation</h2>
-      <div class="container container-grey">
-	{% for project in 'abc' %}
-	<div class="column column-33{% if project not in 'ad' %} column-dashed-separator{% endif %}">
-	  <div class="block block-darkgrey center">
-	    <span class="replace" id="implementation-programme-{{project}}-name">-</span>
-	  </div>
-	  <div class="block block-green">
-	    Total number of projects in planning: <span class="replace right" id="implementation-programme-{{project}}-total">-</span>
-	  </div>
-	  <div class="block block-orange">
-	    Projects in planning completed: <span class="replace right" id="implementation-programme-{{project}}-completed">-</span>
-	  </div>
-	  <div class="block block-purple">
-	    Consultant Appointments: <span class="replace right" id="implementation-programme-{{project}}-appointments">-</span>
-	  </div>
-	  <div class="block block-brown">
-	    Design and Costing: <span class="replace right" id="implementation-programme-{{project}}-design">-</span>
-	  </div>
-	  <div class="block block-blue">
-	    Documentation: <span class="replace right" id="implementation-programme-{{project}}-documentation">-</span>
-	  </div>
-	  <div class="block block-ggrey">
-	    Projects for tender: <span class="replace right" id="implementation-programme-{{project}}-tender">-</span>
-	  </div>
+      <div class="container container-grey container-nopad">
+	
+	<template id="programmes-implementation" class="repeat">
 	  <div class="container">
-	    <div class="column column-50">
-	      <div class="block block-quintuple block-nopad">
-		<div class="widget" data-widget="donut" data-src="json#implementation-programme-{{project}}-donut"></div>
+	    <div class="block block-darkgrey center">
+	      <span class="replace" id="name"></span>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-orange">
+		0 - 50%: <span class="replace right" id="projects-0-50"></span>
+	      </div>
+	      <div class="block block-purple">
+		51 - 75%: <span class="replace right" id="projects-51-75"></span>
+	      </div>
+	      <div class="block block-brown">
+		76 - 99%: <span class="replace right" id="projects-76-99"></span>
+	      </div>
+	      <div class="block block-blue">
+		100%: <span class="replace right" id="projects-100"></span>
 	      </div>
 	    </div>
-	    <div class="column column-50">
-	      <div class="block block-white center">
-		Total Progress: <span class="replace" id="implementation-programme-{{project}}-progress">00%</span>
+	    <div class="column column-33">
+	      <div class="block block-4 block-nopad">
+		<div class="widget" data-widget="donut" data-src="projects-donut"></div>	    
 	      </div>
-	      <div class="block block-quad block-nopad">
-		<div class="widget" data-widget="gauge" data-src="json#implementation-programme-{{project}}-gauge"></div>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-white center">
+		Total progress: <span class="replace" id="progress"></span>
+	      </div>
+	      <div class="block block-3 block-nopad">
+		<div class="widget" data-widget="gauge" data-src="progress-gauge"></div>	    
 	      </div>
 	    </div>
 	  </div>
-	</div>
-	{% endfor %}
+	</template>
       </div>
+      
+      <div class="block" style="height: 10px;"></div>
       
       <div class="container container-transparent">
 	{% for district in districts %}
@@ -350,6 +340,16 @@
 	{% endfor %}
       </div>
       
+      <h2>Projects completed</h2>
+      <div class="container">
+	<template id="projects-completed" class="repeat">
+	  <div class="block block-lower">
+	    <span class="replace" id="name"></span> - <span class="replace" id="budget"></span>
+	  </div>	  
+	  <div><div class="block block-lined" data-template="remove-from-last"></div></div>
+	</template>
+      </div>    
+
     </div>
     
   </body>

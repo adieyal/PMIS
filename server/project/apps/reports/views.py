@@ -557,8 +557,8 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                     sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme])
                 ),
                 "projects-implementation": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
-                "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
-                "total-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
+                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme])),
                 "projects-0-50": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
                 "projects-51-75": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
                 "projects-76-99": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
@@ -688,16 +688,16 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         "programmes-planning": [
             {
                 "name": programme,
-                "appointments": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
                 "completed": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'completed']),
+                "appointments": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
                 "design": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'design-costing']),
                 "documentation": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'documentation']),
                 "tender": len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'tender']),
                 "total": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
                 "donut": {
-                    "values": [
-                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
+                    "values": [ 
                         len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'completed']),
+                        len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
                         len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'design-costing']),
                         len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'documentation']),
                         len([p for p in projects if p.programme == programme and p.phase == 'planning' and p.planning_phase == 'tender'])
@@ -743,7 +743,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
                     len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
                     len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
                 ]),
-                "progress": _avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                "progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "progress-gauge": build_gauge(
                     _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
                     _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
@@ -759,7 +759,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         ],
         ###
         ### Projects completed for implementation section
-        "projects-tender": [
+        "projects-planning-completed": [
             {
                 "name": p.name,
                 "budget": _currency(p.total_anticipated_cost)
@@ -767,7 +767,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         ],
         ###
         ### Completed projects section
-        "projects-tender": [
+        "projects-completed": [
             {
                 "name": p.name,
                 "budget": _currency(p.total_anticipated_cost)

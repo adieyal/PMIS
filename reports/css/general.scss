@@ -357,6 +357,10 @@ h2 {
 	padding: 10px;
     }
     
+    &.container-nopad {
+	padding: 0;
+    }
+    
     &.container-margin {
 	margin: 10px;
 	padding: 5px 0;
@@ -673,6 +677,22 @@ h2 {
     
     &.block-darkpink {
 	background: $darkpink;
+    }
+    
+    &.block-dotted {
+	border-bottom: 2px dashed $darkgrey;
+	padding: 7px 0;
+	height: 0;
+    }
+    
+    &.block-lined {
+	border-bottom: 1px solid $darkgrey;
+	padding: 0;
+	height: 0;
+    }
+    
+    &.block-lower {
+	height: 39px;
     }
 }
 

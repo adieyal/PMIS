@@ -57,6 +57,13 @@ define(['jquery'], function($) {
 			}
 		    });
 		    
+		    if (i == (all_data.length-1)) {
+			console.log('lastone');
+			var e = el.find('[data-template="remove-from-last"]')
+			console.log(e.length);
+			e.remove();
+		    }
+		    
 		    var widgets =  el.find('.widget')
 		    for (j=0; j<widgets.length; j++) {
 			var widget = $(widgets[j]);
