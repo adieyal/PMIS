@@ -113,66 +113,36 @@
       </div>
       <h2>Programmes in planning</h2>
       <div class="container container-grey">
-	<div class="column three-column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="planning-programme-a-name">PROGRAMME A</span>
+	
+	<template id="programmes-planning" class="repeat">
+	  <div class="container">
+	    <div class="block block-darkgrey center">
+	      <span class="replace" id="name"></span>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-grey center">
+		Total number of projects: <span class="replace" id="projects-total"></span>
+	      </div>
+	      <div class="block block-white center">
+		Budget for financial year: <span class="replace" id="budget"></span>
+	      </div>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-white center">
+		Total Expenditure to date: <span class="replace" id="expenditure"></span>
+	      </div>
+	      <div class="block block-white center">
+		Under expenditure: <span class="replace" id="under-expenditure"></span>
+	      </div>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-2 block-nopad">
+		<div class="widget" data-widget="slider" data-src="budget-slider" data-aspect="2"></div>	    
+	      </div>
+	    </div>
 	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="planning-programme-a-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="planning-programme-a-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="planning-programme-a-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="planning-programme-a-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#planning-programme-a-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
-	<div class="three-column column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="planning-programme-b-name">PROGRAMME B</span>
-	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="planning-programme-b-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="planning-programme-b-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="planning-programme-b-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="planning-programme-b-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#planning-programme-b-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
-	<div class="three-column column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="planning-programme-c-name">PROGRAMME C</span>
-	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="planning-programme-c-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="planning-programme-c-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="planning-programme-c-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="planning-programme-c-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#planning-programme-c-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
+	</template>
+	
       </div>
 
       <h2>Implementation</h2>
@@ -202,127 +172,87 @@
 
       <h2>Programmes in Implementation</h2>
       <div class="container container-grey">
-	<div class="column three-column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="implementation-programme-a-name">PROGRAMME A</span>
+	
+	<template id="programmes-implementation" class="repeat">
+	  <div class="container">
+	    <div class="block block-darkgrey center">
+	      <span class="replace" id="name"></span>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-grey center">
+		Total number of projects: <span class="replace" id="projects-total"></span>
+	      </div>
+	      <div class="block block-white center">
+		Budget for financial year: <span class="replace" id="budget"></span>
+	      </div>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-white center">
+		Total Expenditure to date: <span class="replace" id="expenditure"></span>
+	      </div>
+	      <div class="block block-white center">
+		Under expenditure: <span class="replace" id="under-expenditure"></span>
+	      </div>
+	    </div>
+	    <div class="column column-33">
+	      <div class="block block-2 block-nopad">
+		<div class="widget" data-widget="slider" data-src="budget-slider" data-aspect="2"></div>	    
+	      </div>
+	    </div>
 	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="implementation-programme-a-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="implementation-programme-a-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="implementation-programme-a-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="implementation-programme-a-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#implementation-programme-a-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
-	<div class="three-column column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="implementation-programme-b-name">PROGRAMME B</span>
-	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="implementation-programme-b-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="implementation-programme-b-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="implementation-programme-b-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="implementation-programme-b-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#implementation-programme-b-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
-	<div class="three-column column column-dashed-separator">
-	  <div class="block block-darkgrey center bold">
-	    <span class="replace" id="implementation-programme-c-name">PROGRAMME C</span>
-	  </div>
-	  <div class="block block-line">
-	    Total number of projects: <span class="replace right" id="implementation-programme-c-projects">00</span>
-	  </div>
-	  <div class="block">
-	    Budget for financial year: <span class="replace right" id="implementation-programme-c-budget">R800,000</span>
-	  </div>
-	  <div class="block block-grey center">
-	    Total expenditure to date: <span class="replace" id="implementation-programme-c-total-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-white center">
-	    Under expenditure: <span class="replace" id="implementation-programme-c-under-expenditure">R800,000 (00%)</span>
-	  </div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#implementation-programme-c-slider" data-aspect="2"></div>	    
-	  </div>
-	</div>
+	</template>
+	
       </div>
 
       <h2>Analysis</h2>
       <div class="container container-grey">
-	<div class="column column-33 column-dashed-separator">
+
+	<div class="container">
 	  <div class="block block-darkgrey center">
-	    Overall
+	    <span class="replace" id="name-that-does-not-exist">Overall</span>
 	  </div>
-	  <div class="block block-grey center">
-	    Performance: <span class="replace" id="analysis-overall-performance"></span>
-	  </div>
-	  <div class="block"></div>
-	  <div class="block block-double block-nopad">
-	    <div class="widget" data-widget="slider" data-src="json#analysis-overall-budget-slider" data-aspect="2"></div>
-	  </div>
-	  <div class="block block-grey center">
-	    Expenditure: <span class="replace" id="analysis-overall-expenditure"></span>
-	  </div>
-	  <div class="block block-quad block-nopad">
-	    <div class="widget" data-widget="gauge" data-src="json#analysis-overall-progress-gauge"></div>
-	  </div>
-	</div>
-	<div class="column column-66 column-dashed-separator">
-	  <div class="block block-darkgrey center">
-	    Programmes
-	  </div>
-	  <div class="column column-50 column-nomargin">
-	    <div class="block block-grey center">
-	    <span class="replace" id="analysis-programme-a-name">PROGRAMME A</span>
-	    </div>
+	  <div class="column column-50">
 	    <div class="block block-white center">
-	      Performance: <span class="replace" id="analysis-programme-a-performace">30%</span>
+	      Expenditure: <span class="replace" id="analysis-overall-expenditure"></span>
 	    </div>
-	    <div class="block block-double block-nopad">
-	      <div class="widget" data-widget="slider" data-src="json#analysis-programme-a-performance-slider" data-aspect="2"></div>
-	    </div>
-	    <div class="block block-white center">
-	      Expenditure: <span class="replace" id="analysis-programme-a-expenditure">10%</span>
-	    </div>
-	    <div class="block block-quad block-nopad">
-	      <div class="widget" data-widget="gauge" data-src="json#analysis-programme-a-expenditure-gauge"></div>
+	    <div class="block block-3 block-nopad">
+	      <div class="widget" data-widget="slider" data-src="json#analysis-overall-budget-slider" data-aspect="4"></div>
 	    </div>
 	  </div>
-	  <div class="column column-50 column-nomargin">
-	    <div class="block block-grey center">
-	    <span class="replace" id="analysis-programme-b-name">PROGRAMME B</span>
-	    </div>
+	  <div class="column column-50">
 	    <div class="block block-white center">
-	      Performance: <span class="replace" id="analysis-programme-b-performace">30%</span>
+	      Performance: <span class="replace" id="analysis-overall-performance"></span>
 	    </div>
-	    <div class="block block-double block-nopad">
-	      <div class="widget" data-widget="slider" data-src="json#analysis-programme-b-performance-slider" data-aspect="2"></div>
-	    </div>
-	    <div class="block block-white center">
-	      Expenditure: <span class="replace" id="analysis-programme-b-expenditure">10%</span>
-	    </div>
-	    <div class="block block-quad block-nopad">
-	      <div class="widget" data-widget="gauge" data-src="json#analysis-programme-b-expenditure-gauge"></div>
+	    <div class="block block-3 block-nopad">
+	      <div class="widget" data-widget="gauge" data-src="json#analysis-overall-progress-gauge"></div>	    
 	    </div>
 	  </div>
 	</div>
+	
+	<template id="programmes-analysis" class="repeat">
+	  <div class="container">
+	    <div class="block block-darkgrey center">
+	      <span class="replace" id="name"></span>
+	    </div>
+	    <div class="column column-50">
+	      <div class="block block-white center">
+		Expenditure: <span class="replace" id="expenditure"></span>
+	      </div>
+	      <div class="block block-3 block-nopad">
+		<div class="widget" data-widget="slider" data-src="budget-slider" data-aspect="4"></div>
+	      </div>
+	    </div>
+	    <div class="column column-50">
+	      <div class="block block-white center">
+		Performance: <span class="replace" id="performance"></span>
+	      </div>
+	      <div class="block block-3 block-nopad">
+		<div class="widget" data-widget="gauge" data-src="progress-gauge"></div>	    
+	      </div>
+	    </div>
+	  </div>
+	</template>
+	
       </div>
 
     </div>

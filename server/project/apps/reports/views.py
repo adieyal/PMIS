@@ -961,6 +961,7 @@ def cluster_performance_json(request, cluster, year=None, month=None):
         ### Programme analysis section
         "programmes-analysis": [
             {
+                "name": programme,
                 "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
                 "performance": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "progress-gauge": build_gauge(
