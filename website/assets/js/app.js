@@ -304,6 +304,21 @@ pmis = (function(jq) {
 		var bounds = page[0].getBoundingClientRect();
 		iframe.css('height', bounds.height+2)
 	    });
+	},
+	cluster: function(tab) {
+	    var cluster = localStorage.getItem('cluster-name').toLowerCase().replace(/ /g, '-');
+	    var iframe = jq('.report-frame');
+	    
+	    iframe.removeAttr('srcdoc', false);
+	    iframe.attr('src', '/reports/cluster/'+cluster+'/latest/'+tab+'/');
+
+	    iframe.load(function() {
+		setTimeout(function() {
+		    var page = iframe.contents().find('.page-a4');
+		    var bounds = page[0].getBoundingClientRect();
+		    iframe.css('height', bounds.height+2)
+		}, 1000);
+	    });
 	}
     };
 
@@ -339,7 +354,8 @@ pmis = (function(jq) {
 	    project: navigation.project
 	},
 	loaders: {
-	    project: loaders.project
+	    project: loaders.project,
+	    cluster: loaders.cluster
 	}
     }
 })($);

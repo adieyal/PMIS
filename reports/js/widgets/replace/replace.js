@@ -58,10 +58,7 @@ define(['jquery'], function($) {
 		    });
 		    
 		    if (i == (all_data.length-1)) {
-			console.log('lastone');
-			var e = el.find('[data-template="remove-from-last"]')
-			console.log(e.length);
-			e.remove();
+			el.find('[data-template="remove-from-last"]').remove();
 		    }
 		    
 		    var widgets =  el.find('.widget')
