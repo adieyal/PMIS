@@ -870,15 +870,15 @@ def cluster_performance_json(request, cluster, year=None, month=None):
 
         ### Summary section
         "summary-projects-total": len([p for p in projects]),
-        "summary-budget": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects])),
+        "summary-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])),
         "summary-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
         "summary-under-expenditure": _currency(
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects]) -
             sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])
         ),
-        "summary-budget-planning": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.phase == 'planning'])),
-        "summary-budget-implementation": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.phase == 'implementation'])),
-        "summary-budget-final-accounts": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.phase == 'final-accounts'])),
+        "summary-budget-planning": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])),
+        "summary-budget-implementation": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])),
+        "summary-budget-final-accounts": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'final-accounts'])),
         "summary-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
@@ -886,7 +886,7 @@ def cluster_performance_json(request, cluster, year=None, month=None):
         ###
         ### Planning section
         "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
-        "planning-budget": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.phase == 'planning'])),
+        "planning-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])),
         "planning-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])),
         "planning-under-expenditure": _currency(
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning']) -
@@ -902,7 +902,7 @@ def cluster_performance_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
-                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.programme == programme and p.phase == 'planning'])),
+                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
                 "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
                 "under-expenditure": _currency(
                     sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning']) -
@@ -917,7 +917,7 @@ def cluster_performance_json(request, cluster, year=None, month=None):
         ###
         ### Implementation section
         "implementation-projects-total": len([p for p in projects if p.phase == 'implementation']),
-        "implementation-budget": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.phase == 'implementation'])),
+        "implementation-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-under-expenditure": _currency(
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation']) -
@@ -933,7 +933,7 @@ def cluster_performance_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
-                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "under-expenditure": _currency(
                     sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']) -
