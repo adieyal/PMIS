@@ -320,24 +320,15 @@ def project_json(request, project_id, year=None, month=None):
     project = Project.get(project_id)
     
     map_url = None
-    result = fuzzywuzzy.process.extractOne(project.location, location_data['mainplaces'])
+    result = fuzzywuzzy.process.extractOne(project.municipality, location_data['municipalities'])
     if result:
-        mp, score = result
+        mn, score = result
         if score > 70:
-            map_url = 'MP_CODE/%d.png' % (location_data['mainplace_codes'][mp])
-    
-    if map_url == None:
-        result = fuzzywuzzy.process.extractOne(project.municipality, location_data['municipalities'])
-        if result:
-            mn, score = result
-            if score > 70:
-                map_url = 'MN_CODE/%d.png' % (location_data['municipality_codes'][mn])
-    
+            map_url = settings.STATIC_URL + 'img/municipalities/%s' % (location_data['municipality_files'][mn])
+
     if map_url == None:
         map_url = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
         
-    map_url = 'http://s3.amazonaws.com/tasks.acscomputers.co.za/out/' + map_url
-    
     def _budget_donut(planning, implementation):
         planning = _safe_float(planning) or 0
         implementation = _safe_float(implementation) or 0
