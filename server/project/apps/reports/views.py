@@ -328,6 +328,16 @@ def project_json(request, project_id, year=None, month=None):
 
     if map_url == None:
         map_url = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
+
+    district_map_url = None
+    result = fuzzywuzzy.process.extractOne(project.district, location_data['districts'])
+    if result:
+        district, score = result
+        if score > 70:
+            district_map_url = settings.STATIC_URL + 'img/districts/%s' % (location_data['district_files'][district])
+    
+    if district_map_url == None:
+        district_map_url = 'data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=='
         
     def _budget_donut(planning, implementation):
         planning = _safe_float(planning) or 0
@@ -399,6 +409,7 @@ def project_json(request, project_id, year=None, month=None):
         'jobs': _safe_int(project.jobs) or '',
         'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
         'location_map': map_url,
+        'district_map': district_map_url,
         'mitigations-current': project.remedial_action,
         'mitigations-previous': project.remedial_action_previous,
         'month': MONTHS[int(month)-1],

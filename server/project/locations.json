@@ -1,4 +1,14 @@
 {
+    "districts": [
+	"Gert Sibande",
+	"Ehlanzeni",
+	"Nkangala"
+    ],
+    "district_files": {
+	"Gert Sibande": "gert-sibande.svg",
+	"Ehlanzeni": "ehlanzeni.svg",
+	"Nkangala": "nkangala.svg"
+    },
     "municipalities": [
         "Pixley Ka Seme", 
         "Dipaleseng", 
