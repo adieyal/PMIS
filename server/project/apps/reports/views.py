@@ -474,16 +474,19 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
     month0, year_add = MONTHS0[month]
     fyear = year + year_add
     
+    def _active(phase):
+        return phase in ['planning', 'implementation', 'completed', 'final-accounts']
+    
     context = {
         "client": projects[0].cluster,
         "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
         "month": MONTHS[int(month)-1],
 
         ### Summary section
-        "total-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])),
+        "total-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])),
         "total-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
-            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])
         ),
         "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
         "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
