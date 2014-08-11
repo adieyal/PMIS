@@ -8,7 +8,8 @@
 
 <form class="form-horizontal" method="post">
   {% csrf_token %}
-  <fieldset>
+  
+  <fieldset class="can-minimize minimized">
     <legend>General</legend>
 
     <div class="control-group">
@@ -29,6 +30,32 @@
       <label class="control-label" for="description">Description</label>
       <div class="controls">
 	<input class="input-xxlarge" type="text" id="description" name="description"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="phase">Phase</label>
+      <div class="controls">
+	<select class="span4" id="phase" name="phase">
+	  <option selected="selected">--------</option>
+	  <option value="planning">Planning</option>
+	  <option value="implementation">Implementation</option>
+	  <option value="completed">Completed</option>
+	  <option value="final-accounts">Final Accounts</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planning_phase">Planning Phase</label>
+      <div class="controls">
+	<select class="span4" id="planning_phase" name="planning_phase">
+	  <option selected="selected">--------</option>
+	  <option value="consultant-appointment">Consultant Appointment</option>
+	  <option value="design-costing">Design + Costing</option>
+	  <option value="documentation">Documentation</option>
+	  <option value="tender">Tender</option>
+	</select>
       </div>
     </div>
 
@@ -67,7 +94,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="jobs">Jobs Created</label>
       <div class="controls">
 	<input class="input-xxlarge" type="text" id="jobs" name="jobs"/>
@@ -76,7 +103,7 @@
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Location</legend>
 
     <div class="control-group">
@@ -107,7 +134,7 @@
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Parties</legend>
 
     <div class="control-group">
@@ -129,7 +156,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="contractor">Contractor</label>
       <div class="controls">
 	<input class="input-xxlarge" type="text" id="contractor" name="contractor" autocomplete="off"/>
@@ -145,10 +172,10 @@
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Dates</legend>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-implementation">
       <label class="control-label" for="planning_start">Planning Start</label>
       <div class="controls">
 	<div class="input-group">
@@ -158,7 +185,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-implementation">
       <label class="control-label" for="planning_completion">Planning Completion</label>
       <div class="controls">
 	<div class="input-group">
@@ -168,7 +195,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="implementation_handover">Implementation Handover</label>
       <div class="controls">
 	<div class="input-group">
@@ -188,7 +215,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="actual_start">Actual Start</label>
       <div class="controls">
 	<div class="input-group">
@@ -208,7 +235,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="revised_completion">Revised Completion</label>
       <div class="controls">
 	<div class="input-group">
@@ -218,7 +245,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="actual_completion">Actual Completion</label>
       <div class="controls">
 	<div class="input-group">
@@ -228,7 +255,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="extensions">Time Extensions</label>
       <div class="controls">
 	<div class="input-group">
@@ -240,7 +267,7 @@
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Budget</legend>
 
     <div class="control-group">
@@ -290,7 +317,7 @@
       </div>
     </div>
 
-    <div class="control-group">
+    <div class="control-group hide-for-phase hide-for-planning">
       <label class="control-label" for="budget_variation_orders">Variation Orders</label>
       <div class="controls">
 	<div class="input-group">
@@ -301,43 +328,13 @@
     </div>
 
     <div class="control-group">
-      <div class="controls">
-	<span class="span1" style="margin-left: 15px;">Apr</span>
-	<span class="span1" style="margin-left: 5px;">May</span>
-	<span class="span1" style="margin-left: 5px;">Jun</span>
-	<span class="span1" style="margin-left: 5px;">Jul</span>
-	<span class="span1" style="margin-left: 5px;">Aug</span>
-	<span class="span1" style="margin-left: 5px;">Sep</span>
-	<span class="span1" style="margin-left: 5px;">Oct</span>
-	<span class="span1" style="margin-left: 5px;">Nov</span>
-	<span class="span1" style="margin-left: 5px;">Dec</span>
-	<span class="span1" style="margin-left: 5px;">Jan</span>
-	<span class="span1" style="margin-left: 5px;">Feb</span>
-	<span class="span1" style="margin-left: 5px;">Mar</span>
-      </div>
-    </div>
-
-    <div class="control-group">
       <label class="control-label" for="actual">Planned Expenditure</label>
-      <div class="controls">
-	<input class="span1" type="text" id="planning.0.expenditure" name="planning.0.expenditure"/>
-	<input class="span1" type="text" id="planning.1.expenditure" name="planning.1.expenditure"/>
-	<input class="span1" type="text" id="planning.2.expenditure" name="planning.2.expenditure"/>
-	<input class="span1" type="text" id="planning.3.expenditure" name="planning.3.expenditure"/>
-	<input class="span1" type="text" id="planning.4.expenditure" name="planning.4.expenditure"/>
-	<input class="span1" type="text" id="planning.5.expenditure" name="planning.5.expenditure"/>
-	<input class="span1" type="text" id="planning.6.expenditure" name="planning.6.expenditure"/>
-	<input class="span1" type="text" id="planning.7.expenditure" name="planning.7.expenditure"/>
-	<input class="span1" type="text" id="planning.8.expenditure" name="planning.8.expenditure"/>
-	<input class="span1" type="text" id="planning.9.expenditure" name="planning.9.expenditure"/>
-	<input class="span1" type="text" id="planning.10.expenditure" name="planning.10.expenditure"/>
-	<input class="span1" type="text" id="planning.11.expenditure" name="planning.11.expenditure"/>
-      </div>
+      <div id="planning-expenditure" class="controls"></div>
     </div>
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Expenditure</legend>
 
     <div class="control-group">
@@ -371,132 +368,28 @@
     </div>
 
     <div class="control-group">
-      <div class="controls">
-	<span class="span1" style="margin-left: 15px;">Apr</span>
-	<span class="span1" style="margin-left: 5px;">May</span>
-	<span class="span1" style="margin-left: 5px;">Jun</span>
-	<span class="span1" style="margin-left: 5px;">Jul</span>
-	<span class="span1" style="margin-left: 5px;">Aug</span>
-	<span class="span1" style="margin-left: 5px;">Sep</span>
-	<span class="span1" style="margin-left: 5px;">Oct</span>
-	<span class="span1" style="margin-left: 5px;">Nov</span>
-	<span class="span1" style="margin-left: 5px;">Dec</span>
-	<span class="span1" style="margin-left: 5px;">Jan</span>
-	<span class="span1" style="margin-left: 5px;">Feb</span>
-	<span class="span1" style="margin-left: 5px;">Mar</span>
-      </div>
-    </div>
-
-    <div class="control-group">
       <label class="control-label" for="actual">Actual Expenditure</label>
-      <div class="controls">
-	<input class="span1" type="text" id="actual.0.expenditure" name="actual.0.expenditure"/>
-	<input class="span1" type="text" id="actual.1.expenditure" name="actual.1.expenditure"/>
-	<input class="span1" type="text" id="actual.2.expenditure" name="actual.2.expenditure"/>
-	<input class="span1" type="text" id="actual.3.expenditure" name="actual.3.expenditure"/>
-	<input class="span1" type="text" id="actual.4.expenditure" name="actual.4.expenditure"/>
-	<input class="span1" type="text" id="actual.5.expenditure" name="actual.5.expenditure"/>
-	<input class="span1" type="text" id="actual.6.expenditure" name="actual.6.expenditure"/>
-	<input class="span1" type="text" id="actual.7.expenditure" name="actual.7.expenditure"/>
-	<input class="span1" type="text" id="actual.8.expenditure" name="actual.8.expenditure"/>
-	<input class="span1" type="text" id="actual.9.expenditure" name="actual.9.expenditure"/>
-	<input class="span1" type="text" id="actual.10.expenditure" name="actual.10.expenditure"/>
-	<input class="span1" type="text" id="actual.11.expenditure" name="actual.11.expenditure"/>
-      </div>
+      <div id="actual-expenditure" class="controls"></div>
     </div>
 
   </fieldset>
 
-  <fieldset>
+  <fieldset class="can-minimize minimized hide-for-phase hide-for-planning">
     <legend>Progress</legend>
 
     <div class="control-group">
-      <div class="controls">
-	<span class="span1" style="margin-left: 15px;">Apr</span>
-	<span class="span1" style="margin-left: 5px;">May</span>
-	<span class="span1" style="margin-left: 5px;">Jun</span>
-	<span class="span1" style="margin-left: 5px;">Jul</span>
-	<span class="span1" style="margin-left: 5px;">Aug</span>
-	<span class="span1" style="margin-left: 5px;">Sep</span>
-	<span class="span1" style="margin-left: 5px;">Oct</span>
-	<span class="span1" style="margin-left: 5px;">Nov</span>
-	<span class="span1" style="margin-left: 5px;">Dec</span>
-	<span class="span1" style="margin-left: 5px;">Jan</span>
-	<span class="span1" style="margin-left: 5px;">Feb</span>
-	<span class="span1" style="margin-left: 5px;">Mar</span>
-      </div>
-    </div>
-
-    <div class="control-group">
       <label class="control-label" for="actual">Planned Progress</label>
-      <div class="controls">
-	<input class="span1" type="text" id="planning.0.progress" name="planning.0.progress"/>
-	<input class="span1" type="text" id="planning.1.progress" name="planning.1.progress"/>
-	<input class="span1" type="text" id="planning.2.progress" name="planning.2.progress"/>
-	<input class="span1" type="text" id="planning.3.progress" name="planning.3.progress"/>
-	<input class="span1" type="text" id="planning.4.progress" name="planning.4.progress"/>
-	<input class="span1" type="text" id="planning.5.progress" name="planning.5.progress"/>
-	<input class="span1" type="text" id="planning.6.progress" name="planning.6.progress"/>
-	<input class="span1" type="text" id="planning.7.progress" name="planning.7.progress"/>
-	<input class="span1" type="text" id="planning.8.progress" name="planning.8.progress"/>
-	<input class="span1" type="text" id="planning.9.progress" name="planning.9.progress"/>
-	<input class="span1" type="text" id="planning.10.progress" name="planning.10.progress"/>
-	<input class="span1" type="text" id="planning.11.progress" name="planning.11.progress"/>
-      </div>
+      <div id="planning-progress" class="controls"></div>
     </div>
 
     <div class="control-group">
       <label class="control-label" for="actual">Actual Progress</label>
-      <div class="controls">
-	<input class="span1" type="text" id="actual.0.progress" name="actual.0.progress"/>
-	<input class="span1" type="text" id="actual.1.progress" name="actual.1.progress"/>
-	<input class="span1" type="text" id="actual.2.progress" name="actual.2.progress"/>
-	<input class="span1" type="text" id="actual.3.progress" name="actual.3.progress"/>
-	<input class="span1" type="text" id="actual.4.progress" name="actual.4.progress"/>
-	<input class="span1" type="text" id="actual.5.progress" name="actual.5.progress"/>
-	<input class="span1" type="text" id="actual.6.progress" name="actual.6.progress"/>
-	<input class="span1" type="text" id="actual.7.progress" name="actual.7.progress"/>
-	<input class="span1" type="text" id="actual.8.progress" name="actual.8.progress"/>
-	<input class="span1" type="text" id="actual.9.progress" name="actual.9.progress"/>
-	<input class="span1" type="text" id="actual.10.progress" name="actual.10.progress"/>
-	<input class="span1" type="text" id="actual.11.progress" name="actual.11.progress"/>
-      </div>
+      <div id="actual-progress" class="controls"></div>
     </div>
 
   </fieldset>
 
-  <fieldset>
-    <legend>Status</legend>
-
-    <div class="control-group">
-      <label class="control-label" for="phase">Phase</label>
-      <div class="controls">
-	<select class="span4" id="phase" name="phase">
-	  <option selected="selected">--------</option>
-	  <option value="planning">Planning</option>
-	  <option value="implementation">Implementation</option>
-	  <option value="completed">Completed</option>
-	  <option value="final-accounts">Final Accounts</option>
-	</select>
-      </div>
-    </div>
-
-    <div class="control-group">
-      <label class="control-label" for="planning_phase">Planning Phase</label>
-      <div class="controls">
-	<select class="span4" id="planning_phase" name="planning_phase">
-	  <option selected="selected">--------</option>
-	  <option value="consultant-appointment">Consultant Appointment</option>
-	  <option value="design-costing">Design + Costing</option>
-	  <option value="documentation">Documentation</option>
-	  <option value="tender">Tender</option>
-	</select>
-      </div>
-    </div>
-
-  </fieldset>
-
-  <fieldset>
+  <fieldset class="can-minimize minimized">
     <legend>Comments</legend>
 
     <div class="control-group">
@@ -558,7 +451,9 @@
 
 {% block extra_js %}
 <script>
-  var data = {{ data|safe }};    
+  var data = {{ data|safe }};
+  var MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
   var changes = [];
 
   function updateValue(key, value) {
@@ -587,6 +482,89 @@
 	  }
       }
   }
+
+  function updateDates(key, values) {
+      var expenditure = $('#'+key+'-expenditure')
+      var progress = $('#'+key+'-expenditure')
+      var template;
+      var block;
+      var date;
+      
+      for (i=0; i<values.length; i++) {
+	  value = values[i];
+	  date = new Date(value['date']);
+	  
+	  block = $('#'+key+'-'+i+'-expenditure');
+	  if (block.length) {
+	      block.find('date-label').text(MONTHS[date.getMonth()]+' '+date.getFullYear());
+	      block.find('input').val(value['expenditure']).attr({
+		  type: 'text',
+		  id: key+'.'+i+'.expenditure',
+		  name: key+'.'+i+'.expenditure'
+	      });
+	  } else {
+	      block = $('<div/>', {
+		  addClass: 'date-block',
+		  attr: { id: key+'-'+i+'-expenditure'}
+	      });
+	      block.append(
+		  $('<div/>', {
+		      addClass: 'date-label', 
+		      text: MONTHS[date.getMonth()]+' '+date.getFullYear()
+		  })
+	      )
+	      block.append(
+		  $('<input/>', {
+		      addClass: 'span1',
+		      val: value['expenditure'],
+		      attr: {
+			  type: 'text',
+			  id: key+'.'+i+'.expenditure',
+			  name: key+'.'+i+'.expenditure'
+		      }
+		  })
+	      )
+	      $('#'+key+'-expenditure').append(block);
+	  }
+	  
+	  block = $('#'+key+'-'+i+'-progress');
+	  if (block.length) {
+	      block.find('date-label').text(MONTHS[date.getMonth()]+' '+date.getFullYear());
+	      block.find('input').val(value['progress']).attr({
+		  type: 'text',
+		  id: key+'.'+i+'.expenditure',
+		  name: key+'.'+i+'.expenditure'
+	      });
+	  } else {
+	      block = $('<div/>', {
+		  addClass: 'date-block',
+		  attr: { id: key+'-'+i+'-progress'}
+	      });
+	      block.append(
+		  $('<div/>', {
+		      addClass: 'date-label', 
+		      text: MONTHS[date.getMonth()]+' '+date.getFullYear()
+		  })
+	      )
+	      block.append(
+		  $('<input/>', {
+		      addClass: 'span1',
+		      val: value['progress'],
+		      attr: {
+			  type: 'text',
+			  id: key+'.'+i+'.progress',
+			  name: key+'.'+i+'.progress'
+		      }
+		  })
+	      )
+	      $('#'+key+'-progress').append(block);
+	  }
+      }
+
+      
+      $('#'+key+'-expenditure').closest('.control-group').removeClass('warning');
+      $('#'+key+'-progress').closest('.control-group').removeClass('warning');
+  }
   
   function updateForm(d) {
       if (d) {
@@ -595,7 +573,11 @@
       var values = data;
       for (key in values) {
 	  var value = d[key];
-	  updateValue(key, value);
+	  if ((key == 'actual') || (key == 'planning')) {
+	      updateDates(key, value);
+	  } else {
+	      updateValue(key, value);
+	  }
       }
   }
   updateForm(data);
@@ -670,7 +652,11 @@
       }).error(function() {
 	  changes.push({ name: name, value: val });
       });
-  })
+  });
+				  
+  $('fieldset.can-minimize > legend').on('click', function() {
+      $(this).closest('fieldset.can-minimize').toggleClass('minimized');
+  });
 
   $('input[type="button"]').on('click', function() {
       var element = $(this);
@@ -737,11 +723,16 @@
   });
 				  
   function updatePlanningPhase() {
-      if ($(this).val() == 'planning') {
-	  $('#planning_phase').closest('.control-group').show();
+      var value = $(this).val()
+      
+      if (value == 'planning') {
+	  $('#planning_phase').closest('.control-group').css('display', '');
       } else {
-	  $('#planning_phase').closest('.control-group').hide();
+	  $('#planning_phase').closest('.control-group').css('display', 'none');
       }
+      
+      $('.hide-for-phase').css('display', '');
+      $('.hide-for-'+value).css('display', 'none');
   };
   $('select[name="phase"]').on('change', updatePlanningPhase);
   updatePlanningPhase.call($('select[name="phase"]')[0]);

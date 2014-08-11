@@ -1,5 +1,6 @@
 import re
 import json
+import iso8601
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -29,34 +30,38 @@ def projects(request):
     return TemplateResponse(request, 'entry/list.html', {'projects': context})
     
 def new(request):
+    year = datetime.today().year
+    month = datetime.today().month
+    if month < 3:
+        year -= 1
     details = {
         'planning': [
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-06-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-07-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-08-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-09-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-10-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-11-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-12-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-01-01T00:00:00' % (year+1) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-02-01T00:00:00' % (year+1) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-03-01T00:00:00' % (year+1) },
         ],
         'actual': [
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
-            { 'expenditure': None, 'progress': None },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-06-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-07-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-08-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-09-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-10-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-11-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-12-01T00:00:00' % (year) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-01-01T00:00:00' % (year+1) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-02-01T00:00:00' % (year+1) },
+            { 'expenditure': None, 'progress': None, 'date': '%04d-03-01T00:00:00' % (year+1) },
         ]
     }
     project = Project(details)
@@ -64,8 +69,36 @@ def new(request):
     project.save()
     return redirect('entry:edit', project_id=project._uuid)
 
+def _find_or_add_month(data, year, month):
+    for entry in data:
+        try:
+            d = iso8601.parse_date(entry['date'])
+        except:
+            pass
+        else:
+            if d.year == year and d.month == month:
+                return
+    data.append({
+        'expenditure': None,
+        'progress': None,
+        'date': '%04d-%02d-01T00:00:00' % (year, month)
+    })
+        
+
 def edit(request, project_id):
     project = Project.edit(project_id)
+    # Check actual and planned monthly entries. Add any required to
+    # get to this financial year.
+    current = datetime.today()
+    for m in range(3, 15):
+        year = current.year
+        if current.month < 3:
+            year -= 1
+        year += m/12
+        month = m%12 + 1
+        _find_or_add_month(project.actual, year, month)
+        _find_or_add_month(project.planning, year, month)
+    
     if request.method == 'POST':
         for key, value in request.POST.items():
             if key == '__reset':
