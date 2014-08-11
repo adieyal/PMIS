@@ -349,7 +349,25 @@ def project_json(request, project_id, year=None, month=None):
             planning / total,
             implementation / total
         ], percentage=True)
-            
+        
+    def _expenditure_for_year(data, year):
+        MONTHS = [
+            (4, year-1),  (5, year-1),  (6, year-1),  (7, year-1),
+            (8, year-1),  (9, year-1),  (10, year-1), (11, year-1),
+            (12, year-1), (1, year),    (2, year),    (3, year)
+        ]
+        result = []
+        for i, m in enumerate(months):
+            added = False
+            for entry in data:
+                d = iso8601.parse_date(entry['date'])
+                if d.year == m[1] and d.month == m[0]:
+                    result.append([i, (_safe_float(d['expenditure']) or 0)/1000])
+                    added = True
+                    break
+            if not added:
+                result.append([i, 0])
+        return result    
     
     context = {
         'agent': project.implementing_agent,
