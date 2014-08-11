@@ -357,12 +357,12 @@ def project_json(request, project_id, year=None, month=None):
             (12, year-1), (1, year),    (2, year),    (3, year)
         ]
         result = []
-        for i, m in enumerate(months):
+        for i, m in enumerate(MONTHS):
             added = False
             for entry in data:
                 d = iso8601.parse_date(entry['date'])
                 if d.year == m[1] and d.month == m[0]:
-                    result.append([i, (_safe_float(d['expenditure']) or 0)/1000])
+                    result.append([i, (_safe_float(entry['expenditure']) or 0)/1000])
                     added = True
                     break
             if not added:
@@ -398,8 +398,8 @@ def project_json(request, project_id, year=None, month=None):
         'expenditure-cashflow-line': {
             'title': 'Expenditure vs Cashflow',
             'data': [
-                {'values': [[i, (_safe_float(d['expenditure']) or 0)/1000] for i, d in enumerate(project.actual)], 'label': 'Cashflow'},
-                {'values': [[i, (_safe_float(d['expenditure']) or 0)/1000] for i, d in enumerate(project.planning)], 'label': 'Expenditure'}
+                {'values': _expenditure_for_year(project.actual, year), 'label': 'Cashflow'},
+                {'values': _expenditure_for_year(project.planning, year), 'label': 'Expenditure'}
             ],
             'labels': ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
                        'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar' ]
