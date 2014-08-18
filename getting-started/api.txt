@@ -1,0 +1,416 @@
+API endpoints:
+--------------
+
+=====
+
+/account/login
+
+Log a user in.
+
+POST: username - The username.
+      password - The password.
+
+Returns: { "success": false,
+	   "errors": [{ "field": "<field-with-error>",
+	   	     	"error": "<short-error>",
+			"description": <long-error> }, ...] }
+			
+	 or
+	 
+	 { "success": true }
+
+=====
+
+/account/logout
+
+Logs the current user out.
+
+Returns: { "success": true }
+
+=====
+
+/account/session
+
+Returns the session data for a logged in user or an empty session for
+an unauthenticated user.
+
+Returns: { "authenticated": false }
+	 
+	 or
+	 
+	 { "authenticated": true,	
+	   "username": "<username>",
+	   "first_name": "<user-first-name>",
+	   "last_name": "<user-last-name>" }
+
+=====
+
+/entry/new
+
+=====
+
+/entry/cluster
+
+Returns a list of acceptable names for clusters.
+
+Returns: [{ "name": "<cluser-name>" }, ...]
+
+=====
+
+/entry/coordinator
+
+Returns a list of coordinators in the database matching a query. This
+is used for autocomplete in the entry form.
+
+POST: query - A regex to perform a partial match against (eg. 'win'
+      	      mathces 'Leswinene Trading Enterprise').
+
+Returns: ["<name>", ...]
+
+=====
+
+/entry/contractor
+
+Returns a list of contractors in the database matching a query. This
+is used for autocomplete in the entry form.
+
+POST: query - A regex to perform a partial match against (eg. 'win'
+      	      mathces 'Leswinene Trading Enterprise').
+
+Returns: ["<name>", ...]
+
+=====
+
+/entry/programme
+
+Returns a list of all programmes for cluster given.
+
+GET: cluster - The cluster name (as in /entry/cluster).
+
+Returns: ["<programme-name>", ...]
+
+
+=====
+
+/entry/projects
+
+Returns a list of all projects available in the database.
+
+Returns: [{ "cluster": "<cluster-name>",
+	    "uuid": "<project-id>",
+	    "year": <financial-year>,
+	    "phase": "<project-phase>",
+	    "description": "<project-description>",
+	    "programme": "<project-programme>",
+	    "municipality": "<project-municipality>",
+	    "contract": "<contract-number>",
+	    "name": "<project-name>" }, ...]
+
+=====
+
+/entry/<project_id>/edit
+
+A GET to this endpoint will return the entry form. POSTing this form
+to the same URL will return a JSON representation of the project. You
+could also POST without any arguments to just get the project JSON.
+
+Grabbing the JSON data for a project here creates an 'edit' entry in
+the database. You could post keys one by one to update the database
+(keys are JavaScript object notation for the item in the JSON, like
+'actual.0.progress') or in bulk. Once all changes are made (or in a
+bulk POST) add the key '__save' with any value to save the 'edit'
+entry as a new version for the project. It will then appear in
+reports.
+
+Submit a POST with key '__reset' set to any value to reset the 'edit'
+database entry to whatever was saved last. This could be used to
+revert a problematic edit to a last saved state.
+
+Returns: Full JSON dump for project. Example below.
+{
+    "_timestamp": "4c5b07e2-26da-11e4-be79-525400fc9282",
+    "_uuid": "180a4cb8-65f0-43d7-a273-bdf65e0e2b34",
+    "actual": [
+        {
+            "date": "2013-04-01T00:00:00",
+            "expenditure": 0,
+            "progress": "20"
+        },
+        {
+            "date": "2013-05-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-06-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-07-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-08-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-09-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-10-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-11-01T00:00:00",
+            "expenditure": 0,
+            "progress": 2
+        },
+        {
+            "date": "2013-12-01T00:00:00",
+            "expenditure": "0",
+            "progress": "2"
+        },
+        {
+            "date": "2014-01-01T00:00:00",
+            "expenditure": "0",
+            "progress": "2"
+        },
+        {
+            "date": "2014-02-01T00:00:00",
+            "expenditure": "0",
+            "progress": "45"
+        },
+        {
+            "date": "2014-03-01T00:00:00",
+            "expenditure": "0",
+            "progress": "45"
+        },
+        {
+            "date": "2014-04-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-05-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-06-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-07-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-08-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-09-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-10-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-11-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-12-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-01-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-02-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-03-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        }
+    ],
+    "actual_completion": null,
+    "actual_final_accounts": null,
+    "actual_start": "2013-11-08T00:00:00",
+    "allocated_budget_for_year": 752000,
+    "budget_implementation": "938000",
+    "budget_planning": "169000",
+    "circuit": "",
+    "cluster": "Department of Health",
+    "comments": "1. Progress has fallen behind due to cashflow challenge as a result of payment delayed by MDoH. \n2. Meeting between all stakeholder was held on the 7th March 2014 to address the challenge of none payment.",
+    "comments_previous": "1",
+    "contract": "",
+    "contractor": "wi",
+    "description": "Dundonald Clinic (Maintenance Works)",
+    "district": "Gert Sibande",
+    "expenditure_in_year": 0,
+    "expenditure_percent_of_budget": 0,
+    "expenditure_to_date": 0,
+    "fyear": 2014,
+    "implementation_handover": "2013-11-08T00:00:00",
+    "implementing_agent": "DPWRT",
+    "last_modified_time": "2014-08-18T15:19:35.371679",
+    "last_modified_user": "el",
+    "location": "Dundonald",
+    "manager": "teb",
+    "municipality": "Albert Luthuli",
+    "name": "Dundonald Clinic",
+    "phase": "implementation",
+    "planned_completion": "2014-03-09T14:24:00",
+    "planned_final_accounts": "2014-06-07T14:24:00",
+    "planned_start": "2013-11-08T00:00:00",
+    "planning": [
+        {
+            "date": "2013-04-01T00:00:00",
+            "expenditure": 0,
+            "progress": "20"
+        },
+        {
+            "date": "2013-05-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-06-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-07-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-08-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-09-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-10-01T00:00:00",
+            "expenditure": 0,
+            "progress": null
+        },
+        {
+            "date": "2013-11-01T00:00:00",
+            "expenditure": 0,
+            "progress": "2"
+        },
+        {
+            "date": "2013-12-01T00:00:00",
+            "expenditure": 0,
+            "progress": "15"
+        },
+        {
+            "date": "2014-01-01T00:00:00",
+            "expenditure": 0,
+            "progress": "60"
+        },
+        {
+            "date": "2014-02-01T00:00:00",
+            "expenditure": 752000,
+            "progress": "85"
+        },
+        {
+            "date": "2014-03-01T00:00:00",
+            "expenditure": 0,
+            "progress": "100"
+        },
+        {
+            "date": "2014-04-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-05-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-06-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-07-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-08-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-09-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-10-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-11-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2014-12-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-01-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-02-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        },
+        {
+            "date": "2015-03-01T00:00:00",
+            "expenditure": null,
+            "progress": null
+        }
+    ],
+    "principal_agent": "Consultium Project Planning & Management cc",
+    "programme": "EPWP - Construction Projects",
+    "remedial_action": "1. Meeting held on the 7th March 2014 resolve that Client will process submitted invoice timeously.",
+    "revised_completion": "2014-04-30",
+    "scope": "Dundonald Clinic : Holding maintenance in line with NHI Term Of Reference",
+    "source": "NHI-Holding Maintenance",
+    "total_anticipated_cost": 1106752.6800000002,
+    "total_previous_expenses": 0
+}
+

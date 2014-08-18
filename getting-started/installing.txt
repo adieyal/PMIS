@@ -1,0 +1,30 @@
+Quick install guide:
+--------------------
+
+1. Do a basic Ubuntu Server install.
+
+2. Install required Ubuntu packages.
+
+$ sudo apt-get install git build-essential python-virtualenv python-pip redis-server
+
+3. Create a directory for the project.
+
+$ mkdir ~/projects
+$ cd ~/projects
+
+3. Clone the github repo.
+
+$ git clone ssh://git@github.com/adieyal/PMIS.git
+$ cd PMIS
+
+4. Create a python virtualenv.
+
+$ virtualenv venv
+$ source venv/bin/activate
+
+5. Install requirements.
+
+$ cd server
+$ pip install -r requirements/development.txt
+
+6. You're done. See running.txt to get it up and running.

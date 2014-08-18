@@ -1,0 +1,17 @@
+Running PMIS server:
+--------------------
+
+1. Change to project server directory.
+
+$ cd ~/projects/PMIS/server
+
+2. Activate virtualenv.
+
+$ source ../venv/bin/activate
+
+3. Run the development server.
+
+$ python manage.py runserver 0.0.0.0:8000
+
+4. Connect to your server. In a browser open
+http://<your-vm-ip>:8000/.
