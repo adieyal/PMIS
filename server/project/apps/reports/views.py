@@ -465,10 +465,10 @@ def cluster_report(request, cluster, subreport=None):
     }
     return TemplateResponse(request, template, context)
 
-@cache_page(settings.API_CACHE)
+#@cache_page(settings.API_CACHE)
 def cluster_dashboard_json(request, cluster, year=None, month=None):
     projects = filter(
-        lambda x: x.cluster.lower().replace(' ', '-') == cluster,
+        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
     )
     programmes = set([p.programme for p in projects])
@@ -659,7 +659,7 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
 #@cache_page(settings.API_CACHE)
 def cluster_progress_json(request, cluster, year=None, month=None):
     projects = filter(
-        lambda x: x.cluster.lower().replace(' ', '-') == cluster,
+        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
     )
     programmes = set([p.programme for p in projects])
