@@ -475,7 +475,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
     programmes_implementation = set([p.programme for p in projects if p.phase == 'implementation'])
 
     if not year or not month:
-        timestamp = max([project.timestamp for project in projects])
+        try:
+            timestamp = max([project.timestamp for project in projects])
+        except ValueError:
+            return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
         year = timestamp.year
         month = '%02d' % (timestamp.month)
     else:
@@ -664,7 +667,10 @@ def cluster_progress_json(request, cluster, year=None, month=None):
     programmes_planning = set([p.programme for p in projects if p.phase == 'planning'])
 
     if not year or not month:
-        timestamp = max([project.timestamp for project in projects])
+        try:
+            timestamp = max([project.timestamp for project in projects])
+        except ValueError:
+            return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
         year = timestamp.year
         month = '%02d' % (timestamp.month)
     else:
@@ -869,7 +875,10 @@ def cluster_performance_json(request, cluster, year=None, month=None):
     programmes_planning = set([p.programme for p in projects if p.phase == 'planning'])
 
     if not year or not month:
-        timestamp = max([project.timestamp for project in projects])
+        try:
+            timestamp = max([project.timestamp for project in projects])
+        except ValueError:
+            return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
         year = timestamp.year
         month = '%02d' % (timestamp.month)
     else:

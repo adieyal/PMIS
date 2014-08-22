@@ -306,7 +306,7 @@ pmis = (function(jq) {
 	    });
 	},
 	cluster: function(tab) {
-	    var cluster = localStorage.getItem('cluster-name').toLowerCase().replace(/ /g, '-');
+	    var cluster = localStorage.getItem('cluster-name').toLowerCase().replace(/ /g, '-').replace(/,/g, '');
 	    var iframe = jq('.report-frame');
 	    
 	    iframe.removeAttr('srcdoc', false);
