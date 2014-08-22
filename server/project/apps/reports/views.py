@@ -506,10 +506,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ### Summary section
         "total-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])),
         "total-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])
         ),
-        "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
+        "total-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects])),
         "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "total-progress-gauge": build_gauge(
             _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
@@ -525,23 +525,23 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "budget-slider": build_slider(
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme]),
                     sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])
                 ),
                 "projects-accounts": len([p for p in projects if p.programme == programme and p.phase == 'final-accounts']),
                 "projects-implementation": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
                 "projects-planning": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
                 "projects-total": len([p for p in projects if p.programme == programme]),
-                "total-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])) or 'R 0',
+                "total-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme])) or 'R 0',
             } for programme in programmes if programme != '--------'
         ],
         ###
         ### Planning section
         "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
-        "planning-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])),
+        "planning-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning'])),
         "planning-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])),
         "planning-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning']),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])
         ),
         "planning-stage-appointment": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
@@ -563,9 +563,9 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "implementation-projects-due-3months": len([p for p in projects if p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)]),
         "implementation-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])),
-        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation']),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])
         ),
         "implementation-progress-gauge": build_gauge(
@@ -579,11 +579,11 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "budget-slider": build_slider(
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme]),
                     sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])
                 ),
                 "projects-implementation": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
-                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme])),
                 "budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])),
                 "projects-0-50": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
                 "projects-51-75": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
@@ -600,10 +600,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ###
         ### District summary section
         "district-nkangala-projects-implementation": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
-        "district-nkangala-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])),
+        "district-nkangala-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])),
         "district-nkangala-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])),
         "district-nkangala-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])
         ),
         "district-nkangala-projects-0-50": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
@@ -618,10 +618,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ]),
         
         "district-gertsibande-projects-implementation": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
-        "district-gertsibande-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])),
+        "district-gertsibande-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])),
         "district-gertsibande-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])),
         "district-gertsibande-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])
         ),
         "district-gertsibande-projects-0-50": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
@@ -636,10 +636,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ]),
         
         "district-ehlanzeni-projects-implementation": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
-        "district-ehlanzeni-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])),
+        "district-ehlanzeni-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])),
         "district-ehlanzeni-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])),
         "district-ehlanzeni-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])
         ),
         "district-ehlanzeni-projects-0-50": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
@@ -902,31 +902,31 @@ def cluster_performance_json(request, cluster, year=None, month=None):
 
         ### Summary section
         "summary-projects-total": len([p for p in projects]),
-        "summary-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])),
-        "summary-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
+        "summary-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])),
+        "summary-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects])),
         "summary-under-expenditure": _currency(
             sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects]) -
             sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])
         ),
-        "summary-budget-planning": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])),
-        "summary-budget-implementation": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])),
-        "summary-budget-final-accounts": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'final-accounts'])),
+        "summary-budget-planning": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])),
+        "summary-budget-implementation": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])),
+        "summary-budget-final-accounts": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'final-accounts'])),
         "summary-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])
         ),
         ###
         ### Planning section
         "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
-        "planning-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])),
-        "planning-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])),
+        "planning-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])),
+        "planning-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning'])),
         "planning-under-expenditure": _currency(
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning']) -
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning'])
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning']) -
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning'])
         ),
         "planning-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'planning']),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'planning'])
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])
         ),
         ###
         ### Programmes in planning section
@@ -934,30 +934,30 @@ def cluster_performance_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
-                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
-                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
+                "budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])),
                 "under-expenditure": _currency(
-                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning']) -
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning']) -
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
                 ),
                 "budget-slider": build_slider(
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'planning']),
-                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning']),
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'planning'])
                 ),
             } for programme in programmes_planning if programme != '--------'
         ],
         ###
         ### Implementation section
         "implementation-projects-total": len([p for p in projects if p.phase == 'implementation']),
-        "implementation-budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])),
-        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-under-expenditure": _currency(
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation']) -
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation'])
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation']) -
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation'])
         ),
         "implementation-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.phase == 'implementation']),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])
         ),
         ###
         ### Programmes in implementation section
@@ -965,44 +965,44 @@ def cluster_performance_json(request, cluster, year=None, month=None):
             {
                 "name": programme,
                 "projects-total": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
-                "budget": _currency(sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
-                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "under-expenditure": _currency(
-                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']) -
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']) -
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
                 ),
                 "budget-slider": build_slider(
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
-                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
                 ),
             } for programme in programmes_implementation if programme != '--------'
         ],
         ###
         ### Overall analysis section
-        "analysis-overall-expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects])),
+        "analysis-overall-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects])),
         "analysis-overall-performance": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "analysis-overall-progress-gauge": build_gauge(
             _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
             _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
         ),
         "analysis-overall-budget-slider": build_slider(
-            sum([_safe_float(p.expenditure_to_date) or 0 for p in projects]),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects])
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])
         ),
         ###
         ### Programme analysis section
         "programmes-analysis": [
             {
                 "name": programme,
-                "expenditure": _currency(sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme])),
+                "expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme])),
                 "performance": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])),
                 "progress-gauge": build_gauge(
                     _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation']),
                     _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.programme == programme and p.phase == 'implementation'])
                 ),
                 "budget-slider": build_slider(
-                    sum([_safe_float(p.expenditure_to_date) or 0 for p in projects if p.programme == programme]),
-                    sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.programme == programme])
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])
                 ),
             } for programme in programmes_implementation if programme != '--------'
         ],
