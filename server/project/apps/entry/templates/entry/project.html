@@ -485,7 +485,7 @@
 
   function updateDates(key, values) {
       var expenditure = $('#'+key+'-expenditure')
-      var progress = $('#'+key+'-expenditure')
+      var progress = $('#'+key+'-progress')
       var template;
       var block;
       var date;
@@ -532,8 +532,8 @@
 	      block.find('date-label').text(MONTHS[date.getMonth()]+' '+date.getFullYear());
 	      block.find('input').val(value['progress']).attr({
 		  type: 'text',
-		  id: key+'.'+i+'.expenditure',
-		  name: key+'.'+i+'.expenditure'
+		  id: key+'.'+i+'.progress',
+		  name: key+'.'+i+'.progress'
 	      });
 	  } else {
 	      block = $('<div/>', {
