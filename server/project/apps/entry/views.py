@@ -94,8 +94,6 @@ def edit(request, project_id):
         year = current.year
         if current.month < 3:
             year -= 1
-        year += m/12
-        month = m%12 + 1
         if project.acutal == '':
             project._details['actual'] = [
                 { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
@@ -126,6 +124,8 @@ def edit(request, project_id):
                 { 'expenditure': None, 'progress': None, 'date': '%04d-02-01T00:00:00' % (year+1) },
                 { 'expenditure': None, 'progress': None, 'date': '%04d-03-01T00:00:00' % (year+1) },
             ]
+        year += m/12
+        month = m%12 + 1
         _find_or_add_month(project.actual, year, month)
         _find_or_add_month(project.planning, year, month)
     
