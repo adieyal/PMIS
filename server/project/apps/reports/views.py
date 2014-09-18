@@ -425,8 +425,8 @@ def project_json(request, project_id, year=None, month=None):
         'expenditure-cashflow-line': {
             'title': 'Expenditure vs Cashflow',
             'data': [
-                {'values': _expenditure_for_year(project.actual, year), 'label': 'Cashflow'},
-                {'values': _expenditure_for_year(project.planning, year), 'label': 'Expenditure'}
+                {'values': _expenditure_for_year(project.planning, year), 'label': 'Cashflow'},
+                {'values': _expenditure_for_year(project.actual, year), 'label': 'Expenditure'}
             ],
             'labels': ['Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
                        'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar' ]
