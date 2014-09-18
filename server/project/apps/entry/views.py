@@ -96,6 +96,10 @@ def edit(request, project_id):
             year -= 1
         year += m/12
         month = m%12 + 1
+        if project.acutal == '':
+            project.actual = []
+        if project.planning == '':
+            project.planning = []
         _find_or_add_month(project.actual, year, month)
         _find_or_add_month(project.planning, year, month)
     
