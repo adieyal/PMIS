@@ -384,8 +384,8 @@ def project_json(request, project_id, year=None, month=None):
                     break
             if not added:
                 result.append([i, 0])
-        return result    
-    
+        return result
+        
     context = {
         'agent': project.implementing_agent,
         'budget-donut': _budget_donut(project.budget_planning, project.budget_implementation),
@@ -394,7 +394,10 @@ def project_json(request, project_id, year=None, month=None):
         'budget-increase-timeframe': _months(project.actual_completion, project.planned_completion, 'No increase'),
         'budget-overall': _currency(project.total_anticipated_cost),
         'budget-planning': _currency(project.budget_planning),
-        'budget-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
+        'budget-slider': build_slider(
+            _safe_float(project.expenditure_to_date),
+            _safe_float(project.total_anticipated_cost)
+        ),
         'budget-source': project.source,
         'budget-variation-orders': _currency(project.budget_variation_orders),
         'cluster': project.cluster,
@@ -455,7 +458,10 @@ def project_json(request, project_id, year=None, month=None):
         'planning-phase': project.planning_phase if project.phase == 'planning' else 'none',
         'planning-start-date-actual': _date(project.planning_start),
         'progress-gauge': build_gauge(_progress_for_month(project.planning, year-1, month)*100, _progress_for_month(project.actual, year-1, month)*100),
-        'progress-slider': build_slider(project.expenditure_to_date, project.total_anticipated_cost),
+        'progress-slider': build_slider(
+            _safe_float(project.expenditure_to_date),
+            _safe_float(project.total_anticipated_cost)
+        ),
         'progress-to-date': _percent(_progress_for_month(project.actual, year-1, month)),
         'scope': project.scope,
         'stage': [project.phase, _progress_for_month(project.actual, year-1, month)*100 if project.phase == 'implementation' else None],
