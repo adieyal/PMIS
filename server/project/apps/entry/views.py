@@ -96,7 +96,7 @@ def edit(request, project_id):
             year -= 1
         year += m/12
         month = m%12 + 1
-        if project.acutal == '':
+        if project.acutal == '' or project.acutal == []:
             project.actual = [
                 { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
                 { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
@@ -111,7 +111,7 @@ def edit(request, project_id):
                 { 'expenditure': None, 'progress': None, 'date': '%04d-02-01T00:00:00' % (year+1) },
                 { 'expenditure': None, 'progress': None, 'date': '%04d-03-01T00:00:00' % (year+1) },
             ]
-        if project.planning == '':
+        if project.planning == '' or project.planning == []:
             project.planning = [
                 { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
                 { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
