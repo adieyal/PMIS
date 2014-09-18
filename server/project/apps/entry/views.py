@@ -94,7 +94,7 @@ def edit(request, project_id):
         year = current.year
         if current.month < 3:
             year -= 1
-        if project.acutal == '':
+        if project.actual == '':
             project._details['actual'] = [
                 { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
                 { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
