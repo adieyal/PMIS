@@ -292,26 +292,16 @@ def project_json(request, project_id, year=None, month=None):
         return '%.0f%%' % (value*100)
         
     def _expenditure_for_month(data, year, month):
-        clean_data = []
+        clean_data = {}
         for item in data:
             try:
                 dt = iso8601.parse_date(item['date'])
             except iso8601.ParseError:
                 continue
-            clean_data.append({
-                'month': (dt.year*100)+dt.month,
-                'expenditure': _safe_float(item['expenditure'])
-            })
+            clean_data[(dt.year*100)+dt.month] = _safe_float(item['expenditure'])
         
         month = (int(year)*100)+int(month)
-        latest = None
-        for item in clean_data:
-            if item['month']<=month and item['expenditure'] != None:
-                if not latest or latest['month'] < item['month']:
-                    latest = item
-        if latest:
-            return latest['expenditure']/100
-        return 0
+        return clean_data.get(month, 0)
 
     def _progress_for_month(data, year, month):
         clean_data = []
