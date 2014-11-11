@@ -1,9 +1,0 @@
-<h1 class="page-header">
-    Projects
-</h1>
-
-<div ng-controller="MyCtrl1" class="row-fluid" ng-repeat="project in projects">
-    <div class="span12">
-        Project: <a href="/api/projects/{{ project.id }}">{{ project.name }}</a> <a href="/api/projects/{{ project.id }}/update/"><i class="icon-pencil"></i></a>
-    </div>
-</div>

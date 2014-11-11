@@ -1,0 +1,12 @@
+body {
+	font-family: sans-serif;
+}
+.dashboard .performance {
+    background-color: #ffffff;
+    display: inline-block;
+    width: 33%;
+
+    .c3-axis-x .tick {
+        display: none;
+    }
+}
