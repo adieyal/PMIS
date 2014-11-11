@@ -3,9 +3,6 @@ Reflux.nextTick(process.nextTick);
 
 var React = require("react");
 
-// Basic styling
-require("./style.scss");
-
 // Init relevant modules
 // With a pages/router init only relevant modules for this page.
 require("App/init");

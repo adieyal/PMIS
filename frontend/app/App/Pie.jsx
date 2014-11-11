@@ -2,7 +2,7 @@ var React = require("react");
 var c3 = require("c3");
 var d3 = require("d3");
 
-var Performance = React.createClass({
+var Pie = React.createClass({
 	componentDidMount: function() {
 	    var data = this.props.data;
         var node = this.getDOMNode();
@@ -10,14 +10,14 @@ var Performance = React.createClass({
         var chart = c3.generate({
             bindto: node,
             padding: {
-                top: 30
+                top: 40
             },
             data: {
                 columns: data,
-                type: 'bar'
+                type: 'pie'
             },
-            bar: {
-                width: '50%'
+            legend: {
+                position: 'right'
             }
         });
 
@@ -26,14 +26,14 @@ var Performance = React.createClass({
         svg.append('text')
             .attr("x", 60)
             .attr("y", 45)
-            .style("text-anchor", "left")
             .attr('class', 'title')
+            .style("text-anchor", "left")
             .text(this.props.title);
     },
     render: function() {
-        return <div className="widget performance-container">
-            <div className="performance" />
+        return <div className="widget pie-container">
+            <div className="pie" />
         </div>;
     }
 });
-module.exports = Performance;
+module.exports = Pie;

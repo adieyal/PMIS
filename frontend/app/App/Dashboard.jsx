@@ -1,6 +1,8 @@
 var React = require("react");
 var Reflux = require("reflux");
 var DashboardStore = require("./DashboardStore");
+
+var Pie = require('react-proxy!./Pie');
 var Performance = require('react-proxy!./Performance');
 
 var Dashboard = React.createClass({
@@ -16,9 +18,15 @@ var Dashboard = React.createClass({
 	},
 	render: function() {
         return <div className="dashboard">
-            <Performance key="budget" title="Budget" data={this.state.budget} />
-            <Performance key="planning" title="Planning" data={this.state.planning} />
-            <Performance key="implementation" title="Implementation" data={this.state.implementation} />
+            <div class="row">
+                <Performance key="budget" title="Budget" data={this.state.budget} />
+                <Performance key="planning" title="Planning" data={this.state.planning} />
+                <Performance key="implementation" title="Implementation" data={this.state.implementation} />
+            </div>
+            <div class="row">
+                <Pie title="Projects" data={this.state.projects} />
+                <div className="map">&nbsp;</div>
+            </div>
         </div>;
 	}
 });

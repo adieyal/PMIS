@@ -1,12 +1,34 @@
 body {
+	background-color: #EEE;
 	font-family: sans-serif;
 }
-.dashboard .performance {
-    background-color: #ffffff;
+
+.widget {
+    background-color: #FFF;
     display: inline-block;
+}
+
+.widget .title {
+    font-size: large;
+}
+
+.dashboard .performance-container {
     width: 33%;
 
     .c3-axis-x .tick {
         display: none;
     }
+}
+
+.dashboard .pie-container {
+    width: 50%;
+
+    .c3-legend-item {
+        padding: 12px;
+        font-size: medium;
+    }
+}
+
+.dashboard .map-container {
+    width: 50%;
 }

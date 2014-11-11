@@ -15,6 +15,11 @@ module.exports = Reflux.createStore({
                 [ 'Planned', 24 ],
                 [ 'Actual', 30 ]
             ],
+            projects: [
+                [ 'Planning', 24 ],
+                [ 'Implementation', 30 ],
+                [ 'Final accounts', 12 ]
+            ],
         };
 	},
 
