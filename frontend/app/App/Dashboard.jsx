@@ -18,17 +18,27 @@ var Dashboard = React.createClass({
 	},
 	render: function() {
         return <div className="dashboard">
-            <div class="row">
-                <Performance key="budget" title="Budget" data={this.state.budget} />
-                <Performance key="planning" title="Planning" data={this.state.planning} />
-                <Performance key="implementation" title="Implementation" data={this.state.implementation} />
+            <div className="row">
+                <div className="widget performance-container budget">
+                    <Performance key="budget" title="Budget" data={this.state.budget} />
+                </div>
+                <div className="widget performance-container planning">
+                    <Performance key="planning" title="Planning" data={this.state.planning} />
+                </div>
+                <div className="widget performance-container implementation">
+                    <Performance key="implementation" title="Implementation" data={this.state.implementation} />
+                </div>
             </div>
-            <div class="row">
-                <Pie title="Projects" data={this.state.projects} />
-                <div className="map">&nbsp;</div>
+            <div className="row">
+                <div className="widget pie-container">
+                    <Pie title="Projects" data={this.state.projects} />
+                </div>
+                <div className="widget map-container">
+                    <div className="map">&nbsp;</div>
+                </div>
             </div>
         </div>;
-	}
+    }
 });
 
 module.exports = Dashboard;

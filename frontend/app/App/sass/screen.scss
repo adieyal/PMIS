@@ -1,0 +1,66 @@
+/* Welcome to Compass.
+ * In this file you should write your main styles. (or centralize your imports)
+ * Import this file using the following HTML or equivalent:
+ * <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css" /> */
+
+@import "compass/reset";
+@import "compass/css3";
+@import "susy";
+
+body {
+	background-color: #EEE;
+	font-family: sans-serif;
+}
+
+.app {
+    .dashboard {
+
+        .row {
+            @include container(12);
+        }
+
+        .performance-container {
+            @include span(3 of 12);
+        }
+
+        .performance-container.implementation {
+            @include span(3 of 12 last);
+        }
+
+        .pie-container {
+            @include span(6 of 12);
+        }
+
+        .map-container {
+            @include span(6 of 12 last);
+        }
+    }
+}
+
+.widget {
+    background-color: #FFF;
+    display: inline-block;
+}
+
+.widget .title {
+    font-size: large;
+}
+
+.dashboard .performance {
+    .c3-axis-x .tick {
+        display: none;
+    }
+}
+
+.dashboard .pie {
+    width: 50%;
+
+    .c3-legend-item {
+        padding: 12px;
+        font-size: medium;
+    }
+}
+
+.dashboard .map {
+    width: 50%;
+}

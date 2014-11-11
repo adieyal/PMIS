@@ -31,9 +31,7 @@ var Performance = React.createClass({
             .text(this.props.title);
     },
     render: function() {
-        return <div className="widget performance-container">
-            <div className="performance" />
-        </div>;
+        return <div className="performance" ></div>;
     }
 });
 module.exports = Performance;

@@ -31,9 +31,7 @@ var Pie = React.createClass({
             .text(this.props.title);
     },
     render: function() {
-        return <div className="widget pie-container">
-            <div className="pie" />
-        </div>;
+        return <div className="pie"></div>;
     }
 });
 module.exports = Pie;

@@ -7,7 +7,7 @@ var Dashboard = require("./Dashboard");
 var App = React.createClass({
 	render: function() {
 	    require('../../node_modules/c3/c3.css')
-	    require('./style.scss');
+	    require('./stylesheets/screen.css');
 
 		return <div className="app">
 			<Dashboard />
