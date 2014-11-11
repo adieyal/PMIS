@@ -10,23 +10,23 @@ module.exports = function(options) {
 		// second: reactEntry("Second")
 	};
 	var loaders = {
-		"coffee": "coffee-redux",
-		"jsx": options.hotComponents ? ["react-hot", "jsx?harmony"] : "jsx",
-		"json": "json",
-		"json5": "json5",
-		"txt": "raw",
-		"png|jpg|jpeg|gif|svg": "url?limit=10000",
-		"woff": "url?limit=100000",
-		"ttf|eot": "file",
-		"wav|mp3": "file",
-		"html": "html",
-		"md|markdown": ["html", "markdown"],
+		"coffee": "coffee-redux-loader",
+		"jsx": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : "jsx-loader",
+		"json": "json-loader",
+		"json5": "json5-loader",
+		"txt": "raw-loader",
+		"png|jpg|jpeg|gif|svg": "url-loader?limit=10000",
+		"woff": "url-loader?limit=100000",
+		"ttf|eot": "file-loader",
+		"wav|mp3": "file-loader",
+		"html": "html-loader",
+		"md|markdown": ["html-loader", "markdown-loader"],
 	};
 	var stylesheetLoaders = {
-		"css": "css",
-		"less": "css!less",
-		"styl": "css!stylus",
-		"sass|scss": "css!sass",
+		"css": "css-loader",
+		"less": "css-loader!less-loader",
+		"styl": "css-loader!stylus-loader",
+		"sass|scss": "css-loader!sass-loader",
 	};
 	var additionalLoaders = [
 		// { test: /some-reg-exp$/, loader: "any" }
