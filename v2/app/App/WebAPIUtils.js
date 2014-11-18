@@ -2,7 +2,7 @@ var request = require('superagent');
 var NotificationActions = require('./NotificationActions');
 
 function url(path) {
-    return 'http://www.server.dev/' + path;
+    return '/' + path;
 }
 
 module.exports = {
