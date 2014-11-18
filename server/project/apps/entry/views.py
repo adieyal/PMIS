@@ -1,5 +1,5 @@
 import re
-import json
+import ujson as json
 import iso8601
 from datetime import datetime
 from django.http import HttpResponse

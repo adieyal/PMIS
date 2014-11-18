@@ -1,7 +1,7 @@
 from dateutil import parser
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
-import json
+import ujson as json
 
 monthdelta = relativedelta(months=1)
 daydelta = relativedelta(days=1)

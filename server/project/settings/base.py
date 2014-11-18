@@ -157,7 +157,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    'project.middleware.LoginRequiredMiddleware',
+    # 'project.middleware.LoginRequiredMiddleware',
+    'project.middleware.XsSharing',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -199,6 +200,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'reversion',
     'rest_framework.authtoken',
+    'djoser',
     'gunicorn',
 )
 
@@ -280,7 +282,7 @@ LOGIN_REDIRECT_URL = '/ui/index.html'
 LOGOUT_URL = '/ui/login.html'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda o: "/",
-    }
+}
 
 REST_FRAMEWORK = {
     # Use hyperlinked styles by default.
@@ -302,9 +304,10 @@ REST_FRAMEWORK = {
     )
 }
 
-# XS_SHARING_ALLOWED_ORIGINS = '*'
+# XS_SHARING_ALLOWED_ORIGINS = 'http://localhost:2992'
 # XS_SHARING_ALLOWED_METHODS = ['POST', 'GET', 'OPTIONS', 'PUT', 'DELETE']
-XS_SHARING_ALLOWED_HEADERS = ['Origin', 'Content-Type', 'Accept',]
+# XS_SHARING_ALLOWED_HEADERS = ['Authorization', 'Origin', 'Content-Type', 'Accept',]
+# XS_SHARING_ALLOWED_CREDENTIALS = 'true'
 
 API_CACHE = 5
 CACHES = {
@@ -313,3 +316,14 @@ CACHES = {
         'LOCATION': '127.0.0.1:11211',
     }
 }
+
+DJOSER = {
+    'DOMAIN': 'http://localhost:2992',
+    'SITE_NAME': 'Frontend',
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'LOGIN_AFTER_ACTIVATION': True,
+    'SEND_ACTIVATION_EMAIL': True,
+}
+
+PROFILE_LOG_BASE="/tmp"

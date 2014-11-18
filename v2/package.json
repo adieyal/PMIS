@@ -1,0 +1,45 @@
+{
+  "name": "pmis-frontend",
+  "version": "0.0.0",
+  "description": "",
+  "main": "app/App/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-dev-server.config.js --progress --colors --port 2992",
+    "hot-dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-hot-dev-server.config.js --hot --progress --colors --port 2992",
+    "build": "webpack --config webpack-production.config.js --progress --profile --colors",
+    "start": "node lib/server"
+  },
+  "keywords": [],
+  "author": "Marlin Forbes marlinf@datashaman.com",
+  "license": "Proprietary",
+  "dependencies": {
+    "c3": "^0.3.0",
+    "d3": "^3.4.13",
+    "express": "^4.10.2",
+    "flux": "^2.0.1",
+    "hasher": "^1.2.0",
+    "humane-js": "^3.2.1",
+    "jeet": "^6.1.2",
+    "lodash": "^2.4.1",
+    "react": "^0.12.0",
+    "react-style": "^0.3.1",
+    "store2": "^2.1.6",
+    "superagent": "^0.21.0"
+  },
+  "devDependencies": {
+    "css-loader": "^0.9.0",
+    "extract-text-webpack-plugin": "^0.3.4",
+    "file-loader": "^0.8.1",
+    "html-loader": "^0.2.3",
+    "json-loader": "^0.5.1",
+    "jsx-loader": "^0.12.1",
+    "null-loader": "^0.1.0",
+    "react-hot-loader": "^0.5.0",
+    "react-proxy-loader": "^0.2.2",
+    "style-loader": "^0.8.2",
+    "url-loader": "^0.5.5",
+    "webpack": "^1.4.13",
+    "webpack-dev-server": "^1.6.5"
+  }
+}

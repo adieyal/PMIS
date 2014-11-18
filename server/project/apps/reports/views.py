@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from datetime import datetime
 from decimal import Decimal
 from collections import OrderedDict
-import json
+import ujson as json
 from django.template.response import TemplateResponse
 #from project.apps.api.reports.district_report import district_report_json
 #from project.apps.projects import models
@@ -17,6 +17,8 @@ from widgets import *
 from project.libs.database.database import Project
 import iso8601
 import calendar
+
+from decorators import profile
 
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -677,6 +679,109 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ]),
         ###
     }
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+def generate_districts_new(district_projects, month0):
+    result = {}
+    for k, projects in district_projects:
+        result[k] = {
+            "projects-implementation": len(projects),
+            "performance": [
+                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects]),
+                sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+            ],
+            "projects-0-50": len([p for p in projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+            "projects-51-75": len([p for p in projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+            "projects-76-99": len([p for p in projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+            "projects-100": len([p for p in projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+        }
+    return result
+        
+#@cache_page(settings.API_CACHE)
+def cluster_dashboard_new(request, cluster, year=None, month=None):
+    from time import gmtime, strftime
+    print 'Start: %s: %s' % (cluster, strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
+    projects = filter(
+        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
+        [Project.get(p) for p in Project.list() if p]
+    )
+    programmes = set([p.programme for p in projects if p.programme != '--------'])
+
+    if not year or not month:
+        try:
+            timestamp = max([project.timestamp for project in projects])
+        except ValueError:
+            return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
+        year = timestamp.year
+        month = '%02d' % (timestamp.month)
+    else:
+        year = int(year)
+        month = month
+        
+    # Convert month number to 0 indexed month.
+    MONTHS0 = {
+        '04': (0, 1),  '05': (1, 1),  '06': (2, 1),
+        '07': (3, 1),  '08': (4, 1),  '09': (5, 1),
+        '10': (6, 1),  '11': (7, 1),  '12': (8, 1),
+        '01': (9, 0),  '02': (10, 0), '03': (11, 0)
+    }
+    month0, year_add = MONTHS0[month]
+    fyear = year + year_add
+    
+    def _active(phase):
+        return phase in ['planning', 'implementation', 'completed', 'final-accounts']
+
+    districts = {
+        'nkangala': 'Nkangala',
+        'gertsibande': 'Gert Sibande',
+        'ehlanzeni': 'Ehlanzeni'
+    }
+
+    district_projects = [(k, [p for p in projects if p.district == title and p.phase == 'implementation']) for k, title in districts.iteritems()]
+    
+    context = {
+        "client": projects[0].cluster,
+        "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
+
+        ### Summary section
+        "total-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)]),
+        "total-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+        "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
+        "total-projects": len(projects),
+        "total-programmes": len(programmes),
+
+        "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
+        "planning-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning']),
+        "planning-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
+
+        "implementation-projects-total": len([p for p in projects if p.phase == 'implementation' or p.phase == 'completed']),
+        "implementation-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation']),
+        "implementation-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
+
+        "districts": generate_districts_new(district_projects, month0),
+    }
+
+    context['programmes'] = []
+
+    for programme in programmes:
+        programme_projects = [p for p in projects if p.programme == programme]
+        context['programmes'].append({
+            "name": programme,
+            "performance": [
+                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects]),
+                sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
+            ],
+            "projects": {
+                "accounts": len([p for p in programme_projects if p.phase == 'final-accounts']),
+                "implementation": len([p for p in programme_projects if p.phase == 'implementation']),
+                "planning": len([p for p in programme_projects if p.phase == 'planning']),
+                "total": len([p for p in programme_projects if p.programme == programme]),
+            }
+        })
+
+    print 'End: %s: %s' % (cluster, strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 #@cache_page(settings.API_CACHE)
