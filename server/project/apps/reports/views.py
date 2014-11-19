@@ -18,7 +18,6 @@ from project.libs.database.database import Project
 import iso8601
 import calendar
 
-from decorators import profile
 
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 

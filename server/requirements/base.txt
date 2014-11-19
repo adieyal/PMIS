@@ -17,4 +17,4 @@ fuzzywuzzy
 iso8601
 redis
 slugify
-djozer
+djoser

@@ -16,10 +16,9 @@ module.exports = function(options) {
 		"json5": "json5-loader",
 		"txt": "raw-loader",
 		"png|jpg|jpeg|gif": "url-loader?limit=10000",
-		"woff|woff2": "url-loader?limit=100000",
+		"woff|woff2|svg": "url-loader?limit=100000",
 		"ttf|eot": "file-loader",
 		"wav|mp3": "file-loader",
-		"svg": "url-loader?limit=100000",
 		"html": "html-loader",
 		"md|markdown": ["html-loader", "markdown-loader"],
 	};
@@ -27,12 +26,10 @@ module.exports = function(options) {
 		"css": "css-loader",
 		"less": "css-loader!less-loader",
 		"styl": "css-loader!stylus-loader",
-		// Let compass do this
-		// "sass|scss": "css-loader!sass-loader?outputStyle=expanded&includePaths[]=" +
-		//     (path.resolve(__dirname + '/node_modules/jeet/scss/'))
+		"sass|scss": "css-loader!sass-loader?outputStyle=expanded"
 	};
 	var additionalLoaders = [
-		// { test: /some-reg-exp$/, loader: "any" }
+		// { test: /some-reg-exp$/, loader: "any-loader" }
 	];
 	var alias = {
 
@@ -43,7 +40,7 @@ module.exports = function(options) {
 	var externals = [
 
 	];
-	var modulesDirectories = ["web_modules", "node_modules", "bower_components"];
+	var modulesDirectories = ["web_modules", "node_modules"];
 	var extensions = ["", ".web.js", ".js", ".jsx"];
 	var root = path.join(__dirname, "app");
 	var output = {
@@ -69,8 +66,7 @@ module.exports = function(options) {
 			}
 		},
 		new webpack.PrefetchPlugin("react"),
-		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment"),
-		new webpack.ResolverPlugin(new webpack.ResolverPlugin.DirectoryDescriptionFilePlugin('bower.json', ['main']))
+		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment")
 	];
 	if(options.prerender) {
 		aliasLoader["react-proxy$"] = "react-proxy/unavailable";
@@ -95,11 +91,11 @@ module.exports = function(options) {
 		var loaders = stylesheetLoaders[ext];
 		if(Array.isArray(loaders)) loaders = loaders.join("!");
 		if(options.prerender) {
-			stylesheetLoaders[ext] = "null";
+			stylesheetLoaders[ext] = "null-loader";
 		} else if(options.separateStylesheet) {
-			stylesheetLoaders[ext] = ExtractTextPlugin.extract("style", loaders);
+			stylesheetLoaders[ext] = ExtractTextPlugin.extract("style-loader", loaders);
 		} else {
-			stylesheetLoaders[ext] = "style!" + loaders;
+			stylesheetLoaders[ext] = "style-loader!" + loaders;
 		}
 	});
 	if(options.separateStylesheet && !options.prerender) {
