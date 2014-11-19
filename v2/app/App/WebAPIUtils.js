@@ -1,4 +1,5 @@
 var request = require('superagent');
+var AuthActions = require('./AuthActions');
 var NotificationActions = require('./NotificationActions');
 
 function url(path) {
