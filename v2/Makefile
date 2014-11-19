@@ -11,3 +11,6 @@ embed:
 	mkdir -p ../server/project/apps/v2/static/v2
 	cp -a config/dev-server-public/* ../server/project/apps/v2/static/v2
 	cp -a build/public/* ../server/project/apps/v2/static/v2
+
+build:
+	bundle exec compass compile
