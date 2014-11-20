@@ -1,5 +1,5 @@
 
-import ujson as json
+import json as json
 from django.http import HttpResponse
 from django.contrib import auth
 from django.views.decorators.csrf import csrf_exempt

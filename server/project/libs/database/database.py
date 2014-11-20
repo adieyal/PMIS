@@ -1,4 +1,4 @@
-import ujson as json
+import json as json
 import uuid
 import time
 from datetime import datetime

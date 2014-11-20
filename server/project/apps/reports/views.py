@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from datetime import datetime
 from decimal import Decimal
 from collections import OrderedDict
-import ujson as json
+import json as json
 from django.template.response import TemplateResponse
 #from project.apps.api.reports.district_report import district_report_json
 #from project.apps.projects import models
