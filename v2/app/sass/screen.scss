@@ -25,6 +25,9 @@ header {
 
     .logo {
         @include col(2/18);
+        // box-shadow: 2px 2px 1px #666;
+        // border-radius: 9px;
+        // background-color: $tertiary;
         padding-top: 10px;
         height: 90px;
 

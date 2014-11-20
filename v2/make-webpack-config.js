@@ -3,8 +3,13 @@ var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var loadersByExtension = require("./config/loadersByExtension");
 var joinEntry = require("./config/joinEntry");
+var Config = require("./app/App/Config");
 
 module.exports = function(options) {
+    var definitions = {
+        BACKEND: JSON.stringify(process.env.BACKEND)
+    };
+
 	var entry = {
 		main: reactEntry("Main")
 		// second: reactEntry("Second")
@@ -65,6 +70,7 @@ module.exports = function(options) {
 				});
 			}
 		},
+		new webpack.DefinePlugin(definitions),
 		new webpack.PrefetchPlugin("react"),
 		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment")
 	];
@@ -85,7 +91,7 @@ module.exports = function(options) {
 		if(options.hot) {
 			entry = joinEntry("webpack/hot/dev-server", entry);
 		}
-		entry = joinEntry("webpack-dev-server/client?http://insight.burgercom.co.za", entry);
+		entry = joinEntry("webpack-dev-server/client?" + process.env.FRONTEND, entry);
 	}
 	Object.keys(stylesheetLoaders).forEach(function(ext) {
 		var loaders = stylesheetLoaders[ext];

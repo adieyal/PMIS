@@ -37,11 +37,9 @@ var ClusterStore = function (slug) {
             if (action.slug == store.slug) {
                 var ActionTypes = Constants.ActionTypes;
 
-                /*
                 AppDispatcher.waitFor([
                     AuthStore.dispatchToken
                 ]);
-                */
 
                 switch(action.type) {
                     case ActionTypes.RECEIVE_CLUSTER:

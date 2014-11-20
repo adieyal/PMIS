@@ -1,7 +1,10 @@
-.PHONY: default install embed build
+.PHONY: default hot-dev-server dev-server install embed build
 
 default:
 	@echo "No default"
+
+hot-dev-server:
+	npm run hot-dev-server
 
 dev-server:
 	npm run dev-server

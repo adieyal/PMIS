@@ -3,7 +3,7 @@ var AuthActions = require('./AuthActions');
 var NotificationActions = require('./NotificationActions');
 
 function url(path) {
-    return 'http://pmis.burgercom.co.za/' + path;
+    return BACKEND + '/' + path;
 }
 
 module.exports = {
@@ -33,6 +33,10 @@ module.exports = {
 
                 if(res.status == 400) {
                     return AuthActions.loginFailure(res.body);
+                }
+
+                if(res.status != 200) {
+                    return NotificationActions.notify(res.text);
                 }
 
                 var data = res.body;
