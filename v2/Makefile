@@ -1,5 +1,10 @@
+.PHONY: default install embed build
+
 default:
 	@echo "No default"
+
+dev-server:
+	npm run dev-server
 
 install:
 	bundle install

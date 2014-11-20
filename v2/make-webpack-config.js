@@ -85,7 +85,7 @@ module.exports = function(options) {
 		if(options.hot) {
 			entry = joinEntry("webpack/hot/dev-server", entry);
 		}
-		entry = joinEntry("webpack-dev-server/client?http://localhost:2992", entry);
+		entry = joinEntry("webpack-dev-server/client?http://insight.burgercom.co.za", entry);
 	}
 	Object.keys(stylesheetLoaders).forEach(function(ext) {
 		var loaders = stylesheetLoaders[ext];

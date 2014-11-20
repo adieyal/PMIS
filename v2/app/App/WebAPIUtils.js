@@ -3,7 +3,7 @@ var AuthActions = require('./AuthActions');
 var NotificationActions = require('./NotificationActions');
 
 function url(path) {
-    return '/' + path;
+    return 'http://pmis.burgercom.co.za/' + path;
 }
 
 module.exports = {
