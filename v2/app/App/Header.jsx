@@ -9,9 +9,11 @@ var Header = React.createClass({
         });
     },
     render: function() {
+        var insight = require('../images/insight.png');
+
         return <header>
             <div className="logo">
-                <h1><span className="alt">in</span>Sight</h1>
+                <img src={insight} alt="inSight" />
             </div>
             <nav className="menu">
                 <ul>
