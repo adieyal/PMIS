@@ -58,7 +58,15 @@ module.exports = {
         return request
             .get(url('reports/search') + '?query=' + query)
             .end(function (error, res) {
-                if(error) return NotificationActions.notify(error);
+                if(error) {
+                    if(error.message && error.message == 'timeout of undefinedms exceeded') {
+                        // We've been aborted
+                        return;
+                    }
+
+                    return NotificationActions.notify(error);
+                }
+
                 done(res.body);
             });
     }
