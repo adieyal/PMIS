@@ -805,6 +805,23 @@ def search_v2(request):
 
     return HttpResponse(json.dumps(body), mimetype='application/json')
 
+def search_programmes_v2(request):
+    res = es.search(index='pmis', body={
+        'query': {
+            'filtered': {
+                'filter': {
+                    'term': {
+                        'cluster_id': request.GET.get('cluster_id')
+                    }
+                }
+            }
+        }
+    })
+
+    body = res['hits']['hits']
+
+    return HttpResponse(json.dumps(body), mimetype='application/json')
+
 #@cache_page(settings.API_CACHE)
 def cluster_progress_json(request, cluster, year=None, month=None):
     projects = filter(

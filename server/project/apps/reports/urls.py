@@ -4,6 +4,9 @@ urlpatterns = patterns('project.apps.reports.views',
     url(r'^search$',
         'search_v2', {}, name='search_v2'),
 
+    url(r'^search/programmes$',
+        'search_programmes_v2', {}, name='search_programmes_v2'),
+
     url(r'^test/$', 'test'),
     url(r'^district/dashboard/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_dashboard', name='district_dashboard'),
     url(r'^district/progress/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_progress', name='district_progress'),

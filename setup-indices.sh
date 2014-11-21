@@ -34,11 +34,16 @@ curl -XPUT $SERVER/pmis/_mapping/project -d'{
             "type": "string",
             "analyzer": "autocomplete"
         },
-        "manager": {
+        "programme": {
             "type": "string",
             "analyzer": "autocomplete"
         },
-        "description": {
+        "title": {
+            "type": "string",
+            "analyzer": "autocomplete"
+        },
+
+        "manager": {
             "type": "string",
             "analyzer": "autocomplete"
         },
@@ -49,8 +54,18 @@ curl -XPUT $SERVER/pmis/_mapping/project -d'{
         "comments": {
             "type": "string",
             "analyzer": "autocomplete"
+        }
+    }
+}'
+
+# Setup mappings for programme type
+curl -XPUT $SERVER/pmis/_mapping/programme -d'{
+    "properties": {
+        "cluster": {
+            "type": "string",
+            "analyzer": "autocomplete"
         },
-        "programme": {
+        "title": {
             "type": "string",
             "analyzer": "autocomplete"
         }

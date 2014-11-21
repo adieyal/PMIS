@@ -180,17 +180,13 @@ var ClusterDashboard = React.createClass({
                     </div>
                 </div>;
                 break
-            case 'programmes':
-                view = <div className="listing-view inner">
+            case 'programme':
+                view = <div className="programme-view inner">
                     <div className="row">
-                        <div className="cluster-title" onClick={this.showDefault}>{client}</div>
-                        <div className="cluster-year">{store.year}</div>
-                        <div className="cluster-search"><input ref="search" type="search" /></div>
+                        <div className="programme-title" onClick={this.showDefault}>{client}</div>
                     </div>
                     <div className="row rows">
-                        {this.generateProgrammes().map(function(p) {
-                            return <ProgrammeRow programme={p} />;
-                        })}
+                        <ProgrammeRow programme={p} />;
                     </div>
                 </div>;
                 break;
