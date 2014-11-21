@@ -1,4 +1,4 @@
-.PHONY: default hot-dev-server dev-server install embed build
+.PHONY: default hot-dev-server dev-server install embed build server
 
 default:
 	@echo "No default"
@@ -8,6 +8,9 @@ hot-dev-server:
 
 dev-server:
 	npm run dev-server
+
+server: build
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run dev-server
 
 install:
 	bundle install
