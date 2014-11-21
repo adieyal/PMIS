@@ -36,7 +36,7 @@ var Header = React.createClass({
             AuthActions.logout();
         });
     },
-    loadProjectReport(project_id) {
+    loadProjectReport: function(project_id) {
         return function() {
             this.setState(this.getInitialState());
             window.open(BACKEND + '/reports/project/' + project_id + '/latest/');
