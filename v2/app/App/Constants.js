@@ -4,8 +4,9 @@ module.exports = {
     CHANGE_EVENT: 'change',
 
     ActionTypes: keyMirror({
-        FETCH_CLUSTER: null,
         RECEIVE_CLUSTER: null,
+
+        RECEIVE_RESULTS: null,
 
         LOGIN: null,
         LOGIN_FAILURE: null,

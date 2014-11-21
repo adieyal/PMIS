@@ -9,7 +9,7 @@ function url(path) {
 module.exports = {
     fetchCluster: function (slug, auth_token, done) {
         return request
-            .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/new'))
+            .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/v2'))
             .set('Authorization', 'Token ' + auth_token)
             .end(function (error, res) {
                 if(error) {
@@ -50,6 +50,16 @@ module.exports = {
             .end(function (error, res) {
                 if(error) return NotificationActions.notify(error);
                 done();
+            });
+    },
+    search: function (query, auth_token, done) {
+        console.log(query, auth_token);
+
+        return request
+            .get(url('reports/search') + '?query=' + query)
+            .end(function (error, res) {
+                if(error) return NotificationActions.notify(error);
+                done(res.body);
             });
     }
 };

@@ -34,7 +34,7 @@ AuthStore.dispatchToken = AppDispatcher.register(function(payload) {
         case ActionTypes.LOGIN:
             store.session.set('auth', {
                 status: 'logged-in',
-                data: action.data
+                auth_token: action.auth_token
             }, true);
             AuthStore.emitChange();
             break;

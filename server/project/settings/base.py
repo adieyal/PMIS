@@ -209,6 +209,7 @@ LOCAL_APPS = (
     'apps.reports',
     'apps.entry',
     'apps.ui',
+    'apps.v2',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

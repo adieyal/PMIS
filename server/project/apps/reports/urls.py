@@ -1,6 +1,9 @@
 from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('project.apps.reports.views',
+    url(r'^search$',
+        'search_v2', {}, name='search_v2'),
+
     url(r'^test/$', 'test'),
     url(r'^district/dashboard/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_dashboard', name='district_dashboard'),
     url(r'^district/progress/(?P<district_id>\d+)/(?P<year>\d+)/(?P<month>\d+)/$', 'district_progress', name='district_progress'),
@@ -26,14 +29,12 @@ urlpatterns = patterns('project.apps.reports.views',
         'cluster_report', {}, name='cluster'),
     url(r'^cluster/(?P<cluster>[\w-]+)/latest/dashboard/json$',
         'cluster_dashboard_json', {}, name='cluster_dashboard_json'),
-    url(r'^cluster/(?P<cluster>[\w-]+)/latest/dashboard/new$',
-        'cluster_dashboard_new', {}, name='cluster_dashboard_new'),
+    url(r'^cluster/(?P<cluster>[\w-]+)/latest/dashboard/v2$',
+        'cluster_dashboard_v2', {}, name='cluster_dashboard_v2'),
     url(r'^cluster/(?P<cluster>[\w-]+)/latest/progress/json$',
         'cluster_progress_json', {}, name='cluster_progress_json'),
     url(r'^cluster/(?P<cluster>[\w-]+)/latest/performance/json$',
         'cluster_performance_json', {}, name='cluster_performance_json'),
-
-
 
     url(r'^(?P<report>\w+)/(?P<report_id>[\w-]+)/(?P<subreport>\w+)/(?P<year>\d{4})/(?P<month>\d{2})/$',
         'generic_report', name='generic_report'),

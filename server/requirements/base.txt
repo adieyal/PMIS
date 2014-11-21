@@ -18,3 +18,4 @@ iso8601
 redis
 slugify
 djoser
+elasticsearch

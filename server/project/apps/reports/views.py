@@ -12,12 +12,14 @@ from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
 from django.conf import settings
 import fuzzywuzzy.process
+from elasticsearch import Elasticsearch
 
 from widgets import *
 from project.libs.database.database import Project
 import iso8601
 import calendar
 
+es = Elasticsearch()
 
 MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
@@ -680,7 +682,7 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
-def generate_districts_new(district_projects, month0):
+def generate_districts_v2(district_projects, month0):
     result = {}
     for k, projects in district_projects:
         result[k] = {
@@ -696,11 +698,7 @@ def generate_districts_new(district_projects, month0):
         }
     return result
         
-#@cache_page(settings.API_CACHE)
-def cluster_dashboard_new(request, cluster, year=None, month=None):
-    from time import gmtime, strftime
-    print 'Start: %s: %s' % (cluster, strftime("%Y-%m-%d %H:%M:%S", gmtime()))
-
+def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     projects = filter(
         lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
@@ -758,7 +756,7 @@ def cluster_dashboard_new(request, cluster, year=None, month=None):
         "implementation-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation']),
         "implementation-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
 
-        "districts": generate_districts_new(district_projects, month0),
+        "districts": generate_districts_v2(district_projects, month0),
     }
 
     context['programmes'] = []
@@ -779,9 +777,33 @@ def cluster_dashboard_new(request, cluster, year=None, month=None):
             }
         })
 
-    print 'End: %s: %s' % (cluster, strftime("%Y-%m-%d %H:%M:%S", gmtime()))
+    return context
 
+#@cache_page(settings.API_CACHE)
+def cluster_dashboard_v2(request, cluster, year=None, month=None):
+    context = generate_cluster_dashboard_v2(cluster, year, month)
     return HttpResponse(json.dumps(context), mimetype='application/json')
+
+def search_v2(request):
+    res = es.search(index='pmis', body={
+        'query': {
+            'multi_match': {
+                'query': request.GET.get('query'),
+                'fields': [
+                    "cluster",
+                    "manager",
+                    "description",
+                    "municipality",
+                    "comments",
+                    "programme"    
+                ]
+            }
+        }
+    })
+
+    body = res['hits']['hits']
+
+    return HttpResponse(json.dumps(body), mimetype='application/json')
 
 #@cache_page(settings.API_CACHE)
 def cluster_progress_json(request, cluster, year=None, month=None):

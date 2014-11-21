@@ -16,6 +16,7 @@ module.exports = function(options) {
 	};
 	var loaders = {
 		"coffee": "coffee-redux-loader",
+		"js": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : "jsx-loader",
 		"jsx": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : "jsx-loader",
 		"json": "json-loader",
 		"json5": "json5-loader",
