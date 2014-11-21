@@ -19,11 +19,9 @@ var Header = React.createClass({
             results: []
         });
 
-        /*
         if (currentRequest) {
             currentRequest.abort();
         }
-        */
 
         var query = this.refs.query.getDOMNode().value;
         currentRequest = WebAPIUtils.search(query, AuthStore.getState().auth_token, function(results) {
@@ -33,32 +31,32 @@ var Header = React.createClass({
             });
         }.bind(this));
     },
-    handleSelect: function(selection) {
-        console.log("SELECTION");
-        console.log(selection);
-    },
     logout: function() {
         WebAPIUtils.logout(function() {
             AuthActions.logout();
         });
+    },
+    loadProjectReport(project_id) {
+        return function() {
+            this.setState(this.getInitialState());
+            window.open(BACKEND + '/reports/project/' + project_id + '/latest/');
+        }.bind(this);
     },
     renderResults: function() {
         if (this.state.results.length) {
             return <div className="results">{ this.state.results.map(function(result) {
                 switch (result._type) {
                     case 'project':
-                        return <div className="result result-project">
-                            <a href={ BACKEND + '/reports/project/' + result._id + '/latest/' } target="_blank">
-                                <div className="programme">{result._source.programme}</div>
-                                <div className="title">{result._source.title}</div>
-                            </a>
+                        return <div className="result result-project" onClick={this.loadProjectReport(result._id)}>
+                            <div className="programme">{result._source.programme}</div>
+                            <div className="title">{result._source.title}</div>
                         </div>;
                     case 'programme':
                         return <div className="result result-programme">
                             {result._source.title}
                         </div>;
                 }
-            })}</div>;
+            }.bind(this))}</div>;
         }
     },
     render: function() {
