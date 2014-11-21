@@ -7,6 +7,8 @@
 @import "jeet/index";
 @import "settings";
 
+$other: #ADADAF;
+
 /**
  * Base rules
  */
@@ -213,7 +215,7 @@ body {
 
 .cluster-dashboard {
     color: #fff;
-    background-color: $tertiary;
+    background-color: $other;
     border-radius: 12px;
     box-shadow: 2px 2px 1px #666;
     height: 400px;
