@@ -48,8 +48,10 @@ var Header = React.createClass({
                 switch (result._type) {
                     case 'project':
                         return <div className="result result-project">
-                            <div className="programme">{result._source.programme}</div>
-                            <div className="title">{result._source.title}</div>
+                            <a href={ BACKEND + '/reports/project/' + result._id + '/latest/' } target="_blank">
+                                <div className="programme">{result._source.programme}</div>
+                                <div className="title">{result._source.title}</div>
+                            </a>
                         </div>;
                     case 'programme':
                         return <div className="result result-programme">
