@@ -7,6 +7,7 @@ import json as json
 from django.template.response import TemplateResponse
 #from project.apps.api.reports.district_report import district_report_json
 #from project.apps.projects import models
+from django.views.decorators.http import condition
 from django.views.decorators.cache import cache_page
 from django.shortcuts import redirect
 from django.core.urlresolvers import reverse
@@ -779,7 +780,16 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
 
     return context
 
+def latest_project(request, cluster, year=None, month=None):
+    projects = filter(
+        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
+        [Project.get(p) for p in Project.list() if p]
+    )
+    timestamp = max([project.timestamp for project in projects])
+    return timestamp
+
 #@cache_page(settings.API_CACHE)
+@condition(last_modified_func=latest_project)
 def cluster_dashboard_v2(request, cluster, year=None, month=None):
     context = generate_cluster_dashboard_v2(cluster, year, month)
     return HttpResponse(json.dumps(context), mimetype='application/json')
