@@ -1,4 +1,5 @@
 import os
+from slugify import slugify
 from django.http import HttpResponse
 from datetime import datetime
 from decimal import Decimal
@@ -765,7 +766,8 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     for programme in programmes:
         programme_projects = [p for p in projects if p.programme == programme]
         context['programmes'].append({
-            "name": programme,
+            "id": slugify(unicode(programme)),
+            "title": programme,
             "performance": [
                 sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects]),
                 sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
@@ -816,20 +818,27 @@ def search_v2(request):
     return HttpResponse(json.dumps(body), mimetype='application/json')
 
 def search_programmes_v2(request):
-    res = es.search(index='pmis', body={
+    body = {
         'query': {
             'filtered': {
                 'filter': {
                     'term': {
                         'cluster_id': request.GET.get('cluster_id')
                     }
-                }
+                },
             }
         }
-    })
+    }
 
+    if request.GET.get('query'):
+        body['query']['filtered']['query'] = {
+            'match': {
+                'title': request.GET.get('query', '')
+            }
+        }
+
+    res = es.search(index='pmis', doc_type='programme', body=body)
     body = res['hits']['hits']
-
     return HttpResponse(json.dumps(body), mimetype='application/json')
 
 #@cache_page(settings.API_CACHE)

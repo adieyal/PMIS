@@ -41,7 +41,7 @@ var PieChart = {
 
     update: function(component) {
         /*
-        var columns = _.reject(component.props.data, function(datum) {
+        var columns = utils.reject(component.props.data, function(datum) {
             return datum[1] == 0;
         });
         */

@@ -1,9 +1,9 @@
-var _ = require('lodash');
 var React = require("react");
 var d3 = require("d3");
 var StoreMixin = require('./StoreMixin');
 var ActivatorMixin = require('./ActivatorMixin');
 var DistrictStore = require('./DistrictStore');
+var utils = require('./utils');
 
 var SvgMap = {
     scale: d3.scale.ordinal().range([
@@ -20,7 +20,7 @@ var SvgMap = {
         this.scale.domain([ 0, component.state.maxProjects ]);
 
         var svg = component.refs.svg.getDOMNode();
-        _.each(component.props.districts, function(data, districtId) {
+        utils.each(component.props.districts, function (data, districtId) {
             var district = component.refs[districtId].getDOMNode();
             var count = data['projects-implementation'];
             district.style.fill = this.scale(count);

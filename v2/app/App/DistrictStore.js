@@ -1,26 +1,17 @@
-var _ = require('lodash');
-var EventEmitter = require('events').EventEmitter;
 var AppDispatcher = require('./AppDispatcher');
 var Constants = require('./Constants');
+var StoreFactory = require('./StoreFactory');
+var utils = require('./utils');
 
 var state = {
     maxProjects: 0,
     districtsByCluster: {}
 };
 
-var DistrictStore = _.merge({}, EventEmitter.prototype, {
-    addChangeListener: function(done) {
-        this.on(Constants.CHANGE_EVENT, done);
-    },
-    removeChangeListener: function(done) {
-        this.removeListener(Constants.CHANGE_EVENT, done);
-    },
-    emitChange: function() {
-        this.emit(Constants.CHANGE_EVENT);
-    },
-    getState: function() {
+var DistrictStore = StoreFactory(function() {
+    this.getState = function() {
         return state;
-    }
+    };
 });
 
 DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
@@ -32,14 +23,14 @@ DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
             if (typeof state.districtsByCluster[action.slug] == 'undefined') {
                 state.districtsByCluster[action.slug] = action.districts;
                 previousMaxProjects = state.maxProjects;
-                var districts = _.flatten(_.map(state.districtsByCluster), function(districts) {
-                    return _.values(districts);
+                var districts = utils.flatten(utils.map(state.districtsByCluster), function(districts) {
+                    return utils.values(districts);
                 });
-                var otherMaxProjects = _.max(_.pluck(districts, 'projects-implementation'));
+                var otherMaxProjects = utils.max(utils.pluck(districts, 'projects-implementation'));
                 state.maxProjects = Math.max(state.maxProjects, otherMaxProjects);
 
                 if (state.maxProjects > previousMaxProjects) {
-                    DistrictStore.emitChange();
+                    DistrictStore.triggerChange();
                 }
             }
             break;

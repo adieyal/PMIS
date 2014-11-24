@@ -7,6 +7,7 @@ var Map = require('react-proxy!./Map');
 var ProgrammeRow = require('react-proxy!./ProgrammeRow');
 var DistrictRow = require('react-proxy!./DistrictRow');
 
+var utils = require('./utils');
 var WebAPIUtils = require('./WebAPIUtils');
 
 var AuthStore = require('./AuthStore');
@@ -34,8 +35,8 @@ var ClusterDashboard = React.createClass({
     },
     _handleStoreChange: function() {
         var store = this.store.getState();
-        var domain = _.pluck(store.districts, 'projects-implementation');
-        _districtsDomain[1] = Math.max(_districtsDomain[1], _.max(domain));
+        var domain = utils.pluck(store.districts, 'projects-implementation');
+        _districtsDomain[1] = Math.max(_districtsDomain[1], utils.max(domain));
         this.setState({ store: store });
     },
     getInitialState: function() {
@@ -95,16 +96,15 @@ var ClusterDashboard = React.createClass({
                 implementation: p.projects.implementation
             };
 
-            var projects = _(projectStatuses)
-                .map(function(title, status) {
-                    return [ title, p.projects[status] ];
-                })
-                .reject(function(project) {
-                    return project[1] == 0;
-                })
-                .value();
+            var projects = utils.map(projectStatuses, function(title, status) {
+                return [ title, p.projects[status] ];
+            });
+            projects = projects.filter(function (project) {
+                return project[1] > 0;
+            });
 
             return {
+                id: p.id,
                 title: p.name,
                 numbers: numbers,
                 projects: projects,
@@ -161,7 +161,7 @@ var ClusterDashboard = React.createClass({
 
             switch (this.state.view) {
             case 'default':
-                var domain = _.flatten(_.values(_districtsDomain));
+                var domain = utils.flatten(utils.values(_districtsDomain));
 
                 view = <div className="default-view inner">
                     <div className="row">
@@ -189,7 +189,7 @@ var ClusterDashboard = React.createClass({
                     </div>
                     <div className="row rows">
                         {this.generateProgrammes().map(function(p) {
-                            return <ProgrammeRow programme={p} />;
+                            return <ProgrammeRow key={p.id} programme={p} />;
                         })}
                     </div>
                 </div>;

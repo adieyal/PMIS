@@ -1,21 +1,27 @@
-var keyMirror = require('keymirror');
+function keyMirror(keys) {
+    var values = {};
+    keys.forEach(function (key) {
+        values[key] = key;
+    });
+    return values;
+}
 
 module.exports = {
     CHANGE_EVENT: 'change',
 
-    ActionTypes: keyMirror({
-        RECEIVE_CLUSTER: null,
+    ActionTypes: keyMirror([
+        'RECEIVE_CLUSTER',
 
-        RECEIVE_RESULTS: null,
+        'RECEIVE_RESULTS',
 
-        LOGIN: null,
-        LOGIN_FAILURE: null,
-        LOGGED_IN: null,
-        LOGOUT: null,
-        LOGGED_OUT: null,
+        'LOGIN',
+        'LOGIN_FAILURE',
+        'LOGGED_IN',
+        'LOGOUT',
+        'LOGGED_OUT',
 
-        NOTIFY: null,
+        'NOTIFY',
 
-        SET_PREFERENCE: null
-    })
+        'SET_PREFERENCE'
+    ])
 };

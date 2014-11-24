@@ -73,7 +73,11 @@ module.exports = function(options) {
 		},
 		new webpack.DefinePlugin(definitions),
 		new webpack.PrefetchPlugin("react"),
-		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment")
+		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment"),
+		new webpack.optimize.AggressiveMergingPlugin({
+		    minSizeReduce: 1.5,
+		    moveToParents: true
+        })
 	];
 	if(options.prerender) {
 		aliasLoader["react-proxy$"] = "react-proxy/unavailable";

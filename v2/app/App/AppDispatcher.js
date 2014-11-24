@@ -1,9 +1,9 @@
 var Dispatcher = require('flux').Dispatcher;
-var _ = require('lodash');
+var utils = require('./utils');
 
-module.exports = _.extend(new Dispatcher(), {
+module.exports = utils.extend(new Dispatcher(), {
     handleAction: function (action) {
-        console.log(action);
+        // console.log(action);
 
         this.dispatch({
             action: action

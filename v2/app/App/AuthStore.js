@@ -1,29 +1,21 @@
-var _ = require('lodash');
-var EventEmitter = require('events').EventEmitter;
 var AppDispatcher = require('./AppDispatcher');
 var Constants = require('./Constants');
 var WebAPIUtils = require('./WebAPIUtils');
-var store = require('store2');
 
-if (!store.session.has('auth')) {
-    store.session.set('auth', {
+function setAuth(auth) {
+    localStorage.setItem('auth', JSON.stringify(auth));
+}
+
+if (!localStorage.getItem('auth')) {
+    setAuth({
         status: 'logged-out'
     });
 }
 
-var AuthStore = _.merge({}, EventEmitter.prototype, {
-    addChangeListener: function(done) {
-        this.on(Constants.CHANGE_EVENT, done);
-    },
-    removeChangeListener: function(done) {
-        this.removeListener(Constants.CHANGE_EVENT, done);
-    },
-    emitChange: function() {
-        this.emit(Constants.CHANGE_EVENT);
-    },
-    getState: function() {
-        return store.session('auth');
-    }
+var AuthStore = require('./StoreFactory')(function() {
+    this.getState = function() {
+        return JSON.parse(localStorage.getItem('auth'));
+    };
 });
 
 AuthStore.dispatchToken = AppDispatcher.register(function(payload) {
@@ -32,24 +24,24 @@ AuthStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     switch(action.type) {
         case ActionTypes.LOGIN:
-            store.session.set('auth', {
+            setAuth({
                 status: 'logged-in',
                 auth_token: action.auth_token
-            }, true);
-            AuthStore.emitChange();
+            });
+            AuthStore.triggerChange();
             break;
         case ActionTypes.LOGIN_FAILURE:
-            store.session.set('auth', {
+            setAuth({
                 status: 'failure',
                 data: action.data
-            }, true);
-            AuthStore.emitChange();
+            });
+            AuthStore.triggerChange();
             break;
         case ActionTypes.LOGOUT:
-            store.session.set('auth', {
+            setAuth({
                 status: 'logged-out'
-            }, true);
-            AuthStore.emitChange();
+            });
+            AuthStore.triggerChange();
             break;
         default:
             return true;

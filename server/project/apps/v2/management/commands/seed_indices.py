@@ -39,15 +39,14 @@ class Command(BaseCommand):
             cluster = generate_cluster_dashboard_v2('department-of-%s' % c)
             
             for programme in cluster['programmes']:
-                if programme['name']:
-                    body = {
-                        'title': programme['name'],
+                if programme['title']:
+                    body = programme
 
-                        'cluster': cluster['client'],
-                        'cluster_id': c
-                    }
+                    body['cluster'] = cluster['client']
+                    body['cluster_id'] = c
 
-                    programme_id = '%s:%s' % (c, slugify(programme['name']))
+                    programme_id = '%s:%s' % (c, slugify(programme['title']))
+
                     es.index(index='pmis', doc_type='programme', id=programme_id, body=body)
 
             for project_id in Project.list():

@@ -9,8 +9,8 @@ hot-dev-server:
 dev-server:
 	npm run dev-server
 
-server: build
-	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run dev-server
+production-server: build
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run production-server
 
 install:
 	bundle install

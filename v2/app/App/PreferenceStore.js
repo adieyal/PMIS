@@ -1,25 +1,15 @@
-var _ = require('lodash');
-var EventEmitter = require('events').EventEmitter;
 var AppDispatcher = require('./AppDispatcher');
 var Constants = require('./Constants');
+var StoreFactory = require('./StoreFactory');
 
 var state = {
     order: 'alphabetic'
 };
 
-var PreferenceStore = _.merge({}, EventEmitter.prototype, {
-    addChangeListener: function(done) {
-        this.on(Constants.CHANGE_EVENT, done);
-    },
-    removeChangeListener: function(done) {
-        this.removeListener(Constants.CHANGE_EVENT, done);
-    },
-    emitChange: function() {
-        this.emit(Constants.CHANGE_EVENT);
-    },
-    getState: function() {
+var PreferenceStore = StoreFactory(function() {
+    this.getState = function() {
         return state;
-    }
+    };
 });
 
 PreferenceStore.dispatchToken = AppDispatcher.register(function(payload) {
@@ -29,7 +19,7 @@ PreferenceStore.dispatchToken = AppDispatcher.register(function(payload) {
     switch(action.type) {
         case ActionTypes.SET_PREFERENCE:
             state[action.key] = action.value;
-            PreferenceStore.emitChange();
+            PreferenceStore.triggerChange();
             break;
         default:
     }

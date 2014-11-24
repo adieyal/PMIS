@@ -1,12 +1,9 @@
-var _ = require('lodash');
-var EventEmitter = require('events').EventEmitter;
 var AppDispatcher = require('./AppDispatcher');
 var Constants = require('./Constants');
 var AuthStore = require('./AuthStore');
 var DistrictStore = require('./DistrictStore');
+var StoreFactory = require('./StoreFactory');
 var WebAPIUtils = require('./WebAPIUtils');
-
-var CHANGE_EVENT = 'change';
 
 var stores = {};
 var state = {};
@@ -15,20 +12,11 @@ var ClusterStore = function (slug) {
     var store = stores[slug];
 
     if (typeof store == 'undefined') {
-        store = _.merge({}, EventEmitter.prototype, {
-            slug: slug,
-            addChangeListener: function(done) {
-                this.on(CHANGE_EVENT, done);
-            },
-            removeChangeListener: function(done) {
-                this.removeListener(CHANGE_EVENT, done);
-            },
-            emitChange: function() {
-                this.emit(CHANGE_EVENT);
-            },
-            getState: function() {
+        store = StoreFactory(function() {
+            this.slug = slug;
+            this.getState = function() {
                 return state[this.slug];
-            }
+            };
         });
 
         store.dispatchToken = AppDispatcher.register(function(payload) {
@@ -50,7 +38,7 @@ var ClusterStore = function (slug) {
                         ]);
 
                         state[action.slug] = action.cluster;
-                        store.emitChange();
+                        store.triggerChange();
                         break;
                     default:
                 }
@@ -59,7 +47,6 @@ var ClusterStore = function (slug) {
 
         stores[slug] = store;
     }
-
 
     return store;
 };
