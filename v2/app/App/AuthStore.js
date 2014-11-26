@@ -6,15 +6,18 @@ function setAuth(auth) {
     localStorage.setItem('auth', JSON.stringify(auth));
 }
 
-if (!localStorage.getItem('auth')) {
-    setAuth({
-        status: 'logged-out'
-    });
+var defaultAuthState = {
+    status: 'logged-out'
+};
+
+if (typeof localStorage != 'undefined' && !localStorage.getItem('auth')) {
+    setAuth(defaultAuthState);
 }
 
 var AuthStore = require('./StoreFactory')(function() {
     this.getState = function() {
-        return JSON.parse(localStorage.getItem('auth'));
+        var state = typeof localStorage == 'undefined' ? defaultAuthState : JSON.parse(localStorage.getItem('auth'));
+        return state;
     };
 });
 
