@@ -57,15 +57,7 @@ var Donut = React.createClass({
             return acc + datum[1];
         }, 0);
 
-        var is_grey = total == 0;
         var endAngle = 0;
-
-        /*
-        var data = this.props.data.filter(function(datum) {
-            return datum[1] > 0;
-        });
-        oconsole.log(data);
-        */
 
         var phases = this.props.data.map(function (datum, index) {
             var value = datum[1];
@@ -95,8 +87,6 @@ var Donut = React.createClass({
             var textNudge = value > 9 ? 30 : 25;
 
             var key = this.props.keyPrefix + phase;
-
-            console.log(value);
 
             return <g key={key}>
                 <rect x={rectX} y={rectY} width="40" height="40" fill={colour} />

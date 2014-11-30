@@ -48,7 +48,6 @@ module.exports = {
         return request
             .post(url('auth/logout'))
             .end(function (error, res) {
-                console.log(res);
                 if(error) return NotificationActions.notify(error);
                 done();
             });
