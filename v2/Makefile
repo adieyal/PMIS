@@ -9,11 +9,12 @@ hot-dev-server:
 dev-server:
 	npm run dev-server
 
-droplet-server: build
+droplet-server:
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://178.62.65.146 PORT=8082 npm run dev-server
 
-production-server: build
-	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run production-server
+production-server:
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run start
+	# hot-dev-server
 
 # Assume git, nodejs and npm are installed
 install:
