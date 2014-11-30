@@ -112,6 +112,11 @@ var ClusterDashboard = React.createClass({
         var store = this.state.store;
 
         data = programmes.map(function(p) {
+            var numbers = {
+                implementation: p.projects.implementation,
+                projects: p.projects.total
+            };
+
             var projects = utils.map(Object.keys(projectPhases), function(phase) {
                 return [ projectPhases[phase], p.projects[phase] ];
             });
@@ -119,7 +124,7 @@ var ClusterDashboard = React.createClass({
             return {
                 id: p.id,
                 title: p.title,
-                numbers: p.numbers,
+                numbers: numbers,
                 projects: projects,
                 performance: p.performance
             };

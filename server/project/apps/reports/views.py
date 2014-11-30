@@ -801,11 +801,6 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase ])
 
-        obj['numbers'] = {
-            "implementation": obj['projects']['implementation'],
-            "projects": len(programme_projects)
-        }
-
         context['programmes'].append(obj)
 
     return context

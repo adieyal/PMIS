@@ -33,7 +33,7 @@ var App = React.createClass({
 	    var logo = null;
 	    var auth = this.state.auth;
 
-        if (auth.status == 'logged-in') {
+        if(auth.status == 'logged-in') {
             return <div className="app logged-in">
                 <Header logo={logo} />
                 <Dashboard />
@@ -41,8 +41,8 @@ var App = React.createClass({
         } else {
             return <div className="app logged-out">
                 <LoginForm errors={auth.data} />
-            </div>
+            </div>;
         }
-	}
+    }
 });
 module.exports = App;
