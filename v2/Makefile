@@ -15,12 +15,6 @@ droplet-server: build
 production-server: build
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run production-server
 
-embed:
-	npm run build
-	mkdir -p ../server/project/apps/v2/static/v2
-	cp -a config/dev-server-public/* ../server/project/apps/v2/static/v2
-	cp -a build/public/* ../server/project/apps/v2/static/v2
-
 # Assume git, nodejs and npm are installed
 install:
 	sudo apt-get install build-essential ruby ruby-dev

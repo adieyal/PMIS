@@ -3,7 +3,7 @@ var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var loadersByExtension = require("./config/loadersByExtension");
 var joinEntry = require("./config/joinEntry");
-var Config = require("./app/App/Config");
+var Config = require("./lib/config");
 
 module.exports = function(options) {
     var definitions = {
@@ -11,7 +11,7 @@ module.exports = function(options) {
     };
 
 	var entry = {
-		main: reactEntry("Main")
+		main: reactEntry("components/Main")
 		// second: reactEntry("Second")
 	};
 	var loaders = {

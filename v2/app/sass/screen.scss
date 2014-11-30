@@ -273,7 +273,7 @@ body {
             }
         }
 
-        .performance {
+        .slider {
             @include col(1/3);
 
             .body {
@@ -285,36 +285,19 @@ body {
             }
         }
 
-        .pie {
+        .donut {
             @include col(1/2);
-
-            .body {
-                height: 120px;
-            }
-
-            .c3-legend-item {
-                padding: 12px;
-                font-size: xx-small;
-            }
         }
 
         .map {
             @include col(1/2);
+
+            height: 140px;
+
             cursor: pointer;
             position: relative;
             z-index: 0;
-            height: 100%;
             text-align: center;
-
-            .title {
-                position: absolute;
-                top: 0;
-                left: 0;
-            }
-
-            .body {
-                height: 152px;
-            }
         }
     }
 
@@ -351,10 +334,10 @@ body {
         .cluster-budget {
             @include col(1/3);
         }
-        .pie {
+        .donut {
             @include col(1/2);
         }
-        .performance {
+        .slider {
             @include col(1/2);
         }
     }
@@ -407,5 +390,40 @@ body {
     .value-text {
         font-family:Arial,sans-serif;
         font-size: 5pt;
+    }
+}
+
+.donut {
+    .slice text {
+        font-family:Arial, sans-serif;
+        font-size:100%;
+    }
+    .slice-grey path {
+        fill:#CCCCCC;
+        stroke-width:0;
+    }
+    .slice0 path {
+        fill:#E7CE8B;
+        stroke-width:0;
+    }
+    .slice1 path {
+        fill:#BCB3D1;
+        stroke-width:0;
+    }
+    .slice2 path {
+        fill:#D0D0AE; 
+        stroke-width:0;
+    }
+    .slice3 path { 
+        fill:#BFDFF6; 
+        stroke-width:0;
+    }
+    .slice4 path { 
+        fill:#BCBCBC; 
+        stroke-width:0;
+    }
+    .slice5 path { 
+        fill:#B6DED3; 
+        stroke-width:0;
     }
 }
