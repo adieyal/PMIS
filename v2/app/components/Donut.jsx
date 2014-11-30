@@ -68,7 +68,7 @@ var Donut = React.createClass({
         var phases = this.props.data.map(function (datum, index) {
             var value = datum[1];
 
-            var percentage = parseInt(value / total * 100) + '%';
+            var percentage = total > 0 ? parseInt(value / total * 100) + '%' : '';
 
             var startAngle = endAngle;
             var delta = value / total * 2 * Math.PI;
@@ -76,10 +76,15 @@ var Donut = React.createClass({
 
             var thisMargin = this.props.data.length > 1 ? margin : 0;
 
-            var path = arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin);
-
             var phase = datum[0];
             var colour = wedgeColours[index];
+
+            var path;
+            if (total > 0) {
+                path = <path d={arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin)} fill={colour} />;
+            } else {
+                path = '';
+            }
 
             var rectX = 160;
             var rectY = index * 50 - 100;
@@ -97,7 +102,7 @@ var Donut = React.createClass({
                 <text x={rectX+textNudge} y={rectY+25} fill="#ffffff" textAnchor="end">{value}</text>
                 <text x={rectX+48} y={rectY+26}>{phase}</text>
                 <text x={textX} y={textY}>{percentage}</text>
-                <path d={path} fill={colour} />
+                {path}
             </g>;
         }.bind(this));
 
