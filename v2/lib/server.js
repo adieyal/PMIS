@@ -18,4 +18,4 @@ app.get("/*", function(req, res) {
 	res.end(prerenderApplication(SCRIPT_URL, STYLE_URL, COMMONS_URL));
 });
 
-app.listen(+(process.env.PORT || 9090));
+app.listen(+(process.env.PORT || 8082));

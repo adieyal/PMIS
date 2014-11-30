@@ -29,38 +29,40 @@ var Performance = React.createClass({
         var px = 0;
         var aspect = (parseFloat(this.props.aspect) || 1) * 90;
 
-        var rows = this.props.data.map(function (data, i) {
-            var id = 'marker' + i;
+        if (typeof this.props.data != 'undefined') {
+            this.props.data.forEach(function (data, i) {
+                var id = 'marker' + i;
 
-            var x = (aspect - 4) * (data['position'] || 0);
-            var transform = 'translate(' + x + ', 0)';
+                var x = (aspect - 4) * (data['position'] || 0);
+                var transform = 'translate(' + x + ', 0)';
 
-            var style = this.styles[data['marker-style'] || 'short'];
+                var style = this.styles[data['marker-style'] || 'short'];
 
-            var markerId = 'marker' + i + '-gradient';
-            var barId = 'bar' + i + '-gradient';
+                var markerId = 'marker' + i + '-gradient';
+                var barId = 'bar' + i + '-gradient';
 
-            var markerAccentStyle = data['marker-color'] ? { stroke: data['marker-color'] } : {};
-            var markerStyle = data['marker-color'] ? { stroke: data['marker-color'], fill: 'url(#' + markerId + ')' } : {};
-            var barStyle = data['bar-color'] ? { stroke: data['bar-color'], fill: 'url(#' + barId + ')' } : {};
+                var markerAccentStyle = data['marker-color'] ? { stroke: data['marker-color'] } : {};
+                var markerStyle = data['marker-color'] ? { stroke: data['marker-color'], fill: 'url(#' + markerId + ')' } : {};
+                var barStyle = data['bar-color'] ? { stroke: data['bar-color'], fill: 'url(#' + barId + ')' } : {};
 
-            gradients.push(this.generateGradient(markerId, data['marker-color']));
+                gradients.push(this.generateGradient(markerId, data['marker-color']));
 
-            markers.push(<g key={'marker-' + data['marker-text']} id={id} transform={transform}>
-                <rect style={markerAccentStyle} className="marker-accent marker-tab" x="2.5" y="8" rx="1" ry="1" width={style.rect.width} height={style.rect.height}/>
-                <circle style={markerAccentStyle} className="marker-accent" cx="4" cy="8" r="4"/>
-                <circle className="marker-outer" cx="4" cy="8" r="3.6"/>
-                <circle style={markerStyle} className="marker-inner" cx="4" cy="8" r="1.75"/>
-                { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle">{ data['marker-text'] }</text> : '' }
-                { data['value-text'] ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle">{ data['value-text'] }</text> : '' }
-            </g>);
+                markers.push(<g key={'marker-' + data['marker-text']} id={id} transform={transform}>
+                    <rect style={markerAccentStyle} className="marker-accent marker-tab" x="2.5" y="8" rx="1" ry="1" width={style.rect.width} height={style.rect.height}/>
+                    <circle style={markerAccentStyle} className="marker-accent" cx="4" cy="8" r="4"/>
+                    <circle className="marker-outer" cx="4" cy="8" r="3.6"/>
+                    <circle style={markerStyle} className="marker-inner" cx="4" cy="8" r="1.75"/>
+                    { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle">{ data['marker-text'] }</text> : '' }
+                    { data['value-text'] ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle">{ data['value-text'] }</text> : '' }
+                </g>);
 
-            gradients.push(this.generateGradient(barId, data['bar-color']));
+                gradients.push(this.generateGradient(barId, data['bar-color']));
 
-            bars.push(<rect key={'bar-' + data['marker-text']} id={'bar' + i} style={barStyle} className="inner-bar" x={px + 4} y="6" rx="2" ry="2" width={x - px} height="4"/>);
+                bars.push(<rect key={'bar-' + data['marker-text']} id={'bar' + i} style={barStyle} className="inner-bar" x={px + 4} y="6" rx="2" ry="2" width={x - px} height="4"/>);
 
-            px = x;
-        }.bind(this));
+                px = x;
+            }.bind(this));
+        }
 
         return <div className="widget performance" style={{ height: this.props.height }}>
             <div className="title">{this.props.title}</div>
