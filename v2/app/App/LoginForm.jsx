@@ -1,5 +1,4 @@
 var React = require("react");
-var WebAPIUtils = require('./WebAPIUtils');
 var AuthActions = require("./AuthActions");
 
 var LoginForm = React.createClass({
@@ -13,6 +12,8 @@ var LoginForm = React.createClass({
         e.preventDefault();
         var username = this.refs.username.getDOMNode().value;
         var password = this.refs.password.getDOMNode().value;
+
+        var WebAPIUtils = require('./WebAPIUtils');
 
         WebAPIUtils.login(username, password, function(data) {
             AuthActions.login(data.auth_token);

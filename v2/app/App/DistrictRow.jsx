@@ -12,7 +12,7 @@ var DistrictRow = React.createClass({
             </div>
             <div className="row">
                 <Pie title={district.numbers.implementation + " Projects"} data={district.implementation} />
-                <Performance title="Budget" data={district.budget} />
+                <Performance title="Budget" data={district.performance} />
             </div>
         </div>;
 	}

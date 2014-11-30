@@ -1,13 +1,13 @@
-var ActivatorMixin = function (chart) {
+var ActivatorMixin = function (thing) {
     return {
         componentDidMount: function() {
-            chart.create(this);
+            thing.create(this);
         },
         componentDidUpdate: function() {
-            chart.update(this);
+            thing.update(this);
         },
         componentWillUnmount: function() {
-            chart.destroy(this);
+            thing.destroy(this);
         }
     };
 };

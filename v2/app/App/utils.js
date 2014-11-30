@@ -63,5 +63,13 @@ module.exports = {
         }
 
         return thing.values();
+    },
+    scale: function (bands) {
+        return function(domain) {
+            return function(value) {
+                var index = parseInt((bands.length - 1) * value / (domain[1] - domain[0]));
+                return bands[index];
+            };
+        };
     }
 };

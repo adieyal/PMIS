@@ -1,5 +1,4 @@
 var React = require("react");
-var WebAPIUtils = require('./WebAPIUtils');
 var StoreMixin = require('./StoreMixin');
 var AuthStore = require("./AuthStore");
 var AuthActions = require("./AuthActions");
@@ -23,7 +22,10 @@ var Header = React.createClass({
             currentRequest.abort();
         }
 
+        var WebAPIUtils = require('./WebAPIUtils');
+
         var query = this.refs.query.getDOMNode().value;
+
         currentRequest = WebAPIUtils.search(query, AuthStore.getState().auth_token, function(results) {
             this.setState({
                 loading: false,
@@ -32,6 +34,7 @@ var Header = React.createClass({
         }.bind(this));
     },
     logout: function() {
+        var WebAPIUtils = require('./WebAPIUtils');
         WebAPIUtils.logout(function() {
             AuthActions.logout();
         });
@@ -77,7 +80,7 @@ var Header = React.createClass({
                 </ul>
             </nav>
             <div className="search">
-                <input className={searchClassName} type="search" ref="query" onChange={this.search} />
+                <input className={searchClassName} type="search" ref="query" placeholder="Search Here" onChange={this.search} />
                 {this.renderResults()}
             </div>
         </header>;

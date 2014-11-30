@@ -3,7 +3,6 @@ var Constants = require('./Constants');
 var AuthStore = require('./AuthStore');
 var DistrictStore = require('./DistrictStore');
 var StoreFactory = require('./StoreFactory');
-var WebAPIUtils = require('./WebAPIUtils');
 
 var stores = {};
 var state = {};

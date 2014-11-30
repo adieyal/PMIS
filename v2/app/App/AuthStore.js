@@ -1,6 +1,5 @@
 var AppDispatcher = require('./AppDispatcher');
 var Constants = require('./Constants');
-var WebAPIUtils = require('./WebAPIUtils');
 
 function setAuth(auth) {
     localStorage.setItem('auth', JSON.stringify(auth));

@@ -1,6 +1,5 @@
 var AppDispatcher = require('./AppDispatcher');
 var ActionTypes = require('./Constants').ActionTypes;
-var WebAPIUtils = require('./WebAPIUtils');
 
 module.exports = {
     login: function(auth_token) {

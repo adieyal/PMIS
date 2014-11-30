@@ -1,24 +1,29 @@
 var StoreMixin = function (store, key) {
+    function handleStoreChange() {
+        var state,
+            storeState = store.getState();
+
+        if (typeof key == 'undefined') {
+            state = storeState;
+        } else {
+            state = {};
+            state[key] = storeState;
+        }
+
+        this.setState(state);
+    }
+
     return {
         componentDidMount: function () {
-            store.addChangeListener(this._handleStoreChange);
+            store.addChangeListener(function () {
+                return handleStoreChange.call(this);
+            }.bind(this));
         },
         componentWillUnmount: function () {
-            store.removeChangeListener(this._handleStoreChange);
+            store.removeChangeListener(function () {
+                return handleStoreChange.call(this);
+            }.bind(this));
         },
-        _handleStoreChange: function () {
-            var state,
-                storeState = store.getState();
-
-            if (typeof key == 'undefined') {
-                state = storeState;
-            } else {
-                state = {};
-                state[key] = storeState;
-            }
-
-            this.setState(state);
-        }
     };
 };
 module.exports = StoreMixin;

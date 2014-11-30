@@ -12,7 +12,7 @@ var ProgrammeRow = React.createClass({
             </div>
             <div className="row">
                 <Pie title={programme.numbers.implementation + "/" + programme.numbers.projects + " Projects"} data={programme.projects} />
-                <Performance title="Budget" data={programme.budget} />
+                <Performance title="Budget" data={programme.performance} />
             </div>
         </div>;
 	}

@@ -8,7 +8,6 @@ var ProgrammeRow = require('react-proxy!./ProgrammeRow');
 var DistrictRow = require('react-proxy!./DistrictRow');
 
 var utils = require('./utils');
-var WebAPIUtils = require('./WebAPIUtils');
 
 var AuthStore = require('./AuthStore');
 var ClusterStore = require('./ClusterStore');
@@ -20,12 +19,21 @@ var districts = {
     nkangala: 'Nkangala District'
 };
 
+var projectPhases = {
+    'planning': 'Planning',
+    'implementation': 'Implementation',
+    'completed': 'Completed',
+    'final-accounts': 'Final accounts',
+};
+
 var _districtsDomain = [0, 0];
 
 var ClusterDashboard = React.createClass({
     componentDidMount: function() {
         this.store = ClusterStore(this.props.slug);
         this.store.addChangeListener(this._handleStoreChange);
+
+        var WebAPIUtils = require('./WebAPIUtils');
         WebAPIUtils.fetchCluster(this.props.slug, AuthStore.getState().auth_token, function(payload) {
             ClusterActions.receiveCluster(this.props.slug, payload);
         }.bind(this));
@@ -63,14 +71,6 @@ var ClusterDashboard = React.createClass({
         // Translate into millions, with fixed decimal point of 2
         return (num / 1000000).toFixed(2);
     },
-    generatePerformance: function(type) {
-        var store = this.state.store;
-        data = [
-            [ 'Budget', this.translateNumber(store[type + '-budget']) ],
-            [ 'Actual', this.translateNumber(store[type + '-expenditure']) ]
-        ];
-        return data;
-    },
     extractValue: function(slider, type) {
         var value = slider.filter(function (entry) {
             return entry['marker-text'] == type;
@@ -82,12 +82,6 @@ var ClusterDashboard = React.createClass({
         }
     },
     generateProgrammes: function() {
-        var projectStatuses = {
-            'planning': 'Planning',
-            'implementation': 'Implementation',
-            'accounts': 'Final accounts'
-        }
-
         var store = this.state.store;
 
         data = store.programmes.map(function(p) {
@@ -96,8 +90,8 @@ var ClusterDashboard = React.createClass({
                 implementation: p.projects.implementation
             };
 
-            var projects = utils.map(projectStatuses, function(title, status) {
-                return [ title, p.projects[status] ];
+            var projects = utils.map(Object.keys(projectPhases), function(phase) {
+                return [ projectPhases[phase], p.projects[phase] ];
             });
             projects = projects.filter(function (project) {
                 return project[1] > 0;
@@ -105,13 +99,10 @@ var ClusterDashboard = React.createClass({
 
             return {
                 id: p.id,
-                title: p.name,
+                title: p.title,
                 numbers: numbers,
                 projects: projects,
-                budget: [
-                    [ 'Budget', this.translateNumber(p.performance[0]) ],
-                    [ 'Actual', this.translateNumber(p.performance[1]) ]
-                ]
+                performance: p.performance
             };
         }.bind(this));
         return data;
@@ -136,20 +127,16 @@ var ClusterDashboard = React.createClass({
                     [ '76 - 99%', district['projects-76-99'] ],
                     [ '100%', district['projects-100'] ]
                 ],
-                budget: [
-                    [ 'Budget', this.translateNumber(district.performance[0]) ],
-                    [ 'Actual', this.translateNumber(district.performance[1]) ]
-                ]
+                performance: district.performance
             });
         }
         return result;
     },
     generateProjectsPie: function() {
         var store = this.state.store;
-        data = [
-            [ 'Planning', store['planning-projects-total'] ],
-            [ 'Implementation', store['implementation-projects-total'] ]
-        ];
+        var data = Object.keys(projectPhases).map(function(phase) {
+            return [ projectPhases[phase], store[phase + '-projects-total'] ];
+        });
         return data;
     },
 	render: function() {
@@ -170,9 +157,9 @@ var ClusterDashboard = React.createClass({
                         <div className="cluster-programmes"><div className="number" onClick={this.showProgrammes}>{store['total-programmes']}</div>Programmes</div>
                     </div>
                     <div className="row">
-                        <Performance key="total" title="Total" data={this.generatePerformance('total')} />
-                        <Performance key="planning" title="Planning" data={this.generatePerformance('planning')} />
-                        <Performance key="implementation" title="Implementation" data={this.generatePerformance('implementation')} />
+                        <Performance key="total" title="Total" data={store['total-slider']} />
+                        <Performance key="planning" title="Planning" data={store['planning-slider']} />
+                        <Performance key="implementation" title="Implementation" data={store['implementation-slider']} />
                     </div>
                     <div className="row">
                         <Pie title="Projects" data={this.generateProjectsPie()} />
@@ -189,7 +176,7 @@ var ClusterDashboard = React.createClass({
                     </div>
                     <div className="row rows">
                         {this.generateProgrammes().map(function(p) {
-                            return <ProgrammeRow key={p.id} programme={p} />;
+                            return <ProgrammeRow key={p.title} programme={p} />;
                         })}
                     </div>
                 </div>;

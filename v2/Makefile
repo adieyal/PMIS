@@ -15,11 +15,6 @@ droplet-server: build
 production-server: build
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run production-server
 
-install:
-	bundle install
-	rbenv rehash
-	npm install
-
 embed:
 	npm run build
 	mkdir -p ../server/project/apps/v2/static/v2
@@ -33,6 +28,10 @@ install:
 	bundle install
 	npm install
 
-build:
+development-build:
 	bundle exec compass compile
-	npm run build
+	BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run build
+
+production-build:
+	bundle exec compass compile
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build

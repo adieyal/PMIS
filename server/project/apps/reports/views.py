@@ -689,10 +689,10 @@ def generate_districts_v2(district_projects, month0):
     for k, projects in district_projects:
         result[k] = {
             "projects-implementation": len(projects),
-            "performance": [
-                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects]),
+            "performance": build_slider_v2(
                 sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
-            ],
+                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])
+            ),
             "projects-0-50": len([p for p in projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
             "projects-51-75": len([p for p in projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
             "projects-76-99": len([p for p in projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
@@ -728,8 +728,15 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     month0, year_add = MONTHS0[month]
     fyear = year + year_add
     
+    projectPhases = {
+        'planning': 'Planning',
+        'implementation': 'Implementation',
+        'completed': 'Completed',
+        'final-accounts': 'Final accounts',
+    }
+
     def _active(phase):
-        return phase in ['planning', 'implementation', 'completed', 'final-accounts']
+        return phase in projectPhases.keys()
 
     districts = {
         'nkangala': 'Nkangala',
@@ -744,8 +751,8 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
 
         ### Summary section
-        "total-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)]),
         "total-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+        "total-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)]),
         "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "total-projects": len(projects),
         "total-programmes": len(programmes),
@@ -754,31 +761,46 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "planning-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning']),
         "planning-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
 
-        "implementation-projects-total": len([p for p in projects if p.phase == 'implementation' or p.phase == 'completed']),
+        "implementation-projects-total": len([p for p in projects if p.phase == 'implementation']),
         "implementation-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation']),
         "implementation-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
+
+        "completed-projects-total": len([p for p in projects if p.phase == 'completed']),
+        "final-accounts-projects-total": len([p for p in projects if p.phase == 'final-accounts']),
 
         "districts": generate_districts_v2(district_projects, month0),
     }
 
+    for total_type in ['total', 'planning', 'implementation']:
+        key = '%s-slider' % total_type
+        context[key] = build_slider_v2(
+            context['%s-expenditure' % total_type],
+            context['%s-budget' % total_type]
+        )
+
     context['programmes'] = []
 
     for programme in programmes:
+        if not programme:
+            programme = 'No Name'
+
         programme_projects = [p for p in projects if p.programme == programme]
-        context['programmes'].append({
+
+        obj = {
             "id": slugify(unicode(programme)),
             "title": programme,
-            "performance": [
-                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects]),
+            "performance": build_slider_v2(
                 sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
-            ],
+                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects])
+            ),
             "projects": {
-                "accounts": len([p for p in programme_projects if p.phase == 'final-accounts']),
-                "implementation": len([p for p in programme_projects if p.phase == 'implementation']),
-                "planning": len([p for p in programme_projects if p.phase == 'planning']),
-                "total": len([p for p in programme_projects if p.programme == programme]),
             }
-        })
+        }
+
+        for phase, _ in projectPhases.iteritems():
+            obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase ])
+
+        context['programmes'].append(obj)
 
     return context
 

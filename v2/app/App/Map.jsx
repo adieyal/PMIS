@@ -1,29 +1,31 @@
 var React = require("react");
-var d3 = require("d3");
 var StoreMixin = require('./StoreMixin');
 var ActivatorMixin = require('./ActivatorMixin');
 var DistrictStore = require('./DistrictStore');
 var utils = require('./utils');
 
+var scale = utils.scale([
+    "#310",
+    "#610",
+    "#910",
+    "#c10",
+    "#f10"
+]);
+
 var SvgMap = {
-    scale: d3.scale.ordinal().range([
-        "#666",
-        "#999",
-        "#CCC",
-    ]),
     create: function (component) {
         this.bindto = component.getDOMNode();
         this.update(component);
     },
 
     update: function (component) {
-        this.scale.domain([ 0, component.state.maxProjects ]);
+        var thisScale = scale([ 0, component.state.districts.maxProjects ]);
 
         var svg = component.refs.svg.getDOMNode();
         utils.each(component.props.districts, function (data, districtId) {
             var district = component.refs[districtId].getDOMNode();
             var count = data['projects-implementation'];
-            district.style.fill = this.scale(count);
+            district.style.fill = thisScale(count);
         }.bind(this));
     },
 
@@ -37,10 +39,6 @@ var Map = React.createClass({
         return {
             districts: DistrictStore.getState()
         };
-    },
-    _handleChange: function() {
-        var districts = DistrictStore.getState();
-        this.setState({ districts: districts });
     },
     render: function() {
         return <div className="widget map" onClick={this.props.onClick} >

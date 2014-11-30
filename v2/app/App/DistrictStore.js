@@ -19,13 +19,15 @@ DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
     var ActionTypes = Constants.ActionTypes;
 
     switch(action.type) {
-        case ActionTypes.RECEIVE_DATA:
+        case ActionTypes.RECEIVE_CLUSTER:
             if (typeof state.districtsByCluster[action.slug] == 'undefined') {
-                state.districtsByCluster[action.slug] = action.districts;
+                state.districtsByCluster[action.slug] = action.cluster.districts;
+
                 previousMaxProjects = state.maxProjects;
-                var districts = utils.flatten(utils.map(state.districtsByCluster), function(districts) {
+                var districts = utils.flatten(utils.map(state.districtsByCluster, function(districts) {
                     return utils.values(districts);
-                });
+                }));
+
                 var otherMaxProjects = utils.max(utils.pluck(districts, 'projects-implementation'));
                 state.maxProjects = Math.max(state.maxProjects, otherMaxProjects);
 
