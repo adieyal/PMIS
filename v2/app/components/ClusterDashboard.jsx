@@ -162,7 +162,7 @@ var ClusterDashboard = React.createClass({
                         <Slider key="implementation" title="Implementation" data={store['implementation-slider']} />
                     </div>
                     <div className="row">
-                        <Donut keyPrefix={this.props.slug + '-'} data={this.generateProjectsDonut()} height="155" />
+                        <Donut data={this.generateProjectsDonut()} height="155" />
                         <Map districts={store.districts} domain={domain} onClick={this.showDistricts} height="155" />
                     </div>
                 </div>;

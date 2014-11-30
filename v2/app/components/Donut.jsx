@@ -7,12 +7,12 @@ var innerRadius = 25;
 var outerRadius = 65;
 var margin = 2 * Math.PI * 1 / 100;
 
-var phaseColours = {
-    Planning: '#1f77b4',
-    Implementation: '#ff7f0e',
-    Completed: '#2ca02c',
-    'Final accounts': '#d62728'
-};
+var wedgeColours = [
+    '#1f77b4',
+    '#ff7f0e',
+    '#2ca02c',
+    '#d62728'
+];
 
 function arc(innerRadius, outerRadius, startAngle, endAngle) {
     var r0 = innerRadius,
@@ -73,7 +73,7 @@ var Donut = React.createClass({
             var path = arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin);
 
             var phase = datum[0];
-            var colour = phaseColours[phase];
+            var colour = wedgeColors[index];
 
             var rectX = 160;
             var rectY = index * 50 - 100;
@@ -86,9 +86,7 @@ var Donut = React.createClass({
 
             var textNudge = value > 9 ? 30 : 25;
 
-            var key = this.props.keyPrefix + phase;
-
-            return <g key={key}>
+            return <g key={phase}>
                 <rect x={rectX} y={rectY} width="40" height="40" fill={colour} />
                 <text x={rectX+textNudge} y={rectY+25} fill="#ffffff" textAnchor="end">{value}</text>
                 <text x={rectX+48} y={rectY+26}>{phase}</text>
