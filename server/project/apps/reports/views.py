@@ -705,7 +705,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
     )
-    programmes = set([p.programme for p in projects if p.programme != '--------'])
+    programmes = sorted(set([p.programme for p in projects if p.programme != '--------']))
 
     if not year or not month:
         try:
@@ -801,6 +801,11 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase ])
 
+        obj['numbers'] = {
+            "implementation": obj['projects']['implementation'],
+            "projects": len(programme_projects)
+        }
+
         context['programmes'].append(obj)
 
     return context
@@ -825,19 +830,18 @@ def search_v2(request):
             'multi_match': {
                 'query': request.GET.get('query'),
                 'fields': [
+                    "title",
                     "cluster",
                     "manager",
                     "description",
                     "municipality",
-                    "comments",
-                    "programme"    
+                    "comments"
                 ]
             }
         }
     })
 
     body = res['hits']['hits']
-
     return HttpResponse(json.dumps(body), mimetype='application/json')
 
 def search_programmes_v2(request):

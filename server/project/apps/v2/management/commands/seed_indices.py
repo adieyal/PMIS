@@ -40,12 +40,13 @@ class Command(BaseCommand):
             
             for programme in cluster['programmes']:
                 if programme['title']:
-                    body = programme
+                    body = {
+                        'title': programme['title'],
+                        'cluster': cluster['client'],
+                        'cluster_id': c,
+                    }
 
-                    body['cluster'] = cluster['client']
-                    body['cluster_id'] = c
-
-                    programme_id = '%s:%s' % (c, slugify(programme['title']))
+                    programme_id = '%s:%s' % (c, slugify(unicode(programme['title'])))
 
                     es.index(index='pmis', doc_type='programme', id=programme_id, body=body)
 

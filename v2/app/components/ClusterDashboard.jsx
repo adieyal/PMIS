@@ -28,6 +28,8 @@ var projectPhases = {
 
 var _districtsDomain = [0, 0];
 
+var currentRequest = null;
+
 var ClusterDashboard = React.createClass({
     componentDidMount: function() {
         this.store = ClusterStore(this.props.slug);
@@ -50,7 +52,9 @@ var ClusterDashboard = React.createClass({
     getInitialState: function() {
         return {
             view: 'default',
-            store: {}
+            store: {},
+            filtering: false,
+            filteredProgrammes: []
         };
     },
     showDefault: function() {
@@ -81,15 +85,33 @@ var ClusterDashboard = React.createClass({
             return null;
         }
     },
-    generateProgrammes: function() {
+    filterProgrammes: function() {
+        var query = this.refs.query.getDOMNode().value;
+
+        if(query) {
+            this.setState({
+                filtering: true,
+                filteredProgrammes: []
+            });
+
+            var re = new RegExp(query, 'i');
+
+            this.setState({
+                filteredProgrammes: this.state.store.programmes.filter(function (p) {
+                    return re.test(p.title);
+                })
+            });
+        } else {
+            this.setState({
+                filtering: false,
+                filteredProgrammes: []
+            });
+        }
+    },
+    generateProgrammes: function(programmes) {
         var store = this.state.store;
 
-        data = store.programmes.map(function(p) {
-            var numbers = {
-                projects: p.projects.total,
-                implementation: p.projects.implementation
-            };
-
+        data = programmes.map(function(p) {
             var projects = utils.map(Object.keys(projectPhases), function(phase) {
                 return [ projectPhases[phase], p.projects[phase] ];
             });
@@ -97,7 +119,7 @@ var ClusterDashboard = React.createClass({
             return {
                 id: p.id,
                 title: p.title,
-                numbers: numbers,
+                numbers: p.numbers,
                 projects: projects,
                 performance: p.performance
             };
@@ -165,14 +187,16 @@ var ClusterDashboard = React.createClass({
                 </div>;
                 break
             case 'programmes':
+                var programmes = this.state.filtering ? this.state.filteredProgrammes : this.state.store.programmes;
+
                 view = <div className="listing-view inner">
                     <div className="row">
                         <div className="cluster-title" onClick={this.showDefault}>{client}</div>
                         <div className="cluster-year">{store.year}</div>
-                        <div className="cluster-search"><input ref="search" type="search" /></div>
+                        <div className="cluster-search"><input ref="query" type="search" placeholder="Search Here" onChange={this.filterProgrammes} /></div>
                     </div>
                     <div className="row rows">
-                        {this.generateProgrammes().map(function(p) {
+                        {this.generateProgrammes(programmes).map(function(p) {
                             return <ProgrammeRow key={p.title} programme={p} />;
                         })}
                     </div>
