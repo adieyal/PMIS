@@ -93,9 +93,6 @@ var ClusterDashboard = React.createClass({
             var projects = utils.map(Object.keys(projectPhases), function(phase) {
                 return [ projectPhases[phase], p.projects[phase] ];
             });
-            projects = projects.filter(function (project) {
-                return project[1] > 0;
-            });
 
             return {
                 id: p.id,
