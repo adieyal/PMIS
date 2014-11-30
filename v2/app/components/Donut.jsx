@@ -63,6 +63,14 @@ var Donut = React.createClass({
             return acc + datum[1];
         }, 0);
 
+        if (total <= 0) {
+            return <div className="widget donut" style={{ height: this.props.height }}>
+                <svg width="100%" height="100%" viewBox="0 0 100 100">
+                    <text x="48" y="55" textAnchor="middle">No Data</text>
+                </svg>
+            </div>;
+        }
+
         var endAngle = 0;
 
         var phases = this.props.data.map(function (datum, index) {
