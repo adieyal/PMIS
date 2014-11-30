@@ -11,7 +11,13 @@ var wedgeColours = [
     '#1f77b4',
     '#ff7f0e',
     '#2ca02c',
-    '#d62728'
+    '#d62728',
+    '#9467bd',
+    '#8c564b',
+    '#e377c2',
+    '#7f7f7f',
+    '#bcbd22',
+    '#17becf'
 ];
 
 function arc(innerRadius, outerRadius, startAngle, endAngle) {
@@ -73,7 +79,7 @@ var Donut = React.createClass({
             var path = arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin);
 
             var phase = datum[0];
-            var colour = wedgeColors[index];
+            var colour = wedgeColours[index];
 
             var rectX = 160;
             var rectY = index * 50 - 100;
