@@ -794,6 +794,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
                 sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects])
             ),
             "projects": {
+                "total": len(programme_projects)
             }
         }
 

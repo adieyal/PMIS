@@ -60,7 +60,7 @@ var Pie = React.createClass({
     mixins: [ ActivatorMixin(PieChart) ],
 
     render: function() {
-        return <div className="widget pie">
+        return <div className="widget pie" style={{ height: this.props.height }}>
             <div className="title">{this.props.title}</div>
             <div ref="body" className="body" />
         </div>;

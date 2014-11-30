@@ -62,7 +62,7 @@ var Performance = React.createClass({
             px = x;
         }.bind(this));
 
-        return <div className="widget performance">
+        return <div className="widget performance" style={{ height: this.props.height }}>
             <div className="title">{this.props.title}</div>
             <div ref="body" className="body">
                 <svg className="slider" width="100%" height="100%" version="1.1" viewBox="-5 0 104 38" preserveAspectRatio="xMidYMid meet">

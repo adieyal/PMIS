@@ -85,6 +85,8 @@ var ClusterDashboard = React.createClass({
         var store = this.state.store;
 
         data = store.programmes.map(function(p) {
+            console.log(p);
+
             var numbers = {
                 projects: p.projects.total,
                 implementation: p.projects.implementation

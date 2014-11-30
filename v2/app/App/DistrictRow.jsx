@@ -11,8 +11,8 @@ var DistrictRow = React.createClass({
                 {district.title}
             </div>
             <div className="row">
-                <Pie title={district.numbers.implementation + " Projects"} data={district.implementation} />
-                <Performance title="Budget" data={district.performance} />
+                <Pie height="150" title={district.numbers.implementation + " Projects"} data={district.implementation} />
+                <Performance height="150" title="Budget" data={district.performance} />
             </div>
         </div>;
 	}
