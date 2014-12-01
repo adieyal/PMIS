@@ -2,6 +2,9 @@ var React = require("react");
 var AuthActions = require("../actions/AuthActions");
 
 var LoginForm = React.createClass({
+    componentDidMount: function() {
+        this.refs.username.getDOMNode().focus();
+    },
     getInitialState: function() {
         return {
             username: null,
@@ -10,6 +13,7 @@ var LoginForm = React.createClass({
     },
     login: function (e) {
         e.preventDefault();
+
         var username = this.refs.username.getDOMNode().value;
         var password = this.refs.password.getDOMNode().value;
 
@@ -37,16 +41,16 @@ var LoginForm = React.createClass({
             {nonFieldErrors}
 
             <div className="field">
-                <input type="text" ref="username" placeholder="Username" />
+                <input type="text" ref="username" tabIndex="0" placeholder="Username" />
                 { errors.username ? <div className="error">{errors.username}</div> : '' }
             </div>
 
             <div className="field">
-                <input type="password" ref="password" placeholder="Password" />
+                <input type="password" ref="password" tabIndex="1" placeholder="Password" />
                 { errors.password ? <div className="error">{errors.password}</div> : '' }
             </div>
 
-            <button className="btn btn-primary" type="submit" onClick={this.login}>Login</button>
+            <button className="btn btn-primary" type="submit" tabIndex="2" onClick={this.login}>Login</button>
         </form>;
     }
 });
