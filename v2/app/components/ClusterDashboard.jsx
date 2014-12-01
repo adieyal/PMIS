@@ -212,7 +212,6 @@ var ClusterDashboard = React.createClass({
                     <div className="row">
                         <div className="cluster-title" onClick={this.showDefault}>{client}</div>
                         <div className="cluster-year">{store.year}</div>
-                        <div className="cluster-search"><input ref="search" type="search" /></div>
                     </div>
                     <div className="row rows">
                         {this.generateDistricts().map(function(d) {
