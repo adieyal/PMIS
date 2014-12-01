@@ -114,7 +114,9 @@ var Donut = React.createClass({
             </g>;
         }.bind(this));
 
-        return <div className="widget donut">
+        var style = this.props.height ? { height: this.props.height } : {};
+
+        return <div className="widget donut" style={style}>
             <svg width="100%" height="100%" version="1.1" viewBox="-130 -125 530 240" preserveAspectRatio="xMidYMid meet">
                 {phases}
             </svg>

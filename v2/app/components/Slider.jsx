@@ -64,7 +64,9 @@ var Slider = React.createClass({
             }.bind(this));
         }
 
-        return <div className="widget slider" style={{ height: this.props.height }} onClick={this.props.onClick}>
+        var style = this.props.height ? { height: this.props.height } : {};
+
+        return <div className="widget slider" style={style} onClick={this.props.onClick}>
             <div className="title">{this.props.title}</div>
             <div ref="body" className="body">
                 <svg width="100%" height="100%" version="1.1" viewBox="-10 0 114 38" preserveAspectRatio="xMidYMid meet">

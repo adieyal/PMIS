@@ -250,7 +250,7 @@ var ClusterDashboard = React.createClass({
                     </div>
                     <div className="row">
                         <Donut data={this.generatePlanningDonut()} height="155" />
-                        <Slider title="Planning" data={store['planning-slider']} />
+                        <Slider title="Planning" data={store['planning-slider']} height="155" />
                     </div>
                 </div>;
                 break;

@@ -12,8 +12,8 @@ var ProgrammeRow = React.createClass({
                 {programme.title}
             </div>
             <div className="row">
-                <Donut height="150" title={programme.numbers.implementation + "/" + programme.numbers.projects + " Projects"} data={programme.projects} />
-                <Slider height="150" title="Budget" data={programme.performance} />
+                <Donut height="155" title={programme.numbers.implementation + "/" + programme.numbers.projects + " Projects"} data={programme.projects} />
+                <Slider height="155" title="Budget" data={programme.performance} />
             </div>
         </div>;
 	}
