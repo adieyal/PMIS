@@ -64,7 +64,7 @@ var Donut = React.createClass({
         }, 0);
 
         if (total <= 0) {
-            return <div className="widget donut" style={{ height: this.props.height }}>
+            return <div className="widget donut">
                 <svg width="100%" height="100%" viewBox="0 0 100 100">
                     <text x="48" y="55" textAnchor="middle">No Data</text>
                 </svg>
@@ -114,8 +114,8 @@ var Donut = React.createClass({
             </g>;
         }.bind(this));
 
-        return <div className="widget donut" style={{ height: this.props.height }}>
-            <svg width="100%" height="147" version="1.1" viewBox="-130 -80 530 140" preserveAspectRatio="xMidYMid meet">
+        return <div className="widget donut">
+            <svg width="100%" height="100%" version="1.1" viewBox="-130 -125 530 240" preserveAspectRatio="xMidYMid meet">
                 {phases}
             </svg>
         </div>;

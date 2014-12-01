@@ -30,7 +30,7 @@ var Map = React.createClass({
             districtColours[districtId] = colours(count);
         });
 
-        return <div className="widget map" style={{ height: this.props.height }} onClick={this.props.onClick} >
+        return <div className="widget map" onClick={this.props.onClick} >
             <svg
                 ref="svg"
                 version="1.1"
