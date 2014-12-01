@@ -735,6 +735,13 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         'final-accounts': 'Final accounts',
     }
 
+    planningPhases = {
+        "consultant-appointment": "Consultant Appt",
+        "design-consting": "Design Costing",
+        "documentation": "Documentation",
+        "tender": "Tender"
+    }
+
     def _active(phase):
         return phase in projectPhases.keys()
 
@@ -777,6 +784,12 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
             context['%s-expenditure' % total_type],
             context['%s-budget' % total_type]
         )
+
+    planning_projects = [p for p in projects if p.phase == 'planning']
+
+    context['planning-phases'] = {}
+    for phase, title in planningPhases.iteritems():
+        context['planning-phases'][phase] = len([p for p in planning_projects if p.planning_phase == phase ])
 
     context['programmes'] = []
 

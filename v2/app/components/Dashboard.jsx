@@ -11,14 +11,11 @@ var Dashboard = React.createClass({
         };
     },
 	render: function() {
-        return <div className="dashboard">
-            <ClusterDashboard key="education" slug="education" />
-            <ClusterDashboard key="health" slug="health" />
-            <ClusterDashboard key="sd" slug="social-development" />
-            <ClusterDashboard key="cssr" slug="culture-sports-science-and-recreation" />
-            <ClusterDashboard key="cssl" slug="community-safety-security-and-liaison" />
-            <ClusterDashboard key="edet" slug="economic-development-environment-and-tourism" />
-        </div>;
+	    var clusters = this.props.clusters.map(function (cluster) {
+	        return <ClusterDashboard {...cluster} key={cluster.slug} />
+        });
+
+        return <div className="dashboard">{clusters}</div>;
 	}
 });
 

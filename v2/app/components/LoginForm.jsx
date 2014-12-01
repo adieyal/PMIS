@@ -23,34 +23,33 @@ var LoginForm = React.createClass({
         });
     },
     render: function() {
-        var errors = this.props.errors || {};
+        var auth = this.props.auth;
+        var data = auth.data || {};
 
         var nonFieldErrors = '';
 
-        if (errors.non_field_errors) {
+        if (data.non_field_errors) {
             nonFieldErrors = <ul className="errors">
-                {errors.non_field_errors.map(function(e, i) {
+                {data.non_field_errors.map(function(e, i) {
                     return <div key={i} className="error">{e}</div>;
                 })}
             </ul>;
         }
 
         return <form className="login" onSubmit={this.login}>
-            <h3>Login</h3>
-
             {nonFieldErrors}
 
             <div className="field">
                 <input type="text" ref="username" tabIndex="0" placeholder="Username" />
-                { errors.username ? <div className="error">{errors.username}</div> : '' }
+                { data.username ? <div className="error">{data.username}</div> : '' }
             </div>
 
             <div className="field">
                 <input type="password" ref="password" tabIndex="1" placeholder="Password" />
-                { errors.password ? <div className="error">{errors.password}</div> : '' }
+                { data.password ? <div className="error">{data.password}</div> : '' }
             </div>
 
-            <button className="btn btn-primary" type="submit" tabIndex="2" onClick={this.login}>Login</button>
+            <button className="submit" type="submit" tabIndex="2" onClick={this.login}>Login</button>
         </form>;
     }
 });

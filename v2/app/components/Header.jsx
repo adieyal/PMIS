@@ -62,27 +62,37 @@ var Header = React.createClass({
         }
     },
     render: function() {
+        var auth = this.props.auth;
+
         var insight = require('../images/insight.png');
 
         var searchClassName = this.state.results.length ? 'has-results' : 'no-results';
 
-        return <header>
-            <div className="logo">
-                <img src={insight} alt="inSight" />
-            </div>
-            <nav className="menu">
-                <ul>
-                    <li><a href="#">Progress</a></li>
-                    <li><a href="#">Slider</a></li>
-                    <li><a href="#">Projects</a></li>
-                    <li><a href="#" onClick={this.logout}>Logout</a></li>
-                </ul>
-            </nav>
-            <div className="search">
-                <input className={searchClassName} type="search" ref="query" placeholder="Search Here" onChange={this.search} />
-                {this.renderResults()}
-            </div>
-        </header>;
+        if (auth.status == 'logged-in') {
+            return <header>
+                <div className="logo">
+                    <a href="#" onClick={this._owner.showDashboard}><img src={insight} alt="inSight" /></a>
+                </div>
+                <nav className="menu">
+                    <ul>
+                        <li><a href="#">Progress</a></li>
+                        <li><a href="#">Performance</a></li>
+                        <li><a href="#">Projects</a></li>
+                        <li><a href="#" onClick={this.logout}>Logout</a></li>
+                    </ul>
+                </nav>
+                <div className="search">
+                    <input className={searchClassName} type="search" ref="query" placeholder="Search Here" onChange={this.search} />
+                    {this.renderResults()}
+                </div>
+            </header>;
+        } else {
+            return <header>
+                <div className="logo">
+                    <img src={insight} alt="inSight" />
+                </div>
+            </header>;
+        }
     }
 });
 module.exports = Header;

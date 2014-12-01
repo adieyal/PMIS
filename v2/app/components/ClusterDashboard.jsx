@@ -26,12 +26,21 @@ var projectPhases = {
     'final-accounts': 'Final accounts',
 };
 
+var planningPhases = {
+    "consultant-appointment": "Consultant Appt",
+    "design-consting": "Design Costing",
+    "documentation": "Documentation",
+    "tender": "Tender"
+};
+
 var _districtsDomain = [0, 0];
 
 var currentRequest = null;
 
 var ClusterDashboard = React.createClass({
     componentDidMount: function() {
+        this.state.view = this.props.view;
+
         this.store = ClusterStore(this.props.slug);
         this.store.addChangeListener(this._handleStoreChange);
 
@@ -51,20 +60,26 @@ var ClusterDashboard = React.createClass({
     },
     getInitialState: function() {
         return {
-            view: 'default',
+            view: 'index',
             store: {},
             filtering: false,
             filteredProgrammes: []
         };
     },
-    showDefault: function() {
-        this.setState({ view: 'default' });
+    showIndex: function() {
+        this.setState({ view: 'index' });
     },
     showProgrammes: function() {
         this.setState({ view: 'programmes' });
     },
     showDistricts: function() {
         this.setState({ view: 'districts' });
+    },
+    showPlanning: function() {
+        this.setState({ view: 'planning' });
+    },
+    showImplementation: function() {
+        this.setState({ view: 'implementation' });
     },
     translateNumber: function(num) {
         // Strip off locale, if it's there
@@ -156,6 +171,13 @@ var ClusterDashboard = React.createClass({
         }
         return result;
     },
+    generatePlanningDonut: function() {
+        var store = this.state.store;
+        var data = Object.keys(planningPhases).map(function(phase) {
+            return [ planningPhases[phase], store['planning-phases'][phase] ];
+        });
+        return data;
+    },
     generateProjectsDonut: function() {
         var store = this.state.store;
         var data = Object.keys(projectPhases).map(function(phase) {
@@ -171,10 +193,10 @@ var ClusterDashboard = React.createClass({
             var client = store.client.replace(/^Department of /, '');
 
             switch (this.state.view) {
-            case 'default':
+            case 'index':
                 var domain = utils.flatten(utils.values(_districtsDomain));
 
-                view = <div className="default-view inner">
+                view = <div className="index-view inner">
                     <div className="row">
                         <div className="cluster-title">{client}</div>
                         <div className="cluster-projects"><div className="number">{store['total-projects']}</div>Projects</div>
@@ -182,11 +204,11 @@ var ClusterDashboard = React.createClass({
                     </div>
                     <div className="row">
                         <Slider key="total" title="Total" data={store['total-slider']} />
-                        <Slider key="planning" title="Planning" data={store['planning-slider']} />
+                        <Slider key="planning" title="Planning" data={store['planning-slider']} onClick={this.showPlanning} />
                         <Slider key="implementation" title="Implementation" data={store['implementation-slider']} />
                     </div>
                     <div className="row">
-                        <Donut data={this.generateProjectsDonut()} height="155" />
+                        <Donut title={store['planning-projects-total'] + ' Projects'} data={this.generateProjectsDonut()} height="155" />
                         <Map districts={store.districts} domain={domain} onClick={this.showDistricts} height="155" />
                     </div>
                 </div>;
@@ -196,7 +218,7 @@ var ClusterDashboard = React.createClass({
 
                 view = <div className="listing-view inner">
                     <div className="row">
-                        <div className="cluster-title" onClick={this.showDefault}>{client}</div>
+                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
                         <div className="cluster-year">{store.year}</div>
                         <div className="cluster-search"><input ref="query" type="search" placeholder="Search Here" onChange={this.filterProgrammes} /></div>
                     </div>
@@ -210,13 +232,25 @@ var ClusterDashboard = React.createClass({
             case 'districts':
                 view = <div className="listing-view inner">
                     <div className="row">
-                        <div className="cluster-title" onClick={this.showDefault}>{client}</div>
+                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
                         <div className="cluster-year">{store.year}</div>
                     </div>
                     <div className="row rows">
                         {this.generateDistricts().map(function(d) {
                             return <DistrictRow key={d.slug} district={d} />;
                         })}
+                    </div>
+                </div>;
+                break;
+            case 'planning':
+                view = <div className="planning-view inner">
+                    <div className="row">
+                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
+                        <div className="cluster-year">{store.year}</div>
+                    </div>
+                    <div className="row">
+                        <Donut data={this.generatePlanningDonut()} height="155" />
+                        <Slider title="Planning" data={store['planning-slider']} />
                     </div>
                 </div>;
                 break;
