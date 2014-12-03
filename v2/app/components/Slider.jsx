@@ -3,9 +3,9 @@ var React = require("react");
 var Slider = React.createClass({
     styles: {
         long: {
-            rect: { width: 3, height: 14 },
-            markerText: { x: 4, y: 28 },
-            valueText: { x: 4, y: 34 }
+            rect: { width: 3, height: 18 },
+            markerText: { x: 4, y: 34 },
+            valueText: { x: 4, y: 40 }
         },
         short: {
             rect: { width: 3, height: 8 },
@@ -27,6 +27,7 @@ var Slider = React.createClass({
         var markers = [];
         var bars = [];
         var px = 0;
+
         var aspect = (parseFloat(this.props.aspect) || 1) * 90;
 
         if (typeof this.props.data != 'undefined') {
@@ -66,49 +67,44 @@ var Slider = React.createClass({
 
         var style = this.props.height ? { height: this.props.height } : {};
 
-        return <div className="widget slider" style={style} onClick={this.props.onClick}>
-            <div className="title">{this.props.title}</div>
-            <div ref="body" className="body">
-                <svg width="100%" height="100%" version="1.1" viewBox="-10 0 114 38" preserveAspectRatio="xMidYMid meet">
+        return <div className="slider" style={style} onClick={this.props.onClick}>
+            <svg width="100%" height="100%" version="1.1" viewBox="-10 0 110 40" preserveAspectRatio="xMidYMid meet">
 
-                    <defs ref="defs">
-                        <linearGradient id="inner-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#b1b3b2"/>
-                            <stop offset="100%" stopColor="#eceeed"/>
-                        </linearGradient>
-                        <linearGradient id="inner-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#cfd0d0"/>
-                            <stop offset="100%" stopColor="#999c9c"/>
-                        </linearGradient>
-                        <linearGradient id="marker-outer-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#cccccc"/>
-                            <stop offset="100%" stopColor="#ffffff"/>
-                        </linearGradient>
-                        <linearGradient id="marker-outer-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#ffffff"/>
-                            <stop offset="100%" stopColor="#b7b9b8"/>
-                        </linearGradient>
-                        <linearGradient id="marker-inner-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#d3d2d2"/>
-                            <stop offset="100%" stopColor="#656263"/>
-                        </linearGradient>
-                        <linearGradient id="marker-tab-gradient" x1="0" x2="0" y1="0" y2="1">
-                            <stop offset="0%" stopColor="#b1b3b2"/>
-                            <stop offset="100%" stopColor="#eef0ef"/>
-                        </linearGradient>
+                <defs ref="defs">
+                    <linearGradient id="inner-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#b1b3b2"/>
+                        <stop offset="100%" stopColor="#eceeed"/>
+                    </linearGradient>
+                    <linearGradient id="inner-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#cfd0d0"/>
+                        <stop offset="100%" stopColor="#999c9c"/>
+                    </linearGradient>
+                    <linearGradient id="marker-outer-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#cccccc"/>
+                        <stop offset="100%" stopColor="#ffffff"/>
+                    </linearGradient>
+                    <linearGradient id="marker-outer-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#ffffff"/>
+                        <stop offset="100%" stopColor="#b7b9b8"/>
+                    </linearGradient>
+                    <linearGradient id="marker-inner-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#d3d2d2"/>
+                        <stop offset="100%" stopColor="#656263"/>
+                    </linearGradient>
+                    <linearGradient id="marker-tab-gradient" x1="0" x2="0" y1="0" y2="1">
+                        <stop offset="0%" stopColor="#b1b3b2"/>
+                        <stop offset="100%" stopColor="#eef0ef"/>
+                    </linearGradient>
 
-                        {gradients}
-                    </defs>
+                    {gradients}
+                </defs>
 
-                    <rect className="outer-bar" width={aspect} x="2" y="4" rx="4" ry="4" width="90" height="8"/>
-                    <rect className="inner-bar" width={aspect-4} x="4" y="6" rx="2" ry="2" width="86" height="4"/>
+                <rect className="outer-bar" width={aspect} x="2" y="4" rx="4" ry="4" width="90" height="8"/>
+                <rect className="inner-bar" width={aspect-4} x="4" y="6" rx="2" ry="2" width="86" height="4"/>
 
-                    <g className="dynamic">
-                        {bars}
-                        {markers}
-                    </g>
-                </svg>
-            </div>
+                {bars}
+                {markers}
+            </svg>
         </div>;
     }
 });

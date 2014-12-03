@@ -7,31 +7,12 @@ var Map = require('react-proxy!./Map');
 var ProgrammeRow = require('react-proxy!./ProgrammeRow');
 var DistrictRow = require('react-proxy!./DistrictRow');
 
+var lists = require('../lib/lists');
 var utils = require('../lib/utils');
 
 var AuthStore = require('../stores/AuthStore');
 var ClusterStore = require('../stores/ClusterStore');
 var ClusterActions = require('../actions/ClusterActions');
-
-var districts = {
-    ehlanzeni: 'Ehlanzeni District',
-    gertsibande: 'Gert Sibande District',
-    nkangala: 'Nkangala District'
-};
-
-var projectPhases = {
-    'planning': 'Planning',
-    'implementation': 'Implementation',
-    'completed': 'Completed',
-    'final-accounts': 'Final accounts',
-};
-
-var planningPhases = {
-    "consultant-appointment": "Consultant Appt",
-    "design-consting": "Design Costing",
-    "documentation": "Documentation",
-    "tender": "Tender"
-};
 
 var _districtsDomain = [0, 0];
 
@@ -132,8 +113,8 @@ var ClusterDashboard = React.createClass({
                 projects: p.projects.total
             };
 
-            var projects = utils.map(Object.keys(projectPhases), function(phase) {
-                return [ projectPhases[phase], p.projects[phase] ];
+            var projects = utils.map(Object.keys(lists.projectPhases), function(phase) {
+                return [ lists.projectPhases[phase], p.projects[phase] ];
             });
 
             return {
@@ -152,7 +133,7 @@ var ClusterDashboard = React.createClass({
 
         for (var slug in store.districts) {
             var district = store.districts[slug];
-            var title = districts[slug];
+            var title = lists.districts[slug];
 
             result.push({
                 slug: slug,
@@ -173,15 +154,22 @@ var ClusterDashboard = React.createClass({
     },
     generatePlanningDonut: function() {
         var store = this.state.store;
-        var data = Object.keys(planningPhases).map(function(phase) {
-            return [ planningPhases[phase], store['planning-phases'][phase] ];
+        var data = Object.keys(lists.planningPhases).map(function(phase) {
+            return [ lists.planningPhases[phase], store['planning-phases'][phase] ];
+        });
+        return data;
+    },
+    generateImplementationDonut: function() {
+        var store = this.state.store;
+        var data = Object.keys(lists.implementationGroups).map(function(groupId) {
+            return [ lists.implementationGroups[groupId], store['implementation-groups'][groupId] ];
         });
         return data;
     },
     generateProjectsDonut: function() {
         var store = this.state.store;
-        var data = Object.keys(projectPhases).map(function(phase) {
-            return [ projectPhases[phase], store[phase + '-projects-total'] ];
+        var data = Object.keys(lists.projectPhases).map(function(phase) {
+            return [ lists.projectPhases[phase], store[phase + '-projects-total'] ];
         });
         return data;
     },
@@ -196,70 +184,110 @@ var ClusterDashboard = React.createClass({
             case 'index':
                 var domain = utils.flatten(utils.values(_districtsDomain));
 
-                view = <div className="index-view inner">
-                    <div className="row">
-                        <div className="cluster-title">{client}</div>
-                        <div className="cluster-projects"><div className="number">{store['total-projects']}</div>Projects</div>
-                        <div className="cluster-programmes"><div className="number" onClick={this.showProgrammes}>{store['total-programmes']}</div>Programmes</div>
+                view = <div className="index ui fluid card">
+                    <div className="content">
+                        <div className="header">{client}</div>
                     </div>
-                    <div className="row">
-                        <Slider key="total" title="Total" data={store['total-slider']} />
-                        <Slider key="planning" title="Planning" data={store['planning-slider']} onClick={this.showPlanning} />
-                        <Slider key="implementation" title="Implementation" data={store['implementation-slider']} />
+
+                    <div className="extra content">
+                        <div className="ui three column grid slider-row">
+                            <div className="column">
+                                <div className="header">Total</div>
+                                <Slider key="total" data={store['total-slider']} />
+                            </div>
+
+                            <div className="planning-column column" onClick={this.showPlanning}>
+                                <div className="header">Planning</div>
+                                <Slider key="planning" data={store['planning-slider']} />
+                            </div>
+
+                            <div className="implementation-column column" onClick={this.showImplementation}>
+                                <div className="header">Implementation</div>
+                                <Slider key="implementation" data={store['implementation-slider']} />
+                            </div>
+                        </div>
                     </div>
-                    <div className="row">
-                        <Donut title={store['planning-projects-total'] + ' Projects'} data={this.generateProjectsDonut()} height="155" />
+
+                    <div className="extra content">
+                        <div className="header">Projects</div>
+                        <Donut title={store['planning-projects-total'] + ' Projects'} data={this.generateProjectsDonut()} />
+                    </div>
+
+                    <div className="extra content">
+                        <div className="header">Districts</div>
                         <Map districts={store.districts} domain={domain} onClick={this.showDistricts} height="155" />
+                    </div>
+
+                    <div className="extra content">
+                        <a className="projects left floated">{store['total-projects']} projects</a>
+                        <a className="programmes right floated" onClick={this.showProgrammes}>{store['total-programmes']} programmes</a>
                     </div>
                 </div>;
                 break
             case 'programmes':
                 var programmes = this.state.filtering ? this.state.filteredProgrammes : this.state.store.programmes;
 
-                view = <div className="listing-view inner">
-                    <div className="row">
-                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
-                        <div className="cluster-year">{store.year}</div>
-                        <div className="cluster-search"><input ref="query" type="search" placeholder="Search Here" onChange={this.filterProgrammes} /></div>
+                var programmes = this.generateProgrammes(programmes).map(function(p) {
+                    return <ProgrammeRow key={p.title} programme={p} />;
+                });
+
+                view = <div className="index ui fluid card">
+                    <div className="content">
+                        <div className="back-to-cluster header" onClick={this.showIndex}>{client}</div>
                     </div>
-                    <div className="row rows">
-                        {this.generateProgrammes(programmes).map(function(p) {
-                            return <ProgrammeRow key={p.title} programme={p} />;
-                        })}
+                    <div className="programme-rows extra content">
+                        {programmes}
                     </div>
                 </div>;
                 break;
             case 'districts':
-                view = <div className="listing-view inner">
-                    <div className="row">
-                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
-                        <div className="cluster-year">{store.year}</div>
+                var districts = this.generateDistricts().map(function(d) {
+                    return <div className="extra content">
+                        <DistrictRow key={d.slug} district={d} />
+                    </div>;
+                });
+
+                view = <div className="index ui fluid card">
+                    <div className="content">
+                        <div className="back-to-cluster header" onClick={this.showIndex}>{client}</div>
                     </div>
-                    <div className="row rows">
-                        {this.generateDistricts().map(function(d) {
-                            return <DistrictRow key={d.slug} district={d} />;
-                        })}
+                    <div className="district-rows extra content">
+                        {districts}
                     </div>
                 </div>;
                 break;
             case 'planning':
-                view = <div className="planning-view inner">
-                    <div className="row">
-                        <div className="cluster-title" onClick={this.showIndex}>{client}</div>
-                        <div className="cluster-year">{store.year}</div>
+                view = <div className="index ui fluid card">
+                    <div className="content">
+                        <div className="back-to-cluster header" onClick={this.showIndex}>{client}</div>
                     </div>
-                    <div className="row">
-                        <Donut data={this.generatePlanningDonut()} height="155" />
+                    <div className="planning-rows extra content">
+                        <div className="header">{store['planning-projects-total']} Projects in Planning</div>
+                        <Donut data={this.generatePlanningDonut()} height="240" />
                         <Slider title="Planning" data={store['planning-slider']} height="155" />
                     </div>
                 </div>;
                 break;
+            case 'implementation':
+                view = <div className="index ui fluid card">
+                    <div className="content">
+                        <div className="back-to-cluster header" onClick={this.showIndex}>{client}</div>
+                    </div>
+                    <div className="implementation-rows extra content">
+                        <div className="header">{store['implementation-projects-total']} Projects in Implementation</div>
+                        <Donut data={this.generateImplementationDonut()} height="240" />
+                        <Slider title="Implementation" data={store['implementation-slider']} height="155" />
+                    </div>
+                </div>; break;
             }
 
             return <div className="cluster-dashboard">{view}</div>;
         } else {
-            var loader = require('../images/ajax-loader.gif');
-            return <div className="cluster-dashboard loading"><img src={loader} /></div>;
+            return <div className="cluster-dashboard ui segment">
+                <div className="ui active dimmer">
+                    <div className="ui text loader">Loading</div>
+                </div>
+            </div>;
         }
 	}
 });

@@ -1,4 +1,13 @@
 module.exports = {
+    join: function (glue, arr) {
+        var l = arr.length;
+        return this.flatten(this.map(arr, function (item, index) {
+            return index < (l - 1) ? [ item, glue ] : item;
+        }));
+    },
+    inspector: function() {
+        console.dir(arguments);
+    },
     each: function (thing, func) {
         if (typeof thing == 'object') {
             return Object.keys(thing).forEach(function (key) {
@@ -67,10 +76,34 @@ module.exports = {
     scale: function (bands) {
         return function(domain) {
             return function(value) {
-                var index = parseInt((bands.length - 1) * value / (domain[1] - domain[0]));
-                return bands[index];
+                var result = (bands.length - 1) * value / (domain[1] - domain[0]);
+                return Math.round(result);
             };
         };
+    },
+    ranges: function(bands, domain) {
+        var result = [];
+
+        var scale = this.scale(bands)(domain);
+
+        var mins = {};
+        var maxs = {};
+
+        for(var x = domain[0]; x <= domain[1]; x++) {
+            var which = scale(x);
+            mins[which] = typeof mins[which] == 'undefined' ? x : Math.min(mins[which], x);
+            maxs[which] = typeof maxs[which] == 'undefined' ? x : Math.max(maxs[which], x);
+        }
+
+        for(var y = 0, l = bands.length; y < l; y++) {
+            result.push({
+                band: bands[y],
+                min: mins[y],
+                max: maxs[y]
+            });
+        }
+
+        return result;
     },
     keyMirror: function (keys) {
         return keys.reduce(function (values, key) {

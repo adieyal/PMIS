@@ -12,10 +12,16 @@ var Dashboard = React.createClass({
     },
 	render: function() {
 	    var clusters = this.props.clusters.map(function (cluster) {
-	        return <ClusterDashboard {...cluster} key={cluster.slug} />
+	        return <div className="column">
+	            <ClusterDashboard {...cluster} key={cluster.slug} />
+	        </div>;
         });
 
-        return <div className="dashboard">{clusters}</div>;
+        return <div className="ui divided grid">
+            <div className="doubling three column row">
+                {clusters}
+            </div>
+        </div>;
 	}
 });
 

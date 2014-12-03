@@ -742,6 +742,13 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "tender": "Tender"
     }
 
+    implementationGroups = {
+        "completed": lambda p: p.phase == 'completed',
+        "practical-completion": lambda p: p.phase == 'implementation' and p.implementation_phase ==  'practical-completion',
+        "final-completion": lambda p: p.phase == 'implementation' and p.implementation_phase ==  'final-completion',
+        "due-3months": lambda p: p.phase == 'implementation' and _in_3months(p.planned_completion, year, month)
+    }
+
     def _active(phase):
         return phase in projectPhases.keys()
 
@@ -791,6 +798,12 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     for phase, title in planningPhases.iteritems():
         context['planning-phases'][phase] = len([p for p in planning_projects if p.planning_phase == phase ])
 
+    implementation_projects = [p for p in projects if p.phase == 'implementation']
+
+    context['implementation-groups'] = {}
+    for groupId, filt in implementationGroups.iteritems():
+        context['implementation-groups'][groupId] = len([p for p in implementation_projects if filt(p)]);
+
     context['programmes'] = []
 
     for programme in programmes:
@@ -833,13 +846,12 @@ def cluster_dashboard_v2(request, cluster, year=None, month=None):
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 def search_v2(request):
-    res = es.search(index='pmis', body={
+    programmes = es.search(index='pmis', doc_type='programme', body={
         'query': {
             'multi_match': {
                 'query': request.GET.get('query'),
                 'fields': [
                     "title",
-                    "cluster",
                     "manager",
                     "description",
                     "municipality",
@@ -849,7 +861,36 @@ def search_v2(request):
         }
     })
 
-    body = res['hits']['hits']
+    projects = es.search(index='pmis', doc_type='project', body={
+        'query': {
+            'multi_match': {
+                'query': request.GET.get('query'),
+                'fields': [
+                    "title",
+                    "manager",
+                    "description",
+                    "municipality",
+                    "comments"
+                ]
+            }
+        }
+    })
+
+    print projects
+
+    body = {
+        'results': {
+            'programmes': {
+                'name': 'Programmes',
+                'results': [p['_source'] for p in programmes['hits']['hits']]
+            },
+            'projects': {
+                'name': 'Projects',
+                'results': [p['_source'] for p in projects['hits']['hits']]
+            }
+        }
+    }
+
     return HttpResponse(json.dumps(body), mimetype='application/json')
 
 def search_programmes_v2(request):

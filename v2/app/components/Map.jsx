@@ -1,14 +1,16 @@
 var React = require("react");
-var d3 = require("d3");
 var StoreMixin = require('../mixins/StoreMixin');
 var DistrictStore = require('../stores/DistrictStore');
 var utils = require('../lib/utils');
 
-var scale = utils.scale([
-    "#666",
-    "#999",
-    "#CCC",
-]);
+var colours = [
+    '#1f77b4',
+    '#2ca02c',
+    '#ff7f0e',
+    '#d62728'
+];
+
+var scale = utils.scale(colours);
 
 var Map = React.createClass({
     mixins: [ StoreMixin(DistrictStore, 'districts') ],
@@ -22,21 +24,37 @@ var Map = React.createClass({
         this.setState({ districts: districts });
     },
     render: function() {
-        var colours = scale([ 0, this.state.districts.maxProjects ]);
+        var maxProjects = this.state.districts.maxProjects;
+        var domain = [ 0, maxProjects ];
+        var colourScale = scale(domain);
 
         var districtColours = {};
         utils.each(this.props.districts, function (data, districtId) {
             var count = data['projects-implementation'];
-            districtColours[districtId] = colours(count);
+            districtColours[districtId] = colours[colourScale(count)];
         });
 
-        return <div className="widget map" onClick={this.props.onClick} >
+        var ranges = utils.ranges(colours, domain);
+
+        var legendItems = utils.map(ranges, function (range, index) {
+            var label = range.min + ' to ' + range.max;
+
+            return <g key={range.band}>
+                <rect x="570" y={220+index*50} width="40" height="40" fill={range.band} />
+                <text x="620" y={245+index*50} fontSize="24" fill="#000000">{label}</text>
+            </g>;
+        }.bind(this));
+
+        var style = this.props.height ? { height: this.props.height } : {};
+
+        return <div className="map" style={style} onClick={this.props.onClick} >
             <svg
                 ref="svg"
                 version="1.1"
                 width="100%"
                 height="100%"
-                viewBox="287 210 250 250">
+                viewBox="400 210 200 240"
+                preserveAspectRatio="xMidYMid meet">
                     <path
                     ref="gertsibande"
                     className="district"
@@ -161,6 +179,9 @@ var Map = React.createClass({
                     style={{ fill: "#ffffff" }} /><path
                     d="M 462.527,268.816 V 264.6 h 0.693 v 4.216 h -0.693 z"
                     style={{ fill: "#ffffff" }} /></g>
+                    <g className="legend">
+                        {legendItems}
+                    </g>
                 </svg>
             </div>;
     }

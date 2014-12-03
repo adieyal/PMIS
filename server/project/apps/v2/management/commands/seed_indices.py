@@ -40,13 +40,14 @@ class Command(BaseCommand):
             
             for programme in cluster['programmes']:
                 if programme['title']:
+                    programme_id = '%s:%s' % (c, slugify(unicode(programme['title'])))
+
                     body = {
+                        'id': 'programme:%s' % programme_id,
                         'title': programme['title'],
                         'cluster': cluster['client'],
                         'cluster_id': c,
                     }
-
-                    programme_id = '%s:%s' % (c, slugify(unicode(programme['title'])))
 
                     es.index(index='pmis', doc_type='programme', id=programme_id, body=body)
 
@@ -54,7 +55,11 @@ class Command(BaseCommand):
                 if project_id:
                     project = Project.get(project_id, True)
                     body = {
+                        'id': 'project:%s' % project_id,
                         'title': project['description'],
+
+                        # Probably need to do this correctly :)
+                        'url': 'http://www.backend.dev/reports/project/%s/latest/' % project_id,
 
                         'cluster': cluster['client'],
                         'cluster_id': c,

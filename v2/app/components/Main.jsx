@@ -11,7 +11,19 @@ var NotificationStore = require('../stores/NotificationStore');
 
 require('../css/roboto.css');
 require('../../node_modules/humane-js/themes/libnotify.css');
+require('../../bower_components/semantic-ui/dist/semantic.css');
 require('../styles/screen.css');
+
+if (typeof window !== 'undefined') {
+    console.log('here');
+    window.jQuery = require('../../bower_components/jquery/dist/jquery.js');
+    require('../../bower_components/semantic-ui/dist/semantic.js');
+
+    jQuery.fn.api.settings.api = {
+        search: BACKEND + '/reports/search?query={query}',
+        cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
+    };
+}
 
 NotificationStore.addChangeListener(function() {
     var notification = NotificationStore.getLastNotification();
@@ -24,6 +36,11 @@ NotificationStore.addChangeListener(function() {
 
 module.exports = React.createClass({
     mixins: [ StoreMixin(AuthStore, 'auth') ],
+
+    getDefaultProps: function () {
+        return {
+        };
+    },
 
     getInitialState: function () {
         return {
