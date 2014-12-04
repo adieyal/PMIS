@@ -25,6 +25,10 @@ body {
 .logged-in {
 }
 
+header {
+    margin-bottom: 12px;
+}
+
 footer {
     text-align: center;
     margin-bottom: 12px;
@@ -68,7 +72,6 @@ footer {
         box-shadow: 2px 2px 1px #333;
         border-radius: 12px;
         padding: 32px 0;
-        color: #fff;
         background-color: $tertiary;
 
         margin: 12px auto;

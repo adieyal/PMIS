@@ -7,7 +7,7 @@ var ProgrammeRow = React.createClass({
 	render: function() {
 	    var programme = this.props.programme;
 
-        return <div className="programme">
+        return <div className="programme-row">
             <div className="header">{programme.title}</div>
             <div className="extra content">
                 <div className="ui two column grid">

@@ -12,8 +12,8 @@ var Dashboard = React.createClass({
     },
 	render: function() {
 	    var clusters = this.props.clusters.map(function (cluster) {
-	        return <div className="column">
-	            <ClusterDashboard {...cluster} key={cluster.slug} />
+	        return <div key={cluster.slug} className="column">
+	            <ClusterDashboard {...cluster} />
 	        </div>;
         });
 

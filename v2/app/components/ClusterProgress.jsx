@@ -13,9 +13,7 @@ var lists = require('../lib/lists');
 
 var _districtsDomain = [0, 0];
 
-var currentRequest = null;
-
-var ClusterDashboard = React.createClass({
+module.exports = React.createClass({
     componentDidMount: function() {
         this.store = ClusterStore(this.props.slug);
         this.store.addChangeListener(this._handleStoreChange);
@@ -28,7 +26,7 @@ var ClusterDashboard = React.createClass({
     },
     getInitialState: function() {
         return {
-            store: {}
+            store: this.store ? this.store.getState() : {}
         };
     },
     translateNumber: function(num) {
@@ -52,20 +50,54 @@ var ClusterDashboard = React.createClass({
     },
 	render: function() {
 	    var store = this.state.store;
+	    console.log(store);
 
-	    if (store.client) {
-            var client = store.client.replace(/^Department of /, '');
-            return <div className="cluster-progress">
-                {client}
-            </div>;
-        } else {
-            return <div className="cluster-progress ui segment">
-                <div className="ui active dimmer">
-                    <div className="ui text loader">Loading</div>
+        return <div className="cluster-progress">
+            <div className="row">
+                <div className="ui two column grid">
+                    <div className="column">
+                        <h2 style={{ marginTop: 0 }}>Big Title</h2>
+                        <div className="meta">Year/Year</div>
+                    </div>
+                    <div className="column">View Reports</div>
                 </div>
-            </div>;
-        }
-	}
+                <div className="ui six column grid">
+                    <div className="column">
+                        <Donut data={[]} />
+                    </div>
+                    <div className="column">
+                        <Donut data={[]} />
+                    </div>
+                    <div className="four wide column">
+                        <div className="ui three column grid">
+                            <div className="column">
+                                One
+                            </div>
+                            <div className="column">
+                                Two
+                            </div>
+                            <div className="column">
+                                Three
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className="row">
+                <div className="ui three column grid">
+                    <div className="district columnn">District 1</div>
+                    <div className="district columnn">District 2</div>
+                    <div className="district columnn">District 3</div>
+                </div>
+            </div>
+            <div className="ui two column grid">
+                <div className="column">
+                    Programmes
+                </div>
+                <div className="column">
+                    Programmes
+                </div>
+            </div>
+        </div>;
+    }
 });
-
-module.exports = ClusterDashboard;

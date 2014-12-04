@@ -24,11 +24,6 @@ var ClusterDashboard = React.createClass({
 
         this.store = ClusterStore(this.props.slug);
         this.store.addChangeListener(this._handleStoreChange);
-
-        var remote = require('../lib/remote');
-        remote.fetchCluster(this.props.slug, AuthStore.getState().auth_token, function(payload) {
-            ClusterActions.receiveCluster(this.props.slug, payload);
-        }.bind(this));
     },
     componentWillUnmount: function() {
         this.store.removeChangeListener(this._handleStoreChange);

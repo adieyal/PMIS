@@ -1,6 +1,8 @@
 var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
 
+var ClusterActions = require('../actions/ClusterActions');
+
 var StoreFactory = require('./StoreFactory');
 
 var AuthStore = require('./AuthStore');
@@ -44,6 +46,11 @@ var ClusterStore = function (slug) {
                     default:
                 }
             }
+        });
+
+        var remote = require('../lib/remote');
+        remote.fetchCluster(slug, AuthStore.getState().auth_token, function(payload) {
+            ClusterActions.receiveCluster(slug, payload);
         });
 
         stores[slug] = store;
