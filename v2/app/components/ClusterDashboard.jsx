@@ -153,12 +153,6 @@ module.exports = React.createClass({
 
         var client = data.client.replace(/^Department of /, '');
 
-        var districts = this.generateDistricts().map(function(d) {
-            return <div key={d.slug} className="extra content">
-                <DistrictRow district={d} />
-            </div>;
-        });
-
         var programmes = this.state.filtering ? this.state.filteredProgrammes : this.props.data.programmes;
 
         var domain = [ 0, utils.max(utils.pluck(this.props.data.districts, 'projects-implementation')) ];
@@ -226,22 +220,33 @@ module.exports = React.createClass({
                         </div>
 
                         <div key="programmes" title="Programmes">
-                            {this.generateProgrammes(programmes).map(function(p) {
-                                return <ProgrammeRow key={p.title} programme={p} />;
-                            })}
+                            <div className="programme-rows">
+                                {this.generateProgrammes(programmes).map(function(p) {
+                                    return <ProgrammeRow key={p.title} programme={p} />;
+                                })}
+                            </div>
                         </div>
 
                         <div key="districts" title="Districts">
-                            <Map districts={data.districts} domain={domain} onClick={this.showDistricts} height="155" />
-                            <div className="ui divider" />
-                            {districts}
+                            <div className="ui two column grid">
+                                <div className="column">
+                                    <Map districts={data.districts} domain={domain} onClick={this.showDistricts} height="200" />
+                                </div>
+                                <div className="column district-rows">
+                                {this.generateDistricts().map(function(d) {
+                                    return <div key={d.slug} className="extra content">
+                                        <DistrictRow district={d} />
+                                    </div>;
+                                })}
+                                </div>
+                            </div>
                         </div>
                     </Tabs>
                 </div>
 
                 <div className="extra content">
                     <a className="projects left floated">{data['total-projects']} projects</a>
-                    <a className="programmes right floated" onClick={this.showProgrammes}>{data['total-programmes']} programmes</a>
+                    <a className="programmes right floated">{data['total-programmes']} programmes</a>
                 </div>
             </div>
         </div>;

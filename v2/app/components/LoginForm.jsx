@@ -1,9 +1,35 @@
 var React = require("react");
 var AuthActions = require("../actions/AuthActions");
+var NotificationActions = require("../actions/NotificationActions");
+var utils = require('../lib/utils');
 
-var LoginForm = React.createClass({
+module.exports = React.createClass({
     componentDidMount: function() {
-        this.refs.username.getDOMNode().focus();
+        var rules = {
+            username: {
+                identifier: 'username',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'Enter your username'
+                }]
+            },
+            password: {
+                identifier: 'password',
+                rules: [{
+                    type: 'empty',
+                    prompt: 'Enter your password'
+                }]
+            }
+        };
+
+        var $form = window.jQuery('.ui.form', this.getDOMNode());
+
+        window.jQuery('.ui.form', this.getDOMNode()).form(rules, {
+            debug: true,
+            inline: true,
+            on: 'blur',
+            onSuccess: this.login
+        });
     },
     getInitialState: function() {
         return {
@@ -26,32 +52,40 @@ var LoginForm = React.createClass({
         var auth = this.props.auth;
         var data = auth.data || {};
 
-        var nonFieldErrors = '';
+        var success = Object.keys(data).length == 0;
 
-        if (data.non_field_errors) {
-            nonFieldErrors = <ul className="errors">
-                {data.non_field_errors.map(function(e, i) {
-                    return <div key={i} className="error">{e}</div>;
-                })}
-            </ul>;
+        var errors;
+
+        if (!success) {
+            var errors = <ul>{utils.map(data, function(errors) {
+                errors.map(function(error) {
+                    return <li>{error}</li>;
+                });
+            })}</ul>;
         }
 
-        return <form className="login" onSubmit={this.login}>
-            {nonFieldErrors}
+        return <div className="ui segment">
+            <div className={"login ui form " + (success ? 'success' : 'error') }>
+                <h4 className="ui header">Login</h4>
 
-            <div className="field">
-                <input type="text" ref="username" tabIndex="0" placeholder="Username" />
-                { data.username ? <div className="error">{data.username}</div> : '' }
+                <div className={"required field" + (data.username ? " error" : "")}>
+                    <div className="ui icon input">
+                        <input type="text" ref="username" name="username" placeholder="Username" />
+                        <i className="user icon" />
+                    </div>
+                </div>
+
+                <div className={"required field" + (data.password ? " error": "")}>
+                    <div className="ui icon input">
+                        <input type="password" ref="password" name="password" placeholder="Password" />
+                        <i className="lock icon" />
+                    </div>
+                </div>
+
+                <button className="ui submit button">Login</button>
+
+                <div className="ui error message">{errors}</div>
             </div>
-
-            <div className="field">
-                <input type="password" ref="password" tabIndex="1" placeholder="Password" />
-                { data.password ? <div className="error">{data.password}</div> : '' }
-            </div>
-
-            <button className="submit" type="submit" tabIndex="2" onClick={this.login}>Login</button>
-        </form>;
+        </div>;
     }
 });
-
-module.exports = LoginForm;

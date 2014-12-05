@@ -39,7 +39,7 @@ module.exports = React.createClass({
             var item = <a key={"item-" + child.key} data-tab={child.key} className={ "item " + active }>{child.props.title}</a>;
             items.push(item);
 
-            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == this.state.view ? "active": "") + " " + tabClassName }>
+            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == this.state.view ? "active": "") + " " + tabClassName + " tab-" + child.key }>
                 {child}
             </div>;
             tabs.push(tab);

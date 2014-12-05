@@ -19,6 +19,8 @@ if (typeof window !== 'undefined') {
     };
 }
 
+var logo = require('../images/insight.png');
+
 var clusters = [
     { slug: "education", view: "performance" },
     { slug: "health", view: "performance" },
@@ -41,7 +43,7 @@ module.exports = React.createClass({
         if (this.state.clusters.length == 0) {
             return <div>Loading...</div>;
         } else {
-            return <App logo={this.props.logo} clusters={this.state.clusters} />;
+            return <App logo={logo} clusters={this.state.clusters} />;
         }
     }
 });
