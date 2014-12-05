@@ -1,7 +1,7 @@
 var React = require("react");
 
-var Donut = require("react-proxy!./Donut");
-var Slider = require("react-proxy!./Slider");
+var Donut = require("./Donut");
+var Slider = require("./Slider");
 
 var DistrictRow = React.createClass({
 	render: function() {

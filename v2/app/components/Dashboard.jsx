@@ -1,28 +1,18 @@
 var React = require("react");
-var ClusterDashboard = require("react-proxy!./ClusterDashboard");
-var StoreMixin = require('../mixins/StoreMixin');
-var PreferenceStore = require('../stores/PreferenceStore');
 
-var Dashboard = React.createClass({
-    mixins: [ StoreMixin(PreferenceStore, 'preferences') ],
-    getInitialState: function() {
-        return {
-            preferences: PreferenceStore.getState()
-        };
-    },
+var utils = require('../lib/utils');
+var ClusterDashboard = require("./ClusterDashboard");
+
+module.exports = React.createClass({
 	render: function() {
-	    var clusters = this.props.clusters.map(function (cluster) {
-	        return <div key={cluster.slug} className="column">
-	            <ClusterDashboard {...cluster} />
-	        </div>;
-        });
-
         return <div className="ui divided grid">
-            <div className="doubling three column row">
-                {clusters}
+            <div className="doubling two column row">
+                {utils.map(this.props.clusters, function (cluster) {
+                    return <div key={cluster.slug} className="column">
+                        <ClusterDashboard {...cluster} />
+                    </div>;
+                })}
             </div>
         </div>;
 	}
 });
-
-module.exports = Dashboard;

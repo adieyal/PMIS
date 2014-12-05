@@ -20,20 +20,18 @@ DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     switch(action.type) {
         case ActionTypes.RECEIVE_CLUSTER:
-            if (typeof state.districtsByCluster[action.slug] == 'undefined') {
-                state.districtsByCluster[action.slug] = action.cluster.districts;
+            state.districtsByCluster[action.slug] = action.cluster.districts;
 
-                previousMaxProjects = state.maxProjects;
-                var districts = utils.flatten(utils.map(state.districtsByCluster, function(districts) {
-                    return utils.values(districts);
-                }));
+            previousMaxProjects = state.maxProjects;
+            var districts = utils.flatten(utils.map(state.districtsByCluster, function(districts) {
+                return utils.values(districts);
+            }));
 
-                var otherMaxProjects = utils.max(utils.pluck(districts, 'projects-implementation'));
-                state.maxProjects = Math.max(state.maxProjects, otherMaxProjects);
+            var otherMaxProjects = utils.max(utils.pluck(districts, 'projects-implementation'));
+            state.maxProjects = Math.max(state.maxProjects, otherMaxProjects);
 
-                if (state.maxProjects > previousMaxProjects) {
-                    DistrictStore.triggerChange();
-                }
+            if (state.maxProjects > previousMaxProjects) {
+                DistrictStore.triggerChange();
             }
             break;
         default:

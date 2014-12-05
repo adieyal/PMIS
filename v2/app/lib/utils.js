@@ -8,6 +8,12 @@ module.exports = {
     inspector: function() {
         console.dir(arguments);
     },
+    find: function(arr, filter) {
+        for (var x=0, l=arr.length; x < l; x++) {
+            var item = arr[x];
+            if (filter(item)) return item;
+        }
+    },
     each: function (thing, func) {
         if (typeof thing == 'object') {
             return Object.keys(thing).forEach(function (key) {

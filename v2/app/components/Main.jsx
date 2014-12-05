@@ -1,16 +1,10 @@
 var React = require('react');
 
-var Dashboard = require("./Dashboard");
-var LoginForm = require("./LoginForm");
-var Template = require("./Template");
-
-var ClusterProgress = require("./ClusterProgress");
-
 var StoreMixin = require('../mixins/StoreMixin');
-var AuthStore = require('../stores/AuthStore');
-var NotificationStore = require('../stores/NotificationStore');
+var ClusterStore = require("../stores/ClusterStore");
 
-require('../css/roboto.css');
+var App = require('./App');
+
 require('../../node_modules/humane-js/themes/libnotify.css');
 require('../../bower_components/semantic-ui/dist/semantic.css');
 require('../styles/screen.css');
@@ -25,58 +19,29 @@ if (typeof window !== 'undefined') {
     };
 }
 
-NotificationStore.addChangeListener(function() {
-    var notification = NotificationStore.getLastNotification();
-
-    var humane = require('humane-js');
-    var notify = humane.create();
-
-    notify.log(notification);
-});
+var clusters = [
+    { slug: "education", view: "performance" },
+    { slug: "health", view: "performance" },
+    { slug: "social-development", view: "performance" },
+    { slug: "culture-sports-science-and-recreation", view: "performance" },
+    { slug: "community-safety-security-and-liaison", view: "performance" },
+    { slug: "economic-development-environment-and-tourism", view: "performance" }
+];
 
 module.exports = React.createClass({
-    mixins: [ StoreMixin(AuthStore, 'auth') ],
-
-    getDefaultProps: function () {
+    mixins: [ StoreMixin(ClusterStore(clusters), 'clusters') ],
+    
+    getInitialState: function() {
         return {
-        };
-    },
-
-    getInitialState: function () {
-        return {
-            logo: require('../images/insight.png'),
-            view: 'dashboard',
-            auth: AuthStore.getState(),
-            clusters: [
-                { slug: "education", view: "index" },
-                { slug: "health", view: "index" },
-                { slug: "social-development", view: "index" },
-                { slug: "culture-sports-science-and-recreation", view: "index" },
-                { slug: "community-safety-security-and-liaison", view: "index" },
-                { slug: "economic-development-environment-and-tourism", view: "index" }
-            ]
+            clusters: []
         };
     },
 
     render: function () {
-        var auth = this.state.auth;
-        var view = auth.status == 'logged-in' ? this.state.view : 'login';
-        var content;
-
-        switch(view) {
-            case 'login':
-                content = <LoginForm auth={auth} />;
-                break;
-            case 'dashboard':
-                content = <Dashboard clusters={this.state.clusters} />;
-                break;
-            case 'progress':
-                content = <ClusterProgress slug="health" clusters={this.state.clusters} />;
-                break;
+        if (this.state.clusters.length == 0) {
+            return <div>Loading...</div>;
+        } else {
+            return <App logo={this.props.logo} clusters={this.state.clusters} />;
         }
-
-        return <Template logo={this.state.logo} auth={auth}>
-            {content}
-        </Template>;
     }
 });
