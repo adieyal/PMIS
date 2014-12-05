@@ -5,20 +5,6 @@ var ClusterStore = require("../stores/ClusterStore");
 
 var App = require('./App');
 
-require('../../node_modules/humane-js/themes/libnotify.css');
-require('../../bower_components/semantic-ui/dist/semantic.css');
-require('../styles/screen.css');
-
-if (typeof window !== 'undefined') {
-    window.jQuery = require('../../bower_components/jquery/dist/jquery.js');
-    require('../../bower_components/semantic-ui/dist/semantic.js');
-
-    window.jQuery.fn.api.settings.api = {
-        search: BACKEND + '/reports/search?query={query}',
-        cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
-    };
-}
-
 var logo = require('../images/insight.png');
 
 var clusters = [

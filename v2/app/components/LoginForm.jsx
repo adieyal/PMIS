@@ -25,7 +25,6 @@ module.exports = React.createClass({
         var $form = window.jQuery('.ui.form', this.getDOMNode());
 
         window.jQuery('.ui.form', this.getDOMNode()).form(rules, {
-            debug: true,
             inline: true,
             on: 'blur',
             onSuccess: this.login

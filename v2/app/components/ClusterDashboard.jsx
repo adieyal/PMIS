@@ -230,7 +230,7 @@ module.exports = React.createClass({
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <Map districts={data.districts} domain={domain} onClick={this.showDistricts} height="200" />
+                                    <Map districts={data.districts} domain={domain} onClick={this.showDistricts} height="140" />
                                 </div>
                                 <div className="column district-rows">
                                 {this.generateDistricts().map(function(d) {

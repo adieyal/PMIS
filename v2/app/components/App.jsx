@@ -11,27 +11,26 @@ var ClusterStore = require("../stores/ClusterStore");
 // var ClusterProgress = require("./ClusterProgress");
 var NotificationStore = require('../stores/NotificationStore');
 
-require('../css/roboto.css');
-require('../../node_modules/humane-js/themes/libnotify.css');
-require('../../bower_components/semantic-ui/dist/semantic.css');
+var humane = require('humane-js');
+require('humane-js/themes/libnotify.css');
+
+NotificationStore.addChangeListener(function() {
+    var notification = NotificationStore.getLastNotification();
+    var notify = humane.create();
+    notify.log(notification);
+});
+
+jQuery = require('jquery');
+
+require('semantic-ui/dist/semantic.js');
+require('semantic-ui/dist/semantic.css');
+
 require('../styles/screen.css');
 
-if (typeof window !== 'undefined') {
-    var humane = require('humane-js');
-    window.jQuery = require('../../bower_components/jquery/dist/jquery.js');
-    require('../../bower_components/semantic-ui/dist/semantic.js');
-
-    window.jQuery.fn.api.settings.api = {
-        search: BACKEND + '/reports/search?query={query}',
-        cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
-    };
-
-    NotificationStore.addChangeListener(function() {
-        var notification = NotificationStore.getLastNotification();
-        var notify = humane.create();
-        notify.log(notification);
-    });
-}
+jQuery.fn.api.settings.api = {
+    search: BACKEND + '/reports/search?query={query}',
+    cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
+};
 
 module.exports = React.createClass({
     mixins: [
