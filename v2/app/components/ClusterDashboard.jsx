@@ -2,7 +2,7 @@ var React = require("react");
 
 var Donut = require('./Donut');
 var Slider = require('./Slider');
-var Map = require('./Map');
+var DistrictMap = require('./DistrictMap');
 
 var Tabs = require('./Tabs');
 
@@ -38,7 +38,7 @@ module.exports = React.createClass({
     translateNumber: function(num) {
         // Strip off locale, if it's there
         if (typeof num == 'string') {
-            num = parseInt(num.replace(/[R,]/g, ''))
+            num = parseInt(num.replace(/[R,]/g, ''));
         }
 
         // Translate into millions, with fixed decimal point of 2
@@ -127,29 +127,26 @@ module.exports = React.createClass({
     },
     generatePlanningDonut: function() {
         var data = this.props.data;
-        var data = Object.keys(lists.planningPhases).map(function(phase) {
+        return Object.keys(lists.planningPhases).map(function(phase) {
             return [ lists.planningPhases[phase], data['planning-phases'][phase] ];
         });
-        return data;
     },
     generateImplementationDonut: function() {
         var data = this.props.data;
-        var data = Object.keys(lists.implementationGroups).map(function(groupId) {
+        return Object.keys(lists.implementationGroups).map(function(groupId) {
             return [ lists.implementationGroups[groupId], data['implementation-groups'][groupId] ];
         });
-        return data;
     },
     generateProjectsDonut: function() {
         var data = this.props.data;
-        var data = Object.keys(lists.projectPhases).map(function(phase) {
+        return Object.keys(lists.projectPhases).map(function(phase) {
             return [ lists.projectPhases[phase], data[phase + '-projects-total'] ];
         });
-        return data;
     },
-	render: function() {
-	    var data = this.props.data;
+    render: function() {
+        var data = this.props.data;
 
-	    var view = this.state.view;
+        var view = this.state.view;
 
         var client = data.client.replace(/^Department of /, '');
 
@@ -230,7 +227,7 @@ module.exports = React.createClass({
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <Map districts={data.districts} domain={domain} onClick={this.showDistricts} height="140" />
+                                    <DistrictMap districts={data.districts} domain={domain} onClick={this.showDistricts} height="140" />
                                 </div>
                                 <div className="column district-rows">
                                 {this.generateDistricts().map(function(d) {
