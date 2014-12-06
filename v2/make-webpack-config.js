@@ -1,6 +1,7 @@
 var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var BowerWebpackPlugin = require("bower-webpack-plugin");
 var loadersByExtension = require("./config/loadersByExtension");
 var joinEntry = require("./config/joinEntry");
 var Config = require("./lib/config");
@@ -77,7 +78,8 @@ module.exports = function(options) {
 		new webpack.optimize.AggressiveMergingPlugin({
 		    minSizeReduce: 1.5,
 		    moveToParents: true
-        })
+        }),
+        new BowerWebpackPlugin()
 	];
 	if(options.prerender) {
 		aliasLoader["react-proxy$"] = "react-proxy/unavailable";
@@ -142,7 +144,7 @@ module.exports = function(options) {
 			root: root,
 			modulesDirectories: modulesDirectories,
 			extensions: extensions,
-			alias: alias,
+			alias: alias
 		},
 		plugins: plugins
 	};

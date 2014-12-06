@@ -14,5 +14,8 @@
     "test",
     "tests"
   ],
-  "dependencies": {}
+  "dependencies": {
+    "semantic-ui": "~1.1.2",
+    "humane-js": "~3.2.1"
+  }
 }

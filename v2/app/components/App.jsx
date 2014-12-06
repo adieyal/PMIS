@@ -11,26 +11,27 @@ var ClusterStore = require("../stores/ClusterStore");
 // var ClusterProgress = require("./ClusterProgress");
 var NotificationStore = require('../stores/NotificationStore');
 
-var humane = require('humane-js');
-require('humane-js/themes/libnotify.css');
+if (typeof window != 'undefined') {
+    /** This can only be done in the browser */
+    jQuery = require('jquery');
+    require('semantic-ui');
+    require('../styles/screen.css');
 
-NotificationStore.addChangeListener(function() {
-    var notification = NotificationStore.getLastNotification();
-    var notify = humane.create();
-    notify.log(notification);
-});
+    /** How to get to the backend */
+    jQuery.fn.api.settings.api = {
+        search: BACKEND + '/reports/search?query={query}',
+        cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
+    };
 
-jQuery = require('jquery');
+    var humane = require('humane-js');
 
-require('semantic-ui/dist/semantic.js');
-require('semantic-ui/dist/semantic.css');
+    NotificationStore.addChangeListener(function() {
+        var notification = NotificationStore.getLastNotification();
+        var notify = humane.create();
+        notify.log(notification);
+    });
+}
 
-require('../styles/screen.css');
-
-jQuery.fn.api.settings.api = {
-    search: BACKEND + '/reports/search?query={query}',
-    cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
-};
 
 module.exports = React.createClass({
     mixins: [
