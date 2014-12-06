@@ -7,10 +7,10 @@ function url(path) {
 }
 
 module.exports = {
-    fetchCluster: function (slug, auth_token, done) {
+    fetchCluster: function (slug, authToken, done) {
         return request
             .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/v2'))
-            .set('Authorization', 'Token ' + auth_token)
+            .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
                 if(error) {
                     return NotificationActions.notify(error);
@@ -52,7 +52,7 @@ module.exports = {
                 done();
             });
     },
-    search: function (query, auth_token, done) {
+    search: function (query, authToken, done) {
         return request
             .get(url('reports/search') + '?query=' + query)
             .end(function (error, res) {
@@ -68,9 +68,9 @@ module.exports = {
                 done(res.body);
             });
     },
-    searchProgrammes: function (cluster_id, query, auth_token, done) {
+    searchProgrammes: function (clusterId, query, authToken, done) {
         return request
-            .get(url('reports/search/programmes') + '?query=' + query + '&cluster_id=' + cluster_id)
+            .get(url('reports/search/programmes') + '?query=' + query + '&clusterId=' + clusterId)
             .end(function (error, res) {
                 if(error) {
                     if(error.message && error.message == 'timeout of undefinedms exceeded') {

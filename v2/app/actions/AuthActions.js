@@ -2,10 +2,10 @@ var AppDispatcher = require('../lib/dispatcher');
 var ActionTypes = require('../lib/constants').ActionTypes;
 
 module.exports = {
-    login: function(auth_token) {
+    login: function(authToken) {
         AppDispatcher.handleAction({
             type: ActionTypes.LOGIN,
-            auth_token: auth_token
+            authToken: authToken
         });
     },
     loginFailure: function(data) {

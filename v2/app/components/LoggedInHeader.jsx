@@ -23,10 +23,10 @@ module.exports = React.createClass({
         });
     },
 
-    loadProjectReport: function(project_id) {
+    loadProjectReport: function(projectId) {
         return function() {
             this.setState(this.getInitialState());
-            window.open(BACKEND + '/reports/project/' + project_id + '/latest/');
+            window.open(BACKEND + '/reports/project/' + projectId + '/latest/');
         }.bind(this);
     },
 

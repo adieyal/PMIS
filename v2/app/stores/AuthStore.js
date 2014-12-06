@@ -28,7 +28,7 @@ AuthStore.dispatchToken = AppDispatcher.register(function(payload) {
         case ActionTypes.LOGIN:
             setAuth({
                 status: 'logged-in',
-                auth_token: action.auth_token
+                authToken: action.authToken
             });
             AuthStore.triggerChange();
             break;

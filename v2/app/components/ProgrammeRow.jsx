@@ -4,8 +4,8 @@ var Donut = require("./Donut");
 var Slider = require("./Slider");
 
 var ProgrammeRow = React.createClass({
-	render: function() {
-	    var programme = this.props.programme;
+    render: function() {
+        var programme = this.props.programme;
 
         return <div className="programme-row">
             <div className="ui header">{programme.title}</div>
@@ -20,7 +20,7 @@ var ProgrammeRow = React.createClass({
                 </div>
             </div>
         </div>;
-	}
+    }
 });
 
 module.exports = ProgrammeRow;

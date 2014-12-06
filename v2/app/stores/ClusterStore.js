@@ -63,7 +63,7 @@ module.exports = function(clusters) {
         var remote = require('../lib/remote');
 
         clusters.forEach(function(cluster) {
-            remote.fetchCluster(cluster.slug, AuthStore.getState().auth_token, function(payload) {
+            remote.fetchCluster(cluster.slug, AuthStore.getState().authToken, function(payload) {
                 ClusterActions.receiveCluster(cluster.slug, payload);
             });
         });

@@ -1,5 +1,3 @@
-'use strict';
-
 var React = require("react");
 
 var Slider = React.createClass({
@@ -34,7 +32,7 @@ var Slider = React.createClass({
 
         if (typeof this.props.data != 'undefined') {
             this.props.data.forEach(function (data, i) {
-                var x = (aspect - 4) * (data['position'] || 0);
+                var x = (aspect - 4) * (data.position || 0);
                 var transform = 'translate(' + x + ', 0)';
 
                 var style = this.styles[data['marker-style'] || 'short'];

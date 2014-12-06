@@ -26,7 +26,7 @@ module.exports = React.createClass({
     },
 
     render: function () {
-        if (this.state.clusters.length == 0) {
+        if (this.state.clusters.length === 0) {
             return <div>Loading...</div>;
         } else {
             return <App logo={logo} clusters={this.state.clusters} />;

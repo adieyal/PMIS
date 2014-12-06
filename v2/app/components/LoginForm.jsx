@@ -44,21 +44,21 @@ module.exports = React.createClass({
 
         var remote = require('../lib/remote');
         remote.login(username, password, function(data) {
-            AuthActions.login(data.auth_token);
+            AuthActions.login(data.authToken);
         });
     },
     render: function() {
         var auth = this.props.auth;
         var data = auth.data || {};
 
-        var success = Object.keys(data).length == 0;
+        var success = Object.keys(data).length === 0;
 
         var errors;
 
         if (!success) {
-            var errors = <ul>{utils.map(data, function(errors) {
-                errors.map(function(error) {
-                    return <li>{error}</li>;
+            errors = <ul>{utils.map(data, function(validationErrors) {
+                validationErrors.map(function(validationError) {
+                    return <li>{validationError}</li>;
                 });
             })}</ul>;
         }
