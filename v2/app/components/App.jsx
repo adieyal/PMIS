@@ -8,7 +8,7 @@ var StoreMixin = require('../mixins/StoreMixin');
 var AuthStore = require('../stores/AuthStore');
 var ClusterStore = require("../stores/ClusterStore");
 
-// var ClusterProgress = require("./ClusterProgress");
+var ClusterProgress = require("./ClusterProgress");
 var NotificationStore = require('../stores/NotificationStore');
 
 if (typeof window != 'undefined') {
@@ -58,7 +58,8 @@ module.exports = React.createClass({
                 content = <Dashboard clusters={this.props.clusters} />;
                 break;
             case 'progress':
-                // content = <ClusterProgress slug="health" clusters={this.props.clusters} />;
+                var data = this.props.clusters[2].data;
+                content = <ClusterProgress data={data} />;
                 break;
         }
 

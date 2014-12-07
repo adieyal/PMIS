@@ -115,10 +115,10 @@ module.exports = React.createClass({
                     implementation: district['projects-implementation']
                 },
                 implementation: [
-                    [ '0 - 50%', district['projects-0-50'] ],
-                    [ '51 - 75%', district['projects-51-75'] ],
-                    [ '76 - 99%', district['projects-76-99'] ],
-                    [ '100%', district['projects-100'] ]
+                    [ '0 - 50%', district.completeness['projects-0-50'] ],
+                    [ '51 - 75%', district.completeness['projects-51-75'] ],
+                    [ '76 - 99%', district.completeness['projects-76-99'] ],
+                    [ '100%', district.completeness['projects-100'] ]
                 ],
                 performance: district.performance
             });

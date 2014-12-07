@@ -92,7 +92,7 @@ var Donut = React.createClass({
             }
 
             var rectX = 160;
-            var rectY = index * 50 - 100;
+            var rectY = index * 40 - 100;
 
             var textAngle = (startAngle + endAngle) / 2 + arcOffset;
             var textRadius = outerRadius + 25 + ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 5 : 0);
@@ -100,11 +100,11 @@ var Donut = React.createClass({
             var textX = Math.cos(textAngle) * textRadius - ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 15 : 0);
             var textY = Math.sin(textAngle) * textRadius;
 
-            var textNudge = value > 9 ? 30 : 25;
+            var textNudge = value > 9 ? 25 : 20;
 
             return <g key={phase}>
-                <rect x={rectX} y={rectY} width="40" height="40" fill={colour} />
-                <text x={rectX+textNudge} y={rectY+25} fill="#ffffff" textAnchor="end">{value}</text>
+                <rect x={rectX} y={rectY} width="30" height="30" fill={colour} />
+                <text x={rectX+textNudge} y={rectY+20} fill="#ffffff" textAnchor="end">{value}</text>
                 <text x={rectX+48} y={rectY+26}>{phase}</text>
                 <text x={textX} y={textY}>{percentage}</text>
                 {path}
@@ -112,7 +112,7 @@ var Donut = React.createClass({
         }.bind(this));
 
         return <div className="donut" style={style}>
-            <svg width="100%" height="100%" version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
+            <svg width="100%" height="100%" version="1.1" viewBox="-130 -110 470 220" preserveAspectRatio="xMidYMid meet">
                 {phases}
             </svg>
         </div>;

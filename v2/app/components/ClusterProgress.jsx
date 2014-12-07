@@ -2,11 +2,10 @@ var React = require("react");
 
 var Donut = require('./Donut');
 var Slider = require('./Slider');
+var DistrictRow = require('./DistrictRow');
 
 var utils = require('../lib/utils');
 
-var AuthStore = require('../stores/AuthStore');
-var ClusterStore = require('../stores/ClusterStore');
 var ClusterActions = require('../actions/ClusterActions');
 
 var lists = require('../lib/lists');
@@ -14,19 +13,8 @@ var lists = require('../lib/lists');
 var _districtsDomain = [0, 0];
 
 module.exports = React.createClass({
-    componentDidMount: function() {
-        this.store = ClusterStore(this.props.slug);
-        this.store.addChangeListener(this._handleStoreChange);
-    },
-    componentWillUnmount: function() {
-        this.store.removeChangeListener(this._handleStoreChange);
-    },
-    _handleStoreChange: function() {
-        this.setState({ store: store });
-    },
     getInitialState: function() {
         return {
-            store: this.store ? this.store.getState() : {}
         };
     },
     translateNumber: function(num) {
@@ -48,54 +36,108 @@ module.exports = React.createClass({
             return null;
         }
     },
+    generateDistricts: function() {
+        var data = this.props.data;
+        var districts = [];
+
+        for (var slug in data.districts) {
+            var districtData = data.districts[slug];
+            var title = lists.districts[slug];
+
+            var district = {
+                slug: slug,
+                title: title,
+                numbers: {
+                    implementation: districtData['projects-implementation']
+                },
+                performance: districtData.performance
+            };
+
+            district.summary = Object.keys(lists.districtSummaryGroups).map(function(groupId) {
+                return [ lists.districtSummaryGroups[groupId], districtData['summary'][groupId] ];
+            });
+
+            districts.push(district);
+        }
+
+        console.log(districts);
+
+        return districts;
+    },
+    generateProjectsDonut: function() {
+        var data = this.props.data;
+        return Object.keys(lists.projectPhases).map(function(phase) {
+            return [ lists.projectPhases[phase], data[phase + '-projects-total'] ];
+        });
+    },
+    generatePlanningDonut: function() {
+        var data = this.props.data;
+        return Object.keys(lists.planningPhases).map(function(phase) {
+            return [ lists.planningPhases[phase], data['planning-phases'][phase] ];
+        });
+    },
+    generateImplementationDonut: function() {
+        var data = this.props.data;
+        return Object.keys(lists.implementationGroups).map(function(groupId) {
+            return [ lists.implementationGroups[groupId], data['implementation-groups'][groupId] ];
+        });
+    },
 	render: function() {
-	    var store = this.state.store;
-	    console.log(store);
+        var data = this.props.data;
+        var client = data.client.replace(/^Department of /, '');
+        var districts = this.generateDistricts();
 
         return <div className="cluster-progress">
-            <div className="row">
-                <div className="ui two column grid">
-                    <div className="column">
-                        <h2 style={{ marginTop: 0 }}>Big Title</h2>
-                        <div className="meta">Year/Year</div>
-                    </div>
-                    <div className="column">View Reports</div>
+            <div className="progress ui fluid card">
+                <div className="content">
+                    <h2 className="ui header">{client}</h2>
+                    <div className="ui floated right">View Reports</div>
                 </div>
-                <div className="ui six column grid">
-                    <div className="column">
-                        <Donut data={[]} />
-                    </div>
-                    <div className="column">
-                        <Donut data={[]} />
-                    </div>
-                    <div className="four wide column">
-                        <div className="ui three column grid">
-                            <div className="column">
-                                One
-                            </div>
-                            <div className="column">
-                                Two
-                            </div>
-                            <div className="column">
-                                Three
-                            </div>
+                <div className="extra content">
+                    <div className="ui grid segment">
+                        <div className="two wide column">
+                            <Slider title="Planning" data={data['planning-slider']} height="206" />
+                        </div>
+                        <div className="two wide column">
+                            <Slider title="Implementation" data={data['implementation-slider']} height="206" />
+                        </div>
+                        <div className="four wide column">
+                            <div className="ui header centered">{data['total-projects']} Total</div>
+                            <Donut data={this.generateProjectsDonut()} height="206" />
+                        </div>
+                        <div className="four wide column">
+                            <div className="ui header centered">{data['planning-projects-total']} Planning</div>
+                            <Donut data={this.generatePlanningDonut()} height="206" />
+                        </div>
+                        <div className="four wide column">
+                            <div className="ui header centered">{data['implementation-projects-total']} Implementation</div>
+                            <Donut data={this.generateImplementationDonut()} height="206" />
                         </div>
                     </div>
                 </div>
-            </div>
-            <div className="row">
-                <div className="ui three column grid">
-                    <div className="district columnn">District 1</div>
-                    <div className="district columnn">District 2</div>
-                    <div className="district columnn">District 3</div>
-                </div>
-            </div>
-            <div className="ui two column grid">
-                <div className="column">
-                    Programmes
-                </div>
-                <div className="column">
-                    Programmes
+                <div className="extra content">
+                    <div className="ui grid segment">
+                        <div className="three column row">
+                            <div className="column">
+                                <DistrictRow district={districts[0]} donut="summary" layout="horizontal" />
+                            </div>
+                            <div className="column">
+                                <DistrictRow district={districts[1]} donut="summary" layout="horizontal" />
+                            </div>
+                            <div className="column">
+                                <DistrictRow district={districts[2]} donut="summary" layout="horizontal" />
+                            </div>
+                        </div>
+
+                        <div className="two column row">
+                            <div className="column">
+                                Programme Block
+                            </div>
+                            <div className="column">
+                                Programme Block
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>;

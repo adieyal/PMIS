@@ -24,5 +24,12 @@ module.exports = {
         "practical-completion": "Practical completion",
         "final-completion": "Final completion",
         "due-3months": "Due in 3 months"
+    },
+    districtSummaryGroups: {
+        'financial-year': "Due in financial year",
+        'three-months': "Due in 3 months",
+        'this-month': "Due this month",
+        'practical-completion': "Practical completion",
+        'final-completion': "Final completion",
     }
 };

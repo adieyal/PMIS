@@ -17,8 +17,8 @@ module.exports = function(options) {
 	};
 	var loaders = {
 		"coffee": "coffee-redux-loader",
-		"js": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : "jsx-loader",
-		"jsx": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : "jsx-loader",
+		"js": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : ["jsx-loader?harmony" ],
+		"jsx": options.hotComponents ? ["react-hot-loader", "jsx-loader?harmony"] : ["jsx-loader?harmony" ],
 		"json": "json-loader",
 		"json5": "json5-loader",
 		"txt": "raw-loader",
@@ -35,6 +35,20 @@ module.exports = function(options) {
 		"styl": "css-loader!stylus-loader",
 		"sass|scss": "css-loader!sass-loader?outputStyle=expanded"
 	};
+	var preLoaders = [
+	    /*
+        {
+            text: /\.js/,
+            exclude: __dirname + '/node_modules',
+            loader: 'jshint-loader'
+        },
+        {
+            text: /\.jsx/,
+            exclude: __dirname + '/node_modules',
+            loader: 'jsxhint-loader'
+        }
+        */
+    ];
 	var additionalLoaders = [
 		// { test: /some-reg-exp$/, loader: "any-loader" }
 	];
@@ -79,7 +93,7 @@ module.exports = function(options) {
 		    minSizeReduce: 1.5,
 		    moveToParents: true
         }),
-        new BowerWebpackPlugin()
+		new BowerWebpackPlugin()
 	];
 	if(options.prerender) {
 		aliasLoader["react-proxy$"] = "react-proxy/unavailable";
@@ -131,7 +145,8 @@ module.exports = function(options) {
 		output: output,
 		target: options.prerender ? "node" : "web",
 		module: {
-			loaders: loadersByExtension(loaders).concat(loadersByExtension(stylesheetLoaders))
+			loaders: loadersByExtension(loaders).concat(loadersByExtension(stylesheetLoaders)),
+			preLoaders: preLoaders
 		},
 		devtool: options.devtool,
 		debug: options.debug,

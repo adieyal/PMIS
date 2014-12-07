@@ -684,21 +684,43 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
     }
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
-def generate_districts_v2(district_projects, month0):
-    result = {}
+districtSummaryGroups = {
+    'financial-year': lambda p, year, month: _in_financial_year(p.planned_completion, year, month),
+    'three-months': lambda p, year, month: _in_3months(p.planned_completion, year, month),
+    'this-month': lambda p, year, month: _in_month(p.planned_completion, year, month),
+    'practical-completion': lambda p, year, month: p.implementation_phase == 'practical-completion',
+    'final-completion': lambda p, year, month: p.implementation_phase == 'final-completion',
+}
+
+def generate_districts_v2(district_projects, year, month0):
+    districts = {}
+
     for k, projects in district_projects:
-        result[k] = {
-            "projects-implementation": len(projects),
+        implementation_projects = [p for p in projects if p.phase == 'implementation']
+
+        district = {
+            "projects-implementation": len(implementation_projects),
             "performance": build_slider_v2(
-                sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
-                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects])
+                sum([_safe_float(p.expenditure_in_year) or 0 for p in implementation_projects]),
+                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in implementation_projects])
             ),
-            "projects-0-50": len([p for p in projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-            "projects-51-75": len([p for p in projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-            "projects-76-99": len([p for p in projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-            "projects-100": len([p for p in projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+            "completeness": {
+                "projects-0-50": len([p for p in implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+                "projects-51-75": len([p for p in implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+                "projects-76-99": len([p for p in implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+                "projects-100": len([p for p in implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+            }
         }
-    return result
+
+        district['summary'] = {}
+        for groupId, filt in districtSummaryGroups.iteritems():
+            district['summary'][groupId] = len([p for p in implementation_projects if filt(p, year, month0)]);
+
+        print district['summary']
+
+        districts[k] = district
+
+    return districts
         
 def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     projects = filter(
@@ -758,7 +780,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         'ehlanzeni': 'Ehlanzeni'
     }
 
-    district_projects = [(k, [p for p in projects if p.district == title and p.phase == 'implementation']) for k, title in districts.iteritems()]
+    district_projects = [(k, [p for p in projects if p.district == title ]) for k, title in districts.iteritems()]
     
     context = {
         "client": projects[0].cluster,
@@ -782,7 +804,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "completed-projects-total": len([p for p in projects if p.phase == 'completed']),
         "final-accounts-projects-total": len([p for p in projects if p.phase == 'final-accounts']),
 
-        "districts": generate_districts_v2(district_projects, month0),
+        "districts": generate_districts_v2(district_projects, year, month0),
     }
 
     for total_type in ['total', 'planning', 'implementation']:
