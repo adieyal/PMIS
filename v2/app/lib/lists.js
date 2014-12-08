@@ -1,4 +1,13 @@
 module.exports = {
+    clusters: [
+        { slug: "education", title: 'Education', view: "performance" },
+        { slug: "health", title: 'Health', view: "performance" },
+        { slug: "social-development", title: 'Social Development', view: "performance" },
+        { slug: "culture-sports-science-and-recreation", title: 'Culture, Sports, Science and Recreation', view: "performance" },
+        { slug: "community-safety-security-and-liaison", title: 'Community, Safety, Security and Liaison', view: "performance" },
+        { slug: "economic-development-environment-and-tourism", title: 'Economic Development, Environment and Tourism', view: "performance" }
+    ],
+
     districts: {
         ehlanzeni: 'Ehlanzeni District',
         gertsibande: 'Gert Sibande District',

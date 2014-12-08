@@ -35,25 +35,6 @@ module.exports = React.createClass({
     showImplementation: function() {
         this.setState({ view: 'implementation' });
     },
-    translateNumber: function(num) {
-        // Strip off locale, if it's there
-        if (typeof num == 'string') {
-            num = parseInt(num.replace(/[R,]/g, ''));
-        }
-
-        // Translate into millions, with fixed decimal point of 2
-        return (num / 1000000).toFixed(2);
-    },
-    extractValue: function(slider, type) {
-        var value = slider.filter(function (entry) {
-            return entry['marker-text'] == type;
-        });
-        if (value.length) {
-            return this.translateNumber(value[0]['value-text']);
-        } else {
-            return null;
-        }
-    },
     filterProgrammes: function() {
         var query = this.refs.query.getDOMNode().value;
 

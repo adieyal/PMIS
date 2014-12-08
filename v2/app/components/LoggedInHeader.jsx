@@ -30,17 +30,21 @@ module.exports = React.createClass({
         }.bind(this);
     },
 
-    showProgress: function() {
-        console.log(this);
+    generateClasses: function(view) {
+        return (view == this.props.view ? 'active ' : '') + 'item';
+    },
 
-        this._owner.setState({ view: 'progress' });
+    setView: function(view) {
+        return function() {
+            this.props.onSetView(view);
+        }.bind(this);
     },
 
     render: function() {
         return <header>
             <div className="ui menu">
-                <a ref="home" className="active item"><i className="home icon" /> Home</a>
-                <a className="item" onClick={this.showProgress}>Progress</a>
+                <a ref="home" className={this.generateClasses('dashboard')} onClick={this.setView('dashboard')}><i className="home icon" /> Home</a>
+                <a className={this.generateClasses('progress')} onClick={this.setView('progress')}>Progress</a>
                 <a ref="performance" className="item">Performance</a>
                 <a ref="projects" className="item">Projects</a>
                 <a ref="logout" className="item" onClick={this.logout}>Logout</a>

@@ -9,7 +9,7 @@ var Header = React.createClass({
         var logo = this.props.logo;
 
         if (auth.status == 'logged-in') {
-            return <LoggedInHeader logo={this.props.logo} auth={this.props.auth} />;
+            return <LoggedInHeader logo={this.props.logo} auth={this.props.auth} view={this.props.view} onSetView={this.props.onSetView} />;
         } else {
             return <LoggedOutHeader logo={this.props.logo} />;
         }

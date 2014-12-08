@@ -4,20 +4,12 @@ var StoreMixin = require('../mixins/StoreMixin');
 var ClusterStore = require("../stores/ClusterStore");
 
 var App = require('./App');
+var lists = require('../lib/lists');
 
 var logo = require('../images/insight.png');
 
-var clusters = [
-    { slug: "education", view: "performance" },
-    { slug: "health", view: "performance" },
-    { slug: "social-development", view: "performance" },
-    { slug: "culture-sports-science-and-recreation", view: "performance" },
-    { slug: "community-safety-security-and-liaison", view: "performance" },
-    { slug: "economic-development-environment-and-tourism", view: "performance" }
-];
-
 module.exports = React.createClass({
-    mixins: [ StoreMixin(ClusterStore(clusters), 'clusters') ],
+    mixins: [ StoreMixin(ClusterStore(lists.clusters), 'clusters') ],
     
     getInitialState: function() {
         return {

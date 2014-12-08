@@ -45,6 +45,10 @@ module.exports = React.createClass({
         };
     },
 
+    setView: function (view) {
+        this.setState({ view: view });
+    },
+
     render: function () {
         var auth = this.state.auth;
         var view = auth.status == 'logged-in' ? this.state.view : 'login';
@@ -58,12 +62,11 @@ module.exports = React.createClass({
                 content = <Dashboard clusters={this.props.clusters} />;
                 break;
             case 'progress':
-                var data = this.props.clusters[2].data;
-                content = <ClusterProgress data={data} />;
+                content = <ClusterProgress clusters={this.props.clusters} />;
                 break;
         }
 
-        return <Template logo={this.props.logo} auth={auth}>
+        return <Template logo={this.props.logo} auth={auth} view={this.state.view} onSetView={this.setView}>
             {content}
         </Template>;
     }

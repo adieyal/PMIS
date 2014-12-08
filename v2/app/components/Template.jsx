@@ -6,10 +6,9 @@ var Footer = require('./Footer');
 module.exports = React.createClass({
     render: function() {
         var auth = this.props.auth;
-        var logo = this.props.logo;
 
         return <div className={ auth.status }>
-            <Header logo={logo} auth={auth} />
+            <Header logo={this.props.logo} auth={auth} view={this.props.view} onSetView={this.props.onSetView} />
             <div className="content">
                 {this.props.children}
             </div>
