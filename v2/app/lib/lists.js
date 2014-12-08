@@ -22,10 +22,11 @@ module.exports = {
     },
 
     planningPhases: {
+        "completed": "Planning Completed",
         "consultant-appointment": "Consultant Appt",
-        "design-consting": "Design Costing",
+        "design-costing": "Design Costing",
         "documentation": "Documentation",
-        "tender": "Tender"
+        "tender": "For Tender"
     },
 
     implementationGroups: {

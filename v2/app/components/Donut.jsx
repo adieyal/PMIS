@@ -105,7 +105,7 @@ var Donut = React.createClass({
             return <g key={phase}>
                 <rect x={rectX} y={rectY} width="30" height="30" fill={colour} />
                 <text x={rectX+textNudge} y={rectY+20} fill="#ffffff" textAnchor="end">{value}</text>
-                <text x={rectX+48} y={rectY+26}>{phase}</text>
+                <text x={rectX+38} y={rectY+20}>{phase}</text>
                 <text x={textX} y={textY}>{percentage}</text>
                 {path}
             </g>;

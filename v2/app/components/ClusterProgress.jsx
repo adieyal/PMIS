@@ -16,6 +16,32 @@ module.exports = React.createClass({
             clusterId: lists.clusters[0].slug
         };
     },
+    generateProgrammes: function(data) {
+        data = data.programmes.map(function(p) {
+            var numbers = {
+                planning: p.projects.planning,
+                implementation: p.projects.implementation
+            };
+
+            var planning = utils.map(Object.keys(lists.planningPhases), function(phase) {
+                return [ lists.planningPhases[phase], p.planning[phase] ];
+            });
+
+            var implementation = utils.map(Object.keys(lists.implementationGroups), function(groupId) {
+                return [ lists.implementationGroups[groupId], p.implementation[groupId] ];
+            });
+
+            return {
+                id: p.id,
+                title: p.title,
+                numbers: numbers,
+                planning: planning,
+                implementation: implementation,
+                performance: p.performance
+            };
+        }.bind(this));
+        return data;
+    },
     generateDistricts: function(data) {
         var districts = [];
 
@@ -64,7 +90,9 @@ module.exports = React.createClass({
         var data = cluster.data;
 
         var client = data.client.replace(/^Department of /, '');
+
         var districts = this.generateDistricts(data);
+        var programmes = this.generateProgrammes(data);
 
         return <div className="cluster-progress">
             <div className="progress ui fluid card">
@@ -112,14 +140,34 @@ module.exports = React.createClass({
                                 <DistrictRow district={districts[2]} donut="summary" layout="horizontal" />
                             </div>
                         </div>
-
+                    </div>
+                </div>
+                <div className="extra content">
+                    <div className="ui grid">
                         <div className="two column row">
-                            <div className="column">
-                                Programme Block
-                            </div>
-                            <div className="column">
-                                Programme Block
-                            </div>
+                        {programmes.map(function(p) {
+                            return <div className="column">
+                                <div className="ui fluid card">
+                                    <div className="content">
+                                        <div className="header">{p.title}</div>
+                                        <div className="meta">{p.description}</div>
+                                    </div>
+                                    <div className="extra content">
+                                        <div className="ui three column grid">
+                                            <div className="column">
+                                                <Donut data={p.planning} height="206" />
+                                            </div>
+                                            <div className="column">
+                                                <Donut data={p.implementation} height="206" />
+                                            </div>
+                                            <div className="column">
+                                                <Slider data={p.performance} height="200" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>;
+                        })}
                         </div>
                     </div>
                 </div>
