@@ -1,4 +1,5 @@
 import os
+import time
 from slugify import slugify
 from django.http import HttpResponse
 from datetime import datetime
@@ -716,8 +717,6 @@ def generate_districts_v2(district_projects, year, month0):
         for groupId, filt in districtSummaryGroups.iteritems():
             district['summary'][groupId] = len([p for p in implementation_projects if filt(p, year, month0)]);
 
-        print district['summary']
-
         districts[k] = district
 
     return districts
@@ -758,10 +757,11 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     }
 
     planningPhases = {
+        "completed": "Planning Completed",
         "consultant-appointment": "Consultant Appt",
-        "design-consting": "Design Costing",
+        "design-costing": "Design Costing",
         "documentation": "Documentation",
-        "tender": "Tender"
+        "tender": "For Tender"
     }
 
     implementationGroups = {
@@ -824,7 +824,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
 
     context['implementation-groups'] = {}
     for groupId, filt in implementationGroups.iteritems():
-        context['implementation-groups'][groupId] = len([p for p in implementation_projects if filt(p)]);
+        context['implementation-groups'][groupId] = len([p for p in projects if filt(p)]);
 
     context['programmes'] = []
 
@@ -843,11 +843,19 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
             ),
             "projects": {
                 "total": len(programme_projects)
-            }
+            },
+            "planning": {},
+            "implementation": {}
         }
 
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase ])
+
+        for phase, filt in planningPhases.iteritems():
+            obj['planning'][phase] = len([p for p in programme_projects if p.phase == 'planning' and p.planning_phase == phase])
+
+        for groupId, filt in implementationGroups.iteritems():
+            obj['implementation'][groupId] = len([p for p in programme_projects if filt(p)])
 
         context['programmes'].append(obj)
 
@@ -859,6 +867,7 @@ def latest_project(request, cluster, year=None, month=None):
         [Project.get(p) for p in Project.list() if p]
     )
     timestamp = max([project.timestamp for project in projects])
+    timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
     return timestamp
 
 #@cache_page(settings.API_CACHE)
@@ -897,8 +906,6 @@ def search_v2(request):
             }
         }
     })
-
-    print projects
 
     body = {
         'results': {
