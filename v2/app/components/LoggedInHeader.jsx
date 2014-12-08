@@ -45,8 +45,8 @@ module.exports = React.createClass({
             <div className="ui menu">
                 <a ref="home" className={this.generateClasses('dashboard')} onClick={this.setView('dashboard')}><i className="home icon" /> Home</a>
                 <a className={this.generateClasses('progress')} onClick={this.setView('progress')}>Progress</a>
-                <a ref="performance" className="item">Performance</a>
-                <a ref="projects" className="item">Projects</a>
+                <a ref="performance" className="disabled item">Performance</a>
+                <a ref="projects" className="disabled item">Projects</a>
                 <a ref="logout" className="item" onClick={this.logout}>Logout</a>
                 <a className="right menu">
                     <div className="item search-item">
