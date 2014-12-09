@@ -5,6 +5,7 @@
   "authors": [
     "datashaman <marlinf@datashaman.com>"
   ],
+  "main": "app/components/Main.jsx",
   "license": "MIT",
   "private": true,
   "ignore": [

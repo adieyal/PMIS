@@ -48,7 +48,7 @@ module.exports = {
         return request
             .post(url('auth/logout'))
             .end(function (error, res) {
-                if(error) return NotificationActions.notify(error);
+                if(error && error.status !== 401) return NotificationActions.notify(error);
                 done();
             });
     },
