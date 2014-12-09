@@ -71,3 +71,7 @@ DEBUG_TOOLBAR_CONFIG = {
 LOGGING["loggers"]["apps.projects.management.commands.parsers._projectsheetparser"]["level"] = "WARN"
 LOGGING["loggers"]["apps.projects.management.commands.parsers._planningprojectsheetparser"]["level"] = "WARN"
 LOGGING["loggers"]["apps.projects.management.commands.parsers._retentionprojectsheetparser"]["level"] = "WARN"
+
+# Used for URL generation in the seeding of ElasticSearch,
+# useful anywhere
+BASE_URL = 'http://www.backend.dev'

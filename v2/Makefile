@@ -10,7 +10,7 @@ dev-server:
 	npm run dev-server
 
 droplet-server:
-	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://178.62.65.146 PORT=8082 npm run dev-server
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run dev-server
 
 production-server:
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run start
@@ -22,11 +22,12 @@ install:
 	sudo gem install bundler
 	bundle install
 	npm install
+	bower install
 
-development-build:
+development-build: install
 	bundle exec compass compile
 	BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run build
 
-production-build:
+production-build: install
 	bundle exec compass compile
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build

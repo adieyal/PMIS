@@ -95,3 +95,7 @@ ALLOWED_HOSTS = (
         '127.0.0.1',
         '33.33.33.33',
 )
+
+# Used for URL generation in the seeding of ElasticSearch,
+# useful anywhere
+BASE_URL = 'http://pmis.burgercom.co.za'
