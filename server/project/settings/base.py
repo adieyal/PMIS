@@ -328,3 +328,7 @@ DJOSER = {
 }
 
 PROFILE_LOG_BASE="/tmp"
+
+# Used for URL generation in the seeding of ElasticSearch,
+# useful anywhere
+BASE_URL = 'http://pmis.burgercom.co.za'

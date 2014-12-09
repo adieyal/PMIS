@@ -1,4 +1,6 @@
+import os
 import json as json
+from django.conf import settings
 from django.utils.text import slugify
 from django.core.management.base import BaseCommand, CommandError
 from project.libs.database.database import Project
@@ -35,6 +37,8 @@ class Command(BaseCommand):
     ]
 
     def handle(self, *args, **options):
+        base_url = os.getenv('BASE_URL', settings.BASE_URL)
+
         for c in self.clusters:
             cluster = generate_cluster_dashboard_v2('department-of-%s' % c)
             
@@ -57,10 +61,7 @@ class Command(BaseCommand):
                     body = {
                         'id': 'project:%s' % project_id,
                         'title': project['description'],
-
-                        # Probably need to do this correctly :)
-                        'url': 'http://www.backend.dev/reports/project/%s/latest/' % project_id,
-
+                        'url': '%s/reports/project/%s/latest/' % (base_url, project_id),
                         'cluster': cluster['client'],
                         'cluster_id': c,
                         'manager': project.get('manager'),
