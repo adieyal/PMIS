@@ -31,3 +31,6 @@ development-build: install
 production-build: install
 	bundle exec compass compile
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
+
+deploy:
+	ssh pmis "cd /var/www/PMIS; newgrp pmis; git pull; BASE_URL=http://pmis.burgercom.co.za make reindex; cd v2; make production-build; sudo supervisorctl restart all"
