@@ -18,8 +18,11 @@ module.exports = React.createClass({
     },
 
     render: function () {
-        if (this.state.clusters.length === 0) {
-            return <div>Loading...</div>;
+        var length = this.state.clusters.length;
+        if (length < lists.clusters.length) {
+            return <div className="ui active inverted dimmer">
+                <div className="ui text loader">Loaded {length} clusters</div>
+            </div>;
         } else {
             return <App logo={logo} clusters={this.state.clusters} />;
         }

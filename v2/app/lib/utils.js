@@ -1,4 +1,19 @@
 module.exports = {
+    iterate: function(arr, func, done) {
+        if (arr.length === 0) {
+            if (typeof done !== 'undefined') {
+                return done();
+            }
+
+            return;
+        }
+
+        var item = arr[0];
+
+        return func(item, function() {
+            return this.iterate(arr.slice(1), func, done);
+        }.bind(this));
+    },
     join: function (glue, arr) {
         var l = arr.length;
         return this.flatten(this.map(arr, function (item, index) {

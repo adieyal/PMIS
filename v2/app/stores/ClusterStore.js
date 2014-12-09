@@ -40,9 +40,10 @@ module.exports = function(clusters) {
                     data: action.cluster
                 });
 
-                // Only trigger change once we've got all the clusters required
-                if (state.length == clusters.length) {
-                    // But first, reorder them according to the cluster property
+                if (state.length < clusters.length) {
+                    // Trigger change anyway since we want to show a loader with number of clusters loaded
+                } else if(state.length == clusters.length) {
+                    // Reorder them according to the cluster property, we've got them all now
                     state = clusters.map(function(cluster, index) {
                         var stateCluster = utils.find(state, function(stateCluster) {
                             return stateCluster.slug == cluster.slug;
@@ -50,9 +51,9 @@ module.exports = function(clusters) {
                         stateCluster.view = cluster.view;
                         return stateCluster;
                     });
-
-                    ClusterStore.triggerChange();
                 }
+
+                ClusterStore.triggerChange();
 
                 break;
             default:
@@ -61,10 +62,10 @@ module.exports = function(clusters) {
 
     if (typeof window != 'undefined') {
         var remote = require('../lib/remote');
-
-        clusters.forEach(function(cluster) {
+        utils.iterate(clusters, function(cluster, done) {
             remote.fetchCluster(cluster.slug, AuthStore.getState().authToken, function(payload) {
                 ClusterActions.receiveCluster(cluster.slug, payload);
+                done();
             });
         });
     }
