@@ -18,8 +18,8 @@ production-server:
 
 # Assume git, nodejs and npm are installed
 install:
-	sudo apt-get install build-essential ruby ruby-dev
-	sudo gem install bundler
+	# sudo apt-get install build-essential ruby ruby-dev
+	# sudo gem install bundler
 	bundle install
 	npm install
 	bower install
@@ -33,4 +33,4 @@ production-build: install
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
 
 deploy:
-	ssh pmis "cd /var/www/PMIS; newgrp pmis; git pull; BASE_URL=http://pmis.burgercom.co.za make reindex; cd v2; make production-build; sudo supervisorctl restart all"
+	ssh -t pmis "cd /var/www/PMIS && git pull && PATH=~/.virtualenvs/pmis/bin:/usr/bin:/bin make production-reindex && cd v2 && PATH=~/.rbenv/shims:/opt/node/bin:/usr/bin:/bin make production-build && sudo chgrp -R pmis . && sudo supervisorctl restart all"
