@@ -57,7 +57,7 @@ class Command(BaseCommand):
 
             for project_id in Project.list():
                 if project_id:
-                    project = Project.get(project_id, True)
+                    project = Project.get(project_id, as_json=True)
                     body = {
                         'id': 'project:%s' % project_id,
                         'title': project['description'],
