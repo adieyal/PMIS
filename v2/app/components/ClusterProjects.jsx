@@ -36,12 +36,13 @@ module.exports = React.createClass({
             });
         }.bind(this);
     },
-    filterProjects: function() {
-        var clusterProjects = this.props.projects.filter(function (p) {
+    clusterProjects: function() {
+        return this.props.projects.filter(function (p) {
             return ('department-of-' + this.state.clusterId) == p.cluster;
         }.bind(this));
-
-        var projects = clusterProjects.filter(function (p) {
+    },
+    filterProjects: function(projects) {
+        return projects.filter(function (p) {
             var allowed = true;
 
             if (this.state.phase) {
@@ -70,8 +71,6 @@ module.exports = React.createClass({
 
             return allowed;
         }.bind(this));
-
-        return projects;
     },
     sortProjects: function(projects) {
         return projects.sort(function (a, b) {
@@ -96,7 +95,8 @@ module.exports = React.createClass({
         };
     },
     render: function() {
-        var projects = this.sortProjects(this.filterProjects());
+        var clusterProjects = this.clusterProjects();
+        var projects = this.sortProjects(this.filterProjects(clusterProjects));
 
         var projectPhases = utils.unique(projects, 'phase', 'unknown');
 
@@ -148,6 +148,9 @@ module.exports = React.createClass({
                                     <option key="" value="">All Municipalities</option>
                                     {municipalities}
                                 </select>
+                            </div>
+                            <div className="counts">
+                                {projects.length == this.props.projects.length ? this.props.projects.length : (projects.length + ' of ' + clusterProjects.length)} projects
                             </div>
                         </div>
                     </div>
