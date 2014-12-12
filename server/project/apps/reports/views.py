@@ -1074,6 +1074,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         "projects-tender": [
             {
                 "name": p.name,
+                "uuid": p._uuid,
             } for p in projects if p.phase == 'planning' and p.planning_phase == 'tender'
         ],
         ###
@@ -1081,6 +1082,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         "projects-planning-completed": [
             {
                 "name": p.name,
+                "uuid": p._uuid,
                 "budget": _currency(p.total_anticipated_cost)
             } for p in projects if p.phase == 'planning' and p.planning_phase == 'completed'
         ],
@@ -1089,6 +1091,7 @@ def cluster_progress_json(request, cluster, year=None, month=None):
         "projects-completed": [
             {
                 "name": p.name,
+                "uuid": p._uuid,
                 "budget": _currency(p.total_anticipated_cost)
             } for p in projects if p.phase == 'completed'
         ],
