@@ -79,6 +79,17 @@ def _percent(value):
     except (ValueError, TypeError):
         return ''
     return '%.0f%%' % (value*100)
+    
+def _percent_ratio(fraction, total):
+    try:
+        value = fraction / total
+    except (ZeroDivisionError, ValueError, TypeError):
+        return ''
+    try:
+        value = float(value)
+    except (ValueError, TypeError):
+        return ''
+    return '%.0f%%' % (value*100)
         
 def _expenditure_for_month(data, month):
     try:
@@ -539,6 +550,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
             sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])
         ),
         "total-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects])),
+        "total-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)])
+        ),
         "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "total-progress-gauge": build_gauge(
             _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
@@ -562,12 +577,20 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                 "projects-planning": len([p for p in projects if p.programme == programme and p.phase == 'planning']),
                 "projects-total": len([p for p in projects if p.programme == programme]),
                 "total-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme])) or 'R 0',
+                "total-expenditure-percent": _percent_ratio(
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])
+                ),
             } for programme in programmes if programme != '--------'
         ],
         ###
         ### Planning section
         "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
         "planning-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning'])),
+        "planning-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])
+        ),
         "planning-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning'])),
         "planning-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
@@ -593,9 +616,13 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "implementation-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])),
         "implementation-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation'])),
+        "implementation-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])
+        ),
         "implementation-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
-            sum([_safe_float(p.total_anticipated_cost) or 0 for p in projects if p.phase == 'implementation'])
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation'])
         ),
         "implementation-progress-gauge": build_gauge(
             _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
@@ -613,6 +640,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                 ),
                 "projects-implementation": len([p for p in projects if p.programme == programme and p.phase == 'implementation']),
                 "expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme])),
+                "expenditure-percent": _percent_ratio(
+                    sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.programme == programme]),
+                    sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])
+                ),
                 "budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.programme == programme])),
                 "projects-0-50": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
                 "projects-51-75": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
@@ -630,6 +661,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         ### District summary section
         "district-nkangala-projects-implementation": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
         "district-nkangala-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])),
+        "district-nkangala-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])
+        ),
         "district-nkangala-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation'])),
         "district-nkangala-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']),
@@ -648,6 +683,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         
         "district-gertsibande-projects-implementation": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
         "district-gertsibande-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])),
+        "district-gertsibande-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])
+        ),
         "district-gertsibande-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation'])),
         "district-gertsibande-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
@@ -666,6 +705,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         
         "district-ehlanzeni-projects-implementation": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
         "district-ehlanzeni-expenditure": _currency(sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])),
+        "district-ehlanzeni-expenditure-percent": _percent_ratio(
+            sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
+            sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])
+        ),
         "district-ehlanzeni-budget": _currency(sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation'])),
         "district-ehlanzeni-budget-slider": build_slider(
             sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
