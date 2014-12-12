@@ -8,6 +8,7 @@ module.exports = React.createClass({
         return {
             clusterId: lists.clusters[0].slug,
             phase: '',
+            status: '',
             district: '',
             municipality: '',
             sort: 'name',
@@ -50,6 +51,14 @@ module.exports = React.createClass({
                     allowed = !p.phase;
                 } else {
                     allowed = this.state.phase == p.phase;
+                }
+            }
+
+            if (allowed && this.state.status) {
+                if (this.state.status == 'unknown') {
+                    allowed = !p.status;
+                } else {
+                    allowed = this.state.status == p.status;
                 }
             }
 
@@ -105,6 +114,12 @@ module.exports = React.createClass({
             return <option key={id} value={id} disabled={disabled}>{title}</option>;
         });
 
+        var projectStatuses = utils.unique(projects, 'status', 'unknown');
+
+        var statuses = utils.map(projectStatuses, function(status) {
+            return <option key={status} value={status}>{status}</option>;
+        });
+
         var projectDistricts = utils.unique(projects, 'district', 'Unknown').sort();
 
         var districts = utils.map(projectDistricts, function(district) {
@@ -135,6 +150,12 @@ module.exports = React.createClass({
                                 <select valueLink={this.linkState('phase')} className="filter filter-phases">
                                     <option key="" value="">All Phases</option>
                                     {phases}
+                                </select>
+                            </div>
+                            <div className="field">
+                                <select valueLink={this.linkState('status')} className="filter filter-statuses">
+                                    <option key="" value="">All Statuses</option>
+                                    {statuses}
                                 </select>
                             </div>
                             <div className="field">
