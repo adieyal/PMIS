@@ -1,5 +1,6 @@
 import os
 import time
+import operator
 from slugify import slugify
 from django.http import HttpResponse
 from datetime import datetime
@@ -861,7 +862,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
 
     return context
 
-def latest_project(request, cluster, year=None, month=None):
+def latest_cluster_project(request, cluster, year=None, month=None):
     projects = filter(
         lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
@@ -871,9 +872,84 @@ def latest_project(request, cluster, year=None, month=None):
     return timestamp
 
 #@cache_page(settings.API_CACHE)
-@condition(last_modified_func=latest_project)
+@condition(last_modified_func=latest_cluster_project)
 def cluster_dashboard_v2(request, cluster, year=None, month=None):
     context = generate_cluster_dashboard_v2(cluster, year, month)
+    return HttpResponse(json.dumps(context), mimetype='application/json')
+
+def latest_project(request, year=None, month=None):
+    projects = [Project.get(p) for p in Project.list() if p]
+    timestamp = max([project.timestamp for project in projects])
+    timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
+    return timestamp
+
+#@cache_page(settings.API_CACHE)
+@condition(last_modified_func=latest_project)
+def projects_v2(request, year=None, month=None):
+    def _progress_for_month(data, year, month):
+        clean_data = []
+        for item in data:
+            try:
+                dt = iso8601.parse_date(item['date'])
+            except iso8601.ParseError:
+                continue
+            clean_data.append({
+                'month': (dt.year*100)+dt.month,
+                'progress': _safe_float(item['progress'])
+            })
+        
+        month = (int(year)*100)+int(month)
+        latest = None
+        for item in clean_data:
+            if item['month']<=month and item['progress'] != None:
+                if not latest or latest['month'] < item['month']:
+                    latest = item
+        if latest:
+            return latest['progress']/100
+        return 0
+    
+    def _project_status(actual, planned):
+        if (planned - actual) > 0.2:
+            return ('In danger', 'red')
+        elif (planned - actual) > 0.1:
+            return ('Monitor Project', 'yellow')
+        else:
+            return ('On Target', 'green')
+    
+    projects = [Project.get(p) for p in Project.list() if p]
+
+    if not year or not month:
+        try:
+            timestamp = max([project.timestamp for project in projects])
+        except ValueError:
+            return HttpResponse(json.dumps({ 'error': 'No projects!' }), mimetype='application/json')
+        year = timestamp.year
+        month = '%02d' % (timestamp.month)
+    else:
+        year = int(year)
+        month = month
+        
+    base_url = os.getenv('BASE_URL', settings.BASE_URL)
+
+    context = { 'data': [] }
+    for project in projects:
+        context['data'].append({
+            'id': project._uuid,
+            'cluster': slugify(unicode(project.cluster)),
+            'district': project.district,
+            'municipality': project.municipality,
+            'name': project.description,
+            'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
+            'status': _project_status(_progress_for_month(project.actual, year-1, month),
+                                    _progress_for_month(project.planning, year-1, month))[0],
+            'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
+            'phase': project.phase,
+            'implementing_agent': project.implementing_agent,
+            'last_comment': project.comments
+        })
+
+    context['data'] = sorted(context['data'], key=operator.itemgetter('name'))
+
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 def search_v2(request):

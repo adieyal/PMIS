@@ -5,8 +5,8 @@ module.exports = {
 
     ActionTypes: utils.keyMirror([
         'RECEIVE_CLUSTER',
-
         'RECEIVE_RESULTS',
+        'RECEIVE_PROJECTS',
 
         'LOGIN',
         'LOGIN_FAILURE',

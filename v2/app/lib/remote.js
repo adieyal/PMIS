@@ -7,6 +7,23 @@ function url(path) {
 }
 
 module.exports = {
+    fetchProjects: function (authToken, done) {
+        return request
+            .get(url('reports/projects'))
+            .set('Authorization', 'Token ' + authToken)
+            .end(function (error, res) {
+                if(error) {
+                    return NotificationActions.notify(error);
+                }
+
+                if(res.body.error) {
+                    return NotificationActions.notify(res.body.error);
+                }
+
+                var payload = res.body;
+                done(payload);
+            });
+    },
     fetchCluster: function (slug, authToken, done) {
         return request
             .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/v2'))

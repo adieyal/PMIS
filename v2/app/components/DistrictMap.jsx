@@ -2,13 +2,9 @@ var React = require("react");
 var StoreMixin = require('../mixins/StoreMixin');
 var DistrictStore = require('../stores/DistrictStore');
 var utils = require('../lib/utils');
+var lists = require('../lib/lists');
 
-var colours = [
-    '#1f77b4',
-    '#2ca02c',
-    '#ff7f0e',
-    '#d62728'
-];
+var colours = lists.colours.slice(0, 4);
 
 var scale = utils.scale(colours);
 

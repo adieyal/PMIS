@@ -62,7 +62,7 @@ module.exports = function(clusters) {
 
     if (typeof window != 'undefined') {
         var remote = require('../lib/remote');
-        utils.iterate(clusters, function(cluster, done) {
+        utils.walkAsync(clusters, function(cluster, done) {
             remote.fetchCluster(cluster.slug, AuthStore.getState().authToken, function(payload) {
                 ClusterActions.receiveCluster(cluster.slug, payload);
                 done();

@@ -1,24 +1,12 @@
 var React = require("react");
 var ActivatorMixin = require('../mixins/ActivatorMixin');
+var lists = require('../lib/lists');
 
 var maxArc = 2 * Math.PI - 1e-6;
 var arcOffset = - Math.PI / 2;
 var innerRadius = 25;
 var outerRadius = 65;
 var margin = 2 * Math.PI * 1 / 100;
-
-var wedgeColours = [
-    '#1f77b4',
-    '#ff7f0e',
-    '#2ca02c',
-    '#d62728',
-    '#9467bd',
-    '#8c564b',
-    '#e377c2',
-    '#7f7f7f',
-    '#bcbd22',
-    '#17becf'
-];
 
 function arc(innerRadius, outerRadius, startAngle, endAngle) {
     var r0 = innerRadius,
@@ -82,7 +70,7 @@ var Donut = React.createClass({
             var thisMargin = this.props.data.length > 1 ? margin : 0;
 
             var phase = datum[0];
-            var colour = wedgeColours[index];
+            var colour = lists.colours[index];
 
             var path;
             if (total > 0) {

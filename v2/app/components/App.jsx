@@ -3,6 +3,7 @@ var React = require('react');
 var Dashboard = require("./Dashboard");
 var LoginForm = require("./LoginForm");
 var Template = require("./Template");
+var ClusterProjects = require("./ClusterProjects");
 
 var StoreMixin = require('../mixins/StoreMixin');
 var AuthStore = require('../stores/AuthStore');
@@ -63,6 +64,9 @@ module.exports = React.createClass({
                 break;
             case 'progress':
                 content = <ClusterProgress clusters={this.props.clusters} />;
+                break;
+            case 'projects':
+                content = <ClusterProjects projects={this.props.projects} />;
                 break;
         }
 

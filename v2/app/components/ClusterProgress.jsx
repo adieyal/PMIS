@@ -89,8 +89,6 @@ module.exports = React.createClass({
 
         var data = cluster.data;
 
-        var client = data.client.replace(/^Department of /, '');
-
         var districts = this.generateDistricts(data);
         var programmes = this.generateProgrammes(data);
 

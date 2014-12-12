@@ -1,5 +1,32 @@
 module.exports = {
-    iterate: function(arr, func, done) {
+    unique: function(arr, property, def) {
+        var res = [];
+
+        this.each(arr, function(obj) {
+            if (!this.contains(res, obj[property])) {
+                if (typeof def == 'undefined') {
+                    res.push(obj[property]);
+                } else {
+                    if (obj[property]) {
+                        res.push(obj[property]);
+                    } else {
+                        res.push(def);
+                    }
+                }
+            }
+        }.bind(this));
+
+        return res;
+    },
+    contains: function(arr, item) {
+        for (var x = 0, l = arr.length; x < l; x++) {
+            if (arr[x] == item) {
+                return true;
+            }
+        }
+        return false;
+    },
+    walkAsync: function(arr, func, done) {
         if (arr.length === 0) {
             if (typeof done !== 'undefined') {
                 return done();
@@ -11,7 +38,7 @@ module.exports = {
         var item = arr[0];
 
         return func(item, function() {
-            return this.iterate(arr.slice(1), func, done);
+            return this.walkAsync(arr.slice(1), func, done);
         }.bind(this));
     },
     join: function (glue, arr) {
