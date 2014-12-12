@@ -114,7 +114,7 @@ class Project(object):
             
     
     @classmethod
-    def get(cls, uuid, as_json=False):
+    def get(cls, uuid, year=None, month=None, as_json=False):
         revisions = connection.smembers('/project/%s' % (uuid))
         if not revisions:
             raise DoesNotExistException('There is no data for project %s.' % (uuid))
@@ -123,6 +123,10 @@ class Project(object):
             'timestamp': UUID(r.split('/')[-1]).timestamp(),
             'key': '/project/%s/%s' % (uuid, r)
         } for r in revisions]
+        if year != None:
+            revision_map = [i for i in revision_map if i['timestamp'].year == year ]
+        if month != None:
+            revision_map = [i for i in revision_map if i['timestamp'].month == month ]
         revision_map.sort(key=lambda x: x['timestamp'], reverse=True)
         
         data = connection.get(revision_map[0]['key'])
