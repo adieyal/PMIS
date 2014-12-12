@@ -248,7 +248,18 @@ def project_json(request, project_id, year=None, month=None):
     else:
         year = int(year)
         month = month
-        project = Project.get(project_id)
+        project = Project.get(project_id, year, int(month))
+
+    if int(month) == 1:
+        year_prev = year-1
+        month_prev = 12
+    else:
+        year_prev = year
+        month_prev = int(month)-1
+    try:
+        project_prev = Project.get(project_id, year_prev, month_prev)
+    except:
+        project_prev = None
         
     # Convert month number to 0 indexed month.
     MONTHS0 = {
@@ -419,7 +430,7 @@ def project_json(request, project_id, year=None, month=None):
         'budget-variation-orders': _currency(project.budget_variation_orders),
         'cluster': project.cluster,
         'comments-current': project.comments,
-        'comments-previous': project.comments_previous,
+        'comments-previous': project_prev.comments if project_prev else '',
         'comments-stage': (project.phase or '').title(),
         'completion-date-actual': _date(project.actual_completion),
         'completion-date-planned': _date(project.planned_completion),
@@ -466,7 +477,7 @@ def project_json(request, project_id, year=None, month=None):
         'location_map': map_url,
         'district_map': district_map_url,
         'mitigations-current': project.remedial_action,
-        'mitigations-previous': project.remedial_action_previous,
+        'mitigations-previous': project_prev.remedial_action if project_prev else '',
         'month': MONTHS[int(month)-1],
         'name': project.description,
         'number': project.contract,
