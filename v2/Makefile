@@ -33,4 +33,4 @@ production-build: install
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
 
 deploy:
-	ssh -t pmis "cd /var/www/PMIS && git pull && PATH=~/.virtualenvs/pmis/bin:/usr/bin:/bin make production-reindex && cd v2 && PATH=~/.rbenv/shims:/opt/node/bin:/usr/bin:/bin make production-build && sudo chgrp -R pmis . && sudo supervisorctl restart all"
+	ssh -t pmis "cd /var/www/PMIS && git pull && PATH=~/.virtualenvs/pmis/bin:/usr/bin:/bin make production-reindex && sudo /etc/init.d/elasticsearch stop && cd v2 && PATH=~/.rbenv/shims:/opt/node/bin:/usr/bin:/bin make production-build && sudo chgrp -R pmis . && sudo /etc/init.d/elasticsearch start && sudo supervisorctl restart all"

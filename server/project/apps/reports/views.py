@@ -993,8 +993,8 @@ def projects_v2(request, year=None, month=None):
         context['data'].append({
             'id': project._uuid,
             'cluster': slugify(unicode(project.cluster)),
-            'district': project.district,
-            'municipality': project.municipality,
+            'district': project.district or 'Unknown',
+            'municipality': project.municipality or 'Unknown',
             'name': project.description,
             'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
             'status': _project_status(_progress_for_month(project.actual, year-1, month),
