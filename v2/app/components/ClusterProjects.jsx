@@ -2,6 +2,12 @@ var React = require('react/addons');
 var utils = require('../lib/utils');
 var lists = require('../lib/lists');
 
+var projectClasses = {
+    'On Target': 'positive',
+    'Monitor Project': '',
+    'In danger': 'negative'
+};
+
 module.exports = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
@@ -191,7 +197,7 @@ module.exports = React.createClass({
                         </thead>
                         <tbody>
                             {projects.map(function(p) {
-                                return <tr key={p.id}>
+                                return <tr key={p.id} className={projectClasses[p.status]}>
                                     <td>{p.phase}</td>
                                     <td>{p.status}</td>
                                     <td className="name" onClick={this.showProject(p.url)}>{p.name}</td>
