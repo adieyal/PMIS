@@ -32,7 +32,7 @@ module.exports = {
         'planning': 'Planning',
         'implementation': 'Implementation',
         'completed': 'Completed',
-        'final-accounts': 'Final accounts',
+        'final-accounts': 'Final accounts'
     },
 
     planningPhases: {
@@ -54,6 +54,6 @@ module.exports = {
         'three-months': "Due in 3 months",
         'this-month': "Due this month",
         'practical-completion': "Practical completion",
-        'final-completion': "Final completion",
+        'final-completion': "Final completion"
     }
 };

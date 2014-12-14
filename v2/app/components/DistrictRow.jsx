@@ -7,7 +7,8 @@ var DistrictRow = React.createClass({
     render: function() {
         var district = this.props.district;
         var content;
-        var donut = this.props.donut || 'performance';
+
+        var donut = this.props.donut || 'implementation';
 
         if (this.props.layout == 'horizontal') {
             content = <div className="ui two column grid">

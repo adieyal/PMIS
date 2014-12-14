@@ -209,10 +209,6 @@ footer {
     margin-bottom: 12px;
 }
 
-.cluster-dashboard .back-to-cluster {
-    cursor: pointer;
-}
-
 .district-rows {
     height: 335px;
     overflow-y: auto;
@@ -240,4 +236,8 @@ footer {
 
 .cluster-projects .counts {
     line-height: 36px;
+}
+
+.map {
+    margin-top: 24px;
 }

@@ -848,26 +848,27 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "total-projects": len(projects),
         "total-programmes": len(programmes),
 
-        "planning-projects-total": len([p for p in projects if p.phase == 'planning']),
-        "planning-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'planning']),
-        "planning-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'planning']),
-
-        "implementation-projects-total": len([p for p in projects if p.phase == 'implementation']),
-        "implementation-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if p.phase == 'implementation']),
-        "implementation-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects if p.phase == 'implementation']),
-
-        "completed-projects-total": len([p for p in projects if p.phase == 'completed']),
-        "final-accounts-projects-total": len([p for p in projects if p.phase == 'final-accounts']),
-
         "districts": generate_districts_v2(district_projects, year, month0),
     }
 
-    for total_type in ['total', 'planning', 'implementation']:
-        key = '%s-slider' % total_type
-        context[key] = build_slider_v2(
-            context['%s-expenditure' % total_type],
-            context['%s-budget' % total_type]
+    for phase, _ in projectPhases.iteritems():
+        phaseProjects = [p for p in projects if p.phase == phase]
+
+        context['%s-projects-total' % phase] = len(phaseProjects)
+        context['%s-budget' % phase] = sum([_safe_float(p.allocated_budget_for_year) or 0 for p in phaseProjects])
+        context['%s-expenditure' % phase] = sum([_safe_float(p.expenditure_in_year) or 0 for p in phaseProjects])
+        
+        context['%s-slider' % phase] = build_slider_v2(
+            context['%s-expenditure' % phase],
+            context['%s-budget' % phase]
         )
+
+    context['total-slider'] = build_slider_v2(
+        context['total-expenditure'],
+        context['total-budget']
+    )
+
+    context['unknown-projects-total'] = len([p for p in projects if p.phase not in projectPhases])
 
     planning_projects = [p for p in projects if p.phase == 'planning']
 
@@ -904,7 +905,9 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         }
 
         for phase, _ in projectPhases.iteritems():
-            obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase ])
+            obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase])
+
+        obj['projects']['unknown'] = len([p for p in programme_projects if p.phase not in projectPhases])
 
         for phase, filt in planningPhases.iteritems():
             obj['planning'][phase] = len([p for p in programme_projects if p.phase == 'planning' and p.planning_phase == phase])
