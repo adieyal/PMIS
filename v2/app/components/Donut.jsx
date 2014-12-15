@@ -58,6 +58,8 @@ var Donut = React.createClass({
 
         var endAngle = 0;
 
+        var length = this.props.data.length;
+
         var phases = this.props.data.map(function (datum, index) {
             var value = datum[1];
 
@@ -67,7 +69,7 @@ var Donut = React.createClass({
             var delta = value / total * 2 * Math.PI;
             endAngle = startAngle + delta;
 
-            var thisMargin = this.props.data.length > 1 ? margin : 0;
+            var thisMargin = length > 1 ? margin : 0;
 
             var phase = datum[0];
             var colour = lists.colours[index];
@@ -80,7 +82,7 @@ var Donut = React.createClass({
             }
 
             var rectX = 160;
-            var rectY = index * 40 - 100;
+            var rectY = index * 35 - 18 * length;
 
             var textAngle = (startAngle + endAngle) / 2 + arcOffset;
             var textRadius = outerRadius + 25 + ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 5 : 0);

@@ -32,7 +32,8 @@ module.exports = {
         'planning': 'Planning',
         'implementation': 'Implementation',
         'completed': 'Completed',
-        'final-accounts': 'Final accounts'
+        'final-accounts': 'Final accounts',
+        'closed': 'Closed'
     },
 
     planningPhases: {

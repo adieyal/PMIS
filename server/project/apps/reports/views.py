@@ -809,6 +809,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         'implementation': 'Implementation',
         'completed': 'Completed',
         'final-accounts': 'Final accounts',
+        'closed': 'Closed'
     }
 
     planningPhases = {
