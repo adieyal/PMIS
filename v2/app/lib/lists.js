@@ -1,11 +1,11 @@
 module.exports = {
     colours: [
-        '#1f77b4',
-        '#2ca02c',
-        '#ff7f0e',
-        '#d62728',
-        '#9467bd',
-        '#8c564b',
+        '#85CABB',
+        '#E6B744',
+        '#D0D0AE',
+        '#BFDFF6',
+        '#BCBCBC',
+        '#B6DED3',
         '#e377c2',
         '#7f7f7f',
         '#bcbd22',
