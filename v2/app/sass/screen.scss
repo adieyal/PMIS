@@ -173,11 +173,7 @@ footer {
 }
 
 .ui.search .prompt {
-    border-radius: 0;
-}
-
-.search-item {
-    padding: 0 !important;
+    border-radius: 3px;
 }
 
 .cluster-header {
@@ -240,4 +236,36 @@ footer {
 
 .map {
     margin-top: 24px;
+}
+
+$hugeInputOffset: -0.125em;
+$hugeInputVerticalPadding: 0.6em;
+
+$huge: 2.25rem;
+$hugeSubMenu: 1.75rem;
+$hugeDropdown: 2rem;
+$hugeWidth: 36rem;
+
+.ui.huge.menu > .item > .input input {
+  top: $hugeInputOffset;
+  padding-bottom: $hugeInputVerticalPadding;
+  padding-top: $hugeInputVerticalPadding;
+}
+.ui.huge.menu > .item > .input .button,
+.ui.huge.menu > .item > .input .label {
+  padding-top: $hugeInputVerticalPadding;
+  padding-bottom: $hugeInputVerticalPadding;
+}
+
+.ui.huge.menu > .item {
+  font-size: $huge;
+}
+.ui.huge.menu > .item .item {
+  font-size: $hugeSubMenu;
+}
+.ui.huge.menu .dropdown .item {
+  font-size: $hugeDropdown;
+}
+.ui.huge.vertical.menu {
+  width: $hugeWidth;
 }

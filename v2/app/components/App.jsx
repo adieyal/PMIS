@@ -52,7 +52,9 @@ module.exports = React.createClass({
 
     render: function () {
         var auth = this.state.auth;
-        var view = auth.status == 'logged-in' ? this.state.view : 'login';
+        var loggedIn = auth.status == 'logged-in';
+        // var loggedIn = (auth.status == 'logged-in' || jQuery.QueryString['authToken'] == 'browserling');
+        var view = loggedIn ? this.state.view : 'login';
         var content;
 
         switch(view) {
