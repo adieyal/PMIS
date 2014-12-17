@@ -3,13 +3,15 @@ var React = require('react');
 var Dashboard = require("./Dashboard");
 var LoginForm = require("./LoginForm");
 var Template = require("./Template");
-var ClusterProjects = require("./ClusterProjects");
 
 var StoreMixin = require('../mixins/StoreMixin');
 var AuthStore = require('../stores/AuthStore');
 var ClusterStore = require("../stores/ClusterStore");
 
 var ClusterProgress = require("./ClusterProgress");
+var ClusterPerformance = require("./ClusterPerformance");
+var ClusterProjects = require("./ClusterProjects");
+
 var NotificationStore = require('../stores/NotificationStore');
 
 if (typeof window != 'undefined') {
@@ -79,6 +81,9 @@ module.exports = React.createClass({
                 break;
             case 'progress':
                 content = <ClusterProgress clusters={this.props.clusters} />;
+                break;
+            case 'performance':
+                content = <ClusterPerformance clusters={this.props.clusters} />;
                 break;
             case 'projects':
                 content = <ClusterProjects projects={this.props.projects} />;

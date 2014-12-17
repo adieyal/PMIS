@@ -894,16 +894,19 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         obj = {
             "id": slugify(unicode(programme)),
             "title": programme,
-            "performance": build_slider_v2(
-                sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
-                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects])
-            ),
+            'budget': sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects]),
+            'expenditure': sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
             "projects": {
                 "total": len(programme_projects)
             },
             "planning": {},
             "implementation": {}
         }
+
+        obj["performance"] = build_slider_v2(
+            obj['expenditure'],
+            obj['budget']
+        )
 
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase])

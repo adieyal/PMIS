@@ -158,5 +158,9 @@ module.exports = {
             values[key] = key;
             return values;
         }, {});
+    },
+    toMoney: function (number) {
+        // From http://stackoverflow.com/a/16963988/401467
+        return 'R' + parseFloat(number, 10).toFixed(0).replace(/(\d)(?=(\d{3})+$)/g, "$1,").toString();
     }
 };
