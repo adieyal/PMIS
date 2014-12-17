@@ -1,7 +1,7 @@
 var React = require('react');
 
 module.exports = React.createClass({
-    initTab: function() {
+    componentDidMount: function() {
         if (typeof window !== 'undefined') {
             var node = this.getDOMNode();
             window.jQuery('.ui.menu .item', node).tab({
@@ -9,16 +9,13 @@ module.exports = React.createClass({
             });
         }
     },
-    componentDidMount: function() {
-        this.initTab();
-    },
     componentDidUpdate: function() {
-        this.initTab();
+        var node = this.getDOMNode();
+        window.jQuery('.ui.menu .item', node).tab('change tab', this.props.tab);
     },
-    getInitialState: function() {
-        return {
-            view: this.props.view
-        };
+    componentWillUnmount: function() {
+        var node = this.getDOMNode();
+        window.jQuery('.ui.menu .item', node).tab('destroy');
     },
     render: function() {
         var items = [];
@@ -35,11 +32,11 @@ module.exports = React.createClass({
         }
 
         this.props.children.forEach(function(child) {
-            var active = child.key == this.state.view ? "active": "";
+            var active = child.key == this.props.tab ? "active": "";
             var item = <a key={"item-" + child.key} data-tab={child.key} className={ "item " + active }>{child.props.title}</a>;
             items.push(item);
 
-            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == this.state.view ? "active": "") + " " + tabClassName + " tab-" + child.key }>
+            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == this.props.tab ? "active": "") + " " + tabClassName + " tab-" + child.key }>
                 {child}
             </div>;
             tabs.push(tab);

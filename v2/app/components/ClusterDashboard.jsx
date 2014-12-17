@@ -15,25 +15,28 @@ var utils = require('../lib/utils');
 module.exports = React.createClass({
     getInitialState: function() {
         return {
-            view: this.props.view,
+            tab: this.props.tab || 'performance',
+            performanceTab: this.props.performanceTab || 'overview',
             filtering: false,
             filteredProgrammes: []
         };
     },
-    showIndex: function() {
-        this.setState({ view: 'index' });
+    changeTab: function(tab) {
+        return function(e) {
+            e.preventDefault();
+            this.setState({
+                tab: tab
+            });
+        }.bind(this);
     },
-    showProgrammes: function() {
-        this.setState({ view: 'programmes' });
-    },
-    showDistricts: function() {
-        this.setState({ view: 'districts' });
-    },
-    showPlanning: function() {
-        this.setState({ view: 'planning' });
-    },
-    showImplementation: function() {
-        this.setState({ view: 'implementation' });
+    changePerformanceTab: function(tab) {
+        return function(e) {
+            e.preventDefault();
+            this.setState({
+                tab: 'performance',
+                performanceTab: tab
+            });
+        }.bind(this);
     },
     filterProgrammes: function() {
         var query = this.refs.query.getDOMNode().value;
@@ -127,8 +130,6 @@ module.exports = React.createClass({
     render: function() {
         var data = this.props.data;
 
-        var view = this.state.view;
-
         var client = data.client.replace(/^Department of /, '');
 
         var programmes = this.state.filtering ? this.state.filteredProgrammes : this.props.data.programmes;
@@ -138,22 +139,22 @@ module.exports = React.createClass({
         return <div className="cluster-dashboard">
             <div className="index ui fluid card">
                 <div className="content">
-                    <h2 className="ui header">{client}</h2>
+                    <h2 className="cluster-title ui header" onClick={this.changePerformanceTab('overview')}>{client}</h2>
 
-                    <Tabs view={view}>
+                    <Tabs ref="outerTab" tab={this.state.tab}>
                         <div key="performance" title="Performance">
-                            <Tabs type="inner" view="overview">
+                            <Tabs ref="innerTab" type="inner" tab={this.state.performanceTab}>
                                 <div key="overview" title="Overview">
                                     <div className="ui three column grid slider-row">
                                         <div className="column">
                                             <Slider key="total" data={data['total-slider']} title="Total" height="227" />
                                         </div>
 
-                                        <div className="planning-column column" onClick={this.showPlanning}>
+                                        <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
                                             <Slider key="planning" data={data['planning-slider']} title="Planning" height="227" />
                                         </div>
 
-                                        <div className="implementation-column column" onClick={this.showImplementation}>
+                                        <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
                                             <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="227" />
                                         </div>
                                     </div>
@@ -208,7 +209,7 @@ module.exports = React.createClass({
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <DistrictMap districts={data.districts} domain={domain} onClick={this.showDistricts} height="140" />
+                                    <DistrictMap districts={data.districts} domain={domain} height="140" />
                                 </div>
                                 <div className="column district-rows">
                                 {this.generateDistricts().map(function(d) {
@@ -223,8 +224,8 @@ module.exports = React.createClass({
                 </div>
 
                 <div className="extra content">
-                    <a className="projects left floated">{data['total-projects']} projects</a>
-                    <a className="programmes right floated">{data['total-programmes']} programmes</a>
+                    <a className="projects left floated" onClick={this.changePerformanceTab('projects')}>{data['total-projects']} projects</a>
+                    <a className="programmes right floated" onClick={this.changeTab('programmes')}>{data['total-programmes']} programmes</a>
                 </div>
             </div>
         </div>;
