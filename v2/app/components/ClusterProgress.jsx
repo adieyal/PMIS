@@ -93,7 +93,7 @@ module.exports = React.createClass({
         var programmes = this.generateProgrammes(data);
 
         return <div className="cluster-progress">
-            <div className="progress ui fluid card">
+            <div className="ui fluid card">
                 <div className="content">
                     <h2 className="ui header">
                         <select valueLink={this.linkState('clusterId')}>
@@ -103,8 +103,9 @@ module.exports = React.createClass({
                         </select>
                     </h2>
                 </div>
+
                 <div className="extra content">
-                    <div className="ui grid segment">
+                    <div className="ui grid">
                         <div className="two wide column">
                             <Slider title="Planning" data={data['planning-slider']} height="206" />
                         </div>
@@ -126,7 +127,7 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <div className="extra content">
-                    <div className="ui grid segment">
+                    <div className="ui grid">
                         <div className="three column row">
                             <div className="column">
                                 <DistrictRow district={districts[0]} donut="summary" layout="horizontal" />
