@@ -1011,50 +1011,54 @@ def projects_v2(request, year=None, month=None):
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 def search_v2(request):
-    programmes = es.search(index='pmis', doc_type='programme', body={
+    search_body = {
         'query': {
-            'multi_match': {
-                'query': request.GET.get('query'),
-                'fields': [
-                    "title",
-                    "manager",
-                    "description",
-                    "municipality",
-                    "comments"
-                ]
-            }
-        }
-    })
-
-    projects = es.search(index='pmis', doc_type='project', body={
-        'query': {
-            'multi_match': {
-                'query': request.GET.get('query'),
-                'fields': [
-                    "title",
-                    "manager",
-                    "description",
-                    "municipality",
-                    "comments"
-                ]
-            }
-        }
-    })
-
-    body = {
-        'results': {
-            'programmes': {
-                'name': 'Programmes',
-                'results': [p['_source'] for p in programmes['hits']['hits']]
-            },
-            'projects': {
-                'name': 'Projects',
-                'results': [p['_source'] for p in projects['hits']['hits']]
+            'bool': {
+                'should': [{
+                    'match': {
+                        'title': {
+                            'query': request.GET.get('query'),
+                            'boost': 3
+                        }
+                    }
+                }, {
+                    'match': {
+                        'description': {
+                            'query': request.GET.get('query'),
+                            'boost': 2
+                        }
+                    }
+                }, {
+                    'multi_match': {
+                        'query': request.GET.get('query'),
+                        'fields': [
+                            "manager",
+                            "municipality",
+                            "comments"
+                        ]
+                    }
+                }]
             }
         }
     }
 
-    return HttpResponse(json.dumps(body), mimetype='application/json')
+    programmes = es.search(index='pmis', doc_type='programme', body=search_body)
+    projects = es.search(index='pmis', doc_type='project', body=search_body)
+
+    response_body = {
+        'results': {
+            'projects': {
+                'name': 'Projects',
+                'results': [p['_source'] for p in projects['hits']['hits']]
+            },
+            'programmes': {
+                'name': 'Programmes',
+                'results': [p['_source'] for p in programmes['hits']['hits']]
+            },
+        }
+    }
+
+    return HttpResponse(json.dumps(response_body), mimetype='application/json')
 
 def search_programmes_v2(request):
     body = {
