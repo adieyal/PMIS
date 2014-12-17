@@ -64,9 +64,9 @@ class Command(BaseCommand):
                         'url': '%s/reports/project/%s/latest/' % (base_url, project_id),
                         'cluster': cluster['client'],
                         'cluster_id': c,
-                        'manager': project.get('manager'),
-                        'municipality': project.get('municipality'),
-                        'comments': project.get('comments'),
+                        # 'manager': project.get('manager'),
+                        # 'municipality': project.get('municipality'),
+                        # 'comments': project.get('comments'),
                         'programme': project.get('programme'),
                         'programme_id': slugify(project.get('programme', u'')),
                     }
