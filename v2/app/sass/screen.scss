@@ -90,8 +90,6 @@ footer {
 }
 
 .slider {
-    height: 100px;
-
     .outer-bar {
         fill:#eef0ef;
         stroke:#dcdcdb;
@@ -127,6 +125,60 @@ footer {
     .value-text {
         font-family:Arial,sans-serif;
         font-size: 5pt;
+    }
+}
+
+.gauge {
+    .marker-accent {
+        fill: none;
+        stroke: #656263;
+        stroke-width: 0.5;
+    }
+    .marker-outer {
+        fill: url(#gauge-marker-outer-gradient);
+        stroke: url(#gauge-marker-outer-stroke-gradient);
+        stroke-width: 0.5;
+    }
+    .marker-inner {
+        fill:url(#gauge-marker-inner-gradient);
+        stroke:#656263;
+        stroke-width:0.5;
+    }
+    .marker-text {
+        font-family: Arial, sans-serif;
+        font-size: 72%;
+    }
+    .background { 
+        fill: url(#gauge-background-gradient);
+    }
+    .mark-green-main { 
+        stroke: #86bf53;
+        fill: url(#gauge-mark-green-gradient);
+        stroke-width: 2;
+    }
+    .mark-red-main { 
+        stroke: #f0423e;
+        fill: url(#gauge-mark-red-gradient);
+        stroke-width: 2;
+    }
+    .mark { 
+        stroke: #656263;
+        stroke-width: 1;
+    }
+    .needle-dashed .needle-fill { 
+        stroke: #656263;
+        fill: url(#gauge-needle-dashed-gradient);
+        stroke-width: 0.5;
+    }
+    .needle-dashed .needle-mask { 
+        stroke: #656263;
+        stroke-dasharray: 5,5;
+        stroke-width: 3.5;
+    }
+    .needle-plain .needle-fill { 
+        stroke: #656263;
+        fill: url(#gauge-needle-dashed-gradient);
+        stroke-width: 0.5;
     }
 }
 
@@ -172,8 +224,11 @@ footer {
     width: 35em;
 }
 
-.ui.search .prompt {
-    border-radius: 3px;
+.ui.search {
+    .prompt {
+        height: 22px;
+        border-radius: 3px;
+    }
 }
 
 .cluster-header {
@@ -182,10 +237,6 @@ footer {
 
 .cluster-dashboard {
     margin-bottom: 1em;
-}
-
-.slider {
-    height: 60px;
 }
 
 .slider-row {
@@ -206,13 +257,13 @@ footer {
 }
 
 .district-rows {
-    height: 335px;
+    height: 561px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .programme-rows {
-    height: 307px;
+    height: 532px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -245,7 +296,7 @@ footer {
 $hugeInputOffset: -0.09375em;
 $hugeInputVerticalPadding: 0.45em;
 
-$huge: 1.6875rem;
+$huge: 1.2rem;
 $hugeSubMenu: 1.3125rem;
 $hugeDropdown: 1.5rem;
 $hugeWidth: 20rem;
