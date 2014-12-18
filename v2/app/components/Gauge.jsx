@@ -94,7 +94,7 @@ module.exports = React.createClass({
         var style = this.props.height ? { height: this.props.height } : {};
 
         return <div className="gauge" style={style}>
-            <svg width="100%" height="100%" version="1.1" viewBox="-85 -75 154 90" preserveAspectRatio="xMidYMid meet">
+            <svg width="100%" height="100%" version="1.1" viewBox="-85 -80 170 90" preserveAspectRatio="xMidYMid meet">
             <defs>
                 <linearGradient id="gauge-mark-green-gradient" x1="0" x2="1" y1="0" y2="0">
                     <stop offset="0%" stopColor="#86bf53"/>
