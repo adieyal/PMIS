@@ -32,7 +32,7 @@ module.exports = React.createClass({
         actual = actual || 0;
         var diff = budget - actual;
         var diffType = (diff > 0) ? 'Underexpenditure' : 'Overexpenditure';
-        return 'Total ' + diffType + ': ' + utils.toMoney(diff);
+        return 'Total ' + diffType + ': ' + utils.toMoney(Math.abs(diff));
     },
     renderProgramme: function(phase) {
         return function(p) {
@@ -86,7 +86,7 @@ module.exports = React.createClass({
                                 Total Projects: {data['total-projects']}
                             </div>
                             <div className="ui header">
-                                Total Projects: ??? %
+                                Total Progress: {data['total-progress']}
                             </div>
                         </div>
                         <div className="center aligned six wide column">

@@ -17,6 +17,7 @@ module.exports = React.createClass({
             status: '',
             district: '',
             municipality: '',
+            implementing_agent: '',
             sort: 'name',
             direction: 'ascending'
         };
@@ -69,7 +70,7 @@ module.exports = React.createClass({
             }
 
             if (allowed && this.state.district) {
-                if (this.state.district == 'unknown') {
+                if (this.state.district == 'Unknown') {
                     allowed = !p.district;
                 } else {
                     allowed = this.state.district == p.district;
@@ -77,10 +78,18 @@ module.exports = React.createClass({
             }
 
             if (allowed && this.state.municipality) {
-                if (this.state.municipality == 'unknown') {
+                if (this.state.municipality == 'Unknown') {
                     allowed = !p.municipality;
                 } else {
                     allowed = this.state.municipality == p.municipality;
+                }
+            }
+
+            if (allowed && this.state.implementing_agent) {
+                if (this.state.implementing_agent == 'Unknown') {
+                    allowed = !p.implementing_agent;
+                } else {
+                    allowed = this.state.implementing_agent == p.implementing_agent;
                 }
             }
 
@@ -138,6 +147,12 @@ module.exports = React.createClass({
             return <option key={municipality} value={municipality}>{municipality}</option>;
         });
 
+        var projectImplementingAgents = utils.unique(projects, 'implementing_agent', 'Unknown').sort();
+
+        var implementingAgents = utils.map(projectImplementingAgents, function(implementingAgent) {
+            return <option key={implementingAgent} value={implementingAgent}>{implementingAgent}</option>;
+        });
+
         return <div className="cluster-projects">
             <div className="ui fluid card">
                 <div className="content">
@@ -174,6 +189,12 @@ module.exports = React.createClass({
                                 <select valueLink={this.linkState('municipality')} className="filter filter-municipalities">
                                     <option key="" value="">All Municipalities</option>
                                     {municipalities}
+                                </select>
+                            </div>
+                            <div className="field">
+                                <select valueLink={this.linkState('implementing_agent')} className="filter filter-implementing-agents">
+                                    <option key="" value="">All Implementing Agents</option>
+                                    {implementingAgents}
                                 </select>
                             </div>
                             <div className="counts">
