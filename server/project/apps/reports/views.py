@@ -1001,9 +1001,10 @@ def projects_v2(request, year=None, month=None):
             'cluster': slugify(unicode(project.cluster)),
             'district': project.district or 'Unknown',
             'municipality': project.municipality or 'Unknown',
+            'programme': project.programme,
             'name': project.description,
             'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
-            'status': _project_status(_progress_for_month(project.actual, year-1, month),
+            'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
                                     _progress_for_month(project.planning, year-1, month))[0],
             'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
             'phase': project.phase,
@@ -1011,7 +1012,7 @@ def projects_v2(request, year=None, month=None):
             'last_comment': project.comments
         })
 
-    context['data'] = sorted(context['data'], key=operator.itemgetter('name'))
+    context['data'] = sorted(context['data'], key=operator.itemgetter('status'))
 
     return HttpResponse(json.dumps(context), mimetype='application/json')
 

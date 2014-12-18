@@ -242,13 +242,13 @@ footer {
     margin-top: 24px;
 }
 
-$hugeInputOffset: -0.125em;
-$hugeInputVerticalPadding: 0.6em;
+$hugeInputOffset: -0.09375em;
+$hugeInputVerticalPadding: 0.45em;
 
-$huge: 2.25rem;
-$hugeSubMenu: 1.75rem;
-$hugeDropdown: 2rem;
-$hugeWidth: 36rem;
+$huge: 1.6875rem;
+$hugeSubMenu: 1.3125rem;
+$hugeDropdown: 1.5rem;
+$hugeWidth: 20rem;
 
 .ui.huge.menu > .item > .input input {
   top: $hugeInputOffset;
@@ -272,4 +272,17 @@ $hugeWidth: 36rem;
 }
 .ui.huge.vertical.menu {
   width: $hugeWidth;
+}
+
+.status.in-danger {
+    color: #fff;
+    background-color: #F14637;
+}
+
+.status.monitor {
+    background-color: #FDDC10;
+}
+
+.status.on-target {
+    background-color: #88BF52;
 }

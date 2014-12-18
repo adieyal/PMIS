@@ -3,9 +3,9 @@ var utils = require('../lib/utils');
 var lists = require('../lib/lists');
 
 var projectClasses = {
-    'On Target': 'positive',
-    'Monitor Project': '',
-    'In danger': 'negative'
+    'On Target': 'status on-target',
+    'Monitor Project': 'status monitor',
+    'In danger': 'status in-danger'
 };
 
 module.exports = React.createClass({
@@ -13,12 +13,13 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             clusterId: lists.clusters[0].slug,
+            programme: '',
             phase: '',
             status: '',
             district: '',
             municipality: '',
             implementing_agent: '',
-            sort: 'name',
+            sort: 'status',
             direction: 'ascending'
         };
     },
@@ -52,6 +53,14 @@ module.exports = React.createClass({
     filterProjects: function(projects) {
         return projects.filter(function (p) {
             var allowed = true;
+
+            if (this.state.programme) {
+                if (this.state.programme == 'Unknown') {
+                    allowed = !p.programme;
+                } else {
+                    allowed = this.state.programme == p.programme;
+                }
+            }
 
             if (this.state.phase) {
                 if (this.state.phase == 'unknown') {
@@ -122,14 +131,20 @@ module.exports = React.createClass({
         var clusterProjects = this.clusterProjects();
         var projects = this.sortProjects(this.filterProjects(clusterProjects));
 
-        var projectPhases = utils.unique(projects, 'phase', 'unknown');
+        var projectProgrammes = utils.unique(projects, 'programme', 'Unknown').sort();
+
+        var programmes = utils.map(projectProgrammes, function(programme) {
+            return <option key={programme} value={programme}>{programme}</option>;
+        });
+
+        var projectPhases = utils.unique(projects, 'phase', 'unknown').sort();
 
         var phases = utils.map(lists.projectPhases, function(title, id) {
             var disabled = !utils.contains(projectPhases, id);
             return <option key={id} value={id} disabled={disabled}>{title}</option>;
         });
 
-        var projectStatuses = utils.unique(projects, 'status', 'unknown');
+        var projectStatuses = utils.unique(projects, 'status', 'unknown').sort();
 
         var statuses = utils.map(projectStatuses, function(status) {
             return <option key={status} value={status}>{status}</option>;
@@ -180,6 +195,12 @@ module.exports = React.createClass({
                                 </select>
                             </div>
                             <div className="field">
+                                <select valueLink={this.linkState('programme')} className="filter filter-programmes">
+                                    <option key="" value="">All Programmes</option>
+                                    {programmes}
+                                </select>
+                            </div>
+                            <div className="field">
                                 <select valueLink={this.linkState('district')} className="filter filter-districts">
                                     <option key="" value="">All Districts</option>
                                     {districts}
@@ -204,11 +225,12 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <div className="extra content">
-                    <table className="ui sortable celled striped table">
+                    <table className="ui sortable celled table">
                         <thead>
                             <tr>
                                 <th className={this.generateSortClass('phase')} onClick={this.handleSort('phase')}>Phase</th>
                                 <th className={this.generateSortClass('status')} onClick={this.handleSort('status')}>Status</th>
+                                <th className={this.generateSortClass('programme')} onClick={this.handleSort('programme')}>Programme</th>
                                 <th className={this.generateSortClass('name')} onClick={this.handleSort('name')}>Name</th>
                                 <th className={this.generateSortClass('district')} onClick={this.handleSort('district')}>District</th>
                                 <th className={this.generateSortClass('municipality')} onClick={this.handleSort('municipality')}>Municipality</th>
@@ -221,11 +243,12 @@ module.exports = React.createClass({
                                 return <tr key={p.id} className={projectClasses[p.status]}>
                                     <td>{p.phase}</td>
                                     <td>{p.status}</td>
+                                    <td className="programme">{p.programme}</td>
                                     <td className="name" onClick={this.showProject(p.url)}>{p.name}</td>
                                     <td>{p.district}</td>
                                     <td>{p.municipality}</td>
                                     <td>{p.implementing_agent}</td>
-                                    <td>{p.last_comment}</td>
+                                    <td>{utils.join(<br />, p.last_comment.split('\n'))}</td>
                                 </tr>;
                             }.bind(this))}
                         </tbody>

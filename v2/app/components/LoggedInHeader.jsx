@@ -43,12 +43,12 @@ module.exports = React.createClass({
     render: function() {
         return <header>
             <div className="ui grid">
-                <div className="center aligned one wide column">
+                <div className="center aligned two wide column">
                     <a href="/">
                         <img src={this.props.logo} height="80" />
                     </a>
                 </div>
-                <div className="fifteen wide column">
+                <div className="fourteen wide column">
                     <div className="ui huge menu">
                         <a ref="home" className={this.generateClasses('dashboard')} onClick={this.setView('dashboard')}><i className="home icon" /> Home</a>
                         <a className={this.generateClasses('progress')} onClick={this.setView('progress')}>Progress</a>
