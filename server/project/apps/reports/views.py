@@ -908,6 +908,8 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
             obj['budget']
         )
 
+        obj['progress'] = _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in programme_projects if p.phase == 'implementation']))
+
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase])
 

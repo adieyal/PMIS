@@ -40,10 +40,10 @@ module.exports = React.createClass({
                 <div className="ui header">{p.title}</div>
                 <div className="ui grid">
                     <div className="eight wide column">
-                        Total Projects: {p.projects[phase]}<br />
-                        Total Projects: ??? %<br />
-                        Total Budget: {utils.toMoney(p.budget)}<br />
-                        {this.renderExpenditureDiff(p.budget, p.expenditure)}
+                        <div>Total Projects: {p.projects[phase]}</div>
+                        {phase == 'implementation' ? <div>Total Progress: {p.progress}</div> : ''}
+                        <div>Total Budget: {utils.toMoney(p.budget)}</div>
+                        <div>{this.renderExpenditureDiff(p.budget, p.expenditure)}</div>
                     </div>
                     <div className="eight wide column">
                         <Slider data={p.performance} height="120" />
