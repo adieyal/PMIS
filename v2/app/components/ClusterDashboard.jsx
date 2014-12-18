@@ -1,5 +1,6 @@
 var React = require("react");
 
+var Gauge = require('./Gauge');
 var Donut = require('./Donut');
 var Slider = require('./Slider');
 var DistrictMap = require('./DistrictMap');
@@ -145,17 +146,21 @@ module.exports = React.createClass({
                         <div key="performance" title="Performance">
                             <Tabs ref="innerTab" type="inner" tab={this.state.performanceTab}>
                                 <div key="overview" title="Overview">
-                                    <div className="ui three column grid slider-row">
+                                    <div className="ui two column grid slider-row">
                                         <div className="column">
-                                            <Slider key="total" data={data['total-slider']} title="Total" height="227" />
-                                        </div>
-
-                                        <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
-                                            <Slider key="planning" data={data['planning-slider']} title="Planning" height="227" />
+                                            <Slider key="total" data={data['total-slider']} title="Total" height="200" />
                                         </div>
 
                                         <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
-                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="227" />
+                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="200" />
+                                        </div>
+
+                                        <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
+                                            <Slider key="planning" data={data['planning-slider']} title="Planning" height="200" />
+                                        </div>
+
+                                        <div className="gauge-column column">
+                                            <Gauge key="gauge" data={data['total-progress-gauge']} height="227" />
                                         </div>
                                     </div>
                                 </div>
@@ -209,7 +214,7 @@ module.exports = React.createClass({
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <DistrictMap districts={data.districts} domain={domain} height="140" />
+                                    <DistrictMap districts={data.districts} domain={domain} height="400" />
                                 </div>
                                 <div className="column district-rows">
                                 {this.generateDistricts().map(function(d) {

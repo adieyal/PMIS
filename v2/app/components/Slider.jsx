@@ -72,7 +72,7 @@ var Slider = React.createClass({
         var title = <text x="45" y="-10" textAnchor="middle" fontSize="8">{this.props.title || ''}</text>;
 
         return <div className="slider" style={style} onClick={this.props.onClick}>
-            <svg width="100%" height="100%" version="1.1" viewBox="-10 -10 110 50" preserveAspectRatio="xMidYMid meet">
+            <svg width="100%" height="100%" version="1.1" viewBox="-10 -20 110 60" preserveAspectRatio="xMidYMid meet">
 
                 <defs ref="defs">
                     <linearGradient key="inner-gradient" id="inner-gradient" x1="0" x2="0" y1="0" y2="1">

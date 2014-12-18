@@ -49,7 +49,7 @@ module.exports = React.createClass({
                 version="1.1"
                 width="100%"
                 height="100%"
-                viewBox="400 210 200 240"
+                viewBox="280 120 450 460"
                 preserveAspectRatio="xMidYMid meet">
                     <path
                     ref="gertsibande"

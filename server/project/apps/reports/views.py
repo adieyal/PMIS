@@ -869,6 +869,11 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         context['total-budget']
     )
 
+    context["total-progress-gauge"] = build_gauge(
+        _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
+        _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
+    )
+
     context['unknown-projects-total'] = len([p for p in projects if p.phase not in projectPhases])
 
     planning_projects = [p for p in projects if p.phase == 'planning']

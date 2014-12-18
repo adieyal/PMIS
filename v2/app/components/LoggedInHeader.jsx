@@ -45,7 +45,7 @@ module.exports = React.createClass({
             <div className="ui grid">
                 <div className="center aligned two wide column">
                     <a href="/">
-                        <img src={this.props.logo} height="80" />
+                        <img src={this.props.logo} height="60" />
                     </a>
                 </div>
                 <div className="fourteen wide column">
