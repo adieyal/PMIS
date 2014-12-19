@@ -5,17 +5,24 @@ module.exports = React.createClass({
         if (typeof window !== 'undefined') {
             var node = this.getDOMNode();
             window.jQuery('.ui.menu .item', node).tab({
-                context: node
+                context: node,
+                onTabLoad: function(tab) {
+                    // Bypass setState so we don't end up in a re-render loop
+                    this.props.state[this.props.attribute] = tab;
+                }.bind(this)
             });
         }
     },
     componentDidUpdate: function() {
         var node = this.getDOMNode();
-        window.jQuery('.ui.menu .item', node).tab('change tab', this.props.tab);
+        window.jQuery('.ui.menu .item', node).tab('change tab', this.getTabKey());
     },
     componentWillUnmount: function() {
         var node = this.getDOMNode();
         window.jQuery('.ui.menu .item', node).tab('destroy');
+    },
+    getTabKey: function() {
+        return this.props.state[this.props.attribute];
     },
     render: function() {
         var items = [];
@@ -31,12 +38,14 @@ module.exports = React.createClass({
             tabClassName = "ui tab";
         }
 
+        var tabKey = this.getTabKey();
+
         this.props.children.forEach(function(child) {
-            var active = child.key == this.props.tab ? "active": "";
+            var active = child.key == tabKey ? "active": "";
             var item = <a key={"item-" + child.key} data-tab={child.key} className={ "item " + active }>{child.props.title}</a>;
             items.push(item);
 
-            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == this.props.tab ? "active": "") + " " + tabClassName + " tab-" + child.key }>
+            var tab = <div key={"tab-" + child.key} data-tab={child.key} className={ (child.key == tabKey ? "active": "") + " " + tabClassName + " tab-" + child.key }>
                 {child}
             </div>;
             tabs.push(tab);

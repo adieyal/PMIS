@@ -1,4 +1,4 @@
-var React = require("react");
+var React = require("react/addons");
 
 var Gauge = require('./Gauge');
 var Donut = require('./Donut');
@@ -8,19 +8,19 @@ var DistrictMap = require('./DistrictMap');
 
 var Tabs = require('./Tabs');
 
-var ProgrammeRow = require('./ProgrammeRow');
+var Programmes = require('./Programmes');
 var DistrictRow = require('./DistrictRow');
 
 var lists = require('../lib/lists');
 var utils = require('../lib/utils');
+var count = 0;
 
 module.exports = React.createClass({
+    mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
         return {
-            tab: this.props.tab || 'performance',
-            performanceTab: this.props.performanceTab || 'overview',
-            filtering: false,
-            filteredProgrammes: []
+            tab: 'performance',
+            performanceTab: 'overview'
         };
     },
     changeTab: function(tab) {
@@ -40,33 +40,8 @@ module.exports = React.createClass({
             });
         }.bind(this);
     },
-    filterProgrammes: function() {
-        var query = this.refs.query.getDOMNode().value;
-
-        if(query) {
-            this.setState({
-                filtering: true,
-                filteredProgrammes: []
-            });
-
-            var re = new RegExp(query, 'i');
-
-            this.setState({
-                filteredProgrammes: this.props.data.programmes.filter(function (p) {
-                    return re.test(p.title);
-                })
-            });
-        } else {
-            this.setState({
-                filtering: false,
-                filteredProgrammes: []
-            });
-        }
-    },
-    generateProgrammes: function(programmes) {
-        var data = this.props.data;
-
-        data = programmes.map(function(p) {
+    generateProgrammes: function() {
+        var data = this.props.data.programmes.map(function(p) {
             var numbers = {
                 implementation: p.projects.implementation,
                 projects: p.projects.total
@@ -131,11 +106,7 @@ module.exports = React.createClass({
     },
     render: function() {
         var data = this.props.data;
-
         var client = data.client.replace(/^Department of /, '');
-
-        var programmes = this.state.filtering ? this.state.filteredProgrammes : this.props.data.programmes;
-
         var domain = [ 0, utils.max(utils.pluck(this.props.data.districts, 'projects-implementation')) ];
 
         return <div className="cluster-dashboard">
@@ -143,9 +114,9 @@ module.exports = React.createClass({
                 <div className="content">
                     <h2 className="cluster-title ui header" onClick={this.changePerformanceTab('overview')}>{client}</h2>
 
-                    <Tabs ref="outerTab" tab={this.state.tab}>
+                    <Tabs ref="outerTab" state={this.state} attribute="tab">
                         <div key="performance" title="Performance">
-                            <Tabs ref="innerTab" type="inner" tab={this.state.performanceTab}>
+                            <Tabs ref="innerTab" type="inner" state={this.state} attribute="performanceTab">
                                 <div key="overview" title="Overview">
                                     <div className="ui two column grid slider-row">
                                         <div className="column">
@@ -205,13 +176,7 @@ module.exports = React.createClass({
                             </Tabs>
                         </div>
 
-                        <div key="programmes" title="Programmes">
-                            <div className="scrollable programme-rows">
-                                {this.generateProgrammes(programmes).map(function(p) {
-                                    return <ProgrammeRow key={p.title} programme={p} />;
-                                })}
-                            </div>
-                        </div>
+                        <Programmes key="programmes" title="Programmes" programmes={this.generateProgrammes()} />
 
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">

@@ -12,8 +12,8 @@ module.exports = React.createClass({
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
         return {
-            clusterId: lists.clusters[0].slug,
-            programme: '',
+            clusterId: this.props.clusterId || lists.clusters[0].slug,
+            programme: this.props.programme || '',
             phase: '',
             status: '',
             district: '',
