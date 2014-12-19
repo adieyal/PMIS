@@ -237,6 +237,18 @@ footer {
 
 .cluster-dashboard {
     margin-bottom: 1em;
+
+    .card {
+        height: 680px;
+    }
+
+    .ui.bottom.tab {
+        height: 500px;
+    }
+
+    .cluster-title {
+        cursor: pointer;
+    }
 }
 
 .slider-row {
@@ -275,10 +287,6 @@ footer {
 }
 
 .index .ui.tab {
-}
-
-.cluster-dashboard .cluster-title {
-    cursor: pointer;
 }
 
 .cluster-projects .name {
