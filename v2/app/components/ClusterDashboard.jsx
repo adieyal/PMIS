@@ -2,6 +2,7 @@ var React = require("react");
 
 var Gauge = require('./Gauge');
 var Donut = require('./Donut');
+var Legend = require('./Legend');
 var Slider = require('./Slider');
 var DistrictMap = require('./DistrictMap');
 
@@ -116,7 +117,7 @@ module.exports = React.createClass({
             return [ lists.planningPhases[phase], data['planning-phases'][phase] ];
         });
     },
-    generateImplementationDonut: function() {
+    generateImplementationLegend: function() {
         var data = this.props.data;
         return Object.keys(lists.implementationGroups).map(function(groupId) {
             return [ lists.implementationGroups[groupId], data['implementation-groups'][groupId] ];
@@ -194,9 +195,10 @@ module.exports = React.createClass({
                                     <div className="ui grid">
                                         <div className="six wide column">
                                             <Slider data={data['implementation-slider']} height="190" />
+                                            <Gauge data={data['total-progress-gauge']} height="190" />
                                         </div>
                                         <div className="ten wide column">
-                                            <Donut data={this.generateImplementationDonut()} height="206" />
+                                            <Legend data={this.generateImplementationLegend()} height="380" />
                                         </div>
                                     </div>
                                 </div>

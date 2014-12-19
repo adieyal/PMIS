@@ -1,5 +1,6 @@
 var React = require("react");
 var ActivatorMixin = require('../mixins/ActivatorMixin');
+var Legend = require('./Legend');
 var lists = require('../lib/lists');
 
 var maxArc = 2 * Math.PI - 1e-6;
@@ -46,8 +47,6 @@ var Donut = React.createClass({
             return acc + datum[1];
         }, 0);
 
-        var style = this.props.height ? { height: this.props.height } : {};
-
         if (total <= 0) {
             return <div className="donut" style={style}>
                 <svg width="100%" height="100%" version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
@@ -93,18 +92,24 @@ var Donut = React.createClass({
             var textNudge = value > 9 ? 25 : 20;
 
             return <g key={phase}>
-                <rect x={rectX} y={rectY} width="30" height="30" fill={colour} />
-                <text x={rectX+textNudge} y={rectY+20} fill="#ffffff" textAnchor="end">{value}</text>
-                <text x={rectX+38} y={rectY+20}>{phase}</text>
                 <text x={textX} y={textY}>{percentage}</text>
                 {path}
             </g>;
         }.bind(this));
 
+        var style = this.props.height ? { height: this.props.height } : {};
+
         return <div className="donut" style={style}>
-            <svg width="100%" height="100%" version="1.1" viewBox="-130 -110 470 220" preserveAspectRatio="xMidYMid meet">
-                {phases}
-            </svg>
+            <div className="ui grid">
+                <div className="eight wide column">
+                    <svg width="100%" height="100%" version="1.1" viewBox="-135 -135 270 270" preserveAspectRatio="xMidYMid meet">
+                        {phases}
+                    </svg>
+                </div>
+                <div className="eight wide column">
+                    <Legend withBlocks={true} data={this.props.data} />
+                </div>
+            </div>
         </div>;
     }
 });
