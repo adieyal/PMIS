@@ -107,7 +107,7 @@ var Donut = React.createClass({
                     </svg>
                 </div>
                 <div className="eight wide column">
-                    <Legend withBlocks={true} data={this.props.data} />
+                    <Legend height={parseInt(this.props.height) + 90} withBlocks={true} data={this.props.data} />
                 </div>
             </div>
         </div>;

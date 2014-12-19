@@ -206,7 +206,7 @@ module.exports = React.createClass({
                         </div>
 
                         <div key="programmes" title="Programmes">
-                            <div className="programme-rows">
+                            <div className="scrollable programme-rows">
                                 {this.generateProgrammes(programmes).map(function(p) {
                                     return <ProgrammeRow key={p.title} programme={p} />;
                                 })}
@@ -218,7 +218,7 @@ module.exports = React.createClass({
                                 <div className="column">
                                     <DistrictMap districts={data.districts} domain={domain} height="400" />
                                 </div>
-                                <div className="column district-rows">
+                                <div className="column scrollable district-rows">
                                 {this.generateDistricts().map(function(d) {
                                     return <div key={d.slug} className="extra content">
                                         <DistrictRow district={d} />

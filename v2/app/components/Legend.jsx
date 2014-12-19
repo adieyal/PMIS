@@ -45,7 +45,7 @@ module.exports = React.createClass({
         }
 
         return <div className="legend" style={style}>
-            <svg width="100%" height="100%" version="1.1" viewBox="0 -135 135 255" preserveAspectRatio="xMidYMid meet">
+            <svg width="100%" height="100%" version="1.1" viewBox="0 -160 135 300" preserveAspectRatio="xMidYMid meet">
                 {phases}
             </svg>
         </div>;
