@@ -50,10 +50,10 @@ module.exports = React.createClass({
                 </div>
                 <div className="fourteen wide column">
                     <div className="ui huge menu">
-                        <a ref="home" className={this.generateClasses('dashboard')} onClick={this.setView('dashboard')}><i className="home icon" /> Home</a>
-                        <a className={this.generateClasses('progress')} onClick={this.setView('progress')}>Progress</a>
-                        <a ref="performance" className={this.generateClasses('performance')} onClick={this.setView('performance')}>Performance</a>
-                        <a ref="projects" className={this.generateClasses('projects')} onClick={this.setView('projects')}>Projects</a>
+                        <a ref="home" className={this.generateClasses('dashboard')} href="#/"><i className="home icon" /> Home</a>
+                        <a className={this.generateClasses('progress')} href="#/progress">Progress</a>
+                        <a ref="performance" className={this.generateClasses('performance')} href="#/performance">Performance</a>
+                        <a ref="projects" className={this.generateClasses('projects')} href="#/projects">Projects</a>
                         <a ref="logout" className="item" onClick={this.logout}>Logout</a>
                         <a className="right menu">
                             <div className="item search-item">

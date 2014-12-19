@@ -1,4 +1,6 @@
-var React = require('react');
+var React = require('react/addons');
+
+var lists = require('../lib/lists');
 
 var Dashboard = require("./Dashboard");
 var LoginForm = require("./LoginForm");
@@ -17,6 +19,9 @@ var NotificationStore = require('../stores/NotificationStore');
 if (typeof window != 'undefined') {
     /** This can only be done in the browser */
     jQuery = require('jquery');
+
+    require('jquery-address');
+
     require('semantic-ui');
     require('../styles/screen.css');
 
@@ -48,21 +53,57 @@ if (typeof window != 'undefined') {
     })(window.location.search.substr(1).split('&'));
 }
 
-
 module.exports = React.createClass({
     mixins: [
+        React.addons.LinkedStateMixin,
         StoreMixin(AuthStore, 'auth'),
     ],
 
     getInitialState: function () {
-        return {
-            view: 'dashboard',
-            auth: AuthStore.getState()
-        };
+        var path = window.location.hash.replace(/^#/, '');
+        var state = this.generatePathState(path);
+        state.auth = AuthStore.getState();
+        return state;
     },
 
     setView: function (view) {
         this.setState({ view: view });
+    },
+
+    generatePathState: function(path) {
+        var state = {
+            view: 'dashboard',
+            clusterId: lists.clusters[0].slug
+        };
+
+        var parts = path.split('/').slice(1);
+
+        if (parts.length > 0) {
+            state.view = parts[0] || 'dashboard';
+        }
+
+        if (parts.length > 1) {
+            state.clusterId = parts[1] || lists.clusters[0].slug;
+        }
+
+        if (parts.length > 2) {
+            state.programme = parts[2];
+        }
+
+        return state;
+    },
+
+    changeAddress: function(path) {
+        var pathState = this.generatePathState(path);
+        this.setState(pathState);
+    },
+
+    componentDidMount: function() {
+        if(typeof window != 'undefined') {
+            jQuery.address.change(function (evt) {
+                this.changeAddress(evt.path);
+            }.bind(this));
+        }
     },
 
     render: function () {
@@ -77,7 +118,7 @@ module.exports = React.createClass({
                 content = <LoginForm auth={auth} />;
                 break;
             case 'dashboard':
-                content = <Dashboard clusters={this.props.clusters} />;
+                content = <Dashboard appView={this.linkState('view')} clusters={this.props.clusters} />;
                 break;
             case 'progress':
                 content = <ClusterProgress clusters={this.props.clusters} />;
@@ -86,7 +127,7 @@ module.exports = React.createClass({
                 content = <ClusterPerformance clusters={this.props.clusters} />;
                 break;
             case 'projects':
-                content = <ClusterProjects projects={this.props.projects} />;
+                content = <ClusterProjects clusterId={this.state.clusterId} programme={this.state.programme} projects={this.props.projects} />;
                 break;
         }
 

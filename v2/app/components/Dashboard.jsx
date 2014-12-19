@@ -9,9 +9,9 @@ module.exports = React.createClass({
             <div className="doubling two column row">
                 {utils.map(this.props.clusters, function (cluster) {
                     return <div key={cluster.slug} className="column">
-                        <ClusterDashboard {...cluster} />
+                        <ClusterDashboard {...this.props} {...cluster} />
                     </div>;
-                })}
+                }.bind(this))}
             </div>
         </div>;
 	}

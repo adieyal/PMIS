@@ -17,6 +17,7 @@
   ],
   "dependencies": {
     "semantic-ui": "~1.1.2",
-    "humane-js": "~3.2.1"
+    "humane-js": "~3.2.1",
+    "jquery-address": "*"
   }
 }

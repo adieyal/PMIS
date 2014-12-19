@@ -49,6 +49,7 @@ class Command(BaseCommand):
                     body = {
                         'id': 'programme:%s' % programme_id,
                         'title': programme['title'],
+                        'url': '/#/projects/%s/%s' % (c, programme['title']),
                         'cluster': cluster['client'],
                         'cluster_id': c,
                     }

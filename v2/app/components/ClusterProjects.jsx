@@ -13,7 +13,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             clusterId: this.props.clusterId || lists.clusters[0].slug,
-            programme: this.props.programme || '',
+            programme: '',
             phase: '',
             status: '',
             district: '',
@@ -22,6 +22,12 @@ module.exports = React.createClass({
             sort: 'status',
             direction: 'ascending'
         };
+    },
+    componentWillReceiveProps: function(props) {
+        this.setState({
+            clusterId: props.clusterId,
+            programme: props.programme
+        });
     },
     generateSortClass: function(sort) {
         if (this.state.sort == sort) {
