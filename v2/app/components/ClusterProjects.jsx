@@ -13,7 +13,7 @@ module.exports = React.createClass({
     getInitialState: function() {
         return {
             clusterId: this.props.clusterId || lists.clusters[0].slug,
-            programme: '',
+            programme: this.props.programme || '',
             phase: '',
             status: '',
             district: '',
