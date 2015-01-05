@@ -91,7 +91,7 @@ module.exports = React.createClass({
                         </div>
                         <div className="center aligned six wide column">
                             <div className="ui header">Total Budget: {utils.toMoney(data['total-budget'])}</div>
-                            <Donut data={this.generateProjectsDonut()} height="206" />
+                            <Donut data={this.generateProjectsDonut()} height="220" />
                         </div>
                         <div className="center aligned six wide column">
                             <div className="ui header">{this.renderExpenditureDiff(data['total-budget'], data['total-expenditure'])}</div>

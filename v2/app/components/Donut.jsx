@@ -48,8 +48,8 @@ var Donut = React.createClass({
         }, 0);
 
         if (total <= 0) {
-            return <div className="donut" style={style}>
-                <svg width="100%" height="100%" version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
+            return <div className="donut">
+                <svg width="100%" height={this.props.height} version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
                     <text x="100" y="-10" style={{ fontSize: 40 }} textAnchor="middle">No Data</text>
                 </svg>
             </div>;
@@ -97,17 +97,15 @@ var Donut = React.createClass({
             </g>;
         }.bind(this));
 
-        var style = this.props.height ? { height: this.props.height } : {};
-
-        return <div className="donut" style={style}>
+        return <div className="donut">
             <div className="ui grid">
                 <div className="eight wide column">
-                    <svg width="100%" height="100%" version="1.1" viewBox="-135 -135 270 270" preserveAspectRatio="xMidYMid meet">
+                    <svg width="100%" height={this.props.height} version="1.1" viewBox="-135 -135 270 270" preserveAspectRatio="xMidYMid meet">
                         {phases}
                     </svg>
                 </div>
                 <div className="eight wide column">
-                    <Legend height={parseInt(this.props.height) + 90} withBlocks={true} data={this.props.data} />
+                    <Legend height={this.props.height} withBlocks={true} data={this.props.data} />
                 </div>
             </div>
         </div>;

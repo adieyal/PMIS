@@ -108,6 +108,7 @@ module.exports = React.createClass({
         var data = this.props.data;
         var client = data.client.replace(/^Department of /, '');
         var domain = [ 0, utils.max(utils.pluck(this.props.data.districts, 'projects-implementation')) ];
+        var implementation = this.generateImplementationLegend();
 
         return <div className="cluster-dashboard">
             <div className="index ui fluid card">
@@ -169,7 +170,7 @@ module.exports = React.createClass({
                                             <Gauge data={data['total-progress-gauge']} height="190" />
                                         </div>
                                         <div className="ten wide column">
-                                            <Legend data={this.generateImplementationLegend()} height="380" />
+                                            <Legend data={implementation} height="380" />
                                         </div>
                                     </div>
                                 </div>
