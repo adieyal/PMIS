@@ -10,14 +10,13 @@ module.exports = React.createClass({
             var phase = datum[0];
             var value = datum[1];
 
-            var colour = lists.colours[index];
-
             var rectX = 0;
             var rectY = index * 35 - 18 * length;
 
             var textNudge = value > 9 ? 25 : 20;
 
             var withBlocks = typeof this.props.withBlocks == 'undefined' ? false : this.props.withBlocks;
+            var colour = withBlocks ? lists.colours[index] : "transparent";
 
             var textProps = {};
 
@@ -28,7 +27,7 @@ module.exports = React.createClass({
             }
 
             return <g key={phase}>
-                {withBlocks ? <rect x={rectX} y={rectY} width="30" height="30" fill={colour} /> : ''}
+                <rect x={rectX} y={rectY} width="30" height="30" fill={colour} />
                 <text x={rectX+textNudge} y={rectY+20} textAnchor="end" {...textProps}>{value}</text>
                 <text x={rectX+38} y={rectY+20}>{phase}</text>
             </g>;
