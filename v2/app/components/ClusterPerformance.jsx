@@ -37,7 +37,7 @@ module.exports = React.createClass({
     renderProgramme: function(phase) {
         return function(p) {
             return <div key={p.title} className="eight wide column">
-                <div className="ui header">{p.title}</div>
+                <h4 className="ui header">{p.title}</h4>
                 <div className="ui grid">
                     <div className="eight wide column">
                         <div>Total Projects: {p.projects[phase]}</div>
@@ -82,19 +82,17 @@ module.exports = React.createClass({
                 <div className="extra content">
                     <div className="ui grid">
                         <div className="four wide column">
-                            <div className="ui header">
-                                Total Projects: {data['total-projects']}
-                            </div>
-                            <div className="ui header">
+                            <h4 className="ui header">
+                                Total Projects: {data['total-projects']}<br />
                                 Total Progress: {data['total-progress']}
-                            </div>
+                            </h4>
                         </div>
                         <div className="center aligned six wide column">
-                            <div className="ui header">Total Budget: {utils.toMoney(data['total-budget'])}</div>
+                            <h4 className="ui header">Total Budget: {utils.toMoney(data['total-budget'])}</h4>
                             <Donut data={this.generateProjectsDonut()} height="220" />
                         </div>
                         <div className="center aligned six wide column">
-                            <div className="ui header">{this.renderExpenditureDiff(data['total-budget'], data['total-expenditure'])}</div>
+                            <h4 className="ui header">{this.renderExpenditureDiff(data['total-budget'], data['total-expenditure'])}</h4>
                             <Slider data={data['total-slider']} height="190" />
                         </div>
                     </div>
@@ -103,19 +101,19 @@ module.exports = React.createClass({
                 <div className="extra content">
                     <div className="ui grid">
                         <div className="four wide column">
-                            <h1 className="ui header">Planning</h1>
-                            <div className="ui header">Total Projects: {data['planning-projects-total']}</div>
-                            <div className="ui header">Total Budget: {utils.toMoney(data['planning-budget'])}</div>
-                            <div className="ui header">{this.renderExpenditureDiff(data['planning-budget'], data['planning-expenditure'])}</div>
+                            <h3 className="ui header">Planning</h3>
+                            <div>Total Projects: {data['planning-projects-total']}</div>
+                            <div>Total Budget: {utils.toMoney(data['planning-budget'])}</div>
+                            <div>{this.renderExpenditureDiff(data['planning-budget'], data['planning-expenditure'])}</div>
                         </div>
                         <div className="four wide column">
                             <Slider data={data['planning-slider']} height="190" />
                         </div>
                         <div className="four wide column">
-                            <h1 className="ui header">Implementation</h1>
-                            <div className="ui header">Total Projects: {data['implementation-projects-total']}</div>
-                            <div className="ui header">Total Budget: {utils.toMoney(data['implementation-budget'])}</div>
-                            <div className="ui header">{this.renderExpenditureDiff(data['implementation-budget'], data['implementation-expenditure'])}</div>
+                            <h3 className="ui header">Implementation</h3>
+                            <div>Total Projects: {data['implementation-projects-total']}</div>
+                            <div>Total Budget: {utils.toMoney(data['implementation-budget'])}</div>
+                            <div>{this.renderExpenditureDiff(data['implementation-budget'], data['implementation-expenditure'])}</div>
                         </div>
                         <div className="four wide column">
                             <Slider data={data['implementation-slider']} height="190" />
@@ -124,9 +122,9 @@ module.exports = React.createClass({
                 </div>
 
                 <div className="extra content">
-                    <h1 className="ui header" style={{ marginBottom: 20 }}>
+                    <h3 className="ui header" style={{ marginBottom: 20 }}>
                         Planning Programmes
-                    </h1>
+                    </h3>
 
                     <div className="ui grid">
                         {planningProgrammes.map(this.renderProgramme('planning'))}
@@ -134,9 +132,9 @@ module.exports = React.createClass({
                 </div>
 
                 <div className="extra content">
-                    <h1 className="ui header" style={{ marginBottom: 20 }}>
+                    <h3 className="ui header" style={{ marginBottom: 20 }}>
                         Implementation Programmes
-                    </h1>
+                    </h3>
 
                     <div className="ui grid">
                         {implementationProgrammes.map(this.renderProgramme('implementation'))}
