@@ -68,7 +68,7 @@ def build_slider_v2(expenditure, budget, color="#e5b744"):
         text1 = " "
     else:
         text1 = None
-    format_str = 'R{:14,.0f}M'
+    format_str = 'R{:14,.1f}M'
     if expenditure > budget:
         markers.append({ "bar-color": color, 
                          "marker-color": "#656263", 

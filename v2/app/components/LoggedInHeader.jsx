@@ -53,7 +53,7 @@ module.exports = React.createClass({
                         <a ref="home" className={this.generateClasses('dashboard')} href="#/"><i className="home icon" /> Home</a>
                         <a className={this.generateClasses('progress')} href="#/progress">Progress</a>
                         <a ref="performance" className={this.generateClasses('performance')} href="#/performance">Performance</a>
-                        <a ref="projects" className={this.generateClasses('projects')} href="#/projects">Projects</a>
+                        <a ref="projects" className={this.generateClasses('projects')} href="#/projects">Project list</a>
                         <a ref="logout" className="item" onClick={this.logout}>Logout</a>
                         <a className="right menu">
                             <div className="item search-item">
