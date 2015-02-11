@@ -124,12 +124,12 @@ module.exports = React.createClass({
                                             <Slider key="total" data={data['total-slider']} title="Total" height="200" />
                                         </div>
 
-                                        <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
-                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="200" />
-                                        </div>
-
                                         <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
                                             <Slider key="planning" data={data['planning-slider']} title="Planning" height="200" />
+                                        </div>
+
+                                        <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
+                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="200" />
                                         </div>
 
                                         <div className="gauge-column column">
