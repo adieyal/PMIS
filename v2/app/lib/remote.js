@@ -10,6 +10,7 @@ module.exports = {
     fetchProjects: function (authToken, done) {
         return request
             .get(url('reports/projects'))
+            .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
                 if(error) {
@@ -27,6 +28,7 @@ module.exports = {
     fetchCluster: function (slug, authToken, done) {
         return request
             .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/v2'))
+            .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
                 if(error) {
@@ -45,6 +47,7 @@ module.exports = {
         return request
             .post(url('auth/login'))
             .send({ username: username, password: password })
+            .set('Accept', 'application/json')
             .end(function (error, res) {
                 if(error) return NotificationActions.notify(error);
 
@@ -64,6 +67,7 @@ module.exports = {
     logout: function (done) {
         return request
             .post(url('auth/logout'))
+            .set('Accept', 'application/json')
             .end(function (error, res) {
                 if(error && error.status !== 401) return NotificationActions.notify(error);
                 done();
@@ -72,6 +76,7 @@ module.exports = {
     search: function (query, authToken, done) {
         return request
             .get(url('reports/search') + '?query=' + query)
+            .set('Accept', 'application/json')
             .end(function (error, res) {
                 if(error) {
                     if(error.message && error.message == 'timeout of undefinedms exceeded') {
@@ -88,6 +93,7 @@ module.exports = {
     searchProgrammes: function (clusterId, query, authToken, done) {
         return request
             .get(url('reports/search/programmes') + '?query=' + query + '&clusterId=' + clusterId)
+            .set('Accept', 'application/json')
             .end(function (error, res) {
                 if(error) {
                     if(error.message && error.message == 'timeout of undefinedms exceeded') {
