@@ -1,3 +1,4 @@
+import re
 import os
 import time
 import operator
@@ -954,6 +955,13 @@ def latest_project(request, year=None, month=None):
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
 def projects_v2(request, year=None, month=None):
+    def normalize(str):
+        return str.strip().title()
+
+    def normalize_district(str):
+        str = re.sub(r'(?i)\s*district$', '', str)
+        return normalize(str)
+
     def _progress_for_month(data, year, month):
         clean_data = []
         for item in data:
@@ -1004,9 +1012,9 @@ def projects_v2(request, year=None, month=None):
         context['data'].append({
             'id': project._uuid,
             'cluster': slugify(unicode(project.cluster)),
-            'district': project.district or 'Unknown',
-            'municipality': project.municipality or 'Unknown',
-            'programme': project.programme,
+            'district': normalize_district(project.district) or 'Unknown',
+            'municipality': normalize(project.municipality) or 'Unknown',
+            'programme': normalize(project.programme),
             'name': project.description,
             'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
             'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
