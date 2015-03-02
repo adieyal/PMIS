@@ -120,11 +120,11 @@ footer {
     }
     .marker-text {
         font-family:Arial,sans-serif;
-        font-size: 4.5pt;
+        font-size: 0.33em;
     }
     .value-text {
         font-family:Arial,sans-serif;
-        font-size: 4pt;
+        font-size: 0.30em;
     }
 }
 
@@ -381,4 +381,8 @@ $hugeWidth: 20rem;
 
 .ui.pointing.secondary.menu .item {
     font-size: 1.25rem;
+}
+
+.ui.table th, .ui.table td {
+    vertical-align: top;
 }

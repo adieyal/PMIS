@@ -1022,7 +1022,7 @@ def projects_v2(request, year=None, month=None):
             'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
             'phase': project.phase,
             'implementing_agent': project.implementing_agent,
-            'last_comment': project.comments
+            'last_comment': project.comments.strip()
         })
 
     context['data'] = sorted(context['data'], key=operator.itemgetter('status'))

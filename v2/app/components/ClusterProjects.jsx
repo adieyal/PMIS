@@ -177,13 +177,13 @@ module.exports = React.createClass({
         return <div className="cluster-projects">
             <div className="ui fluid card">
                 <div className="content">
-                    <h2 className="ui header">
+                    <h3 className="ui header">
                         <select valueLink={this.linkState('clusterId')}>
                             {utils.map(lists.clusters, function (cluster) {
                                 return <option value={cluster.slug}>{cluster.title}</option>;
                             })}
                         </select>
-                    </h2>
+                    </h3>
                 </div>
                 <div className="extra content">
                     <div className="ui form">
@@ -206,6 +206,8 @@ module.exports = React.createClass({
                                     {programmes}
                                 </select>
                             </div>
+                        </div>
+                        <div className="fields">
                             <div className="field">
                                 <select valueLink={this.linkState('district')} className="filter filter-districts">
                                     <option key="" value="">All Districts</option>
