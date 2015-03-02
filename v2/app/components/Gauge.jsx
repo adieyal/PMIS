@@ -41,7 +41,8 @@ module.exports = React.createClass({
                     <stop offset="100%" stopColor={color[0]} />
                 </linearGradient>;
 
-                markerInnerProps.fill = rectProps.fill = 'url(#' + gid + ')';
+                markerInnerProps.fill = 'url(#' + gid + ')';
+                rectProps.fill = 'url(#' + gid + ')';
             }
 
             var marker;
@@ -88,6 +89,8 @@ module.exports = React.createClass({
         for(var x = 0; x <= 20; x++) {
             var degrees = x * 180 / 20;
             var className = (x == 0 ? 'mark-red-main' : (x == 20 ? 'mark-green-main' : 'mark'));
+            var green = Math.round(this.props.data[0].position*25);
+            var stroke = x < green ? '#f0423e' : '#86bf53';
             markers.push(<line className={className} x1="-50" y1="0" x2="-37" y2="0" transform={'rotate(' + degrees + ')'} />);
         }
 

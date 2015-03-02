@@ -40,14 +40,14 @@ module.exports = React.createClass({
             <div className="scrollable programme-rows">
                 {programmes.map(function(p) {
                     return <div className="programme-row">
-                        <div className="ui header">{p.title}</div>
+                        <h4 className="ui header">{p.title}</h4>
                         <div className="extra content">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <Slider height="125" data={p.performance} />
+                                    <Slider height="100" data={p.performance} />
                                 </div>
                                 <div className="column">
-                                    <Donut height="155" title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
+                                    <Donut height="125" title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
                                 </div>
                             </div>
                         </div>

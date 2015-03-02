@@ -121,19 +121,19 @@ module.exports = React.createClass({
                                 <div key="overview" title="Overview">
                                     <div className="ui two column grid slider-row">
                                         <div className="column">
-                                            <Slider key="total" data={data['total-slider']} title="Total" height="200" />
+                                            <Slider key="total" data={data['total-slider']} title="Total" height="120" />
                                         </div>
 
                                         <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
-                                            <Slider key="planning" data={data['planning-slider']} title="Planning" height="200" />
+                                            <Slider key="planning" data={data['planning-slider']} title="Planning" height="120" />
                                         </div>
 
                                         <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
-                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="200" />
+                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="120" />
                                         </div>
 
                                         <div className="gauge-column column">
-                                            <Gauge key="gauge" data={data['total-progress-gauge']} height="227" />
+                                            <Gauge key="gauge" data={data['total-progress-gauge']} height="110" />
                                         </div>
                                     </div>
                                 </div>
@@ -166,11 +166,11 @@ module.exports = React.createClass({
                                     <div className="ui header">{data['implementation-projects-total']} Projects in Implementation</div>
                                     <div className="ui grid">
                                         <div className="six wide column">
-                                            <Slider data={data['implementation-slider']} height="190" />
-                                            <Gauge data={data['total-progress-gauge']} height="190" />
+                                            <Slider data={data['implementation-slider']} height="120" />
+                                            <Gauge data={data['total-progress-gauge']} height="120" />
                                         </div>
                                         <div className="ten wide column">
-                                            <Legend data={implementation} height="380" />
+                                            <Legend data={implementation} height="280" />
                                         </div>
                                     </div>
                                 </div>
@@ -182,7 +182,7 @@ module.exports = React.createClass({
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <DistrictMap districts={data.districts} domain={domain} height="400" />
+                                    <DistrictMap districts={data.districts} domain={domain} height="200" />
                                 </div>
                                 <div className="column scrollable district-rows">
                                 {this.generateDistricts().map(function(d) {
@@ -194,11 +194,6 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </Tabs>
-                </div>
-
-                <div className="extra content">
-                    <a className="projects left floated" onClick={this.changePerformanceTab('projects')}>{data['total-projects']} projects</a>
-                    <a className="programmes right floated" onClick={this.changeTab('programmes')}>{data['total-programmes']} programmes</a>
                 </div>
             </div>
         </div>;

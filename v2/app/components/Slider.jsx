@@ -56,8 +56,8 @@ var Slider = React.createClass({
                     <circle style={markerAccentStyle} className="marker-accent" cx="4" cy="8" r="4"/>
                     <circle className="marker-outer" cx="4" cy="8" r="3.6"/>
                     <circle style={markerStyle} className="marker-inner" cx="4" cy="8" r="1.75"/>
-                    { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle" fontSize="6">{ data['marker-text'] }</text> : '' }
-                    { data['value-text'] ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle" fontSize="6">{ data['value-text'] }</text> : '' }
+                    { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle" fontSize="4">{ data['marker-text'] }</text> : '' }
+                    { data['value-text'] ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle" fontSize="4">{ data['value-text'] }</text> : '' }
                 </g>);
 
                 var barId = 'bar-' + i;
@@ -69,10 +69,10 @@ var Slider = React.createClass({
         }
 
         var style = this.props.height ? { height: this.props.height } : {};
-        var title = <text x="45" y="-10" textAnchor="middle" fontSize="8">{this.props.title || ''}</text>;
+        var title = <text x="45" y="0" textAnchor="middle" fontSize="8">{this.props.title || ''}</text>;
 
         return <div className="slider" style={style} onClick={this.props.onClick}>
-            <svg width="100%" height="100%" version="1.1" viewBox="-10 -20 110 60" preserveAspectRatio="xMidYMid meet">
+            <svg width="100%" height="100%" version="1.1" viewBox="-10 -10 110 60" preserveAspectRatio="xMidYMid meet">
 
                 <defs ref="defs">
                     <linearGradient key="inner-gradient" id="inner-gradient" x1="0" x2="0" y1="0" y2="1">

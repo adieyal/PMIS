@@ -120,11 +120,11 @@ footer {
     }
     .marker-text {
         font-family:Arial,sans-serif;
-        font-size: 6pt;
+        font-size: 4.5pt;
     }
     .value-text {
         font-family:Arial,sans-serif;
-        font-size: 5pt;
+        font-size: 4pt;
     }
 }
 
@@ -239,11 +239,11 @@ footer {
     margin-bottom: 1em;
 
     .card {
-        height: 680px;
+        height: 460px;
     }
 
     .ui.bottom.tab {
-        height: 500px;
+        height: 310px;
     }
 
     .cluster-title {
@@ -269,23 +269,21 @@ footer {
 }
 
 .district-rows {
-    height: 565px;
+    height: 355px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .district-row {
-    height: 480px;
 }
 
 .programme-rows {
-    height: 480px;
+    height: 280px;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
 .programme-row {
-    height: 300px;
 }
 
 .planning-column:hover,
@@ -376,3 +374,11 @@ $hugeWidth: 20rem;
     background-color: #fff; 
     border-radius: 8px; 
 } 
+
+.ui.header {
+    margin-bottom: 0;
+}
+
+.ui.pointing.secondary.menu .item {
+    font-size: 1.25rem;
+}

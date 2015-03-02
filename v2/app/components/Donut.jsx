@@ -100,7 +100,7 @@ var Donut = React.createClass({
         return <div className="donut">
             <div className="ui grid">
                 <div className="eight wide column">
-                    <svg width="100%" height={this.props.height} version="1.1" viewBox="-135 -135 270 270" preserveAspectRatio="xMidYMid meet">
+                    <svg width="100%" height={this.props.height} version="1.1" viewBox="-175 -135 290 290" preserveAspectRatio="xMidYMid meet">
                         {phases}
                     </svg>
                 </div>
