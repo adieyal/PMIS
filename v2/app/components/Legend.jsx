@@ -16,7 +16,8 @@ module.exports = React.createClass({
             var textNudge = value > 9 ? 25 : 20;
 
             var withBlocks = typeof this.props.withBlocks == 'undefined' ? false : this.props.withBlocks;
-            var colour = withBlocks ? lists.colours[index] : "transparent";
+            var colours = this.props.colours || 'colours';
+            var colour = withBlocks ? lists[colours][index] : "transparent";
 
             var textProps = {};
 

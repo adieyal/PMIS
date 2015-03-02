@@ -58,6 +58,7 @@ var Donut = React.createClass({
         var endAngle = 0;
 
         var length = this.props.data.length;
+        var colours = this.props.colours || 'colours';
 
         var phases = this.props.data.map(function (datum, index) {
             var value = datum[1];
@@ -71,7 +72,7 @@ var Donut = React.createClass({
             var thisMargin = length > 1 ? margin : 0;
 
             var phase = datum[0];
-            var colour = lists.colours[index];
+            var colour = lists[colours][index];
 
             var path;
             if (total > 0) {
@@ -105,7 +106,7 @@ var Donut = React.createClass({
                     </svg>
                 </div>
                 <div className="eight wide column">
-                    <Legend height={this.props.height} withBlocks={true} data={this.props.data} />
+                    <Legend height={this.props.height} withBlocks={true} data={this.props.data} colours={colours} />
                 </div>
             </div>
         </div>;

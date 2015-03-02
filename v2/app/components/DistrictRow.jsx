@@ -13,7 +13,7 @@ var DistrictRow = React.createClass({
         if (this.props.layout == 'horizontal') {
             content = <div className="ui two column grid">
                 <div className="column">
-                    <Donut data={district[donut]} height="170" />
+                    <Donut data={district[donut]} height="170" colours="districtDonutColours" />
                 </div>
                 <div className="column">
                     <Slider data={district.performance} height="170" />
@@ -22,7 +22,7 @@ var DistrictRow = React.createClass({
         } else {
             content = <div>
                 <Slider data={district.performance} height="100" />
-                <Donut data={district[donut]} height="125" />
+                <Donut data={district[donut]} height="125" colours="districtDonutColours" />
             </div>;
         };
         return <div className="district-row">

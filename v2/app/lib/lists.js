@@ -12,6 +12,13 @@ module.exports = {
         '#17becf'
     ],
 
+    districtDonutColours: [
+        '#8EA4CE',
+        '#DE91C3',
+        '#FFDEA7',
+        '#D1F39F',
+    ],
+
     clusters: [
         { slug: "education", title: 'Education', view: "performance", colour: "#E8B96B" },
         { slug: "health", title: 'Health', view: "performance", colour: "#83C4BF" },
