@@ -19,6 +19,11 @@ module.exports = React.createClass({
             return this.props.programmes;
         }
     },
+    setView: function(programme) {
+        return function() {
+            window.location.href = '/#/projects/' + this.props.clusterId + '/' + programme;
+        }.bind(this);
+    },
     render: function() {
         var total = this.props.programmes.length;
         var programmes = this.getProgrammes();
@@ -39,7 +44,7 @@ module.exports = React.createClass({
             </div>
             <div className="scrollable programme-rows">
                 {programmes.map(function(p) {
-                    return <div className="programme-row">
+                    return <div className="programme-row" onClick={this.setView(p.title)}>
                         <h4 className="ui header">{p.title}</h4>
                         <div className="extra content">
                             <div className="ui two column grid">
@@ -52,7 +57,7 @@ module.exports = React.createClass({
                             </div>
                         </div>
                     </div>;
-                })}
+                }.bind(this))}
             </div>
         </div>;
     }

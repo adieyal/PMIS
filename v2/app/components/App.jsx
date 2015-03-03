@@ -67,7 +67,8 @@ module.exports = React.createClass({
     },
 
     setView: function (view) {
-        this.setState({ view: view });
+        var state = { view: view };
+        this.setState(state);
     },
 
     generatePathState: function(path) {
@@ -109,7 +110,6 @@ module.exports = React.createClass({
     render: function () {
         var auth = this.state.auth;
         var loggedIn = auth.status == 'logged-in';
-        // var loggedIn = (auth.status == 'logged-in' || jQuery.QueryString['authToken'] == 'browserling');
         var view = loggedIn ? this.state.view : 'login';
         var content;
 
@@ -118,7 +118,7 @@ module.exports = React.createClass({
                 content = <LoginForm auth={auth} />;
                 break;
             case 'dashboard':
-                content = <Dashboard appView={this.linkState('view')} clusters={this.props.clusters} />;
+                content = <Dashboard onSetView={this.setView} clusters={this.props.clusters} />;
                 break;
             case 'progress':
                 content = <ClusterProgress clusters={this.props.clusters} />;

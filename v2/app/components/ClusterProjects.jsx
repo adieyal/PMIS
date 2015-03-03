@@ -135,6 +135,7 @@ module.exports = React.createClass({
     },
     render: function() {
         var clusterProjects = this.clusterProjects();
+
         var projects = this.sortProjects(this.filterProjects(clusterProjects));
 
         var projectProgrammes = utils.unique(projects, 'programme', 'Unknown').sort();

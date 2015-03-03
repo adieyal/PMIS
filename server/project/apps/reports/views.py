@@ -899,7 +899,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
 
         obj = {
             "id": slugify(unicode(programme)),
-            "title": programme,
+            "title": normalize(programme),
             'budget': sum([_safe_float(p.allocated_budget_for_year) or 0 for p in programme_projects]),
             'expenditure': sum([_safe_float(p.expenditure_in_year) or 0 for p in programme_projects]),
             "projects": {
@@ -952,12 +952,12 @@ def latest_project(request, year=None, month=None):
     timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
     return timestamp
 
+def normalize(str):
+    return str.strip().title()
+
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
 def projects_v2(request, year=None, month=None):
-    def normalize(str):
-        return str.strip().title()
-
     def normalize_district(str):
         str = re.sub(r'(?i)\s*district$', '', str)
         return normalize(str)

@@ -108,7 +108,6 @@ module.exports = React.createClass({
         var data = this.props.data;
         var client = data.client.replace(/^Department of /, '');
         var cluster = utils.find(lists.clusters, function(cluster) {
-            console.log(cluster.title, client);
             return cluster.title == client;
         });
 
@@ -182,7 +181,7 @@ module.exports = React.createClass({
                             </Tabs>
                         </div>
 
-                        <Programmes key="programmes" title="Programmes" programmes={this.generateProgrammes()} />
+                        <Programmes key="programmes" title="Programmes" clusterId={this.props.slug} onSetView={this.props.onSetView} programmes={this.generateProgrammes()} />
 
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
