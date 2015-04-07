@@ -749,7 +749,7 @@ districtSummaryGroups = {
     'final-completion': lambda p, year, month: p.implementation_phase == 'final-completion',
 }
 
-def generate_districts_v2(district_projects, year, month0):
+def generate_districts_v2(district_projects, year, month, month0):
     districts = {}
 
     for k, projects in district_projects:
@@ -771,7 +771,7 @@ def generate_districts_v2(district_projects, year, month0):
 
         district['summary'] = {}
         for groupId, filt in districtSummaryGroups.iteritems():
-            district['summary'][groupId] = len([p for p in implementation_projects if filt(p, year, month0)]);
+            district['summary'][groupId] = len([p for p in implementation_projects if filt(p, year, month)]);
 
         districts[k] = district
 
@@ -783,6 +783,11 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         [Project.get(p) for p in Project.list() if p]
     )
     programmes = sorted(set([p.programme for p in projects if p.programme != '--------']))
+
+    if not year and not month:
+        now = datetime.now()
+        year = now.year
+        month = '%02d' % now.month
 
     if not year or not month:
         try:
@@ -850,7 +855,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         "total-projects": len(projects),
         "total-programmes": len(programmes),
 
-        "districts": generate_districts_v2(district_projects, year, month0),
+        "districts": generate_districts_v2(district_projects, year, month, month0),
     }
 
     for phase, _ in projectPhases.iteritems():
