@@ -1,6 +1,7 @@
 import re
 import json as json
 import iso8601
+import string
 from datetime import datetime
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -18,6 +19,7 @@ def projects(request):
     context = {}
     for p in project_list:
         cluster = p.cluster or 'Unknown'
+        cluster = re.sub(r'^Department of', '', cluster)
         if context.get(cluster) == None:
             context[cluster] = []
         context[cluster].append({
@@ -26,6 +28,9 @@ def projects(request):
             'description': p.description,
             'contract': p.contract
         })
+
+    for name, cluster in context.iteritems():
+        context[name] = sorted(cluster, key=lambda x: x['name'])
 
     return TemplateResponse(request, 'entry/list.html', {'projects': context})
     

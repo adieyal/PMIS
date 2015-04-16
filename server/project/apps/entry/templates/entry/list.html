@@ -14,15 +14,26 @@
 <div class="tab-content">
   {% for name, cluster in projects.items %}
   <div class="tab-pane{% if forloop.first %} active{% endif %}" id="{{ name|slugify }}">
-    <ul>
-      {% for project in cluster %}
-      {% if project.uuid %}
-      <li>
-	<a href="{% url 'entry:edit' project.uuid %}">{{ project.uuid }} - {{ project.description }}</a>
-      </li>
-      {% endif %}
-      {% endfor %}
-    </ul>
+    <table data-toggle="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Description</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for project in cluster %}
+        {% if project.uuid %}
+            <tr>
+                <td>
+                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name }}</a>
+            </td>
+            <td>{{ project.description }}</td>
+            </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
   </div>
   {% endfor %}
 </div>
