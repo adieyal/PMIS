@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
-{% block page_title %}Edit Project{% endblock page_title %}
+{% block page_title %}
+Edit Project
+{% endblock page_title %}
 
 {% block content %}
+<div class="actions">
 <a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
+</div>
 
 <ul class="nav nav-tabs">
   {% for name, cluster in projects.items %}

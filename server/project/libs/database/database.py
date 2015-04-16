@@ -111,7 +111,12 @@ class Project(object):
         uuid = self._uuid
         if self.edit:
             connection.delete('/project/%s/edit' % (uuid))
-            
+        else:
+            timestamps = connection.smembers('/project/%s' % (uuid))
+            for timestamp in timestamps:
+                connection.delete('/project/%s/%s' % (uuid, timestamp))
+                connection.srem('/project/%s' % uuid, timestamp)
+            connection.srem('/project', uuid)
     
     @classmethod
     def get(cls, uuid, year=None, month=None, as_json=False):

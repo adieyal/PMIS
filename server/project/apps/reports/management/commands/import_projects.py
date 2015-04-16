@@ -11,8 +11,8 @@ clusters = {
     'DoE': 'Education',
     'DoH': 'Health',
     'DSD': 'Social Development',
-    'DCSR': 'Culture, Sport and Recreation',
-    'DCSSL': 'Community Safety, Security, and Liaison'
+    'DCSR': 'Culture, Sports, Science and Recreation',
+    'DCSSL': 'Community Safety, Security and Liaison'
 }
 
 fieldsOfInterest = {
