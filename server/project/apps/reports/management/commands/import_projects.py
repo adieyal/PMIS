@@ -139,7 +139,6 @@ for project_id in project_ids:
 print '%s projects found' % len(projects)
 
 def projectExists(project):
-
     for p in projects:
         if (project['cluster'] == p.cluster and
             project.get('name') == p.name and
@@ -160,6 +159,8 @@ class Command(BaseCommand):
         workbook = WorkBook(args[0])
         sheets = workbook.sheets()
 
+        import_time = str(datetime.now())
+
         for sheet in sheets:
             cluster_id = sheet.name
 
@@ -179,6 +180,7 @@ class Command(BaseCommand):
 
                     details = {
                         '_uuid': str(uuid4()),
+                        'import_time': import_time,
                         'planning': [
                             { 'expenditure': None, 'progress': None, 'date': '%04d-04-01T00:00:00' % (year) },
                             { 'expenditure': None, 'progress': None, 'date': '%04d-05-01T00:00:00' % (year) },
