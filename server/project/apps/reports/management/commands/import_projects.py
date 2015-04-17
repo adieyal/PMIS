@@ -106,6 +106,13 @@ def splitIt(value, index):
     parts = value.split('-')
     if len(parts) > index + 1:
         return parts[index]
+    else:
+        if index == 0:
+            """
+            If we are looking for name and there is not a split with '-'
+            then use the whole field value as name instead
+            """
+            return value
 
 def getColumnsOfInterest(sheet):
     """
