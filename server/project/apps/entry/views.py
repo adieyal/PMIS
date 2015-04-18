@@ -26,7 +26,8 @@ def projects(request):
             'uuid': p._uuid,
             'name': p.name,
             'description': p.description,
-            'contract': p.contract
+            'contract': p.contract,
+            'valid_status': p.valid_status
         })
 
     for name, cluster in context.iteritems():

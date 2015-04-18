@@ -89,6 +89,18 @@ class Project(object):
     @property
     def timestamp(self):
         return UUID(self._details.get('_timestamp')).timestamp()
+
+    @property
+    def valid_status(self):
+        if (self.name is None or
+                self.name.strip() == '' or
+                self.phase is None or
+                self.phase.strip() == ''):
+            status = 'warning'
+        else:
+            status = ''
+
+        return status
         
     def revisions(self):
         revisions = connection.smembers('/project/%s' % (self._uuid))

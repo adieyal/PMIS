@@ -28,12 +28,12 @@ Edit Project
         <tbody>
         {% for project in cluster %}
         {% if project.uuid %}
-            <tr>
-                <td>
-                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name }}</a>
+        <tr class="{{ project.valid_status }}">
+            <td>
+                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a>
             </td>
             <td>{{ project.description }}</td>
-            </tr>
+        </tr>
         {% endif %}
         {% endfor %}
         </tbody>

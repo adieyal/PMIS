@@ -138,12 +138,18 @@ for project_id in project_ids:
 
 print '%s projects found' % len(projects)
 
+def samify(value):
+    if value is None:
+        return ''
+    else:
+        return value.strip().lower()
+
 def projectExists(project):
     for p in projects:
-        if (project['cluster'] == p.cluster and
-            project.get('name') == p.name and
-            project['district'] == p.district and
-            project['municipality'] == p.municipality):
+        if (samify(project['cluster']) == samify(p.cluster) and
+            samify(project.get('name')) == samify(p.name) and
+            samify(project['district']) == samify(p.district) and
+            samify(project['municipality']) == samify(p.municipality)):
             return True
     return False
 
