@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>{% block title %}project{% endblock title %}</title>
+    <title>{% block title %}PMIS{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
@@ -41,26 +41,24 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="{% url 'main' %}">project</a>
+          <a class="brand" href="{% url 'main' %}">PMIS</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
               <li class="active"><a href="{% url 'main' %}">Home</a></li>
               <li><a href="{% url 'entry:list' %}">Entry</a></li>
               <li><a href="{% url 'reports:project_list' %}">Reports</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
             </ul>
             <ul class="nav pull-right">
-	      <li><a href="{% url 'accounts:auth_logout' %}">Log out</a></li>
+                <li><a href="{% url 'accounts:auth_logout' %}">Log out</a></li>
             </ul>
-          </div><!--/.nav-collapse -->
+          </div>
         </div>
       </div>
     </div>
 
     <div class="container">
 
-      <h1 class="page-header">{% block page_title %}Example Base Template{% endblock page_title %}</h1>
+      <h1 class="page-header">{% block page_title %}Dashboard{% endblock page_title %}</h1>
 
       {% block content %}
           {% if user.is_authenticated %}

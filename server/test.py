@@ -4,6 +4,8 @@ project_ids = Project.list()
 
 print '%s rows found' % len(project_ids)
 
+raise Hell
+
 def findProject(p):
     for project in projects:
         if (project.cluster == p.cluster and

@@ -26,7 +26,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'default.db')),
+        'NAME': normpath(join(DJANGO_ROOT, 'local.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -75,3 +75,11 @@ LOGGING["loggers"]["apps.projects.management.commands.parsers._retentionprojects
 # Used for URL generation in the seeding of ElasticSearch,
 # useful anywhere
 BASE_URL = 'http://www.backend.dev'
+
+# So we can have separate environments for testing, development
+REDIS = {
+    # 'host': '127.0.0.1',
+    # 'port': 6379,
+    'db': 1,
+    'unix_socket_path': '/var/run/redis/redis.sock',
+}

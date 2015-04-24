@@ -1,14 +1,11 @@
 {% extends "base.html" %}
 
 {% block page_title %}
-Edit Project
+Project Entry
+<a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
 {% endblock page_title %}
 
 {% block content %}
-<div class="actions clearfix">
-<a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
-</div>
-
 <ul class="nav nav-tabs">
   {% for name, cluster in projects.items %}
   <li{% if forloop.first %} class="active"{% endif %}><a href="#{{ name|slugify }}" data-toggle="tab">{{ name }}</a></li>

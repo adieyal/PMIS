@@ -3,6 +3,7 @@
 # easy to add any other storage backend using the python redis client
 # api as a reference.
 
+from django.conf import settings
 import redis
 
-connection = redis.Redis()
+connection = redis.Redis(**settings.REDIS)
