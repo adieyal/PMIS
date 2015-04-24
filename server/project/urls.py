@@ -16,5 +16,5 @@ urlpatterns = patterns('',
     url(r'^account/', include('project.apps.account.urls', namespace='account')),
     url(r'^reports/', include('project.apps.reports.urls', namespace='reports')),
     url(r'^entry/', include('project.apps.entry.urls', namespace='entry')),
-    url(r'^ui/', include('project.apps.ui.urls', namespace='ui')),
+    # url(r'^ui/', include('project.apps.ui.urls', namespace='ui')),
 )

@@ -2,12 +2,10 @@
 
 {% block page_title %}
 Edit Project
+<a href="#" id="__project_url" class="btn pull-right" disabled="disabled" target="_blank">View report</a>
 {% endblock page_title %}
 
 {% block content %}
-<a href="#" id="__project_url" class="btn disabled pull-right" target="_blank">View report</a>
-<div class="clearfix"></div>
-
 <form class="form-horizontal" method="post">
   {% csrf_token %}
   

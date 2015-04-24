@@ -208,7 +208,7 @@ THIRD_PARTY_APPS = (
 LOCAL_APPS = (
     'apps.reports',
     'apps.entry',
-    'apps.ui',
+    # 'apps.ui',
     'apps.v2',
 )
 

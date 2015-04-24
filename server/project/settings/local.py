@@ -80,6 +80,6 @@ BASE_URL = 'http://www.backend.dev'
 REDIS = {
     # 'host': '127.0.0.1',
     # 'port': 6379,
-    'db': 1,
+    'db': 0,
     'unix_socket_path': '/var/run/redis/redis.sock',
 }
