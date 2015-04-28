@@ -1,12 +1,15 @@
 from fabric.api import *
 from fabric.contrib import *
 
-base_dir = '/var/www/PMIS'
+base_dir = '/var/www/pmis'
 django_dir = base_dir + '/server'
-venv = '/home/adi/.virtualenvs/pmis/bin/activate'
+
+venv = '/home/marlinf/.virtualenvs/pmis/bin/activate'
 
 env.use_ssh_config = True
-env.hosts = ['pmis']
+env.hosts = [
+    'pmis-new'
+]
 
 def deploy():
     with cd(base_dir):
