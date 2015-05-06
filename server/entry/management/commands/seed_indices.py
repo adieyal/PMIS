@@ -3,9 +3,9 @@ import json as json
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.management.base import BaseCommand, CommandError
-from project.libs.database.database import Project
+from libs.database.database import Project
 from elasticsearch import Elasticsearch
-from project.apps.reports.views import generate_cluster_dashboard_v2
+from reports.views import generate_cluster_dashboard_v2
 
 def make_null(project, field):
     if field in project and project[field] == '':

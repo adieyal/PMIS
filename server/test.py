@@ -1,4 +1,4 @@
-from project.libs.database.database import Project
+from libs.database.database import Project
 
 project_ids = Project.list()
 

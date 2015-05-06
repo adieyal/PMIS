@@ -62,7 +62,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'demo.db')),
+        'NAME': normpath(join(DJANGO_ROOT, '..', 'data', 'demo.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',

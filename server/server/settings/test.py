@@ -23,8 +23,8 @@ INSTALLED_APPS += (
 )
 
 PROJECT_APPS = (
-    'project.apps.project',
-    'project.apps.api',
+    'project',
+    'api',
 )
 
 COVERAGE_REPORT_HTML_OUTPUT_DIR = normpath(join(SITE_ROOT, 'coverage'))

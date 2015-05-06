@@ -1,8 +1,8 @@
 from django.core.urlresolvers import reverse
 from django.test import TestCase, Client
 from django.template import Template, Context
-from project.apps.projects import factories
-from project.apps.reports.templatetags import formatters
+from projects import factories
+from reports.templatetags import formatters
 
 client = Client()
 

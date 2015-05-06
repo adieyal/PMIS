@@ -4,7 +4,7 @@ import xlrd
 from uuid import uuid4
 from datetime import datetime
 from scripts.spreadsheet import Spreadsheet
-from project.libs.database.database import Project
+from libs.database.database import Project
 
 
 clusters = {

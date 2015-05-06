@@ -9,7 +9,7 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
-from project.libs.database.database import Project
+from libs.database.database import Project
 
 from models import Cluster, Programme, ImplementingAgent
 

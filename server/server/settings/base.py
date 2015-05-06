@@ -46,7 +46,7 @@ MANAGERS = ADMINS
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'default.db')),
+        'NAME': normpath(join(DJANGO_ROOT, '..', 'data', 'default.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -157,8 +157,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'reversion.middleware.RevisionMiddleware',
-    # 'project.middleware.LoginRequiredMiddleware',
-    'project.middleware.XsSharing',
+    # 'server.middleware.LoginRequiredMiddleware',
+    'server.middleware.XsSharing',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
@@ -206,10 +206,9 @@ THIRD_PARTY_APPS = (
 
 # Apps specific for this project go here.
 LOCAL_APPS = (
-    'apps.reports',
-    'apps.entry',
-    # 'apps.ui',
-    'apps.v2',
+    'reports',
+    'entry',
+    'libs',
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

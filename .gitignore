@@ -37,7 +37,7 @@ coverage/
 # Any backups of anything
 *.bak
 
-server/project/*.db
+server/data/*.db
 
 # Django assets
 server/assets/*

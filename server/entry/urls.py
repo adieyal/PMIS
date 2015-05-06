@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url, include
 
-urlpatterns = patterns('project.apps.entry.views',
+urlpatterns = patterns('entry.views',
     url(r'^(?P<project_id>[\w-]+)/edit$', 'edit', {}, 'edit'),
     url(r'^new$', 'new', {}, 'new'),
     url(r'^$', 'projects', {}, 'list'),

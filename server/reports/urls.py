@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url, include
 
-urlpatterns = patterns('project.apps.reports.views',
+urlpatterns = patterns('reports.views',
     url(r'^search$', 'search_v2', {}, name='search_v2'),
     url(r'^search/programmes$', 'search_programmes_v2', {}, name='search_programmes_v2'),
     url(r'^projects$', 'projects_v2', {}, name='projects_v2'),

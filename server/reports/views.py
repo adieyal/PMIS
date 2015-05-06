@@ -9,8 +9,8 @@ from decimal import Decimal
 from collections import OrderedDict
 import json as json
 from django.template.response import TemplateResponse
-#from project.apps.api.reports.district_report import district_report_json
-#from project.apps.projects import models
+#from api.reports.district_report import district_report_json
+#from projects import models
 from django.views.decorators.http import condition
 from django.views.decorators.cache import cache_page
 from django.shortcuts import redirect
@@ -20,7 +20,7 @@ import fuzzywuzzy.process
 from elasticsearch import Elasticsearch
 
 from widgets import *
-from project.libs.database.database import Project
+from libs.database.database import Project
 import iso8601
 import calendar
 
