@@ -1,5 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-You are probably looking for <a href="/entry">entry</a>.
+<p>You are probably looking for <a href="/entry">entry</a>.</p>
+
+<ul class="unstyled debug">
+    <li>Settings: {% app_settings %}</li>
+    <li>Redis DB: {% app_redis_db %}</li>
+    <li>SQLite DB: {% app_sqlite_db %}</li>
+</ul>
+
 {% endblock %}
