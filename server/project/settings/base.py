@@ -332,11 +332,3 @@ PROFILE_LOG_BASE="/tmp"
 # Used for URL generation in the seeding of ElasticSearch,
 # useful anywhere
 BASE_URL = 'http://pmis.burgercom.co.za'
-
-# So we can have separate environments for testing, development
-REDIS = {
-    'host': '127.0.0.1',
-    'port': 6379,
-    'db': 0,
-    # 'unix_socket_path': '/var/run/redis/redis.sock',
-}

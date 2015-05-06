@@ -76,10 +76,10 @@ LOGGING["loggers"]["apps.projects.management.commands.parsers._retentionprojects
 # useful anywhere
 BASE_URL = 'http://www.backend.dev'
 
-# So we can have separate environments for testing, development
+# So we can have separate environments
 REDIS = {
-    # 'host': '127.0.0.1',
-    # 'port': 6379,
+    'host': '127.0.0.1',
+    'port': 6379,
     'db': 0,
-    'unix_socket_path': '/var/run/redis/redis.sock',
+    # 'unix_socket_path': '/var/run/redis/redis.sock',
 }

@@ -1,4 +1,4 @@
-"""Production settings and globals."""
+"""Demo settings and globals."""
 
 
 from os import environ
@@ -62,7 +62,7 @@ SERVER_EMAIL = EMAIL_HOST_USER
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': normpath(join(DJANGO_ROOT, 'production.db')),
+        'NAME': normpath(join(DJANGO_ROOT, 'demo.db')),
         'USER': '',
         'PASSWORD': '',
         'HOST': '',
@@ -98,12 +98,12 @@ ALLOWED_HOSTS = (
 
 # Used for URL generation in the seeding of ElasticSearch,
 # useful anywhere
-BASE_URL = 'http://pmis.burgercom.co.za'
+BASE_URL = 'http://pmis-demo.burgercom.co.za'
 
 # So we can have separate environments for testing, development
 REDIS = {
     'host': '127.0.0.1',
     'port': 6379,
-    'db': 15,
+    'db': 1,
     # 'unix_socket_path': '/var/run/redis/redis.sock',
 }
