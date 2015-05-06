@@ -4,4 +4,4 @@ Redis databases are as follows:
 1 - Demo
 15 - Production
 
-Do *NOT* move production to database 0, as it is the default DB and bad things could happen!
+Don't move anything dangerous into DB 0, it's the default!
