@@ -65,7 +65,7 @@ module.exports = function(options) {
 	var extensions = ["", ".web.js", ".js", ".jsx"];
 	var root = path.join(__dirname, "app");
 	var output = {
-		path: path.join(__dirname, "build", options.prerender ? "prerender" : "public"),
+		path: path.join(process.env.BUILD_FOLDER, options.prerender ? "prerender" : "public"),
 		publicPath: "/",
 		filename: "[name].js" + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
 		chunkFilename: (options.devServer ? "[id].js" : "[name].js") + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
@@ -77,7 +77,7 @@ module.exports = function(options) {
 		function() {
 			if(!options.prerender) {
 				this.plugin("done", function(stats) {
-					require("fs").writeFileSync(path.join(__dirname, "build", "stats.json"), JSON.stringify(stats.toJson({
+					require("fs").writeFileSync(path.join(__dirname, process.env.BUILD_FOLDER, "stats.json"), JSON.stringify(stats.toJson({
 						chunkModules: true,
 						exclude: [
 							/node_modules[\\\/]react/

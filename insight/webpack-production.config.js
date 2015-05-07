@@ -3,10 +3,12 @@ module.exports = [
 		// commonsChunk: true,
 		longTermCaching: true,
 		separateStylesheet: false,
-		minimize: true
+		minimize: true,
+		output_path: "build/production"
 		// devtool: "source-map"
 	}),
 	require("./make-webpack-config")({
-		prerender: true
+		prerender: true,
+		output_path: "build/production"
 	})
 ];
