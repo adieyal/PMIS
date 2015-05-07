@@ -845,7 +845,7 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     district_projects = [(k, [p for p in projects if p.district == title ]) for k, title in districts.iteritems()]
     
     context = {
-        "client": projects[0].cluster,
+        "client": cluster,
         "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
 
         ### Summary section
@@ -941,9 +941,10 @@ def latest_cluster_project(request, cluster, year=None, month=None):
         lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
         [Project.get(p) for p in Project.list() if p]
     )
-    timestamp = max([project.timestamp for project in projects])
-    timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
-    return timestamp
+    if projects:
+        timestamp = max([project.timestamp for project in projects])
+        timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
+        return timestamp
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_cluster_project)
