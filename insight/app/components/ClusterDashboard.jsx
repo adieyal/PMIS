@@ -106,9 +106,9 @@ module.exports = React.createClass({
     },
     render: function() {
         var data = this.props.data;
-        var client = data.client.replace(/^Department of /, '');
+        var client_slug = data.client.replace(/^department-of-/, '');
         var cluster = utils.find(lists.clusters, function(cluster) {
-            return cluster.title == client;
+            return cluster.slug == client_slug;
         });
 
         var domain = [ 0, utils.max(utils.pluck(this.props.data.districts, 'projects-implementation')) ];
@@ -117,7 +117,7 @@ module.exports = React.createClass({
         return <div className="cluster-dashboard">
             <div className="index ui fluid card">
                 <div className="content">
-                    <h2 className="cluster-title ui header" onClick={this.changePerformanceTab('overview')} style={{ backgroundColor: cluster.colour }}>{client}</h2>
+                    <h2 className="cluster-title ui header" onClick={this.changePerformanceTab('overview')} style={{ backgroundColor: cluster.colour }}>{cluster.title}</h2>
 
                     <Tabs ref="outerTab" state={this.state} attribute="tab">
                         <div key="performance" title="Performance">

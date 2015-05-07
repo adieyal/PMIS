@@ -954,9 +954,10 @@ def cluster_dashboard_v2(request, cluster, year=None, month=None):
 
 def latest_project(request, year=None, month=None):
     projects = [Project.get(p) for p in Project.list() if p]
-    timestamp = max([project.timestamp for project in projects])
-    timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
-    return timestamp
+    if projects:
+        timestamp = max([project.timestamp for project in projects])
+        timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
+        return timestamp
 
 def normalize(str):
     return str.strip().title()
