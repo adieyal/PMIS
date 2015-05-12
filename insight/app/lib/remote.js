@@ -1,15 +1,18 @@
+var utils = require('../lib/utils');
 var request = require('superagent');
 var AuthActions = require('../actions/AuthActions');
+var ClusterActions = require('../actions/ClusterActions');
+var ProjectActions = require('../actions/ProjectActions');
 var NotificationActions = require('../actions/NotificationActions');
 
 function url(path) {
     return BACKEND + '/' + path;
 }
 
-module.exports = {
-    fetchProjects: function (authToken, done) {
+Remote = {
+    fetchProjects: function (authToken, query) {
         return request
-            .get(url('reports/projects'))
+            .get(url('reports/projects/' + query.year + '/' + query.month + '/'))
             .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
@@ -22,12 +25,14 @@ module.exports = {
                 }
 
                 var payload = res.body;
-                done(payload);
+                ProjectActions.receiveProjects(payload);
             });
     },
-    fetchCluster: function (slug, authToken, done) {
+    fetchCluster: function (slug, authToken, query) {
+        var month = parseInt(query.month);
+        if(month < 10) month = '0' + month;
         return request
-            .get(url('reports/cluster/department-of-' + slug + '/latest/dashboard/v2'))
+            .get(url('reports/cluster/department-of-' + slug + '/' + query.year + '/' + month + '/v2'))
             .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
@@ -40,8 +45,13 @@ module.exports = {
                 }
 
                 var cluster = res.body;
-                done(cluster);
+                ClusterActions.receiveCluster(slug, cluster);
             });
+    },
+    fetchClusters: function (clusters, authToken, query) {
+        utils.each(clusters, function(cluster) {
+            Remote.fetchCluster(cluster.slug, authToken, query);
+        });
     },
     login: function (username, password, done) {
         return request
@@ -64,13 +74,13 @@ module.exports = {
                 done(data);
             });
     },
-    logout: function (done) {
+    logout: function () {
         return request
             .post(url('auth/logout'))
             .set('Accept', 'application/json')
             .end(function (error, res) {
                 if(error && error.status !== 401) return NotificationActions.notify(error);
-                done();
+                AuthActions.logout();
             });
     },
     search: function (query, authToken, done) {
@@ -108,3 +118,5 @@ module.exports = {
             });
     },
 };
+
+module.exports = Remote;

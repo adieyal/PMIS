@@ -16,6 +16,7 @@ module.exports = {
 
         'NOTIFY',
 
-        'SET_PREFERENCE'
+        'SET_PREFERENCE',
+        'SET_DATE'
     ])
 };

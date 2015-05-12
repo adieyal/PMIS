@@ -2,6 +2,8 @@ import re
 import os
 import time
 import operator
+from py_linq import Enumerable
+from py_linq.exceptions import NoElementsError
 from slugify import slugify
 from django.http import HttpResponse
 from datetime import datetime
@@ -551,6 +553,13 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
     def _active(phase):
         return phase in ['planning', 'implementation', 'completed', 'final-accounts']
     
+    planning_projects = [p for p in projects if p.phase == 'planning']
+    programme_implementation_projects = [p for p in projects if p.programme == programme and p.phase == 'implementation']
+
+    nkangala_implementation_projects = [p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation']
+    gert_sibande_implementation_projects = [p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']
+    ehlanzeni_implementation_projects = [p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']
+
     context = {
         "client": projects[0].cluster,
         "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
@@ -614,10 +623,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "planning-stage-documentation": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'documentation']),
         "planning-stage-tendering": len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'tender']),
         "planning-stage-donut": build_donut([
-            len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'consultant-appointment']),
-            len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'design-consting']),
-            len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'documentation']),
-            len([p for p in projects if p.phase == 'planning' and p.planning_phase == 'tender']),
+            len([p for p in planning_projects if p.planning_phase == 'consultant-appointment']),
+            len([p for p in planning_projects if p.planning_phase == 'design-consting']),
+            len([p for p in planning_projects if p.planning_phase == 'documentation']),
+            len([p for p in planning_projects if p.planning_phase == 'tender']),
         ]),
         ###
         ### Implementation section
@@ -663,10 +672,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
                 "projects-76-99": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
                 "projects-100": len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
                 "projects-donut": build_donut([
-                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-                    len([p for p in projects if p.programme == programme and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+                    len([p for p in programme_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+                    len([p for p in programme_implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+                    len([p for p in programme_implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+                    len([p for p in programme_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
                 ]),
             } for programme in programmes_implementation if programme != '--------'
         ],
@@ -688,10 +697,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "district-nkangala-projects-76-99": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
         "district-nkangala-projects-100": len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         "district-nkangala-projects-donut": build_donut([
-            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-            len([p for p in projects if p.district == 'Nkangala' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+            len([p for p in nkangala_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+            len([p for p in nkangala_implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+            len([p for p in nkangala_implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+            len([p for p in nkangala_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         ]),
         
         "district-gertsibande-projects-implementation": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation']),
@@ -710,10 +719,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "district-gertsibande-projects-76-99": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
         "district-gertsibande-projects-100": len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         "district-gertsibande-projects-donut": build_donut([
-            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-            len([p for p in projects if p.district == 'Gert Sibande' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+            len([p for p in gert_sibande_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+            len([p for p in gert_sibande_implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+            len([p for p in gert_sibande_implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+            len([p for p in gert_sibande_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         ]),
         
         "district-ehlanzeni-projects-implementation": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation']),
@@ -732,10 +741,10 @@ def cluster_dashboard_json(request, cluster, year=None, month=None):
         "district-ehlanzeni-projects-76-99": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
         "district-ehlanzeni-projects-100": len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         "district-ehlanzeni-projects-donut": build_donut([
-            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-            len([p for p in projects if p.district == 'Ehlanzeni' and p.phase == 'implementation' and _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+            len([p for p in ehlanzeni_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
+            len([p for p in ehlanzeni_implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
+            len([p for p in ehlanzeni_implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
+            len([p for p in ehlanzeni_implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
         ]),
         ###
     }
@@ -753,36 +762,64 @@ def generate_districts_v2(district_projects, year, month, month0):
     districts = {}
 
     for k, projects in district_projects:
-        implementation_projects = [p for p in projects if p.phase == 'implementation']
+        implementation_projects = Enumerable(projects).where(lambda p: p.phase == 'implementation')
 
         district = {
-            "projects-implementation": len(implementation_projects),
+            "projects-implementation": implementation_projects.count(),
             "performance": build_slider_v2(
-                sum([_safe_float(p.expenditure_in_year) or 0 for p in implementation_projects]),
-                sum([_safe_float(p.allocated_budget_for_year) or 0 for p in implementation_projects])
+                (implementation_projects
+                    .select(lambda p: _safe_float(p.expenditure_in_year) or 0)
+                    .sum()),
+                (implementation_projects
+                    .select(lambda p: _safe_float(p.allocated_budget_for_year) or 0 )
+                    .sum())
             ),
             "completeness": {
-                "projects-0-50": len([p for p in implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) <= 0.5]),
-                "projects-51-75": len([p for p in implementation_projects if 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75]),
-                "projects-76-99": len([p for p in implementation_projects if 0.75 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.99]),
-                "projects-100": len([p for p in implementation_projects if _safe_float(_progress_for_month(p.planning, month0)) >= 1.0]),
+                "projects-0-50": (implementation_projects
+                    .where(lambda p: _safe_float(_progress_for_month(p.planning, month0)) <= 0.5)
+                    .count()),
+                "projects-51-75": (implementation_projects
+                    .where(lambda p: 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75)
+                    .count()),
+                "projects-76-99": (implementation_projects
+                    .where(lambda p: 0.75 < _safe_float(_progress_for_month(p.planning, month0)) < 1)
+                    .count()),
+                "projects-100": (implementation_projects
+                    .where(lambda p: _safe_float(_progress_for_month(p.planning, month0)) >= 1.0)
+                    .count()),
             }
         }
 
         district['summary'] = {}
         for groupId, filt in districtSummaryGroups.iteritems():
-            district['summary'][groupId] = len([p for p in implementation_projects if filt(p, year, month)]);
+            district['summary'][groupId] = (implementation_projects
+                .where(lambda p: filt(p, year, month))
+                .count())
 
         districts[k] = district
 
     return districts
+
+def select_projects(year, month):
+    projects = (Enumerable(Project.list())
+        .where(lambda p: p)
+        .select(lambda p: Project.get(p, year, month))
+        .where(lambda p: p))
+    return projects
         
-def generate_cluster_dashboard_v2(cluster, year=None, month=None):
-    projects = filter(
-        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
-        [Project.get(p) for p in Project.list() if p]
-    )
-    programmes = sorted(set([p.programme for p in projects if p.programme != '--------']))
+def select_projects_by_cluster(cluster, year, month):
+    projects = (select_projects(year, month)
+        .where(lambda p: p.cluster.lower().replace(' ', '-').replace(',', '') == cluster))
+    return projects
+        
+def generate_cluster_dashboard_v2(cluster, year, month):
+    projects = select_projects_by_cluster(cluster, year, month)
+
+    programmes = (projects
+        .where(lambda p: p.programme != '--------')
+        .select(lambda p: p.programme)
+        .order_by(lambda p: p)
+        .distinct())
 
     if not year and not month:
         now = datetime.now()
@@ -791,7 +828,9 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
 
     if not year or not month:
         try:
-            timestamp = max([project.timestamp for project in projects])
+            timestamp = (projects
+                .select(lambda p: p.timestamp)
+                .max())
         except ValueError:
             return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
         year = timestamp.year
@@ -802,10 +841,10 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         
     # Convert month number to 0 indexed month.
     MONTHS0 = {
-        '04': (0, 1),  '05': (1, 1),  '06': (2, 1),
-        '07': (3, 1),  '08': (4, 1),  '09': (5, 1),
-        '10': (6, 1),  '11': (7, 1),  '12': (8, 1),
-        '01': (9, 0),  '02': (10, 0), '03': (11, 0)
+        4: (0, 1),  5: (1, 1),  6: (2, 1),
+        7: (3, 1),  8: (4, 1),  9: (5, 1),
+        10: (6, 1),  11: (7, 1),  12: (8, 1),
+        1: (9, 0),  2: (10, 0), 3: (11, 0)
     }
     month0, year_add = MONTHS0[month]
     fyear = year + year_add
@@ -842,18 +881,31 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
         'ehlanzeni': 'Ehlanzeni'
     }
 
-    district_projects = [(k, [p for p in projects if p.district == title ]) for k, title in districts.iteritems()]
-    
+    district_projects = (Enumerable(districts.iteritems())
+        .select(lambda d: (d[0], projects.where(lambda p: p.district == d[1]))))
+
+    try:
+        total_progress = _percent(projects
+            .where(lambda p: p.phase == 'implementation')
+            .select(lambda p: _safe_float(_progress_for_month(p.actual, month0)) or 0)
+            .avg())
+    except NoElementsError:
+        total_progress = None
+
     context = {
         "client": cluster,
         "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
 
         ### Summary section
-        "total-expenditure": sum([_safe_float(p.expenditure_in_year) or 0 for p in projects]),
-        "total-budget": sum([_safe_float(p.allocated_budget_for_year) or 0 for p in projects if _active(p.phase)]),
-        "total-progress": _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in projects if p.phase == 'implementation'])),
-        "total-projects": len(projects),
-        "total-programmes": len(programmes),
+        "total-expenditure": (projects
+            .select(lambda p: _safe_float(p.expenditure_in_year) or 0)
+            .sum()),
+        "total-budget": (projects
+            .select(lambda p: _safe_float(p.allocated_budget_for_year) or 0)
+            .sum()),
+        "total-progress": total_progress,
+        "total-projects": projects.count(),
+        "total-programmes": programmes.count(),
 
         "districts": generate_districts_v2(district_projects, year, month, month0),
     }
@@ -937,34 +989,58 @@ def generate_cluster_dashboard_v2(cluster, year=None, month=None):
     return context
 
 def latest_cluster_project(request, cluster, year=None, month=None):
-    projects = filter(
-        lambda x: x.cluster.lower().replace(' ', '-').replace(',', '') == cluster,
-        [Project.get(p) for p in Project.list() if p]
-    )
-    if projects:
-        timestamp = max([project.timestamp for project in projects])
-        timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
+    year = int(year)
+    month = int(month)
+
+    try:
+        timestamp = (select_projects_by_cluster(cluster, year, month)
+            .max(lambda p: p.timestamp))
+    except NoElementsError:
+        timestamp = None
+
+    file_timestamp = datetime.fromtimestamp(os.path.getmtime(__file__))
+
+    if timestamp:
+        timestamp = max([timestamp, file_timestamp])
         return timestamp
+    else:
+        return file_timestamp
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_cluster_project)
 def cluster_dashboard_v2(request, cluster, year=None, month=None):
+    year = int(year)
+    month = int(month)
+
     context = generate_cluster_dashboard_v2(cluster, year, month)
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
 def latest_project(request, year=None, month=None):
-    projects = [Project.get(p) for p in Project.list() if p]
-    if projects:
-        timestamp = max([project.timestamp for project in projects])
-        timestamp = max([timestamp, datetime.fromtimestamp(os.path.getmtime(__file__))])
-        return timestamp
+    year = int(year)
+    month = int(month)
 
-def normalize(str):
-    return str.strip().title()
+    try:
+        timestamp = select_projects(year, month).max(lambda p: p.timestamp)
+    except NoElementsError:
+        timestamp = None
+
+    file_timestamp = datetime.fromtimestamp(os.path.getmtime(__file__))
+
+    if timestamp:
+        timestamp = max([timestamp, file_timestamp])
+        return timestamp
+    else:
+        return file_timestamp
+
+def normalize(value):
+    return value.strip().title()
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
 def projects_v2(request, year=None, month=None):
+    year = int(year)
+    month = int(month)
+        
     def normalize_district(str):
         str = re.sub(r'(?i)\s*district$', '', str)
         return normalize(str)
@@ -999,19 +1075,8 @@ def projects_v2(request, year=None, month=None):
         else:
             return ('On Target', 'green')
     
-    projects = [Project.get(p) for p in Project.list() if p]
+    projects = select_projects(year, month)
 
-    if not year or not month:
-        try:
-            timestamp = max([project.timestamp for project in projects])
-        except ValueError:
-            return HttpResponse(json.dumps({ 'error': 'No projects!' }), mimetype='application/json')
-        year = timestamp.year
-        month = '%02d' % (timestamp.month)
-    else:
-        year = int(year)
-        month = month
-        
     base_url = os.getenv('BASE_URL', settings.BASE_URL)
 
     context = { 'data': [] }

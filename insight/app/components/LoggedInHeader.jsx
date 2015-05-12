@@ -1,10 +1,18 @@
 var React = require('react');
 
 var AuthActions = require("../actions/AuthActions");
+var ClusterActions = require("../actions/ClusterActions");
+var ProjectActions = require("../actions/ProjectActions");
+var PreferenceActions = require("../actions/PreferenceActions");
+var StoreMixin = require('../mixins/StoreMixin');
+var PreferenceStore = require('../stores/PreferenceStore');
 
 module.exports = React.createClass({
+    mixins: [ StoreMixin(PreferenceStore, 'preferenceStore') ],
+
     getInitialState: function() {
         return {
+            preferenceStore: PreferenceStore.getState(),
             loading: false,
             results: []
         };
@@ -18,9 +26,7 @@ module.exports = React.createClass({
 
     logout: function() {
         var remote = require('../lib/remote');
-        remote.logout(function() {
-            AuthActions.logout();
-        });
+        remote.logout();
     },
 
     loadProjectReport: function(projectId) {
@@ -34,10 +40,9 @@ module.exports = React.createClass({
         return (view == this.props.view ? 'active ' : '') + 'item';
     },
 
-    setView: function(view) {
-        return function() {
-            this.props.onSetView(view);
-        }.bind(this);
+    onChangeMonth: function(e) {
+        var date = e.target.value.split('-');
+        PreferenceActions.setDate(date[0], date[1]);
     },
 
     render: function() {
@@ -56,6 +61,12 @@ module.exports = React.createClass({
                         <a ref="projects" className={this.generateClasses('projects')} href="#/projects">Project list</a>
                         <a ref="logout" className="item" onClick={this.logout}>Logout</a>
                         <a className="right menu">
+                            <div className="item">
+                                <div className="ui icon input">
+                                    <input className="month" type="month" defaultValue={this.state.preferenceStore.year + '-' + this.state.preferenceStore.month} onChange={this.onChangeMonth} />
+                                    <i className="calendar icon" />
+                                </div>
+                            </div>
                             <div className="item search-item">
                                 <div className="ui category search">
                                     <div className="ui icon input">

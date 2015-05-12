@@ -2,8 +2,17 @@ var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
 var StoreFactory = require('./StoreFactory');
 
+var today = new Date();
+var month = today.getMonth() + 1;
+
+if(month < 10) {
+    month = '0' + month;
+}
+
 var state = {
-    order: 'alphabetic'
+    order: 'alphabetic',
+    year: today.getFullYear(),
+    month: month
 };
 
 var PreferenceStore = StoreFactory(function() {
@@ -19,6 +28,11 @@ PreferenceStore.dispatchToken = AppDispatcher.register(function(payload) {
     switch(action.type) {
         case ActionTypes.SET_PREFERENCE:
             state[action.key] = action.value;
+            PreferenceStore.triggerChange();
+            break;
+        case ActionTypes.SET_DATE:
+            state.year = action.year;
+            state.month = action.month;
             PreferenceStore.triggerChange();
             break;
         default:

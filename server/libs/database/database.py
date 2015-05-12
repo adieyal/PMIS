@@ -1,6 +1,7 @@
 import json as json
 import uuid
 import time
+from py_linq import Enumerable
 from datetime import datetime
 from uuid import uuid1, uuid4
 from slugify import slugify
@@ -133,24 +134,32 @@ class Project(object):
     @classmethod
     def get(cls, uuid, year=None, month=None, as_json=False):
         revisions = connection.smembers('/project/%s' % (uuid))
+
         if not revisions:
             raise DoesNotExistException('There is no data for project %s.' % (uuid))
 
-        revision_map = [{ 
-            'timestamp': UUID(r.split('/')[-1]).timestamp(),
-            'key': '/project/%s/%s' % (uuid, r)
-        } for r in revisions]
+        revisions = (Enumerable(revisions)
+            .select(lambda r: {
+                'timestamp': UUID(r.split('/')[-1]).timestamp(),
+                'key': '/project/%s/%s' % (uuid, r)
+            }))
+
         if year != None:
-            revision_map = [i for i in revision_map if i['timestamp'].year == year ]
-        if month != None:
-            revision_map = [i for i in revision_map if i['timestamp'].month == month ]
-        revision_map.sort(key=lambda x: x['timestamp'], reverse=True)
-        
-        data = connection.get(revision_map[0]['key'])
-        details = json.loads(data)
-        if as_json:
-            return details
-        return cls(details)
+            revisions = revisions.where(lambda r: r['timestamp'].year <= year)
+
+            if month != None:
+                revisions = revisions.where(lambda r: r['timestamp'].year <= year and r['timestamp'].month <= month)
+
+        revisions = revisions.order_by_descending(lambda r: r['timestamp'])
+
+        if revisions.count():
+            latest_revision = revisions.first()
+
+            data = connection.get(latest_revision['key'])
+            details = json.loads(data)
+            if as_json:
+                return details
+            return cls(details)
         
     @classmethod
     def edit(cls, uuid):

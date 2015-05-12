@@ -4,8 +4,11 @@ var Constants = require('../lib/constants');
 var ProjectActions = require('../actions/ProjectActions');
 var StoreFactory = require('./StoreFactory');
 var AuthStore = require('./AuthStore');
+var PreferenceStore = require('./PreferenceStore');
 
-var state = [];
+var state = {
+    projects: []
+};
 
 var ProjectStore = StoreFactory(function() {
     this.getState = function() {
@@ -23,8 +26,17 @@ ProjectStore.dispatchToken = AppDispatcher.register(function(payload) {
 
     switch(action.type) {
         case ActionTypes.RECEIVE_PROJECTS:
-            state = action.data;
+            state.projects = action.data;
             ProjectStore.triggerChange();
+            break;
+        case ActionTypes.SET_DATE:
+            AppDispatcher.waitFor([
+                PreferenceStore.dispatchToken
+            ]);
+
+            var preference = PreferenceStore.getState();
+
+            remote.fetchProjects(AuthStore.getState().authToken, { year: preference.year, month: preference.month });
             break;
         default:
     }
@@ -32,7 +44,8 @@ ProjectStore.dispatchToken = AppDispatcher.register(function(payload) {
 
 if (typeof window != 'undefined') {
     var remote = require('../lib/remote');
-    remote.fetchProjects(AuthStore.getState().authToken, ProjectActions.receiveProjects);
+    var preference = PreferenceStore.getState();
+    remote.fetchProjects(AuthStore.getState().authToken, { year: preference.year, month: preference.month });
 }
 
 module.exports = ProjectStore;

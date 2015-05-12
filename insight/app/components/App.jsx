@@ -60,9 +60,15 @@ module.exports = React.createClass({
     ],
 
     getInitialState: function () {
+        var today = new Date();
+
         var path = window.location.hash.replace(/^#/, '');
         var state = this.generatePathState(path);
         state.auth = AuthStore.getState();
+        state.date = {
+            year: today.getFullYear(),
+            month: today.getMonth() + 1
+        };
         return state;
     },
 
