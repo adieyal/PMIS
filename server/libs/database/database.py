@@ -148,7 +148,7 @@ class Project(object):
             revisions = revisions.where(lambda r: r['timestamp'].year <= year)
 
             if month != None:
-                revisions = revisions.where(lambda r: r['timestamp'].year <= year and r['timestamp'].month <= month)
+                revisions = revisions.where(lambda r: (r['timestamp'].year, r['timestamp'].month) <=  (year, month))
 
         revisions = revisions.order_by_descending(lambda r: r['timestamp'])
 
