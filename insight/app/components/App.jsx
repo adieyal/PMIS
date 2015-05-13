@@ -101,8 +101,10 @@ module.exports = React.createClass({
     },
 
     changeAddress: function(path) {
-        var pathState = this.generatePathState(path);
-        this.setState(pathState);
+        if (this.isMounted()) {
+            var pathState = this.generatePathState(path);
+            this.setState(pathState);
+        }
     },
 
     componentDidMount: function() {

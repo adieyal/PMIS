@@ -10,7 +10,9 @@ module.exports = {
                     if (obj[property]) {
                         res.push(obj[property]);
                     } else {
-                        res.push(def);
+                        if (!this.contains(res, def)) {
+                            res.push(def);
+                        }
                     }
                 }
             }

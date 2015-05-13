@@ -181,7 +181,7 @@ module.exports = React.createClass({
                     <h3 className="ui header">
                         <select valueLink={this.linkState('clusterId')}>
                             {utils.map(lists.clusters, function (cluster) {
-                                return <option value={cluster.slug}>{cluster.title}</option>;
+                                return <option key={cluster.slug} value={cluster.slug}>{cluster.title}</option>;
                             })}
                         </select>
                     </h3>
