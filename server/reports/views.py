@@ -901,6 +901,7 @@ def generate_cluster_dashboard_v2(cluster, year, month):
             .select(lambda p: _safe_float(p.expenditure_in_year) or 0)
             .sum()),
         "total-budget": (projects
+            .where(lambda p: _active(p.phase))
             .select(lambda p: _safe_float(p.allocated_budget_for_year) or 0)
             .sum()),
         "total-progress": total_progress,
