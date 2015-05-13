@@ -873,7 +873,7 @@ def generate_cluster_dashboard_v2(cluster, year, month):
     }
 
     def _active(phase):
-        return phase in projectPhases.keys()
+        return phase in ['planning', 'implementation', 'completed', 'final-accounts']
 
     districts = {
         'nkangala': 'Nkangala',
