@@ -37,4 +37,4 @@ demo-build: install
 	BUILD_FOLDER=build/demo BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run build
 
 deploy:
-	ssh -t pmis "cd /var/www/pmis && git pull && PATH=~/.virtualenvs/pmis/bin:/usr/bin:/bin make production-reindex && sudo /etc/init.d/elasticsearch stop && cd v2 && PATH=~/.rbenv/shims:/opt/node/bin:/usr/bin:/bin make production-build && sudo chgrp -R webapp . && sudo /etc/init.d/elasticsearch start && sudo supervisorctl restart all"
+	ssh -t pmis "cd /var/www/pmis && git pull && PATH=~/.virtualenvs/pmis/bin:/usr/bin:/bin make production-reindex && sudo /etc/init.d/elasticsearch stop && cd insight && PATH=~/.rbenv/shims:/opt/node/bin:/usr/bin:/bin make production-build && sudo chgrp -R webapp . && sudo /etc/init.d/elasticsearch start && sudo supervisorctl restart all"
