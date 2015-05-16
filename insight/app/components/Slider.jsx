@@ -30,8 +30,11 @@ var Slider = React.createClass({
 
         var aspect = (parseFloat(this.props.aspect) || 1) * 90;
 
+
         if (typeof this.props.data != 'undefined') {
             this.props.data.forEach(function (data, i) {
+                var value = this.props.format == 'percentage' ? data['percentage-text'] : data['value-text'];
+
                 var x = (aspect - 4) * (data.position || 0);
                 var transform = 'translate(' + x + ', 0)';
 
@@ -57,7 +60,7 @@ var Slider = React.createClass({
                     <circle className="marker-outer" cx="4" cy="8" r="3.6"/>
                     <circle style={markerStyle} className="marker-inner" cx="4" cy="8" r="1.75"/>
                     { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle" fontSize="4">{ data['marker-text'] }</text> : '' }
-                    { data['value-text'] ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle" fontSize="4">{ data['value-text'] }</text> : '' }
+                    { value ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle" fontSize="4">{ value }</text> : '' }
                 </g>);
 
                 var barId = 'bar-' + i;

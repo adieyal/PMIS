@@ -4,8 +4,9 @@ var Footer = React.createClass({
     showChangelog: function() {
     },
     render: function() {
+        var today = new Date();
         return <footer>
-            &copy; 2014 PMIS
+            &copy; {today.getFullYear()} PMIS
         </footer>;
     }
 });

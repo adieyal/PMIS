@@ -4,6 +4,7 @@ var Gauge = require('./Gauge');
 var Donut = require('./Donut');
 var Legend = require('./Legend');
 var Slider = require('./Slider');
+var MetaSlider = require('./MetaSlider');
 var DistrictMap = require('./DistrictMap');
 
 var Tabs = require('./Tabs');
@@ -125,15 +126,15 @@ module.exports = React.createClass({
                                 <div key="overview" title="Overview">
                                     <div className="ui two column grid slider-row">
                                         <div className="column">
-                                            <Slider key="total" data={data['total-slider']} title="Total" height="120" />
+                                            <MetaSlider key="total" data={data['total-slider']} title="Total" height="120" />
                                         </div>
 
                                         <div className="planning-column column" onClick={this.changePerformanceTab('planning')}>
-                                            <Slider key="planning" data={data['planning-slider']} title="Planning" height="120" />
+                                            <MetaSlider key="planning" data={data['planning-slider']} title="Planning" height="120" />
                                         </div>
 
                                         <div className="implementation-column column" onClick={this.changePerformanceTab('implementation')}>
-                                            <Slider key="implementation" data={data['implementation-slider']} title="Implementation" height="120" />
+                                            <MetaSlider key="implementation" data={data['implementation-slider']} title="Implementation" height="120" />
                                         </div>
 
                                         <div className="gauge-column column">
