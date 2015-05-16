@@ -26,7 +26,7 @@ install:
 
 development-build: install
 	bundle exec compass compile
-	BUILD_FOLDER=build/development BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run build
+	BUILD_FOLDER=build/development BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run development-build
 
 production-build: install
 	bundle exec compass compile
