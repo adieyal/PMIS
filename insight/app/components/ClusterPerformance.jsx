@@ -40,29 +40,29 @@ module.exports = component('ClusterPerformance', methods, function ({ clusters }
 
     var renderProgramme = function(phase) {
         return function(p) {
-            return <div key={p.title} className="eight wide column">
-                <h4 className="ui header">{p.title}</h4>
+            return <div key={p.get('title')} className="eight wide column">
+                <h4 className="ui header">{p.get('title')}</h4>
                 <div className="ui grid">
                     <div className="eight wide column">
-                        <div>Total Projects: {p.projects[phase]}</div>
-                        {phase == 'implementation' ? <div>Total Progress: {p.progress}</div> : ''}
-                        <div>Total Budget: {utils.toMoney(p.budget)}</div>
-                        <div>{renderExpenditureDiff(p.budget, p.expenditure)}</div>
+                        <div>Total Projects: {p.get('projects').get(phase)}</div>
+                        {phase == 'implementation' ? <div>Total Progress: {p.get('progress')}</div> : ''}
+                        <div>Total Budget: {utils.toMoney(p.get('budget'))}</div>
+                        <div>{renderExpenditureDiff(p.get('budget'), p.get('expenditure'))}</div>
                     </div>
                     <div className="eight wide column">
-                        <Slider data={p.performance} height="120" />
+                        <Slider data={p.get('performance')} height="120" />
                     </div>
                 </div>
             </div>;
         }.bind(this);
     };
 
-    var planningProgrammes = cluster.get('programmes').filter(function(p) {
-        return p.projects.planning > 0;
+    var planningProgrammes = cluster.get('programmes').toArray().filter(function(p) {
+        return p.get('projects').get('planning') > 0;
     });
 
-    var implementationProgrammes = cluster.get('programmes').filter(function(p) {
-        return p.projects.implementation > 0;
+    var implementationProgrammes = cluster.get('programmes').toArray().filter(function(p) {
+        return p.get('projects').get('implementation') > 0;
     });
 
     return <div className="cluster-progress">
@@ -91,8 +91,9 @@ module.exports = component('ClusterPerformance', methods, function ({ clusters }
                         <Donut data={generateProjectsDonut()} height="220" />
                     </div>
                     <div className="center aligned six wide column">
-                        <h4 className="ui
-                        header">{renderExpenditureDiff(cluster.get('total-budget'), cluster.get('total-expenditure'))}</h4>
+                        <h4 className="ui header">
+                            {renderExpenditureDiff(cluster.get('total-budget'), cluster.get('total-expenditure'))}
+                        </h4>
                         <Slider data={cluster.get('total-slider')} height="190" />
                     </div>
                 </div>

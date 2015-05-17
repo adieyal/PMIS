@@ -8,13 +8,13 @@ module.exports = React.createClass({
         var gradient;
 
         this.props.data.forEach(function(data, index) {
-            var a = Math.PI-Math.PI*(data.position || 0);
-            var s = Math.abs(0.5-data.position)*0.28+1;
+            var a = Math.PI-Math.PI*(data.get('position') || 0);
+            var s = Math.abs(0.5-data.get('position'))*0.28+1;
 
             var x = Math.cos(a)*57*s;
             var y = 57-Math.sin(a)*57*s;
 
-            var r = 180 * (data.position || 0) - 90;
+            var r = 180 * (data.get('position') || 0) - 90;
 
             var markerProps = {
                 transform: 'translate(' + x + ',' + y + ')'
@@ -89,7 +89,7 @@ module.exports = React.createClass({
         for(var x = 0; x <= 20; x++) {
             var degrees = x * 180 / 20;
             var className = (x == 0 ? 'mark-red-main' : (x == 20 ? 'mark-green-main' : 'mark'));
-            var green = Math.round(this.props.data[0].position*25);
+            var green = Math.round(this.props.data.get(0).get('position')*25);
             var stroke = x < green ? '#f0423e' : '#86bf53';
             markers.push(<line className={className} x1="-50" y1="0" x2="-37" y2="0" transform={'rotate(' + degrees + ')'} />);
         }

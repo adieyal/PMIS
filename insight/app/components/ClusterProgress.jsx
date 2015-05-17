@@ -53,22 +53,24 @@ module.exports = component('ClusterProgress', methods, function({ clusters }) {
 
     var generateDistricts = function() {
         var districts = [];
+        var clusterDistricts = cluster.get('districts').toObject();
 
-        for (var slug in cluster.get('districts')) {
-            var districtData = cluster.get('districts')[slug];
+        for (var slug in clusterDistricts) {
+            var districtData = clusterDistricts[slug];
             var title = lists.districts[slug];
 
             var district = {
                 slug: slug,
                 title: title,
                 numbers: {
-                    implementation: districtData['projects-implementation']
+                    implementation: districtData.get('projects-implementation')
                 },
-                performance: districtData.performance
+                performance: districtData.get('performance')
             };
 
             district.summary = Object.keys(lists.districtSummaryGroups).map(function(groupId) {
-                return [ lists.districtSummaryGroups[groupId], districtData['summary'][groupId] ];
+                return [ lists.districtSummaryGroups[groupId],
+                            districtData.get('summary').get(groupId) ];
             });
 
             districts.push(district);

@@ -33,39 +33,43 @@ var Slider = React.createClass({
 
         if (typeof this.props.data != 'undefined') {
             this.props.data.forEach(function (data, i) {
-                var value = this.props.format == 'percentage' ? data['percentage-text'] : data['value-text'];
+                var value = this.props.format == 'percentage' ?
+                    data.get('percentage-text') : data.get('value-text');
 
-                var x = (aspect - 4) * (data.position || 0);
+                var x = (aspect - 4) * (data.get('position') || 0);
                 var transform = 'translate(' + x + ', 0)';
 
-                var style = this.styles[data['marker-style'] || 'short'];
+                var style = this.styles[data.get('marker-style') || 'short'];
 
-                var markerAccentStyle = data['marker-color'] ? { stroke: data['marker-color'] } : {};
+                var markerAccentStyle = data.get('marker-color') ? { stroke:
+                    data.get('marker-color') } : {};
 
                 var markerGradientId = 'marker-gradient-' + i;
-                gradients.push(this.generateGradient(markerGradientId, data['marker-color']));
+                gradients.push(this.generateGradient(markerGradientId, data.get('marker-color')));
 
-                var markerStyle = data['marker-color'] ? { stroke: data['marker-color'], fill: 'url(#' + markerGradientId + ')' } : {};
+                var markerStyle = data.get('marker-color') ? { stroke: data.get('marker-color'), fill: 'url(#' + markerGradientId + ')' } : {};
 
                 var barGradientId = 'bar-gradient-' + i;
-                gradients.push(this.generateGradient(barGradientId, data['bar-color']));
+                gradients.push(this.generateGradient(barGradientId, data.get('bar-color')));
 
-                var barStyle = data['bar-color'] ? { stroke: data['bar-color'], fill: 'url(#' + barGradientId + ')' } : {};
+                var barStyle = data.get('bar-color') ? { stroke: data.get('bar-color'), fill: 'url(#' + barGradientId + ')' } : {};
 
                 var markerId = 'marker-' + i;
 
-                markers.push(<g key={'marker-' + data['marker-text']} id={markerId} transform={transform}>
+                markers.push(<g key={'marker-' + data.get('marker-text')} id={markerId} transform={transform}>
                     <rect style={markerAccentStyle} className="marker-accent marker-tab" x="2.5" y="8" rx="1" ry="1" width={style.rect.width} height={style.rect.height}/>
                     <circle style={markerAccentStyle} className="marker-accent" cx="4" cy="8" r="4"/>
                     <circle className="marker-outer" cx="4" cy="8" r="3.6"/>
                     <circle style={markerStyle} className="marker-inner" cx="4" cy="8" r="1.75"/>
-                    { data['marker-text'] ? <text className="marker-text" x={style.markerText.x} y={style.markerText.y} textAnchor="middle" fontSize="4">{ data['marker-text'] }</text> : '' }
+                    { data.get('marker-text') ? <text className="marker-text"
+                        x={style.markerText.x} y={style.markerText.y}
+                        textAnchor="middle" fontSize="4">{ data.get('marker-text') }</text> : '' }
                     { value ? <text className="value-text" x={style.valueText.x} y={style.valueText.y} textAnchor="middle" fontSize="4">{ value }</text> : '' }
                 </g>);
 
                 var barId = 'bar-' + i;
 
-                bars.push(<rect key={'bar-' + data['marker-text']} id={barId} style={barStyle} className="inner-bar" x={px + 4} y="6" rx="2" ry="2" width={x - px} height="4"/>);
+                bars.push(<rect key={'bar-' + data.get('marker-text')} id={barId} style={barStyle} className="inner-bar" x={px + 4} y="6" rx="2" ry="2" width={x - px} height="4"/>);
 
                 px = x;
             }.bind(this));
