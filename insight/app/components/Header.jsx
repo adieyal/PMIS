@@ -1,19 +1,15 @@
+var component = require('omniscient').withDefaults({ jsx: true });
+component.debug();
+
 var React = require("react");
 
 var LoggedOutHeader = require("./LoggedOutHeader");
 var LoggedInHeader = require("./LoggedInHeader");
 
-var Header = React.createClass({
-    render: function() {
-        var auth = this.props.auth;
-        var logo = this.props.logo;
-
-        if (auth.status == 'logged-in') {
-            return <LoggedInHeader logo={this.props.logo} auth={this.props.auth} view={this.props.view} onSetView={this.props.onSetView} />;
-        } else {
-            return <LoggedOutHeader logo={this.props.logo} />;
-        }
+module.exports = component('Header', function(props) {
+    if (props.auth.get('status') == 'logged-in') {
+        return <LoggedInHeader {...props} />
+    } else {
+        return <LoggedOutHeader logo={props.logo} />;
     }
 });
-
-module.exports = Header;

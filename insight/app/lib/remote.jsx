@@ -24,8 +24,7 @@ Remote = {
                     return NotificationActions.notify(res.body.error);
                 }
 
-                var payload = res.body;
-                ProjectActions.receiveProjects(payload);
+                ProjectActions.receiveProjects(res.body.data);
             });
     },
     fetchCluster: function (slug, authToken, query) {
@@ -53,13 +52,15 @@ Remote = {
             Remote.fetchCluster(cluster.slug, authToken, query);
         });
     },
-    login: function (username, password, done) {
+    login: function (username, password) {
         return request
             .post(url('auth/login'))
             .send({ username: username, password: password })
             .set('Accept', 'application/json')
             .end(function (error, res) {
-                if(error) return NotificationActions.notify(error);
+                if(error) {
+                    return NotificationActions.notify(error);
+                }
 
                 if(res.status == 400) {
                     return AuthActions.loginFailure(res.body);
@@ -69,9 +70,7 @@ Remote = {
                     return NotificationActions.notify(res.text);
                 }
 
-                var data = res.body;
-                data.username = username;
-                done(data);
+                AuthActions.login(res.body.auth_token);
             });
     },
     logout: function () {

@@ -20,10 +20,10 @@ module.exports = {
     ],
 
     clusters: [
-        { slug: "education", title: 'Education', view: "performance", colour: "#E8B96B" },
-        { slug: "health", title: 'Health', view: "performance", colour: "#83C4BF" },
-        { slug: "social-development", title: 'Social Development', view: "performance", colour: "#9691B0" },
-        { slug: "culture-sports-science-and-recreation", title: 'Culture, Sports, Science and Recreation', view: "performance", colour: "#8CC7E9" },
+        // { slug: "education", title: 'Education', view: "performance", colour: "#E8B96B" },
+        // { slug: "health", title: 'Health', view: "performance", colour: "#83C4BF" },
+        // { slug: "social-development", title: 'Social Development', view: "performance", colour: "#9691B0" },
+        // { slug: "culture-sports-science-and-recreation", title: 'Culture, Sports, Science and Recreation', view: "performance", colour: "#8CC7E9" },
         { slug: "community-safety-security-and-liaison", title: 'Community Safety, Security and Liaison', view: "performance", colour: "#B8B38B" },
         { slug: "economic-development-environment-and-tourism", title: 'Economic Development, Environment and Tourism', view: "performance", colour: "#BC7692" }
     ],

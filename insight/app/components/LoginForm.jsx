@@ -1,9 +1,9 @@
+var component = require('omniscient').withDefaults({ jsx: true });
 var React = require("react");
-var AuthActions = require("../actions/AuthActions");
 var NotificationActions = require("../actions/NotificationActions");
 var utils = require('../lib/utils');
 
-module.exports = React.createClass({
+var methods = {
     componentDidMount: function() {
         var rules = {
             username: {
@@ -35,56 +35,55 @@ module.exports = React.createClass({
             username: null,
             password: null
         };
-    },
-    login: function (e) {
+    }
+};
+
+module.exports = component('LoginForm', methods, function({ auth }) {
+    var login = (e) => {
         e.preventDefault();
 
         var username = this.refs.username.getDOMNode().value;
         var password = this.refs.password.getDOMNode().value;
 
         var remote = require('../lib/remote');
-        remote.login(username, password, function(data) {
-            AuthActions.login(data.authToken);
-        });
-    },
-    render: function() {
-        var auth = this.props.auth;
-        var data = auth.data || {};
+        remote.login(username, password);
+    };
 
-        var success = Object.keys(data).length === 0;
+    var data = auth.data || {};
 
-        var errors;
+    var success = Object.keys(data).length === 0;
 
-        if (!success) {
-            errors = <ul>{utils.map(data, function(validationErrors) {
-                validationErrors.map(function(validationError) {
-                    return <li>{validationError}</li>;
-                });
-            })}</ul>;
-        }
+    var errors;
 
-        return <div className="ui segment">
-            <div className={"login ui form " + (success ? 'success' : 'error') }>
-                <h4 className="ui header">Login</h4>
-
-                <div className={"required field" + (data.username ? " error" : "")}>
-                    <div className="ui icon input">
-                        <input type="text" ref="username" name="username" placeholder="Username" />
-                        <i className="user icon" />
-                    </div>
-                </div>
-
-                <div className={"required field" + (data.password ? " error": "")}>
-                    <div className="ui icon input">
-                        <input type="password" ref="password" name="password" placeholder="Password" />
-                        <i className="lock icon" />
-                    </div>
-                </div>
-
-                <button className="ui submit button">Login</button>
-
-                <div className="ui error message">{errors}</div>
-            </div>
-        </div>;
+    if (!success) {
+        errors = <ul>{utils.map(data, function(validationErrors) {
+            validationErrors.map(function(validationError) {
+                return <li>{validationError}</li>;
+            });
+        })}</ul>;
     }
+
+    return <div className="ui segment">
+        <div className={"login ui form " + (success ? 'success' : 'error') }>
+            <h4 className="ui header">Login</h4>
+
+            <div className={"required field" + (data.username ? " error" : "")}>
+                <div className="ui icon input">
+                    <input type="text" ref="username" name="username" placeholder="Username" />
+                    <i className="user icon" />
+                </div>
+            </div>
+
+            <div className={"required field" + (data.password ? " error": "")}>
+                <div className="ui icon input">
+                    <input type="password" ref="password" name="password" placeholder="Password" />
+                    <i className="lock icon" />
+                </div>
+            </div>
+
+            <button className="ui submit button" onClick={login}>Login</button>
+
+            <div className="ui error message">{errors}</div>
+        </div>
+    </div>;
 });

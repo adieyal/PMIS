@@ -1,4 +1,11 @@
 module.exports = {
+    timesMap: function(num, func) {
+        var nums = [];
+        for (var x=0; x < num; x++) {
+            nums.push(x);
+        }
+        return this.map(nums, func);
+    },
     unique: function(arr, property, def) {
         var res = [];
 
@@ -9,6 +16,27 @@ module.exports = {
                 } else {
                     if (obj[property]) {
                         res.push(obj[property]);
+                    } else {
+                        if (!this.contains(res, def)) {
+                            res.push(def);
+                        }
+                    }
+                }
+            }
+        }.bind(this));
+
+        return res;
+    },
+    immUnique: function(arr, property, def) {
+        var res = [];
+
+        this.each(arr, function(obj) {
+            if (!this.contains(res, obj.get(property))) {
+                if (typeof def == 'undefined') {
+                    res.push(obj.get(property));
+                } else {
+                    if (obj.get(property)) {
+                        res.push(obj.get(property));
                     } else {
                         if (!this.contains(res, def)) {
                             res.push(def);

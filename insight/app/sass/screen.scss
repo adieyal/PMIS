@@ -89,6 +89,10 @@ footer {
     }
 }
 
+.meta-slider {
+    width: 200px;
+}
+
 .slider {
     .outer-bar {
         fill:#eef0ef;
@@ -148,34 +152,34 @@ footer {
         font-family: Arial, sans-serif;
         font-size: 72%;
     }
-    .background { 
+    .background {
         fill: url(#gauge-background-gradient);
     }
-    .mark-green-main { 
+    .mark-green-main {
         stroke: #86bf53;
         fill: url(#gauge-mark-green-gradient);
         stroke-width: 2;
     }
-    .mark-red-main { 
+    .mark-red-main {
         stroke: #f0423e;
         fill: url(#gauge-mark-red-gradient);
         stroke-width: 2;
     }
-    .mark { 
+    .mark {
         stroke: #656263;
         stroke-width: 1;
     }
-    .needle-dashed .needle-fill { 
+    .needle-dashed .needle-fill {
         stroke: #656263;
         fill: url(#gauge-needle-dashed-gradient);
         stroke-width: 0.5;
     }
-    .needle-dashed .needle-mask { 
+    .needle-dashed .needle-mask {
         stroke: #656263;
         stroke-dasharray: 5,5;
         stroke-width: 3.5;
     }
-    .needle-plain .needle-fill { 
+    .needle-plain .needle-fill {
         stroke: #656263;
         fill: url(#gauge-needle-dashed-gradient);
         stroke-width: 0.5;
@@ -200,19 +204,19 @@ footer {
         stroke-width:0;
     }
     .slice2 path {
-        fill:#D0D0AE; 
+        fill:#D0D0AE;
         stroke-width:0;
     }
-    .slice3 path { 
-        fill:#BFDFF6; 
+    .slice3 path {
+        fill:#BFDFF6;
         stroke-width:0;
     }
-    .slice4 path { 
-        fill:#BCBCBC; 
+    .slice4 path {
+        fill:#BCBCBC;
         stroke-width:0;
     }
-    .slice5 path { 
-        fill:#B6DED3; 
+    .slice5 path {
+        fill:#B6DED3;
         stroke-width:0;
     }
 }
@@ -372,10 +376,10 @@ $hugeWidth: 20rem;
     background-color: rgba(0, 0, 0, .5);
 }
 
-.scrollable::-webkit-scrollbar-track { 
-    background-color: #fff; 
-    border-radius: 8px; 
-} 
+.scrollable::-webkit-scrollbar-track {
+    background-color: #fff;
+    border-radius: 8px;
+}
 
 .ui.header {
     margin-bottom: 0;

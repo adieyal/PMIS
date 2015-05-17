@@ -1,3 +1,6 @@
+var component = require('omniscient').withDefaults({ jsx: true });
+component.debug();
+
 var React = require('react/addons');
 var utils = require('../lib/utils');
 var lists = require('../lib/lists');
@@ -8,7 +11,7 @@ var projectClasses = {
     'In danger': 'status in-danger'
 };
 
-module.exports = React.createClass({
+var methods = {
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
         return {
@@ -28,150 +31,115 @@ module.exports = React.createClass({
             clusterId: props.clusterId,
             programme: props.programme
         });
-    },
-    generateSortClass: function(sort) {
-        if (this.state.sort == sort) {
-            return this.state.direction;
-        }
-        return '';
-    },
-    handleSort: function(sort) {
-        return function() {
-            var direction;
+    }
+};
 
-            if (this.state.sort == sort) {
-                direction = this.state.direction == 'ascending' ? 'descending' : 'ascending';
-            } else {
-                direction = 'ascending';
-            }
+module.exports = component('ClusterProjects', methods,
+    function({ projects }) {
+        var filters = [
+            'programme',
+            'phase',
+            'status',
+            'district',
+            'municipality',
+            'implementing_agent',
+        ];
+        var filterOptions = {};
 
-            this.setState({
-                sort: sort,
-                direction: direction
-            });
+        var generateSortClass = (sort) => this.state.sort == sort ? this.state.direction : ''
+
+        var handleSort = function(sort) {
+            return function() {
+                var direction;
+
+                if (this.state.sort == sort) {
+                    direction = this.state.direction == 'ascending' ? 'descending' : 'ascending';
+                } else {
+                    direction = 'ascending';
+                }
+
+                this.setState({
+                    sort: sort,
+                    direction: direction
+                });
+            }.bind(this);
         }.bind(this);
-    },
-    clusterProjects: function() {
-        return this.props.projects.filter(function (p) {
-            return ('department-of-' + this.state.clusterId) == p.cluster;
-        }.bind(this));
-    },
-    filterProjects: function(projects) {
-        return projects.filter(function (p) {
-            var allowed = true;
 
-            if (this.state.programme) {
-                if (this.state.programme == 'Unknown') {
-                    allowed = !p.programme;
-                } else {
-                    allowed = this.state.programme == p.programme;
+        var filterProjects = function(projects) {
+            return projects.filter(function (p) {
+                var x;
+                var allowed = true;
+
+                for(x = 0, l = filters.length; x < l; x++) {
+                    var filter = filters[x];
+                    if (allowed && this.state[filter]) {
+                        if (this.state[filter].toLowerCase() == 'unknown') {
+                            allowed = !p.get(filter);
+                        } else {
+                            allowed = this.state[filter] == p.get(filter);
+                        }
+                    }
                 }
-            }
 
-            if (this.state.phase) {
-                if (this.state.phase == 'unknown') {
-                    allowed = !p.phase;
+                return allowed;
+            }.bind(this));
+        }.bind(this);
+
+        var sortProjects = function(projects) {
+            return projects.sort(function (a, b) {
+                var sort = this.state.sort;
+                var directionModifier = this.state.direction == 'ascending' ? 1 : -1;
+                var direction;
+
+                if (a.get(sort) > b.get(sort)) {
+                    direction = 1;
+                } else if (a.get(sort) < b.get(sort)) {
+                    direction = -1;
                 } else {
-                    allowed = this.state.phase == p.phase;
-                }
-            }
+                    direction = 0;
+                };
 
-            if (allowed && this.state.status) {
-                if (this.state.status == 'unknown') {
-                    allowed = !p.status;
-                } else {
-                    allowed = this.state.status == p.status;
-                }
-            }
+                return direction * directionModifier;
+            }.bind(this));
+        }.bind(this);
 
-            if (allowed && this.state.district) {
-                if (this.state.district == 'Unknown') {
-                    allowed = !p.district;
-                } else {
-                    allowed = this.state.district == p.district;
-                }
-            }
-
-            if (allowed && this.state.municipality) {
-                if (this.state.municipality == 'Unknown') {
-                    allowed = !p.municipality;
-                } else {
-                    allowed = this.state.municipality == p.municipality;
-                }
-            }
-
-            if (allowed && this.state.implementing_agent) {
-                if (this.state.implementing_agent == 'Unknown') {
-                    allowed = !p.implementing_agent;
-                } else {
-                    allowed = this.state.implementing_agent == p.implementing_agent;
-                }
-            }
-
-            return allowed;
-        }.bind(this));
-    },
-    sortProjects: function(projects) {
-        return projects.sort(function (a, b) {
-            var sort = this.state.sort;
-            var directionModifier = this.state.direction == 'ascending' ? 1 : -1;
-            var direction;
-
-            if (a[sort] > b[sort]) {
-                direction = 1;
-            } else if (a[sort] < b[sort]) {
-                direction = -1;
-            } else {
-                direction = 0;
+        var showProject = function(url) {
+            return function() {
+                window.location.href = url;
             };
-
-            return direction * directionModifier;
-        }.bind(this));
-    },
-    showProject: function(url) {
-        return function() {
-            window.location.href = url;
         };
-    },
-    render: function() {
-        var clusterProjects = this.clusterProjects();
 
-        var projects = this.sortProjects(this.filterProjects(clusterProjects));
+        var clusterProjects = projects.toArray().filter((p) => ('department-of-' + this.state.clusterId) == p.get('cluster'));
 
-        var projectProgrammes = utils.unique(projects, 'programme', 'Unknown').sort();
+        var projects = sortProjects(filterProjects(clusterProjects));
 
-        var programmes = utils.map(projectProgrammes, function(programme) {
+        for(x = 0, l = filters.length; x < l; x++) {
+            var filter = filters[x];
+            filterOptions[filter] = utils.immUnique(projects, filter, 'Unknown').sort();
+        }
+
+        var programmes = utils.map(filterOptions.programme, function(programme) {
             return <option key={programme} value={programme}>{programme}</option>;
         });
 
-        var projectPhases = utils.unique(projects, 'phase', 'unknown').sort();
-
         var phases = utils.map(lists.projectPhases, function(title, id) {
-            var disabled = !utils.contains(projectPhases, id);
+            var disabled = !utils.contains(filterOptions.phase, id);
             return <option key={id} value={id} disabled={disabled}>{title}</option>;
         });
 
-        var projectStatuses = utils.unique(projects, 'status', 'unknown').sort();
-
-        var statuses = utils.map(projectStatuses, function(status) {
+        var statuses = utils.map(filterOptions.status, function(status) {
             return <option key={status} value={status}>{status}</option>;
         });
 
-        var projectDistricts = utils.unique(projects, 'district', 'Unknown').sort();
-
-        var districts = utils.map(projectDistricts, function(district) {
+        var districts = utils.map(filterOptions.district, function(district) {
             return <option key={district} value={district}>{district}</option>;
         });
 
-        var projectMunicipalities = utils.unique(projects, 'municipality', 'Unknown').sort();
-
-        var municipalities = utils.map(projectMunicipalities, function(municipality) {
+        var municipalities = utils.map(filterOptions.municipality, function(municipality) {
             return <option key={municipality} value={municipality}>{municipality}</option>;
         });
 
-        var projectImplementingAgents = utils.unique(projects, 'implementing_agent', 'Unknown').sort();
-
-        var implementingAgents = utils.map(projectImplementingAgents, function(implementingAgent) {
+        var implementingAgents = utils.map(filterOptions.implementing_agent, function(implementingAgent) {
             return <option key={implementingAgent} value={implementingAgent}>{implementingAgent}</option>;
         });
 
@@ -228,7 +196,9 @@ module.exports = React.createClass({
                                 </select>
                             </div>
                             <div className="counts">
-                                {projects.length == this.props.projects.length ? this.props.projects.length : (projects.length + ' of ' + clusterProjects.length)} projects
+                                {projects.length == clusterProjects.size ?
+                                    projects.size : (projects.length + ' of ' +
+                                                     clusterProjects.length)} projects
                             </div>
                         </div>
                     </div>
@@ -237,27 +207,26 @@ module.exports = React.createClass({
                     <table className="ui sortable celled table">
                         <thead>
                             <tr>
-                                <th className={this.generateSortClass('phase')} onClick={this.handleSort('phase')}>Phase</th>
-                                <th className={this.generateSortClass('status')} onClick={this.handleSort('status')}>Status</th>
-                                <th className={this.generateSortClass('programme')} onClick={this.handleSort('programme')}>Programme</th>
-                                <th className={this.generateSortClass('name')} onClick={this.handleSort('name')}>Name</th>
-                                <th className={this.generateSortClass('district')} onClick={this.handleSort('district')}>District</th>
-                                <th className={this.generateSortClass('municipality')} onClick={this.handleSort('municipality')}>Municipality</th>
-                                <th className={this.generateSortClass('implementing_agent')} onClick={this.handleSort('implementing_agent')}>Implementing Agent</th>
-                                <th className={this.generateSortClass('last_comment')} onClick={this.handleSort('last_comment')}>Last Comment</th>
+                                <th className={generateSortClass('phase')} onClick={handleSort('phase')}>Phase</th>
+                                <th className={generateSortClass('status')} onClick={handleSort('status')}>Status</th>
+                                <th className={generateSortClass('programme')} onClick={handleSort('programme')}>Programme</th>
+                                <th className={generateSortClass('name')} onClick={handleSort('name')}>Name</th>
+                                <th className={generateSortClass('district')} onClick={handleSort('district')}>District</th>
+                                <th className={generateSortClass('municipality')} onClick={handleSort('municipality')}>Municipality</th>
+                                <th className={generateSortClass('implementing_agent')} onClick={handleSort('implementing_agent')}>Implementing Agent</th>
+                                <th className={generateSortClass('last_comment')} onClick={handleSort('last_comment')}>Last Comment</th>
                             </tr>
                         </thead>
                         <tbody>
                             {projects.map(function(p) {
-                                return <tr key={p.id} className={projectClasses[p.status]}>
-                                    <td>{p.phase}</td>
-                                    <td>{p.status}</td>
-                                    <td className="programme">{p.programme}</td>
-                                    <td className="name" onClick={this.showProject(p.url)}>{p.name}</td>
-                                    <td>{p.district}</td>
-                                    <td>{p.municipality}</td>
-                                    <td>{p.implementing_agent}</td>
-                                    <td>{utils.join(<br />, p.last_comment.split('\n'))}</td>
+                                return <tr key={p.get('id')} className={projectClasses[p.get('status')]}>
+                                    <td>{p.get('phase')}</td>
+                                    <td>{p.get('status')}</td>
+                                    <td className="programme">{p.get('programme')}</td>
+                                    <td className="name" onClick={showProject(p.get('url'))}>{p.get('name')}</td> <td>{p.district}</td>
+                                    <td>{p.get('municipality')}</td>
+                                    <td>{p.get('implementing_agent')}</td>
+                                    <td>{p.get('last_comment') ? utils.join(<br />, p.get('last_comment').split('\n')) : ''}</td>
                                 </tr>;
                             }.bind(this))}
                         </tbody>
@@ -266,4 +235,4 @@ module.exports = React.createClass({
             </div>
         </div>;
     }
-});
+);

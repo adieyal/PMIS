@@ -12,7 +12,8 @@ module.exports = function(options) {
     };
 
 	var entry = {
-		main: reactEntry("components/Main")
+		// main: './app/components/Container',
+		main: './app/components/Main',
 		// second: reactEntry("Second")
 	};
 	var loaders = {
@@ -100,20 +101,22 @@ module.exports = function(options) {
 		externals.push(/^react(\/.*)?$/, /^reflux(\/.*)?$/);
 		plugins.push(new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
 	}
+
 	if(options.commonsChunk) {
 		plugins.push(new webpack.optimize.CommonsChunkPlugin("commons", "commons.js" + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : "")));
 	}
 
-
 	function reactEntry(name) {
 		return (options.prerender ? "./config/prerender?" : "./config/app?") + name;
 	}
+
 	if(options.devServer) {
 		if(options.hot) {
 			entry = joinEntry("webpack/hot/dev-server", entry);
 		}
 		entry = joinEntry("webpack-dev-server/client?" + process.env.FRONTEND, entry);
 	}
+
 	Object.keys(stylesheetLoaders).forEach(function(ext) {
 		var loaders = stylesheetLoaders[ext];
 		if(Array.isArray(loaders)) loaders = loaders.join("!");

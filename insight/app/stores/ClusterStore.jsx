@@ -1,3 +1,5 @@
+var immstruct = require('immstruct');
+var Immutable = require('immutable');
 var utils = require('../lib/utils');
 
 var AppDispatcher = require('../lib/dispatcher');
@@ -11,71 +13,55 @@ var AuthStore = require('./AuthStore');
 var DistrictStore = require('./DistrictStore');
 var PreferenceStore = require('./PreferenceStore');
 
-var state = {
-    clusters: []
-};
+var store = immstruct({
+    clusters: {}
+});
 
 module.exports = function(clusters) {
-    var ClusterStore = StoreFactory(function() {
-        this.getState = function() {
-            return state;
-        };
-    });
-
-    ClusterStore.dispatchToken = AppDispatcher.register(function(payload) {
+    store.dispatchToken = AppDispatcher.register(function(payload) {
         var action = payload.action;
         var ActionTypes = Constants.ActionTypes;
 
         AppDispatcher.waitFor([
-            AuthStore.dispatchToken
+            AuthStore.dispatchToken,
+            PreferenceStore.dispatchToken
         ]);
 
         switch(action.type) {
             case ActionTypes.SET_DATE:
-                state.clusters = [];
-                ClusterStore.triggerChange();
-                var preference = PreferenceStore.getState();
-                remote.fetchClusters(clusters, AuthStore.getState().authToken, { year: preference.year, month: preference.month });
+                store.cursor('clusters').update(() => {});
+
+                var preference = PreferenceStore.cursor();
+                remote.fetchClusters(clusters,
+                    AuthStore.cursor().get('authToken'), {
+                        year: preference.get('year'),
+                        month: preference.get('month')
+                    }
+                );
                 break;
             case ActionTypes.RECEIVE_CLUSTER:
                 // Force the district store first so it calculates the domain
                 // of the districts map coloration correctly first
                 AppDispatcher.waitFor([
-                    DistrictStore.dispatchToken,
-                    PreferenceStore.dispatchToken
+                    DistrictStore.dispatchToken
                 ]);
 
-                state.clusters.push({
-                    slug: action.slug,
-                    data: action.cluster
-                });
-
-                if (state.length < clusters.length) {
-                    // Trigger change anyway since we want to show a loader with number of clusters loaded
-                } else if(state.length == clusters.length) {
-                    // Reorder them according to the cluster property, we've got them all now
-                    state.clusters = clusters.map(function(cluster, index) {
-                        var stateCluster = utils.find(state, function(stateCluster) {
-                            return stateCluster.slug == cluster.slug;
-                        });
-                        stateCluster.view = cluster.view;
-                        return stateCluster;
-                    });
-                }
-
-                ClusterStore.triggerChange();
-
+                action.cluster.slug = action.slug;
+                store.cursor('clusters').update(action.slug, () => Immutable.fromJS(action.cluster));
                 break;
             default:
         }
     });
 
     if (typeof window != 'undefined') {
-        var preference = PreferenceStore.getState();
+        var preference = PreferenceStore.cursor();
         var remote = require('../lib/remote');
-        var query = { year: preference.year, month: preference.month };
-        remote.fetchClusters(clusters, AuthStore.getState().authToken, query);
+        var query = {
+            year: preference.get('year'),
+            month: preference.get('month')
+        };
+        remote.fetchClusters(clusters, AuthStore.cursor().get('authToken'), query);
     }
 
-    return ClusterStore;
+    return store;
 };

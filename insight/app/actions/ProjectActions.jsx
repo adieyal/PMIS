@@ -9,10 +9,10 @@ module.exports = {
             month: month
         });
     },
-    receiveProjects: function (payload) {
+    receiveProjects: function (projects) {
         AppDispatcher.handleAction({
             type: ActionTypes.RECEIVE_PROJECTS,
-            data: payload.data
+            projects: projects
         });
     }
 };

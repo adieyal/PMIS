@@ -2,6 +2,7 @@ var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
 var utils = require('../lib/utils');
 var StoreFactory = require('./StoreFactory');
+var PreferenceStore = require('./PreferenceStore');
 
 var state = {
     maxProjects: 0,
@@ -17,6 +18,10 @@ var DistrictStore = StoreFactory(function() {
 DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
     var action = payload.action;
     var ActionTypes = Constants.ActionTypes;
+
+    AppDispatcher.waitFor([
+        PreferenceStore.dispatchToken
+    ]);
 
     switch(action.type) {
         case ActionTypes.RECEIVE_CLUSTER:

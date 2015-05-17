@@ -1,36 +1,58 @@
+var component = require('omniscient').withDefaults({ jsx: true });
+component.debug();
+
 var React = require('react');
 
-var StoreMixin = require('../mixins/StoreMixin');
-var ClusterStore = require("../stores/ClusterStore");
-var ProjectStore = require("../stores/ProjectStore");
-
-var App = require('./App');
 var lists = require('../lib/lists');
+var AuthStore = require('../stores/AuthStore');
+var ClusterStore = require('../stores/ClusterStore')(lists.clusters);
+var PreferenceStore = require('../stores/PreferenceStore');
+var ProjectStore = require('../stores/ProjectStore');
+
+var PreferenceActions = require('../actions/PreferenceActions');
 
 var logo = require('../images/insight.png');
 
-module.exports = React.createClass({
-    mixins: [ StoreMixin(ClusterStore(lists.clusters), 'clusterStore'), StoreMixin(ProjectStore, 'projectStore') ],
-    
-    getInitialState: function() {
-        return {
-            clusterStore: {
-                clusters: []
-            },
-            projectStore: {
-                projects: []
-            }
-        };
-    },
+var App = require('./App');
 
-    render: function () {
-        var length = this.state.clusterStore.clusters.length;
-        if (length < lists.clusters.length) {
-            return <div className="ui active inverted dimmer">
-                <div className="ui text loader">Loaded {length} clusters</div>
-            </div>;
-        } else {
-            return <App logo={logo} clusters={this.state.clusterStore.clusters} projects={this.state.projectStore.projects} />;
-        }
+function render() {
+    var auth = AuthStore.cursor();
+    var preference = PreferenceStore.cursor().deref();
+    var view = auth.get('status') == 'logged-in' ?
+        preference.get('view') : 'login';
+
+    var clusters = ClusterStore.cursor('clusters');
+    var projects = ProjectStore.cursor('projects');
+
+    if (clusters.size < lists.clusters.length || projects.size == 0) {
+        React.render(
+            <div className="ui active inverted dimmer">
+                <div className="ui text loader">Loaded {clusters.size} clusters</div>
+            </div>, document.body);
+    } else {
+        React.render(
+            <App
+                auth={AuthStore.cursor()}
+                view={view}
+                clusters={clusters}
+                logo={logo}
+                preference={preference}
+                projects={projects}
+            />, document.body);
     }
-});
+}
+
+AuthStore.on('swap', render);
+ClusterStore.on('swap', render);
+PreferenceStore.on('swap', render);
+ProjectStore.on('swap', render);
+
+render();
+
+if (typeof window !== 'undefined') {
+    var parts = window.location.hash.replace('#/', '').split('/');
+
+    if (parts.length > 0) {
+        PreferenceActions.setPreference('view', parts[0] || 'dashboard');
+    }
+}

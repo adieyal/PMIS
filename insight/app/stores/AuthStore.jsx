@@ -1,3 +1,4 @@
+var immstruct = require('immstruct');
 var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
 
@@ -9,45 +10,43 @@ var defaultAuthState = {
     status: 'logged-out'
 };
 
+var state = typeof localStorage == 'undefined' ? defaultAuthState : JSON.parse(localStorage.getItem('auth'));
+
 if (typeof localStorage != 'undefined' && !localStorage.getItem('auth')) {
     setAuth(defaultAuthState);
 }
 
-var AuthStore = require('./StoreFactory')(function() {
-    this.getState = function() {
-        var state = typeof localStorage == 'undefined' ? defaultAuthState : JSON.parse(localStorage.getItem('auth'));
-        return state;
-    };
-});
+var store = immstruct(state);
 
-AuthStore.dispatchToken = AppDispatcher.register(function(payload) {
+store.dispatchToken = AppDispatcher.register(function(payload) {
+    var cursor = store.cursor();
     var action = payload.action;
     var ActionTypes = Constants.ActionTypes;
 
     switch(action.type) {
         case ActionTypes.LOGIN:
-            setAuth({
-                status: 'logged-in',
-                authToken: action.authToken
-            });
-            AuthStore.triggerChange();
+            cursor.update((current) =>
+                current
+                    .set('status', 'logged-in')
+                    .set('authToken', action.authToken));
             break;
         case ActionTypes.LOGIN_FAILURE:
-            setAuth({
-                status: 'failure',
-                data: action.data
-            });
-            AuthStore.triggerChange();
+            cursor.update((current) =>
+                current
+                    .remove('authToken')
+                    .set('status', 'failure')
+                    .set('data', action.data));
             break;
         case ActionTypes.LOGOUT:
-            setAuth({
-                status: 'logged-out'
-            });
-            AuthStore.triggerChange();
+            cursor.update((current) =>
+                current
+                    .remove('data')
+                    .remove('authToken')
+                    .set('status', 'logged-out'));
             break;
         default:
             return true;
     }
 });
 
-module.exports = AuthStore;
+module.exports = store;

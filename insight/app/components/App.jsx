@@ -1,20 +1,19 @@
+var component = require('omniscient').withDefaults({ jsx: true });
+component.debug();
+
 var React = require('react/addons');
-
 var lists = require('../lib/lists');
-
 var Dashboard = require("./Dashboard");
 var LoginForm = require("./LoginForm");
 var Template = require("./Template");
 
-var StoreMixin = require('../mixins/StoreMixin');
-var AuthStore = require('../stores/AuthStore');
-var ClusterStore = require("../stores/ClusterStore");
+var NotificationStore = require('../stores/NotificationStore');
+
+var PreferenceActions = require('../actions/PreferenceActions');
 
 var ClusterProgress = require("./ClusterProgress");
 var ClusterPerformance = require("./ClusterPerformance");
 var ClusterProjects = require("./ClusterProjects");
-
-var NotificationStore = require('../stores/NotificationStore');
 
 if (typeof window != 'undefined') {
     /** This can only be done in the browser */
@@ -53,60 +52,12 @@ if (typeof window != 'undefined') {
     })(window.location.search.substr(1).split('&'));
 }
 
-module.exports = React.createClass({
-    mixins: [
-        React.addons.LinkedStateMixin,
-        StoreMixin(AuthStore, 'auth'),
-    ],
-
-    getInitialState: function () {
-        var today = new Date();
-
-        var path = window.location.hash.replace(/^#/, '');
-        var state = this.generatePathState(path);
-        state.auth = AuthStore.getState();
-        state.date = {
-            year: today.getFullYear(),
-            month: today.getMonth() + 1
-        };
-        return state;
-    },
-
-    setView: function (view) {
-        var state = { view: view };
-        this.setState(state);
-    },
-
-    generatePathState: function(path) {
-        var state = {
-            view: 'dashboard',
+var AddressState = {
+    getInitialState: function() {
+        return {
             clusterId: lists.clusters[0].slug
         };
-
-        var parts = path.split('/').slice(1);
-
-        if (parts.length > 0) {
-            state.view = parts[0] || 'dashboard';
-        }
-
-        if (parts.length > 1) {
-            state.clusterId = parts[1] || lists.clusters[0].slug;
-        }
-
-        if (parts.length > 2) {
-            state.programme = parts[2];
-        }
-
-        return state;
     },
-
-    changeAddress: function(path) {
-        if (this.isMounted()) {
-            var pathState = this.generatePathState(path);
-            this.setState(pathState);
-        }
-    },
-
     componentDidMount: function() {
         if(typeof window != 'undefined') {
             jQuery.address.change(function (evt) {
@@ -114,11 +65,33 @@ module.exports = React.createClass({
             }.bind(this));
         }
     },
+    changeAddress: function(path) {
+        if (this.isMounted()) {
+            var state = {
+                clusterId: lists.clusters[0].slug
+            };
 
-    render: function () {
-        var auth = this.state.auth;
-        var loggedIn = auth.status == 'logged-in';
-        var view = loggedIn ? this.state.view : 'login';
+            var parts = path.split('/').slice(1);
+
+            if (parts.length > 0) {
+                PreferenceActions.setPreference('view', parts[0] || 'dashboard');
+            }
+
+            if (parts.length > 1) {
+                state.clusterId = parts[1] || lists.clusters[0].slug;
+            }
+
+            if (parts.length > 2) {
+                state.programme = parts[2];
+            }
+
+            this.setState(state);
+        }
+    }
+};
+
+module.exports = component('App', AddressState,
+    function({ logo, view, auth, preference, clusters, projects }) {
         var content;
 
         switch(view) {
@@ -126,21 +99,27 @@ module.exports = React.createClass({
                 content = <LoginForm auth={auth} />;
                 break;
             case 'dashboard':
-                content = <Dashboard onSetView={this.setView} clusters={this.props.clusters} />;
+                content = <Dashboard clusters={clusters} />;
                 break;
             case 'progress':
-                content = <ClusterProgress clusters={this.props.clusters} />;
+                content = <ClusterProgress clusters={clusters} />;
                 break;
             case 'performance':
-                content = <ClusterPerformance clusters={this.props.clusters} />;
+                content = <ClusterPerformance clusters={clusters} />;
                 break;
             case 'projects':
-                content = <ClusterProjects clusterId={this.state.clusterId} programme={this.state.programme} projects={this.props.projects} />;
+                content = <ClusterProjects
+                    clusterId={this.state.clusterId}
+                    programme={this.state.programme}
+                    projects={projects} />;
                 break;
         }
 
-        return <Template logo={this.props.logo} auth={auth} view={this.state.view} onSetView={this.setView}>
+        return <Template
+            logo={logo}
+            auth={auth}
+            preference={preference}>
             {content}
         </Template>;
     }
-});
+);
