@@ -1,13 +1,11 @@
 var Dispatcher = require('flux').Dispatcher;
 var utils = require('./utils');
+var Immutable = require('immutable');
 
 module.exports = utils.extend(new Dispatcher(), {
     handleAction: function (action) {
-        console.log('<Dispatcher>', action.type);
-        // console.log('<Dispatcher>', JSON.stringify(action));
-
-        this.dispatch({
+        this.dispatch(Immutable.fromJS({
             action: action
-        });
+        }));
     }
 });

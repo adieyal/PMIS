@@ -1,6 +1,4 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require('react/addons');
 var utils = require('../lib/utils');
 var lists = require('../lib/lists');
@@ -228,7 +226,7 @@ module.exports = component('ClusterProjects', methods,
                                     <td>{p.get('implementing_agent')}</td>
                                     <td>{p.get('last_comment') ? utils.join(<br />, p.get('last_comment').split('\n')) : ''}</td>
                                 </tr>;
-                            }.bind(this))}
+                            })}
                         </tbody>
                     </table>
                 </div>

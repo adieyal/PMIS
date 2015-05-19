@@ -17,6 +17,6 @@ module.exports = {
         'NOTIFY',
 
         'SET_PREFERENCE',
-        'SET_DATE'
+        'SET_FINANCIAL_YEAR'
     ])
 };

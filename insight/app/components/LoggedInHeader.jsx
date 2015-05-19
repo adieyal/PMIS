@@ -1,14 +1,12 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require('react');
-
 var AuthActions = require("../actions/AuthActions");
 var ClusterActions = require("../actions/ClusterActions");
 var ProjectActions = require("../actions/ProjectActions");
 var PreferenceActions = require("../actions/PreferenceActions");
 var StoreMixin = require('../mixins/StoreMixin');
 var PreferenceStore = require('../stores/PreferenceStore');
+var $ = require('jquery');
 
 var methods = {
     getInitialState: function() {
@@ -42,10 +40,19 @@ module.exports = component('LoggedInHeader', methods, function (props) {
         return (view == props.view ? 'active ' : '') + 'item';
     };
 
-    var onChangeMonth = function(e) {
-        var date = e.target.value.split('-');
-        PreferenceActions.setDate(date[0], date[1]);
+    var onChangeYear = function(e) {
+        var financialYear = $(e.target).val();
+        PreferenceActions.setFinancialYear(financialYear);
     };
+
+    var financialYear = props.preference.get('year');
+
+    var financialYears = [
+        <option key="2012" value="2012">2012/2013</option>,
+        <option key="2013" value="2013">2013/2014</option>,
+        <option key="2014" value="2014">2014/2015</option>,
+        <option key="2015" value="2015">2015/2016</option>
+    ];
 
     return <header>
         <div className="ui grid">
@@ -60,14 +67,15 @@ module.exports = component('LoggedInHeader', methods, function (props) {
                     <a className={generateClasses('progress')} href="#/progress">Progress</a>
                     <a ref="performance" className={generateClasses('performance')} href="#/performance">Performance</a>
                     <a ref="projects" className={generateClasses('projects')} href="#/projects">Project list</a>
-                    <a ref="logout" className="item" onClick={this.logout}>Logout</a>
+                    <a ref="logout" className="item" onClick={logout}>Logout</a>
                     <a className="right menu">
                         <div className="item">
                             <div className="ui icon input">
-                                <input className="month" type="month"
-                                defaultValue={props.preference.get('year') + '-'
-                                    + props.preference.get('month')} onChange={onChangeMonth} />
-                                <i className="calendar icon" />
+                                <select className="financial-year"
+                                onChange={onChangeYear}
+                                defaultValue={financialYear}>
+                                    {financialYears}
+                                </select>
                             </div>
                         </div>
                         <div className="item search-item">

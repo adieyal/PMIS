@@ -1,3 +1,4 @@
+var component = require('../lib/component');
 var React = require("react");
 
 var Slider = React.createClass({

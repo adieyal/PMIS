@@ -1,38 +1,30 @@
+var immstruct = require('immstruct');
 var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
-var StoreFactory = require('./StoreFactory');
 var PreferenceStore = require('./PreferenceStore');
 
-var state = {
+var store = immstruct({
     notifications: []
-};
-
-var NotificationStore = StoreFactory(function() {
-    this.getLastNotification = function() {
-        return state.notifications[state.notifications.length - 1];
-    };
-
-    this.getState = function() {
-        return state;
-    };
 });
 
-NotificationStore.dispatchToken = AppDispatcher.register(function(payload) {
-    var action = payload.action;
+store.dispatchToken = AppDispatcher.register(function(payload) {
+    var action = payload.get('action');
     var ActionTypes = Constants.ActionTypes;
 
     AppDispatcher.waitFor([
         PreferenceStore.dispatchToken
     ]);
 
-    switch(action.type) {
+    switch(action.get('type')) {
         case ActionTypes.NOTIFY:
-            state.notifications.push(action.notification);
-            NotificationStore.triggerChange();
+            var humane = require('humane-js');
+            var notify = humane.create();
+            notify.log(notifications[notifications.length-1]);
+            store.cursor('notifications').push(action.get('notification'));
             break;
         default:
             return true;
     }
 });
 
-module.exports = NotificationStore;
+module.exports = store;

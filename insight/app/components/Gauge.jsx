@@ -1,3 +1,4 @@
+var component = require('../lib/component');
 var React = require("react");
 var lists = require('../lib/lists');
 
@@ -17,10 +18,12 @@ module.exports = React.createClass({
             var r = 180 * (data.get('position') || 0) - 90;
 
             var markerProps = {
+                key: index,
                 transform: 'translate(' + x + ',' + y + ')'
             };
 
             var needleProps = {
+                key: index,
                 transform: 'rotate(' + r + ')'
             };
 
@@ -31,9 +34,9 @@ module.exports = React.createClass({
 
             var markerInnerProps = {};
 
-            if (data['needle-color']) {
+            if (data.get('needle-color')) {
                 var gid = 'gauge-needle' + index + '-gradient';
-                var color = data['needle-color'];
+                var color = data.get('needle-color');
 
                 gradient = <linearGradient id={gid} x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor={color[1]} />
@@ -47,7 +50,7 @@ module.exports = React.createClass({
 
             var marker;
 
-            switch(data['marker-style']) {
+            switch(data.get('marker-style')) {
                 case 'none':
                     marker = <g {...markerProps} />;
                     break;
@@ -57,14 +60,15 @@ module.exports = React.createClass({
                         <circle className="marker-accent" cx="0" cy="-57" r="6"/>
                         <circle className="marker-outer" cx="0" cy="-57" r="5.5"/>
                         <circle className="marker-inner" cx="0" cy="-57" r="2.5" {...markerInnerProps} />
-                        {data.text ? <text className="marker-text" x="0" y="-65" textAnchor="middle">{data.text}</text> : '' }
+                        {data.get('text') ? <text className="marker-text" x="0"
+                            y="-65" textAnchor="middle">{data.get('text')}</text> : '' }
                     </g>;
                     break;
             }
 
             var needle;
 
-            switch(data['needle-style']) {
+            switch(data.get('needle-style')) {
                 case 'dashed':
                     needle = <g {...needleProps} className="needle-dashed">
                         <rect className="needle-fill" x="-1.5" width="3" {...rectProps} />
@@ -91,7 +95,7 @@ module.exports = React.createClass({
             var className = (x == 0 ? 'mark-red-main' : (x == 20 ? 'mark-green-main' : 'mark'));
             var green = Math.round(this.props.data.get(0).get('position')*25);
             var stroke = x < green ? '#f0423e' : '#86bf53';
-            markers.push(<line className={className} x1="-50" y1="0" x2="-37" y2="0" transform={'rotate(' + degrees + ')'} />);
+            markers.push(<line key={x} className={className} x1="-50" y1="0" x2="-37" y2="0" transform={'rotate(' + degrees + ')'} />);
         }
 
         var style = this.props.height ? { height: this.props.height } : {};
@@ -104,6 +108,7 @@ module.exports = React.createClass({
                     <stop offset="50%" stopColor="#eceeed"/>
                     <stop offset="100%" stopColor="#eceeed"/>
                 </linearGradient>
+
                 <linearGradient id="gauge-mark-red-gradient" x1="1" x2="0" y1="0" y2="0">
                     <stop offset="0%" stopColor="#f0423e"/>
                     <stop offset="50%" stopColor="#eceeed"/>
@@ -128,10 +133,12 @@ module.exports = React.createClass({
                     <stop offset="0%" stopColor="#cccccc"/>
                     <stop offset="100%" stopColor="#ffffff"/>
                 </linearGradient>
+
                 <linearGradient id="gauge-marker-outer-stroke-gradient" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#ffffff"/>
                     <stop offset="100%" stopColor="#b7b9b8"/>
                 </linearGradient>
+
                 <linearGradient id="gauge-marker-inner-gradient" x1="0" x2="0" y1="0" y2="1">
                     <stop offset="0%" stopColor="#d3d2d2"/>
                     <stop offset="100%" stopColor="#656263"/>

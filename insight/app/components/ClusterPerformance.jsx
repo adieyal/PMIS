@@ -1,8 +1,5 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require("react/addons");
-
 var Donut = require('./Donut');
 var Slider = require('./Slider');
 var DistrictRow = require('./DistrictRow');

@@ -1,46 +1,43 @@
+'use strict';
+
+var immstruct = require('immstruct');
+var Immutable = require('immutable');
 var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
 var utils = require('../lib/utils');
-var StoreFactory = require('./StoreFactory');
 var PreferenceStore = require('./PreferenceStore');
 
-var state = {
-    maxProjects: 0,
-    districtsByCluster: {}
-};
-
-var DistrictStore = StoreFactory(function() {
-    this.getState = function() {
-        return state;
-    };
+var store = immstruct({
+    districts: {},
+    maxProjects: 0
 });
 
-DistrictStore.dispatchToken = AppDispatcher.register(function(payload) {
-    var action = payload.action;
+store.dispatchToken = AppDispatcher.register(function(payload) {
+    var action = payload.get('action');
     var ActionTypes = Constants.ActionTypes;
 
     AppDispatcher.waitFor([
         PreferenceStore.dispatchToken
     ]);
 
-    switch(action.type) {
+    switch(action.get('type')) {
         case ActionTypes.RECEIVE_CLUSTER:
-            state.districtsByCluster[action.slug] = action.cluster.districts;
+            store.cursor().update('districts', function (current) {
+                return current.set(action.get('cluster').get('slug'),
+                                   action.get('cluster').get('districts').toObject());
+            });
 
-            previousMaxProjects = state.maxProjects;
-            var districts = utils.flatten(utils.map(state.districtsByCluster, function(districts) {
-                return utils.values(districts);
-            }));
-
-            var otherMaxProjects = utils.max(utils.pluck(districts, 'projects-implementation'));
-            state.maxProjects = Math.max(state.maxProjects, otherMaxProjects);
-
-            if (state.maxProjects > previousMaxProjects) {
-                DistrictStore.triggerChange();
-            }
+            store.cursor().update('maxProjects', () => {
+                var clusterDistricts = action.get('cluster').get('districts').toArray();
+                var result = clusterDistricts.reduce(function(acc, d) {
+                    var projects = d.get('projects-implementation');
+                    return Math.max(acc, projects);
+                }, store.cursor().get('maxProjects'));
+                return result;
+            })
             break;
         default:
     }
 });
 
-module.exports = DistrictStore;
+module.exports = store;

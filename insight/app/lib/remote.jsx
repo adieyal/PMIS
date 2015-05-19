@@ -10,9 +10,9 @@ function url(path) {
 }
 
 Remote = {
-    fetchProjects: function (authToken, query) {
+    fetchProjects: function (authToken, year) {
         return request
-            .get(url('reports/projects/' + query.year + '/' + query.month + '/'))
+            .get(url('reports/projects/' + year + '/'))
             .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
@@ -27,11 +27,9 @@ Remote = {
                 ProjectActions.receiveProjects(res.body.data);
             });
     },
-    fetchCluster: function (slug, authToken, query) {
-        var month = parseInt(query.month);
-        if(month < 10) month = '0' + month;
+    fetchCluster: function (slug, authToken, year) {
         return request
-            .get(url('reports/cluster/department-of-' + slug + '/' + query.year + '/' + month + '/v2'))
+            .get(url('reports/cluster/department-of-' + slug + '/' + year + '/v2'))
             .set('Accept', 'application/json')
             .set('Authorization', 'Token ' + authToken)
             .end(function (error, res) {
@@ -44,7 +42,8 @@ Remote = {
                 }
 
                 var cluster = res.body;
-                ClusterActions.receiveCluster(slug, cluster);
+                cluster.slug = slug;
+                ClusterActions.receiveCluster(cluster);
             });
     },
     fetchClusters: function (clusters, authToken, query) {

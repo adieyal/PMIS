@@ -1,3 +1,4 @@
+var component = require('../lib/component');
 var React = require('react/addons');
 var Donut = require("./Donut");
 var Slider = require("./Slider");
@@ -52,7 +53,10 @@ module.exports = React.createClass({
                                     <Slider height="100" data={p.performance} />
                                 </div>
                                 <div className="column">
-                                    <Donut height="125" title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
+                                    <Donut height="125"
+                                    title={p.numbers.implementation
+                                        + "/" + p.numbers.projects
+                                        + " Projects"} data={p.projects} />
                                 </div>
                             </div>
                         </div>

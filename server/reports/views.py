@@ -989,9 +989,12 @@ def generate_cluster_dashboard_v2(cluster, year, month):
 
     return context
 
-def latest_cluster_project(request, cluster, year=None, month=None):
+def latest_cluster_project(request, cluster, year=None):
     year = int(year)
-    month = int(month)
+
+    # Input is financial year, so it's for the period ending March of the next year
+    year += 1
+    month = 3
 
     try:
         timestamp = (select_projects_by_cluster(cluster, year, month)
@@ -1009,17 +1012,23 @@ def latest_cluster_project(request, cluster, year=None, month=None):
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_cluster_project)
-def cluster_dashboard_v2(request, cluster, year=None, month=None):
+def cluster_dashboard_v2(request, cluster, year=None):
     year = int(year)
-    month = int(month)
+
+    # Input is financial year, so it's for the period ending March of the next year
+    year += 1
+    month = 3
 
     context = generate_cluster_dashboard_v2(cluster, year, month)
     return HttpResponse(json.dumps(context), mimetype='application/json')
 
-def latest_project(request, year=None, month=None):
+def latest_project(request, year=None):
     year = int(year)
-    month = int(month)
 
+    # Input is financial year, so it's for the period ending March of the next year
+    year += 1
+    month = 3
+        
     try:
         timestamp = select_projects(year, month).max(lambda p: p.timestamp)
     except NoElementsError:
@@ -1038,9 +1047,12 @@ def normalize(value):
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
-def projects_v2(request, year=None, month=None):
+def projects_v2(request, year=None):
     year = int(year)
-    month = int(month)
+
+    # Input is financial year, so it's for the period ending March of the next year
+    year += 1
+    month = 3
         
     def normalize_district(str):
         str = re.sub(r'(?i)\s*district$', '', str)

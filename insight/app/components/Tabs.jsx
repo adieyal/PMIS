@@ -1,3 +1,4 @@
+var component = require('../lib/component');
 var React = require('react');
 
 module.exports = React.createClass({

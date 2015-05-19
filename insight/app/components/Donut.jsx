@@ -1,3 +1,4 @@
+var component = require('../lib/component');
 var React = require("react");
 var ActivatorMixin = require('../mixins/ActivatorMixin');
 var Legend = require('./Legend');

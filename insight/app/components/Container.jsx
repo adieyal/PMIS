@@ -1,9 +1,4 @@
-var component = require('omniscient').withDefaults({
-    jsx: true
-});
-
-component.debug();
-
+var component = require('../lib/component');
 var React = require('react');
 var MetaSlider = require('./MetaSlider.jsx');
 var PreferenceStruct = require('./PreferenceStruct.jsx');

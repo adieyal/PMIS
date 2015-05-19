@@ -1,13 +1,9 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require('react/addons');
 var lists = require('../lib/lists');
 var Dashboard = require("./Dashboard");
 var LoginForm = require("./LoginForm");
 var Template = require("./Template");
-
-var NotificationStore = require('../stores/NotificationStore');
 
 var PreferenceActions = require('../actions/PreferenceActions');
 
@@ -29,14 +25,6 @@ if (typeof window != 'undefined') {
         search: BACKEND + '/reports/search?query={query}',
         cluster: BACKEND + '/reports/project/department-of-{slug}/latest/'
     };
-
-    var humane = require('humane-js');
-
-    NotificationStore.addChangeListener(function() {
-        var notification = NotificationStore.getLastNotification();
-        var notify = humane.create();
-        notify.log(notification);
-    });
 
     jQuery.QueryString = (function(a) {
         if (a == "") return {};
@@ -91,7 +79,7 @@ var AddressState = {
 };
 
 module.exports = component('App', AddressState,
-    function({ logo, view, auth, preference, clusters, projects }) {
+    function({ view, auth, preference, clusters, districts, projects }) {
         var content;
 
         switch(view) {
@@ -99,7 +87,7 @@ module.exports = component('App', AddressState,
                 content = <LoginForm auth={auth} />;
                 break;
             case 'dashboard':
-                content = <Dashboard clusters={clusters} />;
+                content = <Dashboard preference={preference} clusters={clusters} districts={districts} />;
                 break;
             case 'progress':
                 content = <ClusterProgress clusters={clusters} />;
@@ -116,7 +104,6 @@ module.exports = component('App', AddressState,
         }
 
         return <Template
-            logo={logo}
             auth={auth}
             preference={preference}>
             {content}

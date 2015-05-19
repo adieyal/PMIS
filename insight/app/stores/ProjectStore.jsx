@@ -13,7 +13,7 @@ var store = immstruct({
 });
 
 store.dispatchToken = AppDispatcher.register(function(payload) {
-    var action = payload.action;
+    var action = payload.get('action');
     var ActionTypes = Constants.ActionTypes;
 
     AppDispatcher.waitFor([
@@ -21,17 +21,15 @@ store.dispatchToken = AppDispatcher.register(function(payload) {
         PreferenceStore.dispatchToken
     ]);
 
-    switch(action.type) {
+    switch(action.get('type')) {
         case ActionTypes.RECEIVE_PROJECTS:
-            store.cursor('projects').update(() => Immutable.fromJS(action.projects));
+            store.cursor('projects').update(() => action.get('projects'));
             break;
         case ActionTypes.SET_DATE:
             var preference = PreferenceStore.cursor();
 
-            remote.fetchProjects(AuthStore.cursor().get('authToken'), {
-                year: preference.get('year'),
-                month: preference.get('month')
-            });
+            remote.fetchProjects(AuthStore.cursor().get('authToken'),
+                                 preference.get('year'));
             break;
         default:
     }
@@ -40,10 +38,8 @@ store.dispatchToken = AppDispatcher.register(function(payload) {
 if (typeof window != 'undefined') {
     var remote = require('../lib/remote');
     var preference = PreferenceStore.cursor();
-    remote.fetchProjects(AuthStore.cursor().get('authToken'), {
-        year: preference.get('year'),
-        month: preference.get('month')
-    });
+    remote.fetchProjects(AuthStore.cursor().get('authToken'),
+                         preference.get('year'));
 }
 
 module.exports = store;

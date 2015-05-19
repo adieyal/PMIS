@@ -1,4 +1,4 @@
-var component = require('omniscient').withDefaults({ jsx: true });
+var component = require('../lib/component');
 var Cursor = require('immutable/contrib/cursor');
 var React = require("react/addons");
 
@@ -28,183 +28,187 @@ var methods = {
     }
 };
 
-module.exports = component('ClusterDashboard', methods, function ({ cluster }) {
-    var changeTab = (tab) => (e) => {
-        e.preventDefault();
-        this.setState({
-            tab: tab
-        });
-    };
-
-    var changePerformanceTab = (tab) => (e) => {
-        e.preventDefault();
-        this.setState({
-            tab: 'performance',
-            performanceTab: tab
-        });
-    };
-
-    var generateProgrammes = function() {
-        var data = cluster.get('programmes').map(function(p) {
-            var numbers = {
-                implementation: p.projects.implementation,
-                projects: p.projects.total
-            };
-
-            var projects = utils.map(Object.keys(lists.projectPhases), function(phase) {
-                return [ lists.projectPhases[phase], p.projects[phase] ];
+module.exports = component('ClusterDashboard', methods,
+    function ({ cluster, districts }) {
+        var changeTab = (tab) => (e) => {
+            e.preventDefault();
+            this.setState({
+                tab: tab
             });
+        };
 
-            return {
-                id: p.id,
-                title: p.title,
-                numbers: numbers,
-                projects: projects,
-                performance: p.performance
-            };
-        }.bind(this));
-        return data;
-    };
-
-    var generateDistricts = function() {
-        var result = [];
-
-        for (var slug in cluster.districts) {
-            var district = cluster.districts[slug];
-            var title = lists.districts[slug];
-
-            result.push({
-                slug: slug,
-                title: title,
-                numbers: {
-                    implementation: district['projects-implementation']
-                },
-                implementation: [
-                    [ '0 - 50%', district.completeness['projects-0-50'] ],
-                    [ '51 - 75%', district.completeness['projects-51-75'] ],
-                    [ '76 - 99%', district.completeness['projects-76-99'] ],
-                    [ '100%', district.completeness['projects-100'] ]
-                ],
-                performance: district.performance
+        var changePerformanceTab = (tab) => (e) => {
+            e.preventDefault();
+            this.setState({
+                tab: 'performance',
+                performanceTab: tab
             });
-        }
-        return result;
-    };
+        };
 
-    var generatePlanningDonut = function() {
-        return Object.keys(lists.planningPhases).map(function(phase) {
-            return [ lists.planningPhases[phase], cluster.get('planning-phases')[phase] ];
+        var generateProgrammes = function() {
+            var data = cluster.get('programmes').toArray().map(function(p) {
+                var projects = p.cursor('projects');
+                var numbers = {
+                    implementation: projects.get('implementation'),
+                    projects: projects.get('total')
+                };
+
+                var projects = utils.map(Object.keys(lists.projectPhases), function(phase) {
+                    return [ lists.projectPhases[phase],
+                            p.get('projects').get(phase) ];
+                });
+
+                return {
+                    id: p.get('id'),
+                    title: p.get('title'),
+                    numbers: numbers,
+                    projects: projects,
+                    performance: p.get('performance')
+                };
+            }.bind(this));
+            return data;
+        };
+
+        var generateDistricts = function() {
+            var result = [];
+
+            for (var slug in cluster.districts) {
+                var district = cluster.districts[slug];
+                var title = lists.districts[slug];
+
+                result.push({
+                    slug: slug,
+                    title: title,
+                    numbers: {
+                        implementation: district['projects-implementation']
+                    },
+                    implementation: [
+                        [ '0 - 50%', district.completeness['projects-0-50'] ],
+                        [ '51 - 75%', district.completeness['projects-51-75'] ],
+                        [ '76 - 99%', district.completeness['projects-76-99'] ],
+                        [ '100%', district.completeness['projects-100'] ]
+                    ],
+                    performance: district.performance
+                });
+            }
+            return result;
+        };
+
+        var generatePlanningDonut = function() {
+            return Object.keys(lists.planningPhases).map(function(phase) {
+                return [ lists.planningPhases[phase], cluster.get('planning-phases').get(phase) ];
+            });
+        };
+
+        var generateImplementationLegend = function() {
+            return Object.keys(lists.implementationGroups).map(function(groupId) {
+                return [ lists.implementationGroups[groupId], cluster.get('implementation-groups').get(groupId) ];
+            });
+        };
+
+        var generateProjectsDonut = function() {
+            return Object.keys(lists.projectPhases).map(function(phase) {
+                return [ lists.projectPhases[phase], cluster.get(phase + '-projects-total') ];
+            });
+        };
+
+        var listCluster = utils.find(lists.clusters, function(listCluster) {
+            return listCluster.slug == cluster.get('slug');
         });
-    };
 
-    var generateImplementationLegend = function() {
-        return Object.keys(lists.implementationGroups).map(function(groupId) {
-            return [ lists.implementationGroups[groupId], cluster.get('implementation-groups')[groupId] ];
-        });
-    };
+        var domain = [ 0, utils.max(utils.pluck(cluster.get('districts'), 'projects-implementation')) ];
 
-    var generateProjectsDonut = function() {
-        return Object.keys(lists.projectPhases).map(function(phase) {
-            return [ lists.projectPhases[phase], cluster.get(phase + '-projects-total') ];
-        });
-    };
+        var implementation = generateImplementationLegend();
 
-    var listCluster = utils.find(lists.clusters, function(listCluster) {
-        return listCluster.slug == cluster.get('slug');
-    });
+        return <div className="cluster-dashboard">
+            <div className="index ui fluid card">
+                <div className="content">
+                    <h2 className="cluster-title ui header"
+                    onClick={changePerformanceTab('overview')} style={{
+                        backgroundColor: listCluster.colour }}>{listCluster.title}</h2>
 
-    var domain = [ 0, utils.max(utils.pluck(cluster.get('districts'), 'projects-implementation')) ];
+                    <Tabs ref="outerTab" state={this.state} attribute="tab">
+                        <div key="performance" title="Performance">
+                            <Tabs ref="innerTab" type="inner" state={this.state} attribute="performanceTab">
+                                <div key="overview" title="Overview">
+                                    <div className="ui two column grid slider-row">
+                                        <div className="column">
+                                            <Slider key="total" data={cluster.get('total-slider')} title="Total" height="120" />
+                                        </div>
 
-    var implementation = generateImplementationLegend();
+                                        <div className="planning-column column" onClick={changePerformanceTab('planning')}>
+                                            <Slider key="planning" data={cluster.get('planning-slider')} title="Planning" height="120" />
+                                        </div>
 
-    return <div className="cluster-dashboard">
-        <div className="index ui fluid card">
-            <div className="content">
-                <h2 className="cluster-title ui header"
-                onClick={changePerformanceTab('overview')} style={{
-                    backgroundColor: listCluster.colour }}>{listCluster.title}</h2>
+                                        <div className="implementation-column column" onClick={changePerformanceTab('implementation')}>
+                                            <Slider key="implementation"
+                                            data={cluster.get('implementation-slider')} title="Implementation" height="120" />
+                                        </div>
 
-                <Tabs ref="outerTab" state={this.state} attribute="tab">
-                    <div key="performance" title="Performance">
-                        <Tabs ref="innerTab" type="inner" state={this.state} attribute="performanceTab">
-                            <div key="overview" title="Overview">
-                                <div className="ui two column grid slider-row">
-                                    <div className="column">
-                                        <Slider key="total" data={cluster.get('total-slider')} title="Total" height="120" />
-                                    </div>
-
-                                    <div className="planning-column column" onClick={changePerformanceTab('planning')}>
-                                        <Slider key="planning" data={cluster.get('planning-slider')} title="Planning" height="120" />
-                                    </div>
-
-                                    <div className="implementation-column column" onClick={changePerformanceTab('implementation')}>
-                                        <Slider key="implementation"
-                                        data={cluster.get('implementation-slider')} title="Implementation" height="120" />
-                                    </div>
-
-                                    <div className="gauge-column column">
-                                        <Gauge key="gauge" data={cluster.get('total-progress-gauge')} height="110" />
+                                        <div className="gauge-column column">
+                                            <Gauge key="gauge" data={cluster.get('total-progress-gauge')} height="110" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div key="projects" title="Projects">
-                                <div className="ui header">{cluster.get('total-projects')} Projects in Total</div>
-                                <div className="ui grid">
-                                    <div className="six wide column">
-                                        <Slider data={cluster.get('total-slider')} height="190" />
-                                    </div>
-                                    <div className="ten wide column">
-                                        <Donut data={generateProjectsDonut()} height="206" />
+                                <div key="projects" title="Projects">
+                                    <div className="ui header">{cluster.get('total-projects')} Projects in Total</div>
+                                    <div className="ui grid">
+                                        <div className="six wide column">
+                                            <Slider data={cluster.get('total-slider')} height="190" />
+                                        </div>
+                                        <div className="ten wide column">
+                                            <Donut data={generateProjectsDonut()} height="206" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div key="planning" title="Planning">
-                                <div className="ui header">{cluster.get('planning-projects-total')} Projects in Planning</div>
-                                <div className="ui grid">
-                                    <div className="six wide column">
-                                        <Slider data={cluster.get('planning-slider')} height="190" />
-                                    </div>
-                                    <div className="ten wide column">
-                                        <Donut data={generatePlanningDonut()} height="206" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div key="implementation" title="Implementation">
-                                <div className="ui header">{cluster.get('implementation-projects-total')} Projects in Implementation</div>
-                                <div className="ui grid">
-                                    <div className="six wide column">
-                                        <Slider data={cluster.get('implementation-slider')} height="120" />
-                                        <Gauge data={cluster.get('total-progress-gauge')} height="120" />
-                                    </div>
-                                    <div className="ten wide column">
-                                        <Legend data={implementation} height="280" />
+                                <div key="planning" title="Planning">
+                                    <div className="ui header">{cluster.get('planning-projects-total')} Projects in Planning</div>
+                                    <div className="ui grid">
+                                        <div className="six wide column">
+                                            <Slider data={cluster.get('planning-slider')} height="190" />
+                                        </div>
+                                        <div className="ten wide column">
+                                            <Donut data={generatePlanningDonut()} height="206" />
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </Tabs>
-                    </div>
 
-                    <Programmes key="programmes" title="Programmes" clusterId={cluster.slug} programmes={generateProgrammes()} />
+                                <div key="implementation" title="Implementation">
+                                    <div className="ui header">{cluster.get('implementation-projects-total')} Projects in Implementation</div>
+                                    <div className="ui grid">
+                                        <div className="six wide column">
+                                            <Slider data={cluster.get('implementation-slider')} height="120" />
+                                            <Gauge data={cluster.get('total-progress-gauge')} height="120" />
+                                        </div>
+                                        <div className="ten wide column">
+                                            <Legend data={implementation} height="280" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </Tabs>
+                        </div>
 
-                    <div key="districts" title="Districts">
-                        <div className="ui two column grid">
-                            <div className="column">
-                                <DistrictMap districts={cluster.get('districts')} domain={domain} height="200" />
-                            </div>
-                            <div className="column scrollable district-rows">
-                            {generateDistricts().map(function(d) {
-                                return <div key={d.slug} className="extra content">
-                                    <DistrictRow district={d} />
-                                </div>;
-                            })}
+                        <Programmes key="programmes" title="Programmes" clusterId={cluster.get('slug')} programmes={generateProgrammes()} />
+
+                        <div key="districts" title="Districts">
+                            <div className="ui two column grid">
+                                <div className="column">
+                                    <DistrictMap clusterId={cluster.get('slug')} districts={districts} domain={domain} height="200" />
+                                </div>
+                                <div className="column scrollable district-rows">
+                                {generateDistricts().map(function(d) {
+                                    return <div key={d.slug} className="extra content">
+                                        <DistrictRow district={d} />
+                                    </div>;
+                                })}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </Tabs>
+                    </Tabs>
+                </div>
             </div>
-        </div>
-    </div>;
-});
+        </div>;
+    }
+);

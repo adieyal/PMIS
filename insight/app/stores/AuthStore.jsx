@@ -20,22 +20,22 @@ var store = immstruct(state);
 
 store.dispatchToken = AppDispatcher.register(function(payload) {
     var cursor = store.cursor();
-    var action = payload.action;
+    var action = payload.get('action');
     var ActionTypes = Constants.ActionTypes;
 
-    switch(action.type) {
+    switch(action.get('type')) {
         case ActionTypes.LOGIN:
             cursor.update((current) =>
                 current
                     .set('status', 'logged-in')
-                    .set('authToken', action.authToken));
+                    .set('authToken', action.get('authToken')));
             break;
         case ActionTypes.LOGIN_FAILURE:
             cursor.update((current) =>
                 current
                     .remove('authToken')
                     .set('status', 'failure')
-                    .set('data', action.data));
+                    .set('data', action.get('data')));
             break;
         case ActionTypes.LOGOUT:
             cursor.update((current) =>

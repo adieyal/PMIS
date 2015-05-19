@@ -1,6 +1,5 @@
-var component = require('omniscient').withDefaults({ jsx: true });
+var component = require('../lib/component');
 var React = require('react');
-
 var Header = require('./Header');
 var Footer = require('./Footer');
 

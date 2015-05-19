@@ -1,8 +1,5 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require("react/addons");
-
 var Donut = require('./Donut');
 var Slider = require('./Slider');
 var DistrictRow = require('./DistrictRow');
@@ -81,19 +78,22 @@ module.exports = component('ClusterProgress', methods, function({ clusters }) {
 
     var generateProjectsDonut = function() {
         return Object.keys(lists.projectPhases).map(function(phase) {
-            return [ lists.projectPhases[phase], cluster.get(phase + '-projects-total') ];
+            return [ lists.projectPhases[phase],
+                    cluster.get(phase + '-projects-total') ];
         });
     };
 
     var generatePlanningDonut = function() {
         return Object.keys(lists.planningPhases).map(function(phase) {
-            return [ lists.planningPhases[phase], cluster.get('planning-phases')[phase] ];
+            return [ lists.planningPhases[phase],
+                    cluster.get('planning-phases').get(phase) ];
         });
     };
 
     var generateImplementationDonut = function() {
         return Object.keys(lists.implementationGroups).map(function(groupId) {
-            return [ lists.implementationGroups[groupId], cluster.get('implementation-groups')[groupId] ];
+            return [ lists.implementationGroups[groupId],
+                    cluster.get('implementation-groups').get(groupId) ];
         });
     };
 

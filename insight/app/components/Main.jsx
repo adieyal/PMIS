@@ -1,17 +1,13 @@
-var component = require('omniscient').withDefaults({ jsx: true });
-component.debug();
-
+var component = require('../lib/component');
 var React = require('react');
-
 var lists = require('../lib/lists');
 var AuthStore = require('../stores/AuthStore');
-var ClusterStore = require('../stores/ClusterStore')(lists.clusters);
+var ClusterStore = require('../stores/ClusterStore');
 var PreferenceStore = require('../stores/PreferenceStore');
 var ProjectStore = require('../stores/ProjectStore');
+var DistrictStore = require('../stores/DistrictStore');
 
 var PreferenceActions = require('../actions/PreferenceActions');
-
-var logo = require('../images/insight.png');
 
 var App = require('./App');
 
@@ -23,6 +19,7 @@ function render() {
 
     var clusters = ClusterStore.cursor('clusters');
     var projects = ProjectStore.cursor('projects');
+    var districts = DistrictStore.cursor();
 
     if (clusters.size < lists.clusters.length || projects.size == 0) {
         React.render(
@@ -35,7 +32,7 @@ function render() {
                 auth={AuthStore.cursor()}
                 view={view}
                 clusters={clusters}
-                logo={logo}
+                districts={districts}
                 preference={preference}
                 projects={projects}
             />, document.body);
@@ -46,6 +43,7 @@ AuthStore.on('swap', render);
 ClusterStore.on('swap', render);
 PreferenceStore.on('swap', render);
 ProjectStore.on('swap', render);
+DistrictStore.on('swap', render);
 
 render();
 
