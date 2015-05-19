@@ -72,23 +72,24 @@ module.exports = component('ClusterDashboard', methods,
         var generateDistricts = function() {
             var result = [];
 
-            for (var slug in cluster.districts) {
-                var district = cluster.districts[slug];
+            for (var slug in cluster.get('districts').toObject()) {
+                var district = cluster.get('districts').get(slug);
                 var title = lists.districts[slug];
+                var completeness = district.get('completeness');
 
                 result.push({
                     slug: slug,
                     title: title,
                     numbers: {
-                        implementation: district['projects-implementation']
+                        implementation: district.get('projects-implementation')
                     },
                     implementation: [
-                        [ '0 - 50%', district.completeness['projects-0-50'] ],
-                        [ '51 - 75%', district.completeness['projects-51-75'] ],
-                        [ '76 - 99%', district.completeness['projects-76-99'] ],
-                        [ '100%', district.completeness['projects-100'] ]
+                        [ '0 - 50%', completeness.get('projects-0-50') ],
+                        [ '51 - 75%', completeness.get('projects-51-75') ],
+                        [ '76 - 99%', completeness.get('projects-76-99') ],
+                        [ '100%', completeness.get('projects-100') ]
                     ],
-                    performance: district.performance
+                    performance: district.get('performance')
                 });
             }
             return result;

@@ -42,7 +42,8 @@ store.dispatchToken = AppDispatcher.register(function(payload) {
             ]);
 
             var cluster = action.get('cluster');
-            store.cursor('clusters').set(cluster.get('slug'), cluster);
+            store.cursor('clusters').set(cluster.get('slug'),
+                                         Immutable.fromJS(cluster));
             break;
         default:
     }
