@@ -23,3 +23,5 @@ deploy:
 	make production-build demo-build && \
 	sudo chgrp -R webapp . && \
 	sudo supervisorctl restart all"
+
+.PHONY: serve production-reindex development-reindex deploy
