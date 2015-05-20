@@ -27,7 +27,7 @@ store.dispatchToken = AppDispatcher.register(function(payload) {
 
     switch(action.get('type')) {
         case ActionTypes.SET_FINANCIAL_YEAR:
-            store.cursor('clusters').update(() => {});
+            store.cursor('clusters').update(() => Immutable.fromJS({}));
 
             var preference = PreferenceStore.cursor();
             remote.fetchClusters(clusters,
