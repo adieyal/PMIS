@@ -45,9 +45,9 @@ PreferenceStore.on('swap', render);
 ProjectStore.on('swap', render);
 DistrictStore.on('swap', render);
 
-render();
-
 if (typeof window !== 'undefined') {
+    render();
+
     var parts = window.location.hash.replace('#/', '').split('/');
 
     if (parts.length > 0) {

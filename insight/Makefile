@@ -10,11 +10,11 @@ dev-server:
 	npm run dev-server
 
 production-server:
-	BUILD_FOLDER=build/production BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run start
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run start
 	# hot-dev-server
 
 demo-server:
-	BUILD_FOLDER=build/demo BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run start
+	BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run start
 
 # Assume git, nodejs and npm are installed
 install:
@@ -26,12 +26,12 @@ install:
 
 development-build: install
 	bundle exec compass compile
-	BUILD_FOLDER=build/development BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run development-build
+	BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run development-build
 
 production-build: install
 	bundle exec compass compile
-	BUILD_FOLDER=build/production BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
 
 demo-build: install
 	bundle exec compass compile
-	BUILD_FOLDER=build/demo BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run build
+	BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run build

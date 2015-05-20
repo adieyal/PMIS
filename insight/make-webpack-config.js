@@ -2,6 +2,7 @@ var path = require("path");
 var webpack = require("webpack");
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var BowerWebpackPlugin = require("bower-webpack-plugin");
+var ComponentWebpackPlugin = require("component-webpack-plugin");
 var loadersByExtension = require("./config/loadersByExtension");
 var joinEntry = require("./config/joinEntry");
 var Config = require("./lib/config");
@@ -66,7 +67,7 @@ module.exports = function(options) {
 	var extensions = ["", ".web.js", ".js", ".jsx"];
 	var root = path.join(__dirname, "app");
 	var output = {
-		path: path.join(process.env.BUILD_FOLDER, options.prerender ? "prerender" : "public"),
+		path: path.join(__dirname, "build", options.prerender ? "prerender" : "public"),
 		publicPath: "/",
 		filename: "[name].js" + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
 		chunkFilename: (options.devServer ? "[id].js" : "[name].js") + (options.longTermCaching && !options.prerender ? "?[chunkhash]" : ""),
@@ -78,7 +79,7 @@ module.exports = function(options) {
 		function() {
 			if(!options.prerender) {
 				this.plugin("done", function(stats) {
-					require("fs").writeFileSync(path.join(__dirname, process.env.BUILD_FOLDER, "stats.json"), JSON.stringify(stats.toJson({
+					require("fs").writeFileSync(path.join(__dirname, "build", "stats.json"), JSON.stringify(stats.toJson({
 						chunkModules: true,
 						exclude: [
 							/node_modules[\\\/]react/
@@ -94,7 +95,8 @@ module.exports = function(options) {
 		    minSizeReduce: 1.5,
 		    moveToParents: true
         }),
-		new BowerWebpackPlugin()
+		new BowerWebpackPlugin(),
+		new ComponentWebpackPlugin()
 	];
 	if(options.prerender) {
 		aliasLoader["react-proxy$"] = "react-proxy/unavailable";
@@ -134,14 +136,17 @@ module.exports = function(options) {
 	if(options.minimize) {
 		plugins.push(
 			new webpack.optimize.UglifyJsPlugin(),
-			new webpack.optimize.DedupePlugin(),
-			new webpack.DefinePlugin({
-				"process.env": {
-					NODE_ENV: JSON.stringify("production")
-				}
-			})
+			new webpack.optimize.DedupePlugin()
 		);
 	}
+
+    plugins.push(
+        new webpack.DefinePlugin({
+            "process.env": {
+                NODE_ENV: JSON.stringify("production")
+            }
+        })
+    );
 
 	return {
 		entry: entry,

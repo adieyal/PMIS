@@ -25,8 +25,8 @@ deploy:
 	sudo supervisorctl restart all"
 
 local-build-and-deploy:
-	cd insight && make production-build demo-build
-	rsync -avz --delete build/ pmis:/var/www/pmis/build
+	# cd insight && make production-build demo-build
+	rsync -avz --delete insight/build/ pmis:/var/www/pmis/build
 	ssh -t pmis " \
 	export PATH=~/.virtualenvs/pmis/bin:~/.rbenv/shims:/opt/node/bin:/usr/local/bin:/usr/bin:/bin; \
 	cd /var/www/pmis && \
