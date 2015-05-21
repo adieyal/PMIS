@@ -7,8 +7,6 @@ var DistrictRow = require('./DistrictRow');
 var utils = require('../lib/utils');
 var lists = require('../lib/lists');
 
-var ClusterActions = require('../actions/ClusterActions');
-
 var methods = {
     mixins: [React.addons.LinkedStateMixin],
     getInitialState: function() {
@@ -23,17 +21,21 @@ module.exports = component('ClusterProgress', methods, function({ clusters }) {
 
     var generateProgrammes = function() {
         data = cluster.get('programmes').map(function(p) {
+            var projects = p.get('projects');
+
             var numbers = {
-                planning: p.projects.planning,
-                implementation: p.projects.implementation
+                planning: projects.get('planning'),
+                implementation: projects.get('implementation')
             };
 
             var planning = utils.map(Object.keys(lists.planningPhases), function(phase) {
-                return [ lists.planningPhases[phase], p.planning[phase] ];
+                return [ lists.planningPhases[phase],
+                        p.get('planning').get(phase) ];
             });
 
             var implementation = utils.map(Object.keys(lists.implementationGroups), function(groupId) {
-                return [ lists.implementationGroups[groupId], p.implementation[groupId] ];
+                return [ lists.implementationGroups[groupId],
+                        p.get('implementation').get(groupId) ];
             });
 
             return {

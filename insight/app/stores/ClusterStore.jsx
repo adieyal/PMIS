@@ -1,6 +1,5 @@
 var immstruct = require('immstruct');
 var Immutable = require('immutable');
-var utils = require('../lib/utils');
 var lists = require('../lib/lists');
 
 var AppDispatcher = require('../lib/dispatcher');

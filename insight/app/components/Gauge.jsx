@@ -1,6 +1,5 @@
-var component = require('../lib/component');
+// var component = require('../lib/component');
 var React = require("react");
-var lists = require('../lib/lists');
 
 module.exports = React.createClass({
     render: function() {

@@ -1,10 +1,8 @@
 'use strict';
 
 var immstruct = require('immstruct');
-var Immutable = require('immutable');
 var AppDispatcher = require('../lib/dispatcher');
 var Constants = require('../lib/constants');
-var utils = require('../lib/utils');
 var PreferenceStore = require('./PreferenceStore');
 
 var store = immstruct({

@@ -1,6 +1,5 @@
-var component = require('../lib/component');
+// var component = require('../lib/component');
 var React = require("react");
-var ActivatorMixin = require('../mixins/ActivatorMixin');
 var Legend = require('./Legend');
 var lists = require('../lib/lists');
 
@@ -82,16 +81,11 @@ var Donut = React.createClass({
                 path = '';
             }
 
-            var rectX = 160;
-            var rectY = index * 35 - 18 * length;
-
             var textAngle = (startAngle + endAngle) / 2 + arcOffset;
             var textRadius = outerRadius + 25 + ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 5 : 0);
 
             var textX = Math.cos(textAngle) * textRadius - ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 15 : 0);
             var textY = Math.sin(textAngle) * textRadius;
-
-            var textNudge = value > 9 ? 25 : 20;
 
             return <g key={phase}>
                 <text x={textX} y={textY}>{percentage}</text>

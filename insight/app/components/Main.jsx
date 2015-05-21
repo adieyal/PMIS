@@ -1,4 +1,3 @@
-var component = require('../lib/component');
 var React = require('react');
 var lists = require('../lib/lists');
 var AuthStore = require('../stores/AuthStore');
@@ -24,17 +23,17 @@ function render() {
     if (clusters.size < lists.clusters.length || projects.size == 0) {
         React.render(
             <div className="ui active inverted dimmer">
-                <div className="ui text loader">Loaded {clusters.size} clusters</div>
+            <div className="ui text loader">Loaded {clusters.size} clusters</div>
             </div>, document.body);
     } else {
         React.render(
             <App
-                auth={AuthStore.cursor()}
-                view={view}
-                clusters={clusters}
-                districts={districts}
-                preference={preference}
-                projects={projects}
+            auth={AuthStore.cursor()}
+            view={view}
+            clusters={clusters}
+            districts={districts}
+            preference={preference}
+            projects={projects}
             />, document.body);
     }
 }

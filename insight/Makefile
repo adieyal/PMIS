@@ -24,14 +24,11 @@ install:
 	npm install
 	bower install
 
-development-build: install
-	bundle exec compass compile
+development-build:
 	BACKEND=http://www.backend.dev FRONTEND=http://www.production.dev PORT=8082 npm run development-build
 
-production-build: install
-	bundle exec compass compile
+production-build:
 	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run build
 
-demo-build: install
-	bundle exec compass compile
+demo-build:
 	BACKEND=http://pmis-demo.burgercom.co.za FRONTEND=http://insight-demo.burgercom.co.za PORT=8084 npm run build

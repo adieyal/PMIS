@@ -9,9 +9,11 @@ var Config = require("./lib/config");
 
 module.exports = function(options) {
     var definitions = {
-        BACKEND: JSON.stringify(process.env.BACKEND)
+        BACKEND: JSON.stringify(process.env.BACKEND),
+        "process.env": {
+            NODE_ENV: JSON.stringify(options.node_env)
+        }
     };
-
 	var entry = {
 		// main: './app/components/Container',
 		main: './app/components/Main',
@@ -88,7 +90,6 @@ module.exports = function(options) {
 				});
 			}
 		},
-		new webpack.DefinePlugin(definitions),
 		new webpack.PrefetchPlugin("react"),
 		new webpack.PrefetchPlugin("react/lib/ReactComponentBrowserEnvironment"),
 		new webpack.optimize.AggressiveMergingPlugin({
@@ -141,11 +142,7 @@ module.exports = function(options) {
 	}
 
     plugins.push(
-        new webpack.DefinePlugin({
-            "process.env": {
-                NODE_ENV: JSON.stringify("production")
-            }
-        })
+        new webpack.DefinePlugin(definitions)
     );
 
 	return {

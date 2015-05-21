@@ -1,12 +1,11 @@
 var component = require('../lib/component');
-var Cursor = require('immutable/contrib/cursor');
 var React = require("react/addons");
 
 var Gauge = require('./Gauge');
 var Donut = require('./Donut');
 var Legend = require('./Legend');
 var Slider = require('./Slider');
-var MetaSlider = require('./MetaSlider');
+// var MetaSlider = require('./MetaSlider');
 var DistrictMap = require('./DistrictMap');
 
 var Tabs = require('./Tabs');
@@ -16,7 +15,6 @@ var DistrictRow = require('./DistrictRow');
 
 var lists = require('../lib/lists');
 var utils = require('../lib/utils');
-var count = 0;
 
 var methods = {
     mixins: [React.addons.LinkedStateMixin],
@@ -30,13 +28,6 @@ var methods = {
 
 module.exports = component('ClusterDashboard', methods,
     function ({ cluster, districts }) {
-        var changeTab = (tab) => (e) => {
-            e.preventDefault();
-            this.setState({
-                tab: tab
-            });
-        };
-
         var changePerformanceTab = (tab) => (e) => {
             e.preventDefault();
             this.setState({

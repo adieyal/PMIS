@@ -1,6 +1,5 @@
 var component = require('../lib/component');
 var React = require("react");
-var NotificationActions = require("../actions/NotificationActions");
 var utils = require('../lib/utils');
 
 var methods = {
@@ -21,8 +20,6 @@ var methods = {
                 }]
             }
         };
-
-        var $form = window.jQuery('.ui.form', this.getDOMNode());
 
         window.jQuery('.ui.form', this.getDOMNode()).form(rules, {
             inline: true,

@@ -1,11 +1,6 @@
 var component = require('../lib/component');
 var React = require('react');
-var AuthActions = require("../actions/AuthActions");
-var ClusterActions = require("../actions/ClusterActions");
-var ProjectActions = require("../actions/ProjectActions");
 var PreferenceActions = require("../actions/PreferenceActions");
-var StoreMixin = require('../mixins/StoreMixin');
-var PreferenceStore = require('../stores/PreferenceStore');
 var $ = require('jquery');
 
 var methods = {
@@ -48,7 +43,6 @@ module.exports = component('LoggedInHeader', methods, function (props) {
     var financialYear = props.preference.get('year');
 
     var financialYears = [
-        <option key="2012" value="2012">2012/2013</option>,
         <option key="2013" value="2013">2013/2014</option>,
         <option key="2014" value="2014">2014/2015</option>,
         <option key="2015" value="2015">2015/2016</option>
