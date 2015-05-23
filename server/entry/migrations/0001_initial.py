@@ -8,31 +8,62 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
+        # Adding model 'Cluster'
+        db.create_table(u'entry_cluster', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+        ))
+        db.send_create_signal(u'entry', ['Cluster'])
+
+        # Adding model 'Programme'
+        db.create_table(u'entry_programme', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('cluster', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['entry.Cluster'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+        ))
+        db.send_create_signal(u'entry', ['Programme'])
+
+        # Adding model 'ImplementingAgent'
+        db.create_table(u'entry_implementingagent', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
+        ))
+        db.send_create_signal(u'entry', ['ImplementingAgent'])
+
         # Adding model 'Project'
         db.create_table(u'entry_project', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('cluster_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('redis_project_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
+            ('programme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['entry.Programme'])),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=128)),
         ))
         db.send_create_signal(u'entry', ['Project'])
 
-        # Adding model 'ProjectRevision'
-        db.create_table(u'entry_projectrevision', (
+        # Adding model 'Revision'
+        db.create_table(u'entry_revision', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('project', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['entry.Project'])),
-            ('redis_revision_id', self.gf('django.db.models.fields.CharField')(max_length=64)),
-            ('updated_at', self.gf('django.db.models.fields.DateTimeField')()),
-            ('data', self.gf('jsonfield.fields.JSONField')()),
+            ('edit', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('data', self.gf('jsonfield.fields.JSONField')(null=True)),
+            ('updated_at', self.gf('django.db.models.fields.DateTimeField')(null=True)),
         ))
-        db.send_create_signal(u'entry', ['ProjectRevision'])
+        db.send_create_signal(u'entry', ['Revision'])
 
 
     def backwards(self, orm):
+        # Deleting model 'Cluster'
+        db.delete_table(u'entry_cluster')
+
+        # Deleting model 'Programme'
+        db.delete_table(u'entry_programme')
+
+        # Deleting model 'ImplementingAgent'
+        db.delete_table(u'entry_implementingagent')
+
         # Deleting model 'Project'
         db.delete_table(u'entry_project')
 
-        # Deleting model 'ProjectRevision'
-        db.delete_table(u'entry_projectrevision')
+        # Deleting model 'Revision'
+        db.delete_table(u'entry_revision')
 
 
     models = {
@@ -53,18 +84,18 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'entry.project': {
-            'Meta': {'object_name': 'Project'},
-            'cluster_id': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
+            'Meta': {'ordering': "('name',)", 'object_name': 'Project'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'redis_project_id': ('django.db.models.fields.CharField', [], {'max_length': '64'})
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
+            'programme': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['entry.Programme']"})
         },
-        u'entry.projectrevision': {
-            'Meta': {'object_name': 'ProjectRevision'},
-            'data': ('jsonfield.fields.JSONField', [], {}),
+        u'entry.revision': {
+            'Meta': {'ordering': "('updated_at',)", 'object_name': 'Revision'},
+            'data': ('jsonfield.fields.JSONField', [], {'null': 'True'}),
+            'edit': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'project': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['entry.Project']"}),
-            'redis_revision_id': ('django.db.models.fields.CharField', [], {'max_length': '64'}),
-            'updated_at': ('django.db.models.fields.DateTimeField', [], {})
+            'updated_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True'})
         }
     }
 

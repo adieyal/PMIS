@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, url, include
 
 urlpatterns = patterns('entry.views',
+    url(r'^', include('django.contrib.auth.urls')),
     url(r'^(?P<project_id>[\w-]+)/edit$', 'edit', {}, 'edit'),
     url(r'^new$', 'new', {}, 'new'),
     url(r'^$', 'projects', {}, 'list'),

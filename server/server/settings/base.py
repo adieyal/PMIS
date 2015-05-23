@@ -33,7 +33,7 @@ TEMPLATE_DEBUG = DEBUG
 ########## MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ('Marlin Forbes', 'marlinf@localhost'),
+    ('Marlin Forbes', 'marlinf@datashaman.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -156,8 +156,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'reversion.middleware.RevisionMiddleware',
-    # 'server.middleware.LoginRequiredMiddleware',
+    'server.middleware.LoginRequiredMiddleware',
     'server.middleware.XsSharing',
 )
 ########## END MIDDLEWARE CONFIGURATION
@@ -198,7 +197,6 @@ THIRD_PARTY_APPS = (
     'south',
     'registration',
     'rest_framework',
-    'reversion',
     'rest_framework.authtoken',
     'djoser',
     'gunicorn',
@@ -277,12 +275,12 @@ WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
 
 
-LOGIN_URL = '/ui/login.html'
-LOGIN_REDIRECT_URL = '/ui/index.html'
-LOGOUT_URL = '/ui/login.html'
-ABSOLUTE_URL_OVERRIDES = {
-    'auth.user': lambda o: "/",
-}
+# LOGIN_URL = '/ui/login.html'
+# LOGIN_REDIRECT_URL = '/ui/index.html'
+# LOGOUT_URL = '/ui/login.html'
+# ABSOLUTE_URL_OVERRIDES = {
+#     'auth.user': lambda o: "/",
+# }
 
 REST_FRAMEWORK = {
     # Use hyperlinked styles by default.
@@ -317,14 +315,14 @@ CACHES = {
     }
 }
 
-DJOSER = {
-    'DOMAIN': 'http://localhost:2992',
-    'SITE_NAME': 'Frontend',
-    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': '#/activate/{uid}/{token}',
-    'LOGIN_AFTER_ACTIVATION': True,
-    'SEND_ACTIVATION_EMAIL': True,
-}
+# DJOSER = {
+#     'DOMAIN': 'http://localhost:2992',
+#     'SITE_NAME': 'Frontend',
+#     'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+#     'ACTIVATION_URL': '#/activate/{uid}/{token}',
+#     'LOGIN_AFTER_ACTIVATION': True,
+#     'SEND_ACTIVATION_EMAIL': True,
+# }
 
 PROFILE_LOG_BASE="/tmp"
 

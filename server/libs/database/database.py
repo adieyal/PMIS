@@ -9,6 +9,8 @@ from slugify import slugify
 from backend import connection
 from utils import dump_to_json
 
+from django.db import models
+
 __all__ = ['Project', 'DoesNotExistError']
 
 # UUID v1 Custom Class
@@ -178,4 +180,3 @@ class Project(object):
     def list(cls):
         items = connection.smembers('/project')
         return items
-        
