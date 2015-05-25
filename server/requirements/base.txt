@@ -20,3 +20,4 @@ slugify
 djoser
 elasticsearch
 py-linq
+jsonfield

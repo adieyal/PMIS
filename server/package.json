@@ -9,9 +9,8 @@
   "license": "Proprietary",
   "devDependencies": {
     "browser-sync": "^2.6.4",
-    "gulp": "^3.8.11"
-  },
-  "dependencies": {
+    "gulp": "^3.8.11",
     "gulp-sass": "^1.3.3"
-  }
+  },
+  "dependencies": {}
 }
