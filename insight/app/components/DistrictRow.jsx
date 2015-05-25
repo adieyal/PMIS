@@ -11,21 +11,24 @@ var DistrictRow = React.createClass({
 
         var donut = this.props.donut || 'implementation';
 
-        if (this.props.layout == 'horizontal') {
-            content = <div className="ui two column grid">
-                <div className="column">
-                    <Donut data={district[donut]} height="170" colours="districtDonutColours" />
-                </div>
-                <div className="column">
-                    <Slider data={district.performance} height="170" />
-                </div>
-            </div>;
-        } else {
-            content = <div>
-                <Slider data={district.performance} height="100" />
-                <Donut data={district[donut]} height="125" colours="districtDonutColours" />
-            </div>;
-        };
+        if (district.numbers.implementation > 0) {
+            if (this.props.layout == 'horizontal') {
+                content = <div className="ui two column grid">
+                    <div className="column">
+                        <Donut data={district[donut]} height="170" colours="districtDonutColours" />
+                    </div>
+                    <div className="column">
+                        <Slider data={district.performance} height="170" />
+                    </div>
+                </div>;
+            } else {
+                content = <div>
+                    <Slider data={district.performance} height="100" />
+                    <Donut data={district[donut]} height="125" colours="districtDonutColours" />
+                </div>;
+            };
+        }
+
         return <div className="district-row">
             <h4 className="ui header">{district.title}</h4>
             <div className="meta">{district.numbers.implementation} Projects in Implementation</div>

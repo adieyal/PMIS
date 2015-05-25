@@ -39,6 +39,8 @@ module.exports = component('ClusterDashboard', methods,
         var generateProgrammes = function() {
             var data = cluster.get('programmes').toArray().map(function(p) {
                 var projects = p.cursor('projects');
+                console.log(projects.size);
+
                 var numbers = {
                     implementation: projects.get('implementation'),
                     projects: projects.get('total')
@@ -150,7 +152,8 @@ module.exports = component('ClusterDashboard', methods,
                                             <Slider data={cluster.get('total-slider')} height="190" />
                                         </div>
                                         <div className="ten wide column">
-                                            <Donut data={generateProjectsDonut()} height="206" />
+                                            <Donut
+                                            count={cluster.get('total-projects')} data={generateProjectsDonut()} height="206" />
                                         </div>
                                     </div>
                                 </div>
@@ -162,7 +165,9 @@ module.exports = component('ClusterDashboard', methods,
                                             <Slider data={cluster.get('planning-slider')} height="190" />
                                         </div>
                                         <div className="ten wide column">
-                                            <Donut data={generatePlanningDonut()} height="206" />
+                                            <Donut
+                                                count={cluster.get('planning-projects-total')}
+                                                data={generatePlanningDonut()} height="206" />
                                         </div>
                                     </div>
                                 </div>

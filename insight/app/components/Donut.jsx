@@ -43,17 +43,18 @@ function arc(innerRadius, outerRadius, startAngle, endAngle) {
 
 var Donut = React.createClass({
     render: function() {
-        var total = this.props.data.reduce(function (acc, datum) {
-            return acc + datum[1];
-        }, 0);
-
-        if (total <= 0) {
+        if (this.props.count == 0) {
             return <div className="donut">
                 <svg width="100%" height={this.props.height} version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
-                    <text x="100" y="-10" style={{ fontSize: 40 }} textAnchor="middle">No Data</text>
+                    <text x="100" y="-10" style={{ fontSize: 40 }}
+                    textAnchor="middle">No Projects</text>
                 </svg>
             </div>;
         }
+
+        var total = this.props.data.reduce(function (acc, datum) {
+            return acc + datum[1];
+        }, 0);
 
         var endAngle = 0;
 
