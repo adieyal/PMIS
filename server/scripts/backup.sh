@@ -1,4 +1,4 @@
-DBPATH=/var/www/pmis/server/data/*.db
+DBPATH=/var/www/production/server/data/*.db
 BACKUPDIR=/var/backups/pmis
 DIR=`date +"%Y%m%d"`
 cd /tmp
