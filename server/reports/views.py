@@ -1058,7 +1058,7 @@ def projects_v2(request, year=None):
         str = re.sub(r'(?i)\s*district$', '', str)
         return normalize(str)
 
-    def _progress_for_month(data, year, month):
+    def _progress_for_month(name, data, year, month):
         clean_data = []
         for item in data:
             try:
@@ -1069,15 +1069,21 @@ def projects_v2(request, year=None):
                 'month': (dt.year*100)+dt.month,
                 'progress': _safe_float(item['progress'])
             })
-        
+
         month = (int(year)*100)+int(month)
         latest = None
         for item in clean_data:
             if item['month']<=month and item['progress'] != None:
                 if not latest or latest['month'] < item['month']:
                     latest = item
+
+        if name == 'Saselani construction of enviroloos':
+            print clean_data
+            print latest
+        
         if latest:
-            return latest['progress']/100
+            return latest['progress'] / 100
+
         return 0
     
     def _project_status(actual, planned):
@@ -1102,8 +1108,8 @@ def projects_v2(request, year=None):
             'programme': normalize(project.programme),
             'name': project.description,
             'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
-            'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
-                                    _progress_for_month(project.planning, year-1, month))[0],
+            'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.description, project.actual, year, month),
+                                    _progress_for_month(project.description, project.planning, year, month))[0],
             'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
             'phase': project.phase,
             'implementing_agent': project.implementing_agent,
