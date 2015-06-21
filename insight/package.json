@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "webpack-dev-server --content-base config/dev-server-public --config webpack.config.js --progress --colors --port $PORT",
+    "production-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-production.config.js --progress --colors --port $PORT",
     "dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-dev-server.config.js --progress --colors --port $PORT",
     "hot-dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-hot-dev-server.config.js --hot --progress --colors --port $PORT",
     "build": "webpack --config webpack-production.config.js --progress --profile --colors",
