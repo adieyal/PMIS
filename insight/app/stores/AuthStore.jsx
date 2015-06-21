@@ -25,24 +25,40 @@ store.dispatchToken = AppDispatcher.register(function(payload) {
 
     switch(action.get('type')) {
         case ActionTypes.LOGIN:
-            cursor.update((current) =>
-                current
+            cursor.update(function(current) {
+                setAuth({
+                    status: 'logged-in',
+                    authToken: action.get('authToken')
+                });
+
+                return current
                     .set('status', 'logged-in')
-                    .set('authToken', action.get('authToken')));
+                    .set('authToken', action.get('authToken'));
+            });
             break;
         case ActionTypes.LOGIN_FAILURE:
-            cursor.update((current) =>
-                current
+            cursor.update(function(current) {
+                setAuth({
+                    status: 'failure'
+                });
+
+                return current
                     .remove('authToken')
                     .set('status', 'failure')
-                    .set('data', action.get('data')));
+                    .set('data', action.get('data'));
+            });
             break;
         case ActionTypes.LOGOUT:
-            cursor.update((current) =>
-                current
+            cursor.update(function(current) {
+                setAuth({
+                    status: 'logged-out'
+                });
+
+                return current
                     .remove('data')
                     .remove('authToken')
-                    .set('status', 'logged-out'));
+                    .set('status', 'logged-out');
+            });
             break;
         default:
             return true;
