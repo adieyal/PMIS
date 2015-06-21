@@ -39,7 +39,6 @@ module.exports = component('ClusterDashboard', methods,
         var generateProgrammes = function() {
             var data = cluster.get('programmes').toArray().map(function(p) {
                 var projects = p.cursor('projects');
-                console.log(projects.size);
 
                 var numbers = {
                     implementation: projects.get('implementation'),
