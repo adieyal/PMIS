@@ -800,20 +800,20 @@ def generate_districts_v2(district_projects, year, month, month0):
 
     return districts
 
-def select_projects(year, month):
+def select_projects():
     projects = (Enumerable(Project.list())
         .where(lambda p: p)
-        .select(lambda p: Project.get(p, year, month))
+        .select(lambda p: Project.get(p))
         .where(lambda p: p))
     return projects
         
-def select_projects_by_cluster(cluster, year, month):
-    projects = (select_projects(year, month)
+def select_projects_by_cluster(cluster):
+    projects = (select_projects()
         .where(lambda p: p.cluster.lower().replace(' ', '-').replace(',', '') == cluster))
     return projects
         
 def generate_cluster_dashboard_v2(cluster, year, month):
-    projects = select_projects_by_cluster(cluster, year, month)
+    projects = select_projects_by_cluster(cluster)
 
     programmes = (projects
         .where(lambda p: p.programme != '--------')
@@ -997,7 +997,7 @@ def latest_cluster_project(request, cluster, year=None):
     month = 3
 
     try:
-        timestamp = (select_projects_by_cluster(cluster, year, month)
+        timestamp = (select_projects_by_cluster(cluster)
             .max(lambda p: p.timestamp))
     except NoElementsError:
         timestamp = None
@@ -1030,7 +1030,7 @@ def latest_project(request, year=None):
     month = 3
         
     try:
-        timestamp = select_projects(year, month).max(lambda p: p.timestamp)
+        timestamp = select_projects().max(lambda p: p.timestamp)
     except NoElementsError:
         timestamp = None
 
@@ -1088,7 +1088,7 @@ def projects_v2(request, year=None):
         else:
             return ('On Target', 'green')
     
-    projects = select_projects(year, month)
+    projects = select_projects()
 
     base_url = os.getenv('BASE_URL', settings.BASE_URL)
 
