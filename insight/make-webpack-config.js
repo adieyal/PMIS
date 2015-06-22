@@ -131,9 +131,11 @@ module.exports = function(options) {
 			stylesheetLoaders[ext] = "style-loader!" + loaders;
 		}
 	});
+
 	if(options.separateStylesheet && !options.prerender) {
 		plugins.push(new ExtractTextPlugin("[name].css"));
 	}
+
 	if(options.minimize) {
 		plugins.push(
 			new webpack.optimize.UglifyJsPlugin(),
