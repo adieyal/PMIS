@@ -24,4 +24,9 @@ jQuery(document).ready(function($){
        tf_field.val(parseInt(total_forms)+1);
        parents.before(clone);
    });
+   
+   /** Show referenced tab if there is one */
+   if(window.location.hash && $('.nav-tabs').length) {
+       $('[href="' + window.location.hash + '"]').tab('show');
+   }
 });

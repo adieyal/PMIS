@@ -62,3 +62,29 @@ fieldset.can-minimize.minimized > legend:before {
 fieldset.can-minimize.minimized > div {
     display: none;
 }
+
+table.projects th, table.projects td {
+    vertical-align: top;
+}
+
+table.projects .name {
+    width: 20%;
+}
+
+table.projects .description {
+    width: 40%;
+}
+
+table.projects .programme {
+    width: 20%;
+}
+
+table.projects .budget {
+    text-align: right;
+    width: 10%;
+}
+
+table.projects .expenditure {
+    text-align: right;
+    width: 10%;
+}

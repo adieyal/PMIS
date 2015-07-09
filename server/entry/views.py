@@ -13,6 +13,11 @@ from libs.database.database import Project
 
 from models import Cluster, Programme, ImplementingAgent
 
+def _safe_int(val, add=0):
+    try:
+        return int(filter(lambda x: x.isdigit() or x == '.', str(val))) + add
+    except (TypeError, ValueError):
+        return None
 
 def projects(request):
     project_list = (Project.get(uuid) for uuid in Project.list())
@@ -26,12 +31,15 @@ def projects(request):
             'uuid': p._uuid,
             'name': p.name,
             'description': p.description,
+            'programme': p.programme,
+            'expenditure_to_date': _safe_int(p.expenditure_to_date),
+            'total_anticipated_cost': _safe_int(p.total_anticipated_cost),
             'contract': p.contract,
             'valid_status': p.valid_status
         })
 
     for name, cluster in context.iteritems():
-        context[name] = sorted(cluster, key=lambda x: x['name'])
+        context[name] = sorted(cluster, key=lambda x: [x['programme'], x['name']])
 
     return TemplateResponse(request, 'entry/list.html', {'projects': context})
     
@@ -166,6 +174,7 @@ def edit(request, project_id):
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
     project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
     context = {
+        'cluster_name': re.sub(r'^Department of', '', project.cluster),
         'data': json.dumps(project._details),
         'clusters': Cluster.objects.all(),
         'implementing_agents': ImplementingAgent.objects.all()

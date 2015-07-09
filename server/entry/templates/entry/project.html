@@ -2,7 +2,10 @@
 
 {% block page_title %}
 Edit Project
-<a href="#" id="__project_url" class="btn pull-right" disabled="disabled" target="_blank">View report</a>
+<div class="btn-group pull-right">
+    <a class="btn btn-default" href="{% url 'entry:list' %}#{{ cluster_name | slugify }}">Cluster Projects</a>
+    <a href="#" id="__project_url" class="btn btn-default" disabled="disabled" target="_blank">View report</a>
+</div>
 {% endblock page_title %}
 
 {% block content %}

@@ -1,8 +1,11 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block page_title %}
 Project Entry
-<a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
+<div class="btn-group pull-right">
+    <a class="btn btn-default" href="{% url 'entry:new' %}">Add project</a>
+</div>
 {% endblock page_title %}
 
 {% block content %}
@@ -15,21 +18,27 @@ Project Entry
 <div class="tab-content">
   {% for name, cluster in projects.items %}
   <div class="tab-pane{% if forloop.first %} active{% endif %}" id="{{ name|slugify }}">
-    <table data-toggle="table">
+    <table data-toggle="table" class="projects">
         <thead>
             <tr>
-                <th>Name</th>
-                <th>Description</th>
+                <th class="programme">Programme</th>
+                <th class="name">Name</th>
+                <th class="description">Description</th>
+                <th class="budget">Budget</th>
+                <th class="expenditure">Expenditure</th>
             </tr>
         </thead>
         <tbody>
         {% for project in cluster %}
         {% if project.uuid %}
         <tr class="{{ project.valid_status }}">
-            <td>
+            <td class="programme">{{ project.programme }}</td>
+            <td class="name">
                 <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a>
             </td>
-            <td>{{ project.description }}</td>
+            <td class="description">{{ project.description | linebreaks }}</td>
+            <td class="budget">{{ project.total_anticipated_cost | intcomma }}</td>
+            <td class="expenditure">{{ project.expenditure_to_date | intcomma }}</td>
         </tr>
         {% endif %}
         {% endfor %}
