@@ -6,7 +6,7 @@ Edit Project
 {% endblock page_title %}
 
 {% block content %}
-<form class="form-horizontal" method="post">
+<form method="post">
     {% csrf_token %}
 
     <div class="row">
@@ -27,380 +27,298 @@ Edit Project
             <div class="tab-content">
                 <div class="tab-pane active" id="general">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="_uuid">Id</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="_uuid" name="_uuid" readonly="readonly"/>
-                        </div>
+                        <label for="_uuid">Id</label>
+                        <input class="form-control" type="text" id="_uuid" name="_uuid" readonly="readonly"/>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="name">Name</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="name" name="name"/>
-                        </div>
+                        <label for="name">Name</label>
+                        <input class="form-control" type="text" id="name" name="name"/>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="description">Description</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="description" name="description"/>
-                        </div>
+                        <label for="description">Description</label>
+                        <input class="form-control" type="text" id="description" name="description"/>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="phase">Phase</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="phase" name="phase">
-                                <option selected="selected">--------</option>
-                                <option value="planning">Planning</option>
-                                <option value="implementation">Implementation</option>
-                                <option value="completed">Completed</option>
-                                <option value="final-accounts">Final Accounts</option>
-                                <option value="closed">Closed</option>
-                            </select>
-                        </div>
+                        <label for="phase">Phase</label>
+                        <select class="form-control" id="phase" name="phase">
+                            <option selected="selected">--------</option>
+                            <option value="planning">Planning</option>
+                            <option value="implementation">Implementation</option>
+                            <option value="completed">Completed</option>
+                            <option value="final-accounts">Final Accounts</option>
+                            <option value="closed">Closed</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="planning_phase">Planning Phase</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="planning_phase" name="planning_phase">
-                                <option selected="selected">--------</option>
-                                <option value="consultant-appointment">Consultant Appointment</option>
-                                <option value="design-costing">Design + Costing</option>
-                                <option value="documentation">Documentation</option>
-                                <option value="tender">Tender</option>
-                            </select>
-                        </div>
+                        <label for="planning_phase">Planning Phase</label>
+                        <select class="form-control" id="planning_phase" name="planning_phase">
+                            <option selected="selected">--------</option>
+                            <option value="consultant-appointment">Consultant Appointment</option>
+                            <option value="design-costing">Design + Costing</option>
+                            <option value="documentation">Documentation</option>
+                            <option value="tender">Tender</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="cluster">Cluster</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="cluster" name="cluster">
-                                <option selected="selected">--------</option>
-                                {% for cluster in clusters %}
-                                <option value="{{ cluster.name }}">{{ cluster.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        <label for="cluster">Cluster</label>
+                        <select class="form-control" id="cluster" name="cluster">
+                            <option selected="selected">--------</option>
+                            {% for cluster in clusters %}
+                            <option value="{{ cluster.name }}">{{ cluster.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="programme">Programme</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="programme" name="programme">
-                                <option selected="selected">--------</option>
-                            </select>
-                        </div>
+                        <label for="programme">Programme</label>
+                        <select class="form-control" id="programme" name="programme">
+                            <option selected="selected">--------</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="contract">Contract Number</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="contract" name="contract"/>
-                        </div>
+                        <label for="contract">Contract Number</label>
+                        <input class="form-control" type="text" id="contract" name="contract"/>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="scope">Scope</label>
-                        <div class="col-xs-10">
-                            <textarea class="form-control" rows="5" type="text" id="scope" name="scope"></textarea>
-                        </div>
+                        <label for="scope">Scope</label>
+                        <textarea class="form-control" rows="5" type="text" id="scope" name="scope"></textarea>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="jobs">Jobs Created</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="jobs" name="jobs"/>
-                        </div>
+                        <label for="jobs">Jobs Created</label>
+                        <input class="form-control" type="text" id="jobs" name="jobs"/>
                     </div>
                 </div>
                 <div class="tab-pane" id="location">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="district">District</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="district" name="district">
-                                <option selected="selected">--------</option>
-                                <option value="Bohlabela">Bohlabela</option>
-                                <option value="Ehlanzeni">Ehlanzeni</option>
-                                <option value="Gert Sibande">Gert Sibande</option>
-                                <option value="Nkangala">Nkangala</option>
-                            </select>
-                        </div>
+                        <label for="district">District</label>
+                        <select class="form-control" id="district" name="district">
+                            <option selected="selected">--------</option>
+                            <option value="Bohlabela">Bohlabela</option>
+                            <option value="Ehlanzeni">Ehlanzeni</option>
+                            <option value="Gert Sibande">Gert Sibande</option>
+                            <option value="Nkangala">Nkangala</option>
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="municipality">Municipality</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="municipality" name="municipality"/>
-                        </div>
+                        <label for="municipality">Municipality</label>
+                        <input class="form-control" type="text" id="municipality" name="municipality"/>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="location">Location / Village</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="location" name="location"/>
-                        </div>
+                        <label for="location">Location / Village</label>
+                        <input class="form-control" type="text" id="location" name="location"/>
                     </div>
                 </div>
                 <div class="tab-pane" id="parties">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="implementing_agent">Implementing Agent</label>
-                        <div class="col-xs-10">
-                            <select class="form-control" id="implementing_agent" name="implementing_agent">
-                                <option selected="selected">--------</option>
-                                {% for agent in implementing_agents %}
-                                <option value="{{ agent.name }}">{{ agent.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                        <label for="implementing_agent">Implementing Agent</label>
+                        <select class="form-control" id="implementing_agent" name="implementing_agent">
+                            <option selected="selected">--------</option>
+                            {% for agent in implementing_agents %}
+                            <option value="{{ agent.name }}">{{ agent.name }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="principal_agent">Consultant</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="principal_agent" name="principal_agent"/>
-                        </div>
+                        <label for="principal_agent">Consultant</label>
+                        <input class="form-control" type="text" id="principal_agent" name="principal_agent"/>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="contractor">Contractor</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="contractor" name="contractor" autocomplete="off"/>
-                        </div>
+                        <label for="contractor">Contractor</label>
+                        <input class="form-control" type="text" id="contractor" name="contractor" autocomplete="off" />
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="coordinator">Coordinator</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="manager" name="manager" autocomplete="off"/>
-                        </div>
+                        <label for="coordinator">Coordinator</label>
+                        <input class="form-control" type="text" id="manager" name="manager" autocomplete="off" />
                     </div>
                 </div>
                 <div class="tab-pane" id="dates">
                     <div class="form-group hide-for-phase hide-for-implementation">
-                        <label class="col-xs-2 control-label" for="planning_start">Planning Start</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="planning_start" name="planning_start"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="planning_start">Planning Start</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="planning_start" name="planning_start"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-implementation">
-                        <label class="col-xs-2 control-label" for="planning_completion">Planning Completion</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="planning_completion" name="planning_completion"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="planning_completion">Planning Completion</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="planning_completion" name="planning_completion"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="implementation_handover">Implementation Handover</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="implementation_handover" name="implementation_handover"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="implementation_handover">Implementation Handover</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="implementation_handover" name="implementation_handover"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="planned_start">Planned Start</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="planned_start" name="planned_start"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="planned_start">Planned Start</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="planned_start" name="planned_start"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="actual_start">Actual Start</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="actual_start" name="actual_start"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="actual_start">Actual Start</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="actual_start" name="actual_start"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="planned_completion">Planned Completion</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="planned_completion" name="planned_completion"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="planned_completion">Planned Completion</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="planned_completion" name="planned_completion"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="revised_completion">Revised Completion</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="revised_completion" name="revised_completion"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="revised_completion">Revised Completion</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="revised_completion" name="revised_completion"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="actual_completion">Actual Completion</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control input-datepicker" type="text" id="actual_completion" name="actual_completion"/>
-                                <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                            </div>
+                        <label for="actual_completion">Actual Completion</label>
+                        <div class="input-group">
+                            <input class="form-control input-datepicker" type="text" id="actual_completion" name="actual_completion"/>
+                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="extensions">Time Extensions</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <input class="form-control" type="text" id="extensions" name="extensions"/>
-                                <span class="input-group-addon">months</span>
-                            </div>
+                        <label for="extensions">Time Extensions</label>
+                        <div class="input-group">
+                            <input class="form-control" type="text" id="extensions" name="extensions"/>
+                            <span class="input-group-addon">months</span>
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="budget">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="source">Source</label>
-                        <div class="col-xs-10">
-                            <input class="form-control" type="text" id="source" name="source"/>
+                        <label for="source">Source</label>
+                        <input class="form-control" type="text" id="source" name="source"/>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="total_anticipated_cost">Overall</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="total_anticipated_cost" name="total_anticipated_cost"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="total_anticipated_cost">Overall</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="total_anticipated_cost" name="total_anticipated_cost"/>
-                            </div>
+                        <label for="allocated_budget_for_year">Current Financial Year</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="allocated_budget_for_year" name="allocated_budget_for_year"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="allocated_budget_for_year">Current Financial Year</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="allocated_budget_for_year" name="allocated_budget_for_year"/>
-                            </div>
+                        <label for="budget_implementation">Implementation</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="budget_implementation" name="budget_implementation"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="budget_implementation">Implementation</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="budget_implementation" name="budget_implementation"/>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-xs-2 control-label" for="budget_planning">Planning</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="budget_planning" name="budget_planning"/>
-                            </div>
+                        <label for="budget_planning">Planning</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="budget_planning" name="budget_planning"/>
                         </div>
                     </div>
 
                     <div class="form-group hide-for-phase hide-for-planning">
-                        <label class="col-xs-2 control-label" for="budget_variation_orders">Variation Orders</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="budget_variation_orders" name="budget_variation_orders"/>
-                            </div>
+                        <label for="budget_variation_orders">Variation Orders</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="budget_variation_orders" name="budget_variation_orders"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="actual">Planned Expenditure</label>
-                        <div class="col-xs-10">
-                            <div class="years row" id="planning-expenditure">
-                            </div>
+                        <label for="actual">Planned Expenditure</label>
+                        <div class="years row" id="planning-expenditure">
                         </div>
                     </div>
                 </div>
                 <div class="tab-pane" id="expenditure">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="total_previous_expenses">Previous Years</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="total_previous_expenses" name="total_previous_expenses"/>
-                            </div>
+                        <label for="total_previous_expenses">Previous Years</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="total_previous_expenses" name="total_previous_expenses"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="expenditure_in_year">This Year</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="expenditure_in_year" name="expenditure_in_year"/>
-                            </div>
+                        <label for="expenditure_in_year">This Year</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="expenditure_in_year" name="expenditure_in_year"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="expenditure_to_date">Total to Date</label>
-                        <div class="col-xs-10">
-                            <div class="input-group">
-                                <span class="input-group-addon">R</span>
-                                <input class="form-control" type="text" id="expenditure_to_date" name="expenditure_to_date"/>
-                            </div>
+                        <label for="expenditure_to_date">Total to Date</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">R</span>
+                            <input class="form-control" type="text" id="expenditure_to_date" name="expenditure_to_date"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="actual">Actual Expenditure</label>
-                        <div class="col-xs-10">
-                            <div class="years row" id="actual-expenditure"></div>
-                        </div>
+                        <label for="actual">Actual Expenditure</label>
+                        <div class="years row" id="actual-expenditure"></div>
                     </div>
                 </div>
                 <div class="tab-pane hide-for-phase hide-for-planning" id="progress">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="actual">Planned Progress</label>
-                        <div class="col-xs-10">
-                            <div class="years row" id="planning-progress"></div>
-                        </div>
+                        <label for="actual">Planned Progress</label>
+                        <div class="years row" id="planning-progress"></div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="actual">Actual Progress</label>
-                        <div class="col-xs-10">
-                            <div class="years row" id="actual-progress"></div>
-                        </div>
+                        <label for="actual">Actual Progress</label>
+                        <div class="years row" id="actual-progress"></div>
                     </div>
                 </div>
                 <div class="tab-pane" id="comments">
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="comments">Comments</label>
-                        <div class="col-xs-10">
-                            <textarea class="form-control" rows="5" type="text" id="comments" name="comments"></textarea>
-                        </div>
+                        <label for="comments">Comments</label>
+                        <textarea class="form-control" rows="5" type="text" id="comments" name="comments"></textarea>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-xs-2 control-label" for="remedial_action">Mitigation</label>
-                        <div class="col-xs-10">
-                            <textarea class="form-control" rows="5" type="text" id="remedial_action" name="remedial_action"></textarea>
-                        </div>
+                        <label for="remedial_action">Mitigation</label>
+                        <textarea class="form-control" rows="5" type="text" id="remedial_action" name="remedial_action"></textarea>
                     </div>
                 </div>
             </div>
@@ -435,6 +353,7 @@ Edit Project
 
 
 {% block extra_js %}
+<script src="{{ STATIC_URL }}bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
 <script>
 var data = {{ data|safe }};
 var csrf_token = "{{ csrf_token|safe }}";
@@ -447,4 +366,9 @@ var url_entry_programme = "{% url 'entry:programme' %}";
 
 {% block extra_css %}
 <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" />
+<style>
+.date-block {
+    padding-right: 0;
+}
+</style>
 {% endblock %}

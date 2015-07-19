@@ -255,6 +255,8 @@ jQuery(document).ready(function($) {
         },
     });
 
+    $('.twitter-typeahead').css('display', 'block');
+
     function updatePlanningPhase() {
         var value = $(this).val()
 
