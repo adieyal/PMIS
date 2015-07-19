@@ -24,7 +24,7 @@ jQuery(document).ready(function($) {
             } else if (key == '__project_url') {
                 var link = $('a#__project_url');
                 link.attr('href', value);
-                link.removeClass('disabled');
+                link.removeAttr('disabled');
             }
         }
     }
