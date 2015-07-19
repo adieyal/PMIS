@@ -17,6 +17,7 @@ deploy:
 	git pull && \
 	cd server && \
 	npm install && \
+	bower install && \
 	gulp && \
 	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis-demo.burgercom.co.za python manage.py collectstatic && \
 	cd ../insight && \
@@ -27,6 +28,7 @@ deploy:
 	git pull && \
 	cd server && \
 	npm install && \
+	bower install && \
 	gulp && \
 	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis.burgercom.co.za python manage.py collectstatic && \
 	cd ../insight && \
