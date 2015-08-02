@@ -2,50 +2,69 @@
 {% load humanize %}
 
 {% block page_title %}
-Project Entry
-<div class="btn-group pull-right">
-    <a class="btn btn-default" href="{% url 'entry:new' %}">Add project</a>
-</div>
 {% endblock page_title %}
 
 {% block content %}
-<ul class="nav nav-tabs">
-  {% for name, cluster in projects.items %}
-  <li{% if forloop.first %} class="active"{% endif %}><a href="#{{ name|slugify }}" data-toggle="tab">{{ name }}</a></li>
-  {% endfor %}
-</ul>
 
-<div class="tab-content">
-  {% for name, cluster in projects.items %}
-  <div class="tab-pane{% if forloop.first %} active{% endif %}" id="{{ name|slugify }}">
-    <table data-toggle="table" class="projects">
-        <thead>
-            <tr>
-                <th class="programme">Programme</th>
-                <th class="name">Name</th>
-                <th class="description">Description</th>
-                <th class="budget">Budget</th>
-                <th class="expenditure">Expenditure</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in cluster %}
-        {% if project.uuid %}
-        <tr class="{{ project.valid_status }}">
-            <td class="programme">{{ project.programme }}</td>
-            <td class="name">
-                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a>
-            </td>
-            <td class="description">{{ project.description | linebreaks }}</td>
-            <td class="budget">{{ project.total_anticipated_cost | intcomma }}</td>
-            <td class="expenditure">{{ project.expenditure_to_date | intcomma }}</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
-  </div>
-  {% endfor %}
+<div class="toolbar">
+    {% if form.cluster.value %}
+    <a class="btn btn-default pull-right" href="{% url 'entry:new' %}?cluster={{ form.cluster.value }}">Add project</a>
+    {% endif %}
+
+    <form class="form-inline">
+        {{ form }}
+    </form>
 </div>
 
+<table id="projects">
+    <thead>
+        <tr>
+            <th class="cluster">Cluster</th>
+            <th class="programme">
+                <div class="pull-right">Contract</div>
+                Programme &gt; Name &gt; Description
+            </th>
+            <th class="budget">Budget</th>
+            <th class="expenditure">Expenditure</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for project in projects %}
+        <tr class="{{ project.valid_status }}">
+            <td class="cluster">{{ project.cluster }}</td>
+            <td class="programme">
+                <div class="contract pull-right">{{ project.contract }}</div>
+                <strong>{{ project.programme }}<br />
+                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a></strong><br />
+                {{ project.description | linebreaks }}
+            </td>
+            <td class="budget">{{ project.total_anticipated_cost | default_if_none:'' | intcomma }}</td>
+            <td class="expenditure">{{ project.expenditure_to_date | default_if_none:'' | intcomma }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ STATIC_URL }}bower_components/datatables/media/js/jquery.dataTables.js"></script>
+<script src="{{ STATIC_URL }}/js/dataTables.bootstrap.js"></script>
+<script>
+$(function() {
+    $('#cluster').change(function() {
+        this.form.submit();
+    });
+    $('#projects').dataTable();
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ STATIC_URL }}/css/dataTables.bootstrap.css" rel="stylesheet" />
+<style>
+.toolbar { margin-bottom: 16px; }
+label[for="id_cluster"] { margin-right: 12px; }
+th, td { vertical-align: top; }
+.budget, .expenditure { text-align: right; }
+</style>
 {% endblock %}

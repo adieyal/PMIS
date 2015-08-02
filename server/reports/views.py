@@ -865,9 +865,24 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         "total-expenditure": (projects
             .select(lambda p: _safe_float(p.expenditure_in_year) or 0)
             .sum()),
+        "total-expenditure-to-date": (projects
+            .select(lambda p: _safe_float(p.expenditure_to_date) or 0)
+            .sum()),
         "total-budget": (projects
             .where(lambda p: _active(p.phase))
             .select(lambda p: _safe_float(p.allocated_budget_for_year) or 0)
+            .sum()),
+        "total-anticipated-cost": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.total_anticipated_cost) or 0)
+            .sum()),
+        "total-planning-budget": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.budget_planning) or 0)
+            .sum()),
+        "total-implementation-budget": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.budget_implementation) or 0)
             .sum()),
         "total-progress": total_progress,
         "total-projects": projects.count(),
@@ -882,6 +897,8 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         context['%s-projects-total' % phase] = len(phaseProjects)
         context['%s-budget' % phase] = sum([_safe_float(p.allocated_budget_for_year) or 0 for p in phaseProjects])
         context['%s-expenditure' % phase] = sum([_safe_float(p.expenditure_in_year) or 0 for p in phaseProjects])
+        context['%s-expenditure-to-date' % phase] = sum([_safe_float(p.expenditure_to_date) or 0 for p in phaseProjects])
+        context['%s-anticipated-cost' % phase] = sum([_safe_float(p.total_anticipated_cost) or 0 for p in phaseProjects])
         
         context['%s-slider' % phase] = build_slider_v2(
             context['%s-expenditure' % phase],
@@ -892,6 +909,9 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         context['total-expenditure'],
         context['total-budget']
     )
+
+    if cluster == 'department-of-community-safety-security-and-liaison':
+        print context
 
     context["total-progress-gauge"] = build_gauge(
         _avg([_safe_float(_progress_for_month_v2(p.planning, year, month))*100 or 0 for p in projects if p.phase == 'implementation']),

@@ -29,4 +29,10 @@ jQuery(document).ready(function($){
    if(window.location.hash && $('.nav-tabs').length) {
        $('[href="' + window.location.hash + '"]').tab('show');
    }
+
+   $('#id_cluster').change(function() {
+       /** Clear the query, since it won't make sense */
+       $('#id_query').val('');
+       this.form.submit();
+   });
 });

@@ -3,7 +3,7 @@
 {% block page_title %}
 Edit Project
 <div class="btn-group pull-right">
-    <a class="btn btn-default" href="{% url 'entry:list' %}#{{ cluster_name | slugify }}">Cluster Projects</a>
+    <a class="btn btn-default" href="{% url 'entry:list' %}?cluster={{ cluster.id }}">Cluster Projects</a>
     <a href="#" id="__project_url" class="btn btn-default" disabled="disabled" target="_blank">View report</a>
 </div>
 {% endblock page_title %}
@@ -357,6 +357,7 @@ Edit Project
 
 {% block extra_js %}
 <script src="{{ STATIC_URL }}bower_components/typeahead.js/dist/typeahead.bundle.js"></script>
+<script src="{{ STATIC_URL }}bower_components/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
 <script>
 var data = {{ data|safe }};
 var csrf_token = "{{ csrf_token|safe }}";
@@ -368,6 +369,7 @@ var url_entry_programme = "{% url 'entry:programme' %}";
 {% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker3.min.css" />
 <link rel="stylesheet" href="{{ STATIC_URL }}bower_components/bootstrap-vertical-tabs/bootstrap.vertical-tabs.css" />
 <style>
 .date-block {

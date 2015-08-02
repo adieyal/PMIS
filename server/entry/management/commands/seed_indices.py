@@ -1,28 +1,47 @@
 import os
+import re
+import time
+import datetime
 import json as json
+from dateutil.parser import parse
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.management.base import BaseCommand, CommandError
-from libs.database.database import Project
+from libs.database.database import Project, UUID
 from elasticsearch import Elasticsearch
+from elasticsearch.client import IndicesClient
 from reports.views import generate_cluster_dashboard_v2
+
+MAX_LONG = 9223372036854775807
 
 def make_null(project, field):
     if field in project and project[field] == '':
         project[field] = None
 
-es = Elasticsearch()
+def safe_float(val):
+    try:
+        return float(filter(lambda x: x.isdigit() or x == '.', str(val)))
+    except (TypeError, ValueError):
+        return None
+            
+def translate_cluster(cluster):
+    cluster = cluster or u'Unknown'
+    cluster = slugify(re.sub(r'^Department of', '', cluster))
+    return cluster
+
+client = Elasticsearch()
+indices_client = IndicesClient(client)
 
 class Command(BaseCommand):
     help = 'Seed Elasticsearch indices from Redis'
 
-    clusters = [
-        "education",
-        "health",
-        "social-development",
-        "culture-sports-science-and-recreation",
-        "community-safety-security-and-liaison",
-        "economic-development-environment-and-tourism",
+    float_fields = [
+        'budget_implementation',
+        'budget_planning',
+        'expenditure_to_date',
+        'allocated_budget_for_year',
+        'budget_variation_orders',
+        'expenditure_in_year',
     ]
 
     date_fields = [
@@ -36,39 +55,346 @@ class Command(BaseCommand):
         'revised_completion',
     ]
 
+    def process_entry(self, body, entry, title):
+        entry['expenditure'] = safe_float(entry['expenditure'])
+        entry['progress'] = safe_float(entry['progress'])
+
+        if entry['expenditure'] is not None and (entry['expenditure'] > MAX_LONG or entry['expenditure'] < 0):
+            pass # print '%s expenditure is suspicious (%s): %s' % (title, entry['expenditure'], body['url'])
+            entry['expenditure'] = None
+
+        if entry['progress'] is not None and (entry['progress'] > 100 or entry['progress'] < 0):
+            pass # print '%s progress is suspicious (%s): %s' % (title, entry['progress'], body['url'])
+            entry['progress'] = None
+
+        if 'date' in entry:
+            date = parse(entry['date'])
+
+            year = date.year
+            month = date.month
+
+            if month <= 3:
+                fyear = year - 1
+            else:
+                fyear = year
+
+            if year not in body['calculated']['financial_years']:
+                body['calculated']['financial_years'][fyear] = dict(expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
+
+            financial_year = body['calculated']['financial_years'][fyear]
+
+            which = title.lower()
+
+            if entry.get('expenditure'):
+                body['calculated']['expenditure'][which] += entry['expenditure']
+                financial_year['expenditure'][which] += entry['expenditure']
+
+        else:
+            pass # print 'Strange entry for %s: %s: %s' % (title, entry, body['url'])
+
+        return dict(body)
+
+
+    def process_progress(self, body):
+        for fin_year in xrange(2012, datetime.datetime.now().year+1):
+            planned = None
+            actual = None
+
+            end_year = fin_year + 1
+            end_month = 3
+
+            end = datetime.datetime(end_year, end_month, 1, 0, 0, 0)
+
+            for entry in body.get('planning', []):
+                if 'date' in entry:
+                    date = parse(entry['date'])
+
+                    if date is not None and date < end and entry['progress'] is not None and (planned is None or date > parse(planned['date'])):
+                        planned = entry
+
+            for entry in body.get('actual', []):
+                if 'date' in entry:
+                    date = parse(entry['date'])
+
+                    if date is not None and date < end and entry['progress'] is not None and (actual is None or date > parse(actual['date'])):
+                        actual = entry
+
+            if fin_year not in body['calculated']['financial_years']:
+                body['calculated']['financial_years'][fin_year] = dict(expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
+
+            if planned is not None:
+                body['calculated']['financial_years'][fin_year]['progress']['planned'] = planned['progress']
+
+            if actual is not None:
+                body['calculated']['financial_years'][fin_year]['progress']['actual'] = actual['progress']
+
     def handle(self, *args, **options):
+        self.recreate_index()
+
         base_url = os.getenv('BASE_URL', settings.BASE_URL)
 
-        for c in self.clusters:
-            cluster = generate_cluster_dashboard_v2('department-of-%s' % c)
-            
-            for programme in cluster['programmes']:
-                if programme['title']:
-                    programme_id = '%s:%s' % (c, slugify(unicode(programme['title'])))
+        for project_id in Project.list():
+            if project_id:
+                revisions = Project.get_all(project_id)
 
-                    body = {
-                        'id': 'programme:%s' % programme_id,
-                        'title': programme['title'],
-                        'url': '/#/projects/%s/%s' % (c, programme['title']),
-                        'cluster': cluster['client'],
-                        'cluster_id': c,
+                for body in revisions:
+                    body['timestamp'] = UUID(body['_timestamp']).timestamp()
+
+                    body['id'] = '%s/%s' % (body['_uuid'], body['timestamp'])
+
+                    body['title'] = body.get('description', 'NO TITLE')
+                    body['url'] = '%s/reports/project/%s/latest/' % (base_url, project_id),
+
+                    body['cluster_id'] = translate_cluster(unicode(body.get('cluster', u'')))
+                    body['programme_id'] = slugify(body.get('programme', u''))
+
+                    body['calculated'] = dict(
+                        expenditure=dict(planned=0, actual=0),
+                        financial_years=dict(),
+                    )
+
+                    for entry in body.get('planning', []):
+                        body = self.process_entry(body, entry, 'Planned')
+
+                    for entry in body.get('actual', []):
+                        body = self.process_entry(body, entry, 'Actual')
+
+                    self.process_progress(body)
+
+                    for field in self.float_fields:
+                        body[field] = safe_float(body.get(field))
+
+                    for field in self.date_fields:
+                        if body.get(field, None) == '':
+                            body[field] = None
+
+                    client.index(index='pmis', doc_type='project', id=body['id'], body=body)
+
+    def recreate_index(self):
+        if indices_client.exists(index='pmis'):
+            indices_client.delete(index='pmis')
+
+        body = {
+            'mappings': {
+                'project': {
+                    'properties': {
+                        "municipality" : {
+                            "type" : "string"
+                        },
+                        "expenditure_percent_of_budget" : {
+                            "type" : "double"
+                        },
+                        "fyear" : {
+                            "type" : "long"
+                        },
+                        "contract_award_date" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "source" : {
+                            "type" : "string"
+                        },
+                        "planning_start" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "phase" : {
+                            "type" : "string"
+                        },
+                        "budget_implementation" : {
+                            "type" : "long"
+                        },
+                        "total_previous_expenses" : {
+                            "type" : "string"
+                        },
+                        "remedial_action" : {
+                            "type" : "string"
+                        },
+                        "contractor" : {
+                            "type" : "string"
+                        },
+                        "contract" : {
+                            "type" : "string"
+                        },
+                        "last_modified_user" : {
+                            "type" : "string"
+                        },
+                        "district" : {
+                            "type" : "string"
+                        },
+                        "remedial_action_previous" : {
+                            "type" : "string"
+                        },
+                        "location" : {
+                            "type" : "string"
+                        },
+                        "cluster_id" : {
+                            "type" : "string"
+                        },
+                        "budget_planning" : {
+                            "type" : "long"
+                        },
+                        "final_account" : {
+                            "type" : "double"
+                        },
+                        "implementation_handover" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "planning_completion" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "jobs" : {
+                            "type" : "string"
+                        },
+                        "total_confirmed_budget" : {
+                            "type" : "long"
+                        },
+                        "allocated_budget_for_year" : {
+                            "type" : "long"
+                        },
+                        "actual_start" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "planning_phase" : {
+                            "type" : "string"
+                        },
+                        "expenditure_to_date" : {
+                            "type" : "long"
+                        },
+                        "actual_final_accounts" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "planning" : {
+                            "properties" : {
+                                "date" : {
+                                    "format" : "dateOptionalTime",
+                                    "type" : "date"
+                                },
+                                "expenditure" : {
+                                    "type" : "long"
+                                },
+                                "progress" : {
+                                    "type" : "short"
+                                }
+                            }
+                        },
+                        "comments_previous" : {
+                            "type" : "string"
+                        },
+                        "planned_final_accounts" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "implementing_agent" : {
+                            "type" : "string"
+                        },
+                        "actual" : {
+                            "properties" : {
+                                "date" : {
+                                    "format" : "dateOptionalTime",
+                                    "type" : "date"
+                                },
+                                "expenditure" : {
+                                    "type" : "long"
+                                },
+                                "progress" : {
+                                    "type" : "short"
+                                }
+                            }
+                        },
+                        "budget_variation_orders" : {
+                            "type" : "long"
+                        },
+                        "title" : {
+                            "type" : "string"
+                        },
+                        "principal_agent" : {
+                            "type" : "string"
+                        },
+                        "programme" : {
+                            "type" : "string"
+                        },
+                        "circuit" : {
+                            "type" : "string"
+                        },
+                        "timestamp" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "planned_start" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "name" : {
+                            "type" : "string"
+                        },
+                        "comments" : {
+                            "type" : "string"
+                        },
+                        "expenditure_in_year" : {
+                            "type" : "long"
+                        },
+                        "last_modified_time" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "total_anticipated_cost" : {
+                            "type" : "string"
+                        },
+                        "url" : {
+                            "type" : "string"
+                        },
+                        "actual_completion" : {
+                            "format" : "dateOptionalTime",
+                            "type" : "date"
+                        },
+                        "id" : {
+                            "index": "not_analyzed",
+                            "type" : "string"
+                        },
+                        "_uuid" : {
+                            "index": "not_analyzed",
+                            "type" : "string"
+                        },
+                        "total_anticipated_in_year" : {
+                            "type" : "double"
+                        },
+                        "extensions" : {
+                            "type" : "string"
+                        },
+                        "cluster" : {
+                            "type" : "string"
+                        },
+                        "scope" : {
+                            "type" : "string"
+                        },
+                        "manager" : {
+                            "type" : "string"
+                        },
+                        "state" : {
+                            "type" : "string"
+                        },
+                        "revised_completion" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "description" : {
+                            "type" : "string"
+                        },
+                        "planned_completion" : {
+                            "type" : "date",
+                            "format" : "dateOptionalTime"
+                        },
+                        "programme_id" : {
+                            "type" : "string"
+                        }
                     }
+                }
+            }
+        }
 
-                    es.index(index='pmis', doc_type='programme', id=programme_id, body=body)
-
-            for project_id in Project.list():
-                if project_id:
-                    project = Project.get(project_id, as_json=True)
-                    body = {
-                        'id': 'project:%s' % project_id,
-                        'title': project['description'],
-                        'url': '%s/reports/project/%s/latest/' % (base_url, project_id),
-                        'cluster': cluster['client'],
-                        'cluster_id': c,
-                        # 'manager': project.get('manager'),
-                        # 'municipality': project.get('municipality'),
-                        # 'comments': project.get('comments'),
-                        'programme': project.get('programme'),
-                        'programme_id': slugify(project.get('programme', u'')),
-                    }
-                    es.index(index='pmis', doc_type='project', id=project_id, body=body)
+        indices_client.create(index='pmis', body=body)

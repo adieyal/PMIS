@@ -1,0 +1,219 @@
+{
+   "pmis" : {
+      "mappings" : {
+         "project" : {
+            "properties" : {
+               "municipality" : {
+                  "type" : "string"
+               },
+               "expenditure_percent_of_budget" : {
+                  "type" : "double"
+               },
+               "fyear" : {
+                  "type" : "long"
+               },
+               "contract_award_date" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "source" : {
+                  "type" : "string"
+               },
+               "planning_start" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "phase" : {
+                  "type" : "string"
+               },
+               "budget_implementation" : {
+                  "type" : "string"
+               },
+               "total_previous_expenses" : {
+                  "type" : "string"
+               },
+               "remedial_action" : {
+                  "type" : "string"
+               },
+               "contractor" : {
+                  "type" : "string"
+               },
+               "contract" : {
+                  "type" : "string"
+               },
+               "last_modified_user" : {
+                  "type" : "string"
+               },
+               "district" : {
+                  "type" : "string"
+               },
+               "remedial_action_previous" : {
+                  "type" : "string"
+               },
+               "location" : {
+                  "type" : "string"
+               },
+               "cluster_id" : {
+                  "type" : "string"
+               },
+               "budget_planning" : {
+                  "type" : "string"
+               },
+               "final_account" : {
+                  "type" : "double"
+               },
+               "implementation_handover" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "planning_completion" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "jobs" : {
+                  "type" : "string"
+               },
+               "total_confirmed_budget" : {
+                  "type" : "double"
+               },
+               "allocated_budget_for_year" : {
+                  "type" : "string"
+               },
+               "actual_start" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "planning_phase" : {
+                  "type" : "string"
+               },
+               "expenditure_to_date" : {
+                  "type" : "string"
+               },
+               "actual_final_accounts" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "planning" : {
+                  "properties" : {
+                     "date" : {
+                        "format" : "dateOptionalTime",
+                        "type" : "date"
+                     },
+                     "expenditure" : {
+                        "type" : "string"
+                     },
+                     "progress" : {
+                        "type" : "string"
+                     }
+                  }
+               },
+               "comments_previous" : {
+                  "type" : "string"
+               },
+               "planned_final_accounts" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "implementing_agent" : {
+                  "type" : "string"
+               },
+               "actual" : {
+                  "properties" : {
+                     "date" : {
+                        "format" : "dateOptionalTime",
+                        "type" : "date"
+                     },
+                     "expenditure" : {
+                        "type" : "string"
+                     },
+                     "progress" : {
+                        "type" : "string"
+                     }
+                  }
+               },
+               "budget_variation_orders" : {
+                  "type" : "string"
+               },
+               "title" : {
+                  "type" : "string"
+               },
+               "principal_agent" : {
+                  "type" : "string"
+               },
+               "programme" : {
+                  "type" : "string"
+               },
+               "circuit" : {
+                  "type" : "string"
+               },
+               "timestamp" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "planned_start" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "name" : {
+                  "type" : "string"
+               },
+               "comments" : {
+                  "type" : "string"
+               },
+               "expenditure_in_year" : {
+                  "type" : "string"
+               },
+               "last_modified_time" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "total_anticipated_cost" : {
+                  "type" : "string"
+               },
+               "url" : {
+                  "type" : "string"
+               },
+               "actual_completion" : {
+                  "format" : "dateOptionalTime",
+                  "type" : "date"
+               },
+               "_uuid" : {
+                  "type" : "string"
+               },
+               "total_anticipated_in_year" : {
+                  "type" : "double"
+               },
+               "extensions" : {
+                  "type" : "string"
+               },
+               "cluster" : {
+                  "type" : "string"
+               },
+               "scope" : {
+                  "type" : "string"
+               },
+               "manager" : {
+                  "type" : "string"
+               },
+               "state" : {
+                  "type" : "string"
+               },
+               "revised_completion" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "description" : {
+                  "type" : "string"
+               },
+               "planned_completion" : {
+                  "type" : "date",
+                  "format" : "dateOptionalTime"
+               },
+               "programme_id" : {
+                  "type" : "string"
+               }
+            }
+         }
+      }
+   }
+}

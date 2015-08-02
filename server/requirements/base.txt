@@ -19,5 +19,6 @@ redis
 slugify
 djoser
 elasticsearch
+elasticsearch-dsl
 py-linq
 jsonfield

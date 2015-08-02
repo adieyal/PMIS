@@ -11,6 +11,7 @@ from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 from libs.database.database import Project
 
+from forms import IndexForm
 from models import Cluster, Programme, ImplementingAgent
 
 def _safe_int(val, add=0):
@@ -20,28 +21,47 @@ def _safe_int(val, add=0):
         return None
 
 def projects(request):
-    project_list = (Project.get(uuid) for uuid in Project.list())
-    context = {}
-    for p in project_list:
-        cluster = p.cluster or 'Unknown'
-        cluster = re.sub(r'^Department of', '', cluster)
-        if context.get(cluster) == None:
-            context[cluster] = []
-        context[cluster].append({
-            'uuid': p._uuid,
-            'name': p.name,
-            'description': p.description,
-            'programme': p.programme,
-            'expenditure_to_date': _safe_int(p.expenditure_to_date),
-            'total_anticipated_cost': _safe_int(p.total_anticipated_cost),
-            'contract': p.contract,
-            'valid_status': p.valid_status
-        })
+    cluster_id = request.GET.get('cluster')
+    query = request.GET.get('query')
 
-    for name, cluster in context.iteritems():
-        context[name] = sorted(cluster, key=lambda x: [x['programme'], x['name']])
+    def _filter(x):
+        result = True
 
-    return TemplateResponse(request, 'entry/list.html', {'projects': context})
+        if cluster_id:
+            cluster = Cluster.objects.get(id=cluster_id)
+            result = x.cluster == cluster.name
+
+        if result:
+            if query:
+                lower = query.lower()
+                result = lower in x.name.lower() or lower in x.contract.lower()
+
+        return result
+
+    source = filter(
+        _filter,
+        [Project.get(p) for p in Project.list() if p]
+    )
+
+    projects = []
+    for p in source:
+        if p._uuid:
+            project = {
+                'uuid': p._uuid,
+                'name': p.name,
+                'description': p.description,
+                'cluster': Cluster.objects.get(name=p.cluster),
+                'programme': p.programme,
+                'contract': p.contract,
+                'expenditure_to_date': _safe_int(p.expenditure_to_date),
+                'total_anticipated_cost': _safe_int(p.total_anticipated_cost),
+                'valid_status': p.valid_status
+            }
+            projects.append(project)
+
+    form = IndexForm(request.GET)
+
+    return TemplateResponse(request, 'entry/list.html', {'projects': projects, 'form': form})
 
 def generate_year(year):
     return [
@@ -64,13 +84,22 @@ def new(request):
     month = datetime.today().month
     if month < 3:
         year -= 1
+
     details = {
         'planning': generate_year(year),
         'actual': generate_year(year),
     }
+
     project = Project(details)
+
+    cluster_id = request.GET.get('cluster')
+    if cluster_id and cluster_id != 'None':
+        cluster = Cluster.objects.get(id=cluster_id)
+        project._details['cluster'] = cluster.name
+
     project.edit = True
     project.save()
+
     return redirect('entry:edit', project_id=project._uuid)
 
 def _find_or_add_month(data, year, month):
@@ -143,9 +172,10 @@ def edit(request, project_id):
         project._details['last_modified_time'] = datetime.now().isoformat()
         project.save()
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
+    cluster = Cluster.objects.get(name=project.cluster)
     project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
     context = {
-        'cluster_name': re.sub(r'^Department of', '', project.cluster),
+        'cluster': cluster,
         'data': json.dumps(project._details),
         'clusters': Cluster.objects.all(),
         'implementing_agents': ImplementingAgent.objects.all()

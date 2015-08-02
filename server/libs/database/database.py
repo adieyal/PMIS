@@ -110,6 +110,8 @@ class Project(object):
     def save(self):
         uuid = self._uuid
         timestamp = str(uuid1())
+        print UUID(timestamp).timestamp()
+
         self._details['_uuid'] = uuid
         self._details['_timestamp'] = timestamp
         data = dump_to_json(self._details)
@@ -131,6 +133,28 @@ class Project(object):
                 connection.srem('/project/%s' % uuid, timestamp)
             connection.srem('/project', uuid)
     
+    @classmethod
+    def get_all(cls, uuid):
+        revisions = connection.smembers('/project/%s' % (uuid))
+
+        if not revisions:
+            raise DoesNotExistException('There is no data for project %s.' % (uuid))
+
+        revisions = (Enumerable(revisions)
+            .select(lambda r: {
+                'timestamp': UUID(r.split('/')[-1]).timestamp(),
+                'key': '/project/%s/%s' % (uuid, r)
+            }))
+
+        results = []
+
+        for revision in revisions.to_list():
+            data = connection.get(revision['key'])
+            details = json.loads(data)
+            results.append(details)
+
+        return results
+
     @classmethod
     def get(cls, uuid, year=None, month=None, as_json=False):
         revisions = connection.smembers('/project/%s' % (uuid))
