@@ -46,11 +46,16 @@ def projects(request):
     projects = []
     for p in source:
         if p._uuid:
+            if p.cluster:
+                cluster = Cluster.objects.get(name=p.cluster)
+            else:
+                cluster = None
+
             project = {
                 'uuid': p._uuid,
                 'name': p.name,
                 'description': p.description,
-                'cluster': Cluster.objects.get(name=p.cluster),
+                'cluster': None,
                 'programme': p.programme,
                 'contract': p.contract,
                 'expenditure_to_date': _safe_int(p.expenditure_to_date),
