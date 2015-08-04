@@ -7,13 +7,15 @@ from elasticsearch_dsl import Search
 
 client = Elasticsearch()
 
-def projects_by_fin_year(fin_year):
+def projects_by_fin_year(fin_year, exclude_previous=True):
     gte = datetime.datetime(fin_year, 4, 1, 0, 0, 0)
     lt = datetime.datetime(fin_year + 1, 4, 1, 0, 0, 0)
 
     search = Search(using=client, index='pmis') \
-        .filter('range', timestamp={ 'lt': lt }) \
-        .filter('range', timestamp={ 'gte': gte, 'lt': lt })
+        .filter('range', timestamp={ 'lt': lt })
+
+    if exclude_previous:
+        search = search.filter('range', timestamp={ 'gte': gte, 'lt': lt })
 
     search.aggs \
         .bucket('projects', 'terms', field='_uuid', size=0) \
@@ -32,7 +34,6 @@ def projects_by_fin_year(fin_year):
     toc = time.time()
 
     print 'Found %d project revisions in %s milliseconds' % (len(keys), (toc - tic) * 1000)
-    return
 
     # Now start another ES query which works the most-up-to-date project revisions only
     search = Search(using=client, index='pmis') \
@@ -44,9 +45,7 @@ def projects_by_fin_year(fin_year):
 
     response = search.execute()
 
-    print response.aggregations.actual_progress
-    print response.aggregations.planned_progress
-    die
+    return response
 
     all = []
     old = []

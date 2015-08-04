@@ -38,10 +38,11 @@ class Command(BaseCommand):
     float_fields = [
         'budget_implementation',
         'budget_planning',
-        'expenditure_to_date',
         'allocated_budget_for_year',
         'budget_variation_orders',
         'expenditure_in_year',
+        'expenditure_to_date',
+        'total_anticipated_cost',
     ]
 
     date_fields = [
@@ -60,11 +61,11 @@ class Command(BaseCommand):
         entry['progress'] = safe_float(entry['progress'])
 
         if entry['expenditure'] is not None and (entry['expenditure'] > MAX_LONG or entry['expenditure'] < 0):
-            pass # print '%s expenditure is suspicious (%s): %s' % (title, entry['expenditure'], body['url'])
+            # print '%s expenditure is suspicious (%s): %s' % (title, entry['expenditure'], body['url'])
             entry['expenditure'] = None
 
         if entry['progress'] is not None and (entry['progress'] > 100 or entry['progress'] < 0):
-            pass # print '%s progress is suspicious (%s): %s' % (title, entry['progress'], body['url'])
+            # print '%s progress is suspicious (%s): %s' % (title, entry['progress'], body['url'])
             entry['progress'] = None
 
         if 'date' in entry:
@@ -94,6 +95,9 @@ class Command(BaseCommand):
 
         return dict(body)
 
+    def create_fin_year(self, fin_year, body):
+        if fin_year not in body['calculated']['financial_years']:
+            body['calculated']['financial_years'][fin_year] = dict(total_anticipated_cost=0, expenditure_to_date=0, expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
 
     def process_progress(self, body):
         for fin_year in xrange(2012, datetime.datetime.now().year+1):
@@ -119,14 +123,26 @@ class Command(BaseCommand):
                     if date is not None and date < end and entry['progress'] is not None and (actual is None or date > parse(actual['date'])):
                         actual = entry
 
-            if fin_year not in body['calculated']['financial_years']:
-                body['calculated']['financial_years'][fin_year] = dict(expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
+            self.create_fin_year(fin_year, body)
 
             if planned is not None:
                 body['calculated']['financial_years'][fin_year]['progress']['planned'] = planned['progress']
 
             if actual is not None:
                 body['calculated']['financial_years'][fin_year]['progress']['actual'] = actual['progress']
+
+    def process_expenditure_totals(self, body):
+        planned = 0
+        actual = 0
+
+        for fin_year in xrange(2012, datetime.datetime.now().year+1):
+            self.create_fin_year(fin_year, body)
+
+            planned += body['calculated']['financial_years'][fin_year]['expenditure']['planned']
+            actual += body['calculated']['financial_years'][fin_year]['expenditure']['actual']
+
+            body['calculated']['financial_years'][fin_year]['total_anticipated_cost'] = planned
+            body['calculated']['financial_years'][fin_year]['expenditure_to_date'] = actual
 
     def handle(self, *args, **options):
         self.recreate_index()
@@ -140,9 +156,16 @@ class Command(BaseCommand):
                 for body in revisions:
                     body['timestamp'] = UUID(body['_timestamp']).timestamp()
 
-                    body['id'] = '%s/%s' % (body['_uuid'], body['timestamp'])
+                    body['project_id'] = body['_uuid']
 
-                    body['title'] = body.get('description', 'NO TITLE')
+                    # Django doesn't like _variables, don't do it
+                    del(body['_uuid'])
+
+                    body['id'] = '%s/%s' % (body['project_id'], body['timestamp'])
+
+                    body['description'] = body.get('description', 'NO TITLE')
+                    body['unanalyzed_description'] = body.get('description', 'NO TITLE')
+
                     body['url'] = '%s/reports/project/%s/latest/' % (base_url, project_id),
 
                     body['cluster_id'] = translate_cluster(unicode(body.get('cluster', u'')))
@@ -159,6 +182,7 @@ class Command(BaseCommand):
                     for entry in body.get('actual', []):
                         body = self.process_entry(body, entry, 'Actual')
 
+                    self.process_expenditure_totals(body)
                     self.process_progress(body)
 
                     for field in self.float_fields:
@@ -312,6 +336,10 @@ class Command(BaseCommand):
                         "title" : {
                             "type" : "string"
                         },
+                        "unanalyzed_description" : {
+                            "type" : "string",
+                            "index": "not_analyzed"
+                        },
                         "principal_agent" : {
                             "type" : "string"
                         },
@@ -343,7 +371,7 @@ class Command(BaseCommand):
                             "format" : "dateOptionalTime"
                         },
                         "total_anticipated_cost" : {
-                            "type" : "string"
+                            "type" : "long"
                         },
                         "url" : {
                             "type" : "string"
@@ -367,7 +395,8 @@ class Command(BaseCommand):
                             "type" : "string"
                         },
                         "cluster" : {
-                            "type" : "string"
+                            "type" : "string",
+                            "index": "not_analyzed"
                         },
                         "scope" : {
                             "type" : "string"

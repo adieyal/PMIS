@@ -2,6 +2,7 @@ import re
 import json as json
 import iso8601
 import string
+import time
 from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.shortcuts import redirect
@@ -9,10 +10,14 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from libs.database.database import Project
 
-from forms import IndexForm
+from forms import IndexForm, NewIndexForm
 from models import Cluster, Programme, ImplementingAgent
+
+client = Elasticsearch()
 
 def _safe_int(val, add=0):
     try:
@@ -20,10 +25,7 @@ def _safe_int(val, add=0):
     except (TypeError, ValueError):
         return None
 
-def projects(request):
-    cluster_id = request.GET.get('cluster')
-    query = request.GET.get('query')
-
+def create_filter(cluster_id, query):
     def _filter(x):
         result = True
 
@@ -37,11 +39,148 @@ def projects(request):
                 result = lower in x.name.lower() or lower in x.contract.lower()
 
         return result
+    return _filter
 
-    source = filter(
-        _filter,
+def filter_projects(request):
+    cluster_id = request.GET.get('cluster')
+    query = request.GET.get('query')
+
+    projects = filter(
+        create_filter(cluster_id, query),
         [Project.get(p) for p in Project.list() if p]
     )
+
+    return projects
+
+def search_by_fin_year(request):
+    """ Create an Elasticsearch Search object which is prefiltered to the financial year """
+    fin_year = int(request.GET.get('fin_year', '2015'))
+
+    range_filter = { 'lt': datetime(fin_year + 1, 4, 1, 0, 0, 0) }
+
+    exclude_previous = request.GET.get('exclude_previous') == 'on'
+
+    # Exclude previous financial years' data
+    if exclude_previous:
+        range_filter['gte'] = datetime(fin_year, 4, 1, 0, 0, 0)
+
+    search = Search(using=client, index='pmis') \
+        .filter('range', timestamp=range_filter)
+
+    search.aggs \
+        .bucket('projects', 'terms', field='project_id', size=0) \
+        .bucket('revisions', 'terms', field='id', order={ '_term': 'desc' }, size=1)
+
+    search = search.params(search_type='count')
+
+    response = search.execute()
+
+    latest_ids = []
+
+    for project in response.aggregations.projects.buckets:
+        for revision in project['revisions']['buckets']:
+            latest_ids.append(revision['key'])
+
+    # Now start another ES query which works with the most-up-to-date
+    # project revisions only
+    search = Search(using=client, index='pmis') \
+        .filter('terms', id=latest_ids)
+
+    return search
+
+def projects_by_fin_year(request):
+    search = search_by_fin_year(request)
+    total = search.params(search_type='count').execute().hits.total
+
+    cluster_id = request.GET.get('cluster')
+
+    if cluster_id:
+        cluster = Cluster.objects.get(id=cluster_id)
+        search = search.filter('term', cluster=cluster.name)
+
+    query = request.GET.get('search[value]')
+
+    if query:
+        search = search.query('query_string', query=query)
+
+    start = int(request.GET.get('start', '0'))
+    length = int(request.GET.get('length', '10'))
+
+    # Order
+    order_column = request.GET.get('order[0][column]')
+    if order_column:
+        name = request.GET.get('columns[%d][data]' % int(order_column))
+        name = translate_order(request, name)
+
+        direction = request.GET.get('order[0][dir]')
+
+        search = search.sort({ name : direction })
+
+    # Pagination
+    search = search[start:(start + length)]
+
+    # Do other things with projects here
+    # search.aggs.metric('actual_progress', 'stats', field='calculated.financial_years.2015.progress.actual')
+    # search.aggs.metric('planned_progress', 'stats', field='calculated.financial_years.2015.progress.planned')
+
+    response = search.execute()
+    return (response, total)
+
+def translate_order(request, order):
+    fin_year = str(request.GET.get('fin_year', 2015))
+
+    orders = {
+        'cluster': 'cluster',
+        'description': 'unanalyzed_description',
+        'entered_budget': 'total_anticipated_cost',
+        'calculated_budget': 'calculated.financial_years.%s.total_anticipated_cost' % fin_year,
+        'entered_expenditure': 'expenditure_to_date',
+        'calculated_expenditure': 'calculated.financial_years.%s.expenditure_to_date' % fin_year
+    }
+    return orders[order]
+
+def create_map(request):
+    def _map(project):
+        fin_year = str(request.GET.get('fin_year', 2015))
+
+        result = {
+            'cluster_id': project['cluster_id'],
+            'cluster': project['cluster'],
+            'description': project['description'],
+            'entered_budget': project['total_anticipated_cost'],
+            'calculated_budget': project['calculated']['financial_years'][fin_year]['total_anticipated_cost'],
+            'entered_expenditure': project['expenditure_to_date'],
+            'calculated_expenditure': project['calculated']['financial_years'][fin_year]['expenditure_to_date'],
+            'edit_url': '/entry/%s/edit' % project['project_id'],
+            'DT_RowId': project['project_id']
+        }
+
+        return result
+    return _map
+
+def map_projects(request, projects, total):
+    result = {
+        'draw': request.GET.get('draw'),
+        'recordsTotal': total,
+        'recordsFiltered': projects.hits.total,
+        'data': map(create_map(request), projects.hits),
+    }
+    return result
+
+def diagnose(request):
+    fin_year = str(request.GET.get('fin_year', 2015))
+
+    (projects, total) = projects_by_fin_year(request)
+
+    if request.is_ajax():
+        response = map_projects(request, projects, total)
+        return HttpResponse(json.dumps(response), content_type='application/json')
+    else:
+        form = NewIndexForm(request.GET)
+        return TemplateResponse(request, 'entry/diagnose.html', {'fin_year': fin_year, 'projects': projects, 'form': form})
+
+def projects(request):
+    source = filter_projects(request)
 
     projects = []
     for p in source:

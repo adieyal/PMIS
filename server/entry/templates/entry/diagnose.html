@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load humanize %}
+{% load entry_extras %}
+
+{% block page_title %}
+{% endblock page_title %}
+
+{% block content %}
+
+<div class="toolbar">
+    {% if form.cluster.value %}
+    <a class="btn btn-default pull-right" href="{% url 'entry:new' %}?cluster={{ form.cluster.value }}">Add project</a>
+    {% endif %}
+
+    <form class="form-inline">
+        {{ form }}
+
+        <button class="btn btn-primary" type="submit">Go</button>
+    </form>
+</div>
+
+<table id="projects" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            {% if not form.cluster.value %}
+            <th class="cluster">Cluster</th>
+            {% endif %}
+            <th class="description">Description</th>
+            <th class="entered-budget text-right">Entered Budget</th>
+            <th class="calculated-budget text-right">Calculated Budget</th>
+            <th class="entered-expenditure text-right">Entered Expenditure</th>
+            <th class="calculated-expenditure text-right">Calculated Expenditure</th>
+        </tr>
+    </thead>
+</table>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ STATIC_URL }}bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+<script src="{{ STATIC_URL }}js/dataTables.bootstrap.min.js"></script>
+<script>
+function addCommas(nStr) {
+    nStr += '';
+    x = nStr.split('.');
+    x1 = x[0];
+    x2 = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
+    while (rgx.test(x1)) {
+        x1 = x1.replace(rgx, '$1' + ',' + '$2');
+    }
+    return x1 + x2;
+}
+
+function renderNumber(data, type, row, meta) {
+    if (type == 'display') {
+        if (data === '') {
+            return '';
+        }
+        return '<div class="text-right">' + addCommas(data) + '</div>';
+    } else {
+        return data;
+    }
+}
+
+$(function() {
+    $('#cluster').change(function() {
+        this.form.submit();
+    });
+    $('#projects').dataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/entry/diagnose',
+            data: function(d) {
+                d.cluster = $('#id_cluster').val();
+                d.fin_year = $('#id_fin_year').val();
+
+                if($('#id_exclude_previous').prop('checked')) {
+                    d.exclude_previous = 'on';
+                }
+            }
+        },
+        columns: [
+            {% if not form.cluster.value %}
+            { data: 'cluster' },
+            {% endif %}
+            { data: 'description', render: function(data, type, row, meta) {
+                if (type == 'display') {
+                    return '<a href="' + row['edit_url'] + '">' + data + '</a>';
+                } else {
+                    return data;
+                }
+            }},
+            { data: 'entered_budget', render: renderNumber },
+            { data: 'calculated_budget', render: renderNumber },
+            { data: 'entered_expenditure', render: renderNumber },
+            { data: 'calculated_expenditure', render: renderNumber }
+        ],
+
+    });
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ STATIC_URL }}css/dataTables.bootstrap.css" rel="stylesheet" />
+<style>
+.toolbar { margin-bottom: 16px; }
+label[for="id_cluster"] { margin-right: 12px; }
+th, td { vertical-align: top; }
+.budget, .expenditure { text-align: right; }
+</style>
+{% endblock %}
