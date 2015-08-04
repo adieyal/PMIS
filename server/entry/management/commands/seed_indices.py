@@ -163,8 +163,11 @@ class Command(BaseCommand):
 
                     body['id'] = '%s/%s' % (body['project_id'], body['timestamp'])
 
-                    body['description'] = body.get('description', 'NO TITLE')
-                    body['unanalyzed_description'] = body.get('description', 'NO TITLE')
+                    body['description'] = body.get('description')
+                    body['unanalyzed_description'] = body.get('description')
+
+                    body['name'] = body.get('name', 'NO NAME')
+                    body['unanalyzed_name'] = body.get('name', 'NO NAME')
 
                     body['url'] = '%s/reports/project/%s/latest/' % (base_url, project_id),
 
@@ -359,6 +362,10 @@ class Command(BaseCommand):
                         },
                         "name" : {
                             "type" : "string"
+                        },
+                        "unanalyzed_name" : {
+                            "type" : "string",
+                            "index" : "not_analyzed"
                         },
                         "comments" : {
                             "type" : "string"

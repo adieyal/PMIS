@@ -25,7 +25,7 @@
             {% if not form.cluster.value %}
             <th class="cluster">Cluster</th>
             {% endif %}
-            <th class="description">Description</th>
+            <th class="name">Name</th>
             <th class="entered-budget text-right">Entered Budget</th>
             <th class="calculated-budget text-right">Calculated Budget</th>
             <th class="entered-expenditure text-right">Entered Expenditure</th>
@@ -84,7 +84,7 @@ $(function() {
             {% if not form.cluster.value %}
             { data: 'cluster' },
             {% endif %}
-            { data: 'description', render: function(data, type, row, meta) {
+            { data: 'name', render: function(data, type, row, meta) {
                 if (type == 'display') {
                     return '<a href="' + row['edit_url'] + '">' + data + '</a>';
                 } else {

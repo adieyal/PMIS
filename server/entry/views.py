@@ -131,7 +131,7 @@ def translate_order(request, order):
 
     orders = {
         'cluster': 'cluster',
-        'description': 'unanalyzed_description',
+        'name': 'unanalyzed_name',
         'entered_budget': 'total_anticipated_cost',
         'calculated_budget': 'calculated.financial_years.%s.total_anticipated_cost' % fin_year,
         'entered_expenditure': 'expenditure_to_date',
@@ -146,7 +146,7 @@ def create_map(request):
         result = {
             'cluster_id': project['cluster_id'],
             'cluster': project['cluster'],
-            'description': project['description'],
+            'name': project['name'],
             'entered_budget': project['total_anticipated_cost'],
             'calculated_budget': project['calculated']['financial_years'][fin_year]['total_anticipated_cost'],
             'entered_expenditure': project['expenditure_to_date'],
