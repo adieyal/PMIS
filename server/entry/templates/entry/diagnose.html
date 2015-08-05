@@ -26,10 +26,11 @@
             <th class="cluster">Cluster</th>
             {% endif %}
             <th class="name">Name</th>
-            <th class="entered-budget text-right">Entered Budget</th>
             <th class="calculated-budget text-right">Calculated Budget</th>
-            <th class="entered-expenditure text-right">Entered Expenditure</th>
+            <th class="entered-budget text-right">Entered Budget</th>
             <th class="calculated-expenditure text-right">Calculated Expenditure</th>
+            <th class="entered-expenditure text-right">Entered Expenditure</th>
+            <th class="score text-right">Score</th>
         </tr>
     </thead>
 </table>
@@ -53,7 +54,7 @@ function addCommas(nStr) {
 
 function renderNumber(data, type, row, meta) {
     if (type == 'display') {
-        if (data === '') {
+        if (data === '' || data === null) {
             return '';
         }
         return '<div class="text-right">' + addCommas(data) + '</div>';
@@ -86,15 +87,16 @@ $(function() {
             {% endif %}
             { data: 'name', render: function(data, type, row, meta) {
                 if (type == 'display') {
-                    return '<a href="' + row['edit_url'] + '">' + data + '</a>';
+                    return '<a href="' + row.edit_url + '">' + data + '</a>';
                 } else {
                     return data;
                 }
             }},
-            { data: 'entered_budget', render: renderNumber },
             { data: 'calculated_budget', render: renderNumber },
+            { data: 'entered_budget', render: renderNumber },
+            { data: 'calculated_expenditure', render: renderNumber },
             { data: 'entered_expenditure', render: renderNumber },
-            { data: 'calculated_expenditure', render: renderNumber }
+            { data: 'score', sortable: false },
         ],
 
     });

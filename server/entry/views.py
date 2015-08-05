@@ -124,6 +124,7 @@ def projects_by_fin_year(request):
     # search.aggs.metric('planned_progress', 'stats', field='calculated.financial_years.2015.progress.planned')
 
     response = search.execute()
+
     return (response, total)
 
 def translate_order(request, order):
@@ -152,8 +153,17 @@ def create_map(request):
             'entered_expenditure': project['expenditure_to_date'],
             'calculated_expenditure': project['calculated']['financial_years'][fin_year]['expenditure']['actual_to_date'],
             'edit_url': '/entry/%s/edit' % project['project_id'],
+            'url' : project['url'],
+
             'DT_RowId': project['project_id']
         }
+
+        if result['entered_budget'] == 0 or result['entered_expenditure'] == 0:
+            result['score'] = '&infin;'
+        elif result['entered_budget'] is None or result['entered_expenditure'] is None:
+            result['score'] = ''
+        else:
+            result['score'] = int((result['calculated_budget'] / result['entered_budget'] + result['calculated_expenditure'] / result['entered_expenditure']) * 50)
 
         return result
     return _map
