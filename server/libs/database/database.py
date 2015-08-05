@@ -110,16 +110,18 @@ class Project(object):
     def save(self):
         uuid = self._uuid
         timestamp = str(uuid1())
-        print UUID(timestamp).timestamp()
 
         self._details['_uuid'] = uuid
         self._details['_timestamp'] = timestamp
+
         data = dump_to_json(self._details)
+
         if self.edit:
             connection.set('/project/%s/edit' % (uuid), data)
         else:
             connection.sadd('/project', uuid)
             connection.sadd('/project/%s' % (uuid), timestamp)
+
             connection.set('/project/%s/%s' % (uuid, timestamp), data)
             
     def clear(self):
@@ -129,6 +131,7 @@ class Project(object):
         else:
             timestamps = connection.smembers('/project/%s' % (uuid))
             for timestamp in timestamps:
+                connection.sadd('/deletes', dump_to_json([ uuid, timestamp ]))
                 connection.delete('/project/%s/%s' % (uuid, timestamp))
                 connection.srem('/project/%s' % uuid, timestamp)
             connection.srem('/project', uuid)
@@ -142,7 +145,6 @@ class Project(object):
 
         revisions = (Enumerable(revisions)
             .select(lambda r: {
-                'timestamp': UUID(r.split('/')[-1]).timestamp(),
                 'key': '/project/%s/%s' % (uuid, r)
             }))
 

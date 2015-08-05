@@ -3,12 +3,14 @@ import re
 import time
 import datetime
 import json as json
+from optparse import make_option
 from dateutil.parser import parse
 from django.conf import settings
 from django.utils.text import slugify
 from django.core.management.base import BaseCommand, CommandError
 from libs.database.database import Project, UUID
 from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from elasticsearch.client import IndicesClient
 from reports.views import generate_cluster_dashboard_v2
 
@@ -56,6 +58,13 @@ class Command(BaseCommand):
         'revised_completion',
     ]
 
+    option_list = BaseCommand.option_list + (
+        make_option('--recreate',
+            action='store_true',
+            dest='recreate',
+            default=False,
+            help='Recreate index'), )
+
     def process_entry(self, body, entry, title):
         entry['expenditure'] = safe_float(entry['expenditure'])
         entry['progress'] = safe_float(entry['progress'])
@@ -75,14 +84,11 @@ class Command(BaseCommand):
             month = date.month
 
             if month <= 3:
-                fyear = year - 1
+                fin_year = year - 1
             else:
-                fyear = year
+                fin_year = year
 
-            if year not in body['calculated']['financial_years']:
-                body['calculated']['financial_years'][fyear] = dict(expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
-
-            financial_year = body['calculated']['financial_years'][fyear]
+            financial_year = self.get_fin_year(fin_year, body)
 
             which = title.lower()
 
@@ -95,12 +101,13 @@ class Command(BaseCommand):
 
         return dict(body)
 
-    def create_fin_year(self, fin_year, body):
+    def get_fin_year(self, fin_year, body):
         if fin_year not in body['calculated']['financial_years']:
-            body['calculated']['financial_years'][fin_year] = dict(total_anticipated_cost=0, expenditure_to_date=0, expenditure=dict(planned=0, actual=0), progress=dict(planned=None, actual=None))
+            body['calculated']['financial_years'][fin_year] = dict(expenditure=dict(planned_to_date=0, actual_to_date=0, planned=0, actual=0), progress=dict(planned=None, actual=None))
+        return body['calculated']['financial_years'][fin_year]
 
     def process_progress(self, body):
-        for fin_year in xrange(2012, datetime.datetime.now().year+1):
+        for fin_year in xrange(2013, datetime.datetime.now().year+1):
             planned = None
             actual = None
 
@@ -123,29 +130,43 @@ class Command(BaseCommand):
                     if date is not None and date < end and entry['progress'] is not None and (actual is None or date > parse(actual['date'])):
                         actual = entry
 
-            self.create_fin_year(fin_year, body)
+            financial_year = self.get_fin_year(fin_year, body)
 
             if planned is not None:
-                body['calculated']['financial_years'][fin_year]['progress']['planned'] = planned['progress']
+                financial_year['progress']['planned'] = planned['progress']
 
             if actual is not None:
-                body['calculated']['financial_years'][fin_year]['progress']['actual'] = actual['progress']
+                financial_year['progress']['actual'] = actual['progress']
 
     def process_expenditure_totals(self, body):
         planned = 0
         actual = 0
 
-        for fin_year in xrange(2012, datetime.datetime.now().year+1):
-            self.create_fin_year(fin_year, body)
+        for fin_year in xrange(2013, datetime.datetime.now().year+1):
+            financial_year = self.get_fin_year(fin_year, body)
 
-            planned += body['calculated']['financial_years'][fin_year]['expenditure']['planned']
-            actual += body['calculated']['financial_years'][fin_year]['expenditure']['actual']
+            planned += financial_year['expenditure']['planned']
+            actual += financial_year['expenditure']['actual']
 
-            body['calculated']['financial_years'][fin_year]['total_anticipated_cost'] = planned
-            body['calculated']['financial_years'][fin_year]['expenditure_to_date'] = actual
+            financial_year['expenditure']['planned_to_date'] = planned
+            financial_year['expenditure']['actual_to_date'] = actual
 
     def handle(self, *args, **options):
-        self.recreate_index()
+        if options['recreate']:
+            self.recreate_index()
+
+        s = Search(client, 'pmis')
+        s = s.params(search_type='count')
+
+        s.aggs.metric('timestamp_stats', 'extended_stats', field='timestamp')
+
+        r = s.execute()
+        
+        if r.aggregations.timestamp_stats['max'] is None:
+            max_datetime = None
+        else:
+            max_datetime = datetime.datetime.utcfromtimestamp(r.aggregations.timestamp_stats['max'] / 1000)
+            print 'Max timestamp: %s' % max_datetime
 
         base_url = os.getenv('BASE_URL', settings.BASE_URL)
 
@@ -154,48 +175,52 @@ class Command(BaseCommand):
                 revisions = Project.get_all(project_id)
 
                 for body in revisions:
-                    body['timestamp'] = UUID(body['_timestamp']).timestamp()
+                    dt = UUID(body['_timestamp']).timestamp()
 
-                    body['project_id'] = body['_uuid']
+                    if max_datetime is None or dt > max_datetime:
+                        body['timestamp'] = dt
 
-                    # Django doesn't like _variables, don't do it
-                    del(body['_uuid'])
+                        body['project_id'] = body['_uuid']
 
-                    body['id'] = '%s/%s' % (body['project_id'], body['timestamp'])
+                        # Django doesn't like _variables, don't do it
+                        del(body['_uuid'])
 
-                    body['description'] = body.get('description')
-                    body['unanalyzed_description'] = body.get('description')
+                        body['id'] = '%s/%s' % (body['project_id'], body['timestamp'])
 
-                    body['name'] = body.get('name', 'NO NAME')
-                    body['unanalyzed_name'] = body.get('name', 'NO NAME')
+                        body['description'] = body.get('description')
+                        body['unanalyzed_description'] = body.get('description')
 
-                    body['url'] = '%s/reports/project/%s/latest/' % (base_url, project_id),
+                        body['name'] = body.get('name', 'NO NAME')
+                        body['unanalyzed_name'] = body.get('name', 'NO NAME')
 
-                    body['cluster_id'] = translate_cluster(unicode(body.get('cluster', u'')))
-                    body['programme_id'] = slugify(body.get('programme', u''))
+                        body['url'] = '%s/reports/project/%s/latest/' % (base_url, project_id)
+                        body['edit_url'] = '%s/entry/%s/edit' % (base_url, project_id)
 
-                    body['calculated'] = dict(
-                        expenditure=dict(planned=0, actual=0),
-                        financial_years=dict(),
-                    )
+                        body['cluster_id'] = translate_cluster(unicode(body.get('cluster', u'')))
+                        body['programme_id'] = slugify(body.get('programme', u''))
 
-                    for entry in body.get('planning', []):
-                        body = self.process_entry(body, entry, 'Planned')
+                        body['calculated'] = dict(
+                            expenditure=dict(planned=0, actual=0),
+                            financial_years=dict(),
+                        )
 
-                    for entry in body.get('actual', []):
-                        body = self.process_entry(body, entry, 'Actual')
+                        for entry in body.get('planning', []):
+                            body = self.process_entry(body, entry, 'Planned')
 
-                    self.process_expenditure_totals(body)
-                    self.process_progress(body)
+                        for entry in body.get('actual', []):
+                            body = self.process_entry(body, entry, 'Actual')
 
-                    for field in self.float_fields:
-                        body[field] = safe_float(body.get(field))
+                        self.process_expenditure_totals(body)
+                        self.process_progress(body)
 
-                    for field in self.date_fields:
-                        if body.get(field, None) == '':
-                            body[field] = None
+                        for field in self.float_fields:
+                            body[field] = safe_float(body.get(field))
 
-                    client.index(index='pmis', doc_type='project', id=body['id'], body=body)
+                        for field in self.date_fields:
+                            if body.get(field, None) == '':
+                                body[field] = None
+
+                        client.index(index='pmis', doc_type='project', id=body['id'], body=body)
 
     def recreate_index(self):
         if indices_client.exists(index='pmis'):
