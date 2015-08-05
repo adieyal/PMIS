@@ -133,9 +133,9 @@ def translate_order(request, order):
         'cluster': 'cluster',
         'name': 'unanalyzed_name',
         'entered_budget': 'total_anticipated_cost',
-        'calculated_budget': 'calculated.financial_years.%s.planned_to_date' % fin_year,
+        'calculated_budget': 'calculated.financial_years.%s.expenditure.planned_to_date' % fin_year,
         'entered_expenditure': 'expenditure_to_date',
-        'calculated_expenditure': 'calculated.financial_years.%s.actual_to_date' % fin_year
+        'calculated_expenditure': 'calculated.financial_years.%s.expenditure.actual_to_date' % fin_year
     }
     return orders[order]
 
@@ -148,9 +148,9 @@ def create_map(request):
             'cluster': project['cluster'],
             'name': project['name'],
             'entered_budget': project['total_anticipated_cost'],
-            'calculated_budget': project['calculated']['financial_years'][fin_year]['planned_to_date'],
+            'calculated_budget': project['calculated']['financial_years'][fin_year]['expenditure']['planned_to_date'],
             'entered_expenditure': project['expenditure_to_date'],
-            'calculated_expenditure': project['calculated']['financial_years'][fin_year]['actual_to_date'],
+            'calculated_expenditure': project['calculated']['financial_years'][fin_year]['expenditure']['actual_to_date'],
             'edit_url': '/entry/%s/edit' % project['project_id'],
             'DT_RowId': project['project_id']
         }
