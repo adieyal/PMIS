@@ -47,7 +47,7 @@ Edit Project
                     <div class="form-group">
                         <label for="phase">Phase</label>
                         <select class="form-control" id="phase" name="phase">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                             <option value="planning">Planning</option>
                             <option value="implementation">Implementation</option>
                             <option value="completed">Completed</option>
@@ -59,7 +59,7 @@ Edit Project
                     <div class="form-group">
                         <label for="planning_phase">Planning Phase</label>
                         <select class="form-control" id="planning_phase" name="planning_phase">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                             <option value="consultant-appointment">Consultant Appointment</option>
                             <option value="design-costing">Design + Costing</option>
                             <option value="documentation">Documentation</option>
@@ -70,7 +70,7 @@ Edit Project
                     <div class="form-group">
                         <label for="cluster">Cluster</label>
                         <select class="form-control" id="cluster" name="cluster">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                             {% for cluster in clusters %}
                             <option value="{{ cluster.name }}">{{ cluster.name }}</option>
                             {% endfor %}
@@ -80,7 +80,7 @@ Edit Project
                     <div class="form-group">
                         <label for="programme">Programme</label>
                         <select class="form-control" id="programme" name="programme">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                         </select>
                     </div>
 
@@ -103,7 +103,7 @@ Edit Project
                     <div class="form-group">
                         <label for="district">District</label>
                         <select class="form-control" id="district" name="district">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                             <option value="Bohlabela">Bohlabela</option>
                             <option value="Ehlanzeni">Ehlanzeni</option>
                             <option value="Gert Sibande">Gert Sibande</option>
@@ -111,9 +111,25 @@ Edit Project
                         </select>
                     </div>
 
-                    <div class="form-group">
-                        <label for="municipality">Municipality</label>
-                        <input class="form-control" type="text" id="municipality" name="municipality"/>
+                    <div class="
+                        form-group
+                        {% if data.municipality and data.municipality not in municipalities %}
+                        has-warning
+                        {% endif %}
+                        ">
+                        <label for="municipality">Municipality
+                        </label>
+
+                        <select class="form-control" id="municipality" name="municipality">
+                            <option value="" selected="selected">--------</option>
+                            {% for municipality in municipalities %}
+                            <option value="{{ municipality }}">{{ municipality }}</option>
+                            {% endfor %}
+                        </select>
+
+                        {% if data.municipality and data.municipality not in municipalities %}
+                        <div class="help-block">Current value of {{ data.municipality }} is invalid.</div>
+                        {% endif %}
                     </div>
 
                     <div class="form-group">
@@ -125,7 +141,7 @@ Edit Project
                     <div class="form-group">
                         <label for="implementing_agent">Implementing Agent</label>
                         <select class="form-control" id="implementing_agent" name="implementing_agent">
-                            <option selected="selected">--------</option>
+                            <option value="" selected="selected">--------</option>
                             {% for agent in implementing_agents %}
                             <option value="{{ agent.name }}">{{ agent.name }}</option>
                             {% endfor %}

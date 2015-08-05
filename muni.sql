@@ -1,0 +1,18 @@
+insert into entry_municipality (name, code) values ("Albert Luthuli", "MP301");
+insert into entry_municipality (name, code) values ("Bushbuckridge", "MP325");
+insert into entry_municipality (name, code) values ("Dipaleseng", "MP306");
+insert into entry_municipality (name, code) values ("Dr JS Moroka", "MP316");
+insert into entry_municipality (name, code) values ("Emakhazeni", "MP314");
+insert into entry_municipality (name, code) values ("Emalahleni", "MP312");
+insert into entry_municipality (name, code) values ("Govan Mbeki", "MP307");
+insert into entry_municipality (name, code) values ("Lekwa", "MP305");
+insert into entry_municipality (name, code) values ("Mbombela", "MP322");
+insert into entry_municipality (name, code) values ("Mkhondo", "MP303");
+insert into entry_municipality (name, code) values ("Msukaligwa", "MP302");
+insert into entry_municipality (name, code) values ("Nkomazi", "MP324");
+insert into entry_municipality (name, code) values ("Pixley Ka Seme", "MP304");
+insert into entry_municipality (name, code) values ("Steve Tshwete", "MP313");
+insert into entry_municipality (name, code) values ("Thaba Chweu", "MP321");
+insert into entry_municipality (name, code) values ("Thembisile Hani", "MP315");
+insert into entry_municipality (name, code) values ("Umjindi", "MP323");
+insert into entry_municipality (name, code) values ("Victor Khanye", "MP311");

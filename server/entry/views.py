@@ -15,7 +15,7 @@ from elasticsearch_dsl import Search
 from libs.database.database import Project
 
 from forms import IndexForm, NewIndexForm
-from models import Cluster, Programme, ImplementingAgent
+from models import Cluster, Programme, ImplementingAgent, Municipality
 
 client = Elasticsearch()
 
@@ -190,13 +190,21 @@ def diagnose(request):
         return TemplateResponse(request, 'entry/diagnose.html', {'fin_year': fin_year, 'projects': projects, 'form': form})
 
 def projects(request):
+    clusters = {}
+    objects = Cluster.objects.all()
+    for cluster in objects:
+        clusters[cluster.name] = unicode(cluster)
+
     source = filter_projects(request)
 
     projects = []
     for p in source:
         if p._uuid:
             if p.cluster:
-                cluster = Cluster.objects.get(name=p.cluster)
+                if p.cluster in clusters:
+                    cluster = clusters[p.cluster]
+                else:
+                    cluster = p.cluster
             else:
                 cluster = None
 
@@ -204,13 +212,14 @@ def projects(request):
                 'uuid': p._uuid,
                 'name': p.name,
                 'description': p.description,
-                'cluster': None,
+                'cluster': cluster,
                 'programme': p.programme,
                 'contract': p.contract,
                 'expenditure_to_date': _safe_int(p.expenditure_to_date),
                 'total_anticipated_cost': _safe_int(p.total_anticipated_cost),
                 'valid_status': p.valid_status
             }
+
             projects.append(project)
 
     form = IndexForm(request.GET)
@@ -326,13 +335,16 @@ def edit(request, project_id):
         project._details['last_modified_time'] = datetime.now().isoformat()
         project.save()
         return HttpResponse(json.dumps(project._details), mimetype='application/json')
+
     cluster = Cluster.objects.get(name=project.cluster)
     project._details['__project_url'] = reverse('reports:project', kwargs={ 'project_id': project._uuid })
+
     context = {
         'cluster': cluster,
         'data': json.dumps(project._details),
         'clusters': Cluster.objects.all(),
-        'implementing_agents': ImplementingAgent.objects.all()
+        'implementing_agents': ImplementingAgent.objects.all(),
+        'municipalities': list(Municipality.objects.all().values_list('name', flat=True))
     }
     return TemplateResponse(request, 'entry/project.html', context)
 
@@ -366,6 +378,11 @@ def programme(request):
 def cluster(request):
     clusters = list(Cluster.objects.all().values('name'))
     return HttpResponse(json.dumps(clusters), mimetype='application/json')
+
+@csrf_exempt
+def municipality(request):
+    municipalities = list(Municipality.objects.all().values_list('name', flat=True))
+    return HttpResponse(json.dumps(municipalities), mimetype='application/json')
 
 @csrf_exempt
 def projects_json(request):

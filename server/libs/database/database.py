@@ -107,12 +107,15 @@ class Project(object):
         revisions = connection.smembers('/project/%s' % (self._uuid))
         return revisions
         
-    def save(self):
+    def save(self, update_timestamp=True):
         uuid = self._uuid
-        timestamp = str(uuid1())
-
         self._details['_uuid'] = uuid
-        self._details['_timestamp'] = timestamp
+
+        if update_timestamp:
+            timestamp = str(uuid1())
+            self._details['_timestamp'] = timestamp
+        else:
+            timestamp = self._details['_timestamp']
 
         data = dump_to_json(self._details)
 
@@ -120,7 +123,9 @@ class Project(object):
             connection.set('/project/%s/edit' % (uuid), data)
         else:
             connection.sadd('/project', uuid)
-            connection.sadd('/project/%s' % (uuid), timestamp)
+
+            if update_timestamp:
+                connection.sadd('/project/%s' % (uuid), timestamp)
 
             connection.set('/project/%s/%s' % (uuid, timestamp), data)
             

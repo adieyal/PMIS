@@ -22,3 +22,5 @@ elasticsearch
 elasticsearch-dsl
 py-linq
 jsonfield
+titlecase
+python-levenshtein

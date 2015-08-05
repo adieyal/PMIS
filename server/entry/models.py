@@ -35,6 +35,16 @@ class ImplementingAgent(models.Model):
     class Meta:
         ordering = ('name',)
 
+class Municipality(models.Model):
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=128)
+    
+    def __unicode__(self):
+        return u'%s' % (self.name)
+        
+    class Meta:
+        ordering = ('name',)
+
 class Project(models.Model):
     cluster_id = models.CharField(max_length=64, null=True)
     project_id = models.CharField(max_length=64, null=True)
