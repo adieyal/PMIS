@@ -7,6 +7,7 @@ class Cluster(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name)
 
+    @property
     def code(self):
         name = self.name
         initials = ''.join(filter(lambda c: c.isupper(), name))
@@ -44,6 +45,7 @@ class Municipality(models.Model):
         
     class Meta:
         ordering = ('name',)
+        verbose_name_plural = 'municipalities'
 
 class Project(models.Model):
     cluster_id = models.CharField(max_length=64, null=True)

@@ -193,7 +193,7 @@ def projects(request):
     clusters = {}
     objects = Cluster.objects.all()
     for cluster in objects:
-        clusters[cluster.name] = unicode(cluster)
+        clusters[cluster.name] = cluster.code
 
     source = filter_projects(request)
 

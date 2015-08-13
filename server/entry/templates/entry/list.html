@@ -35,8 +35,8 @@ Projects
         <tr class="{{ project.valid_status }}">
             <td class="cluster">{{ project.cluster }}</td>
             <td class="programme">
-                <div class="contract pull-right">{{ project.contract }}</div>
-                <strong>{{ project.programme }}<br />
+                <div class="contract pull-right">{{ project.contract | default:"None" }}</div>
+                <strong>{{ project.programme | default:"None" }}<br />
                 <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a></strong><br />
                 {{ project.description | linebreaks }}
             </td>
