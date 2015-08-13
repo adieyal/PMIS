@@ -4,13 +4,13 @@ from jsonfield import JSONField
 class Cluster(models.Model):
     name = models.CharField(max_length=128)
     
-    # def __unicode__(self):
-        # return u'%s' % (self.name)
-
     def __unicode__(self):
+        return u'%s' % (self.name)
+
+    def code(self):
         name = self.name
-        upper = ''.join(filter(lambda c: c.isupper(), name))
-        return upper
+        initials = ''.join(filter(lambda c: c.isupper(), name))
+        return u'%s' % initials
 
     class Meta:
         ordering = ('name',)
