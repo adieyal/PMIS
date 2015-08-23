@@ -13,6 +13,11 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         for uuid in args:
-            project = Project.get(uuid)
-            print 'Deleted project %s' % project.name
-            project.clear()
+            try:
+                project = Project.get(uuid)
+                name = project.name
+                project.clear()
+                print 'Deleted project %s' % name
+            except Exception, e:
+                print e
+                pass

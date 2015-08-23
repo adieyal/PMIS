@@ -1028,7 +1028,10 @@ def latest_project(request, year=None):
         return file_timestamp
 
 def normalize(value):
-    return value.strip().title()
+    if value is None:
+        return value
+    else:
+        return value.strip().title()
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
