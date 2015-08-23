@@ -308,6 +308,7 @@ jQuery(document).ready(function($) {
 
     $('.input-datepicker').datepicker({
         format: "yyyy-mm-dd",
-        autoclose: true
+        autoclose: true,
+        zIndexOffset: 9999,
     });
 });
