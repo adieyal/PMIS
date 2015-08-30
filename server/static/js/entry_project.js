@@ -29,6 +29,21 @@ jQuery(document).ready(function($) {
         }
     }
 
+    function getFirstDate(ids) {
+        var date = '';
+        ids.forEach(function (id) {
+            if ($('#' + id).length > 0) {
+                var val = $('#' + id).val();
+
+                if (val) {
+                    date = new Date(val);
+                    return false;
+                }
+            }
+        });
+        return date;
+    }
+
     function updateDates(key, values) {
         var expenditure = $('#'+key+'-expenditure')
         var progress = $('#'+key+'-progress')
@@ -107,6 +122,18 @@ jQuery(document).ready(function($) {
             data = d;
         }
         var values = data;
+
+        var dates = {
+            planning: [
+                getFirstDate([ 'planning_start' ]),
+                getFirstDate([ 'planning_completion' ])
+            ],
+            implementation: [
+                getFirstDate([ 'actual_start', 'planned_start' ]),
+                getFirstDate([ 'actual_completion', 'revised_completion', 'planned_completion' ])
+            ]
+        };
+
         for (key in values) {
             var value = d[key];
             if ((key == 'actual') || (key == 'planning')) {

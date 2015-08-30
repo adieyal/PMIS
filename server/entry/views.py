@@ -10,6 +10,7 @@ from django.utils.html import escape
 from django.core.urlresolvers import reverse
 from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required
 from elasticsearch import Elasticsearch
 from elasticsearch_dsl import Search
 from libs.database.database import Project
@@ -177,6 +178,7 @@ def map_projects(request, projects, total):
     }
     return result
 
+@login_required
 def diagnose(request):
     fin_year = str(request.GET.get('fin_year', 2015))
 
@@ -189,6 +191,7 @@ def diagnose(request):
         form = NewIndexForm(request.GET)
         return TemplateResponse(request, 'entry/diagnose.html', {'fin_year': fin_year, 'projects': projects, 'form': form})
 
+@login_required
 def projects(request):
     clusters = {}
     objects = Cluster.objects.all()
@@ -242,6 +245,7 @@ def generate_year(year):
         { 'expenditure': None, 'progress': None, 'date': '%04d-03-01T00:00:00' % (year+1) },
     ]
     
+@login_required
 def new(request):
     year = datetime.today().year
     month = datetime.today().month
@@ -280,7 +284,7 @@ def _find_or_add_month(data, year, month):
         'date': '%04d-%02d-01T00:00:00' % (year, month)
     })
         
-
+@login_required
 def edit(request, project_id):
     project = Project.edit(project_id)
     # Check actual and planned monthly entries. Add any required to
@@ -375,16 +379,19 @@ def programme(request):
     return HttpResponse(json.dumps(programmes), mimetype='application/json')
 
 @csrf_exempt
+@login_required
 def cluster(request):
     clusters = list(Cluster.objects.all().values('name'))
     return HttpResponse(json.dumps(clusters), mimetype='application/json')
 
 @csrf_exempt
+@login_required
 def municipality(request):
     municipalities = list(Municipality.objects.all().values_list('name', flat=True))
     return HttpResponse(json.dumps(municipalities), mimetype='application/json')
 
 @csrf_exempt
+@login_required
 def projects_json(request):
     project_list = (Project.get(uuid) for uuid in Project.list())
     projects = [{

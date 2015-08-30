@@ -170,7 +170,7 @@ ROOT_URLCONF = '%s.urls' % SITE_NAME
 
 ########## AUTHENTICATION CONFIGURATION
 # Configuration variables for LoginRequiredMiddleware
-LOGIN_EXEMPT_URLS = ['^ui/(.*)', '^account/(.*)']
+LOGIN_EXEMPT_URLS = ['^account/(.*)']
 ########## END AUTHENTICATION CONFIGURATION
 
 ########## APP CONFIGURATION
@@ -190,12 +190,12 @@ DJANGO_APPS = (
     # Admin panel and documentation:
     'django.contrib.admin',
     # 'django.contrib.admindocs',
-    'django.contrib.formtools',
+    # 'django.contrib.formtools',
 )
 
 THIRD_PARTY_APPS = (
     # Database migration helpers:
-    'south',
+    # 'south',
     'registration',
     'rest_framework',
     'reversion',
@@ -277,9 +277,9 @@ WSGI_APPLICATION = 'wsgi.application'
 ########## END WSGI CONFIGURATION
 
 
-LOGIN_URL = '/ui/login.html'
-LOGIN_REDIRECT_URL = '/ui/index.html'
-LOGOUT_URL = '/ui/login.html'
+LOGIN_URL = '/accounts/login'
+LOGOUT_URL = '/accounts/logout'
+LOGIN_REDIRECT_URL = '/'
 ABSOLUTE_URL_OVERRIDES = {
     'auth.user': lambda o: "/",
 }

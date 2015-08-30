@@ -20,6 +20,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import fuzzywuzzy.process
 from elasticsearch import Elasticsearch
+from django.contrib.auth.decorators import login_required
 
 from widgets import *
 from libs.database.database import Project
@@ -250,6 +251,7 @@ def generic_json(request, report, subreport, year, month, report_id=None, client
             ))
 
 
+@login_required
 def project_list(request):
     projects = Project.list()
     context = {
