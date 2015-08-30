@@ -33,28 +33,28 @@
     width: 120%;
 }
 
-table.projects th, table.projects td {
+table#projects th, table#projects td {
     vertical-align: top;
 }
 
-table.projects .name {
-    width: 20%;
+table#projects .cluster {
+    width: 5%;
 }
 
-table.projects .description {
-    width: 40%;
+table#projects .programme {
+    width: 75%;
 }
 
-table.projects .programme {
-    width: 20%;
-}
-
-table.projects .budget {
+table#projects .budget {
     text-align: right;
     width: 10%;
 }
 
-table.projects .expenditure {
+table#projects .expenditure {
     text-align: right;
     width: 10%;
+}
+
+table#projects .contract {
+    text-align: right;
 }
