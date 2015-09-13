@@ -42,6 +42,10 @@ def test(request):
 ### Utility functions
 
 
+def normalize_district(str):
+    str = re.sub(r'(?i)\s*district$', '', str)
+    return normalize(str)
+
 def _safe_float(val):
     try:
         return float(filter(lambda x: x.isdigit() or x == '.', str(val)))
@@ -101,6 +105,18 @@ def _expenditure_for_month(data, month):
         return data[month]['expenditure']
     except:
         return ''
+
+def _expenditure_for_month_v2(data, year, month):
+    clean_data = {}
+    for item in data:
+        try:
+            dt = iso8601.parse_date(item['date'])
+        except iso8601.ParseError:
+            continue
+        clean_data[(dt.year*100)+dt.month] = _safe_float(item['expenditure']) or 0
+    
+    month = (int(year)*100)+int(month)
+    return clean_data.get(month, 0)
 
 def _progress_for_month(data, month):
     clean_data = [{
@@ -469,7 +485,7 @@ def project_json(request, project_id, year=None, month=None):
             ]
         },
         'expenditure-previous': _currency(project.total_previous_expenses),
-        'expenditure-this-month': _currency(_expenditure_for_month(project.actual, year-1, month)),
+        'expenditure-this-month': _currency(_expenditure_for_month_v2(project.actual, year-1, month)),
         'expenditure-this-year': _currency(project.expenditure_in_year),
         'extensions': '%.0f months' % (_safe_float(project.extensions)) if _safe_float(project.extensions) else 'None',
         'implementation-handover-date': _date(project.implementation_handover),
@@ -1044,10 +1060,6 @@ def projects_v2(request, year=None):
     year += 1
     month = 3
         
-    def normalize_district(str):
-        str = re.sub(r'(?i)\s*district$', '', str)
-        return normalize(str)
-
     def _project_status(actual, planned):
         if (planned - actual) > 0.2:
             return ('In danger', 'red')
