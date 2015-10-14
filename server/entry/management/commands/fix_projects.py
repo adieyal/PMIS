@@ -21,14 +21,10 @@ class Command(BaseCommand):
 
         project_ids = Project.list()
         for project_id in project_ids:
-            project = Project.get(project_id)
-
-            if project.cluster == 'Department of Culture, Sports, Science and Recreation':
-                project.cluster = 'Department of Culture, Sports and Recreation'
-                project.save(False)
-
-            print project.cluster
-            continue
+            for revision in Project.get_all(project_id):
+                if 'cluster' in revision and revision['cluster'] == 'Department of Culture, Sports, Science and Recreation':
+                    revision['cluster'] = 'Department of Culture, Sports and Recreation'
+                    Project.save_revision(revision)
 
             if project.municipality not in municipalities:
                 if project.municipality is not None:

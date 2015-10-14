@@ -106,6 +106,13 @@ class Project(object):
     def revisions(self):
         revisions = connection.smembers('/project/%s' % (self._uuid))
         return revisions
+
+    @classmethod
+    def save_revision(cls, revision):
+        uuid = revision['_uuid']
+        timestamp = revision['_timestamp']
+        data = dump_to_json(revision)
+        connection.set('/project/%s/%s' % (uuid, timestamp), data)
         
     def save(self, update_timestamp=True):
         uuid = self._uuid
