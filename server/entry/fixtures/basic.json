@@ -24,7 +24,7 @@
     "pk": 4, 
     "model": "entry.cluster", 
     "fields": {
-        "name": "Department of Culture, Sports, Science and Recreation"
+        "name": "Department of Culture, Sports and Recreation"
     }
 },
 {

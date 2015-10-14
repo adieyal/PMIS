@@ -23,6 +23,13 @@ class Command(BaseCommand):
         for project_id in project_ids:
             project = Project.get(project_id)
 
+            if project.cluster == 'Department of Culture, Sports, Science and Recreation':
+                project.cluster = 'Department of Culture, Sports and Recreation'
+                project.save(False)
+
+            print project.cluster
+            continue
+
             if project.municipality not in municipalities:
                 if project.municipality is not None:
                     # Strip off brackets
