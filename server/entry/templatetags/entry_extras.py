@@ -17,3 +17,7 @@ def app_redis_db():
 def app_sqlite_db():
     name = os.path.basename(settings.DATABASES['default']['NAME'])
     return name
+
+@register.simple_tag
+def fin_year(body, fin_year, attribute):
+    return body['calculated']['financial_years'][fin_year][attribute]

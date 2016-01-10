@@ -1,0 +1,146 @@
+[
+   {
+      "fields" : {
+         "code" : "MP301",
+         "name" : "Albert Luthuli"
+      },
+      "model" : "entry.municipality",
+      "pk" : 3
+   },
+   {
+      "fields" : {
+         "code" : "MP325",
+         "name" : "Bushbuckridge"
+      },
+      "pk" : 4,
+      "model" : "entry.municipality"
+   },
+   {
+      "pk" : 5,
+      "model" : "entry.municipality",
+      "fields" : {
+         "name" : "Dipaleseng",
+         "code" : "MP306"
+      }
+   },
+   {
+      "pk" : 6,
+      "model" : "entry.municipality",
+      "fields" : {
+         "name" : "Dr JS Moroka",
+         "code" : "MP316"
+      }
+   },
+   {
+      "model" : "entry.municipality",
+      "pk" : 7,
+      "fields" : {
+         "code" : "MP314",
+         "name" : "Emakhazeni"
+      }
+   },
+   {
+      "model" : "entry.municipality",
+      "pk" : 8,
+      "fields" : {
+         "code" : "MP312",
+         "name" : "Emalahleni"
+      }
+   },
+   {
+      "fields" : {
+         "code" : "MP307",
+         "name" : "Govan Mbeki"
+      },
+      "model" : "entry.municipality",
+      "pk" : 9
+   },
+   {
+      "fields" : {
+         "name" : "Lekwa",
+         "code" : "MP305"
+      },
+      "model" : "entry.municipality",
+      "pk" : 10
+   },
+   {
+      "model" : "entry.municipality",
+      "pk" : 11,
+      "fields" : {
+         "code" : "MP322",
+         "name" : "Mbombela"
+      }
+   },
+   {
+      "fields" : {
+         "name" : "Mkhondo",
+         "code" : "MP303"
+      },
+      "pk" : 12,
+      "model" : "entry.municipality"
+   },
+   {
+      "pk" : 13,
+      "model" : "entry.municipality",
+      "fields" : {
+         "code" : "MP302",
+         "name" : "Msukaligwa"
+      }
+   },
+   {
+      "pk" : 14,
+      "model" : "entry.municipality",
+      "fields" : {
+         "code" : "MP324",
+         "name" : "Nkomazi"
+      }
+   },
+   {
+      "pk" : 15,
+      "model" : "entry.municipality",
+      "fields" : {
+         "name" : "Pixley Ka Seme",
+         "code" : "MP304"
+      }
+   },
+   {
+      "fields" : {
+         "code" : "MP313",
+         "name" : "Steve Tshwete"
+      },
+      "model" : "entry.municipality",
+      "pk" : 16
+   },
+   {
+      "fields" : {
+         "name" : "Thaba Chweu",
+         "code" : "MP321"
+      },
+      "model" : "entry.municipality",
+      "pk" : 17
+   },
+   {
+      "fields" : {
+         "name" : "Thembisile Hani",
+         "code" : "MP315"
+      },
+      "model" : "entry.municipality",
+      "pk" : 18
+   },
+   {
+      "fields" : {
+         "code" : "MP323",
+         "name" : "Umjindi"
+      },
+      "pk" : 19,
+      "model" : "entry.municipality"
+   },
+   {
+      "pk" : 20,
+      "model" : "entry.municipality",
+      "fields" : {
+         "name" : "Victor Khanye",
+         "code" : "MP311"
+      }
+   }
+]

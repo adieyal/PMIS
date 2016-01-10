@@ -54,9 +54,8 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="column">
                                     <Donut height="125"
-                                    title={p.numbers.implementation
-                                        + "/" + p.numbers.projects
-                                        + " Projects"} data={p.projects} />
+                                        count={p.numbers.projects}
+                                        title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
                                 </div>
                             </div>
                         </div>

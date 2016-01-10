@@ -18,12 +18,21 @@ GEM
       sass (>= 3.3.0, < 3.5)
     compass-import-once (1.0.5)
       sass (>= 3.2, < 3.5)
+    drydock (0.6.9)
     ffi (1.9.6)
     multi_json (1.10.1)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
+    redis (3.2.1)
+    redis-dump (0.3.5)
+      drydock (>= 0.6.9)
+      redis (>= 2.0)
+      uri-redis (>= 0.4.0)
+      yajl-ruby (>= 0.1)
     sass (3.4.7)
+    uri-redis (0.4.2)
+    yajl-ruby (1.2.1)
 
 PLATFORMS
   ruby
@@ -31,4 +40,8 @@ PLATFORMS
 DEPENDENCIES
   color-schemer
   compass
+  redis-dump
   sass
+
+BUNDLED WITH
+   1.10.6

@@ -17,8 +17,10 @@ deploy:
 	git pull && \
 	cd server && \
 	npm install && \
+	bower install && \
+	cd static/bower_components/bootstrap-datepicker && npm install && grunt dist && cd ../../.. \
 	gulp && \
-	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis-demo.burgercom.co.za python manage.py collectstatic && \
+	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis-demo.burgercom.co.za python manage.py collectstatic --noinput && \
 	cd ../insight && \
 	make demo-build && \
 	sudo chgrp -R webapp . && \
@@ -27,8 +29,10 @@ deploy:
 	git pull && \
 	cd server && \
 	npm install && \
+	bower install && \
+	cd static/bower_components/bootstrap-datepicker && npm install && grunt dist && cd ../../.. \
 	gulp && \
-	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis.burgercom.co.za python manage.py collectstatic && \
+	SECRET_KEY='34234v*eh#_gq618si+0gucd!fpkr2n07gxuy4m$mg_ss&_0h-ktm1fgdf' BASE_URL=http://pmis.burgercom.co.za python manage.py collectstatic --noinput && \
 	cd ../insight && \
 	make production-build && \
 	sudo chgrp -R webapp . && \

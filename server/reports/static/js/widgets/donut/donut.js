@@ -47,7 +47,7 @@ define(['jquery', 'd3', 'text!widgets/donut/base.svg'], function($, d3, svg) {
 		    }
 		}});
 	    
-        var total = me.data.values.reduce(function(a, b) { return a + b });
+        var total = me.data.values.reduce(function(a, b) { return a + b; }, 0);
 
         var is_grey = false;
         if (total == 0) {

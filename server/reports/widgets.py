@@ -58,13 +58,16 @@ def build_slider(expenditure, budget, color="#e5b744"):
     return markers
 
 def build_slider_v2(expenditure, budget, color="#e5b744"):
+    expenditure = _safe_float(expenditure)
+    budget = _safe_float(budget)
+
     if budget == 0:
         expenditurePercentage = 'Undefined'
     else:
         expenditurePercentage = '%s%%' % int(expenditure / budget * 100)
 
-    expenditure = _safe_float(expenditure / 1000000)
-    budget = _safe_float(budget / 1000000)
+    expenditure = expenditure / 1000000
+    budget = budget / 1000000
 
     markers = []
     normalize = (expenditure+budget)/(2.0/1.1/2.0) or 1
@@ -77,6 +80,7 @@ def build_slider_v2(expenditure, budget, color="#e5b744"):
         text1 = None
 
     format_str = 'R{:14,.1f}M'
+
     if expenditure > budget:
         markers.append({ "bar-color": color, 
                          "marker-color": "#656263", 

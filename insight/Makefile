@@ -10,7 +10,7 @@ dev-server:
 	npm run dev-server
 
 production-server:
-	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run start
+	BACKEND=http://pmis.burgercom.co.za FRONTEND=http://insight.burgercom.co.za PORT=8082 npm run production-server
 	# hot-dev-server
 
 demo-server:

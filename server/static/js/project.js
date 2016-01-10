@@ -24,4 +24,17 @@ jQuery(document).ready(function($){
        tf_field.val(parseInt(total_forms)+1);
        parents.before(clone);
    });
+   
+   /** Show referenced tab if there is one */
+   if(window.location.hash && $('.nav-tabs').length) {
+       $('[href="' + window.location.hash + '"]').tab('show');
+   }
+
+   /*
+   $('#id_cluster').change(function() {
+       // Clear the query, since it won't make sense
+       $('#id_query').val('');
+       this.form.submit();
+   });
+    */
 });

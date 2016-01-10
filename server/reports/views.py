@@ -20,6 +20,7 @@ from django.core.urlresolvers import reverse
 from django.conf import settings
 import fuzzywuzzy.process
 from elasticsearch import Elasticsearch
+from django.contrib.auth.decorators import login_required
 
 from widgets import *
 from libs.database.database import Project
@@ -40,6 +41,10 @@ def test(request):
 
 ### Utility functions
 
+
+def normalize_district(str):
+    str = re.sub(r'(?i)\s*district$', '', str)
+    return normalize(str)
 
 def _safe_float(val):
     try:
@@ -101,6 +106,18 @@ def _expenditure_for_month(data, month):
     except:
         return ''
 
+def _expenditure_for_month_v2(data, year, month):
+    clean_data = {}
+    for item in data:
+        try:
+            dt = iso8601.parse_date(item['date'])
+        except iso8601.ParseError:
+            continue
+        clean_data[(dt.year*100)+dt.month] = _safe_float(item['expenditure']) or 0
+    
+    month = (int(year)*100)+int(month)
+    return clean_data.get(month, 0)
+
 def _progress_for_month(data, month):
     clean_data = [{
         'month': m,
@@ -117,6 +134,23 @@ def _progress_for_month(data, month):
         
     return 0
     
+def _progress_for_month_v2(data, year, month):
+    month = _safe_int(month)
+    search_date = datetime(year, month, 1).isoformat()
+    latest = None
+
+    for item in data:
+        # Make it the latest if it is the last month with a progress update before or on the specified year and month
+        if item['progress'] is not None and item['date'] <= search_date and (not latest or item['date'] > latest['date']):
+            latest = item
+    
+    if latest:
+        progress = _safe_float(latest['progress'])
+        if progress:
+            return progress / 100
+
+    return 0
+
 def _project_status(actual, planned):
     if (planned - actual) > 0.2:
         return ('In danger', 'red')
@@ -233,6 +267,7 @@ def generic_json(request, report, subreport, year, month, report_id=None, client
             ))
 
 
+@login_required
 def project_list(request):
     projects = Project.list()
     context = {
@@ -335,28 +370,6 @@ def project_json(request, project_id, year=None, month=None):
         month = (int(year)*100)+int(month)
         return clean_data.get(month, 0)
 
-    def _progress_for_month(data, year, month):
-        clean_data = []
-        for item in data:
-            try:
-                dt = iso8601.parse_date(item['date'])
-            except iso8601.ParseError:
-                continue
-            clean_data.append({
-                'month': (dt.year*100)+dt.month,
-                'progress': _safe_float(item['progress'])
-            })
-        
-        month = (int(year)*100)+int(month)
-        latest = None
-        for item in clean_data:
-            if item['month']<=month and item['progress'] != None:
-                if not latest or latest['month'] < item['month']:
-                    latest = item
-        if latest:
-            return latest['progress']/100
-        return 0
-    
     def _project_status(actual, planned):
         if (planned - actual) > 0.2:
             return ('In danger', 'red')
@@ -472,7 +485,7 @@ def project_json(request, project_id, year=None, month=None):
             ]
         },
         'expenditure-previous': _currency(project.total_previous_expenses),
-        'expenditure-this-month': _currency(_expenditure_for_month(project.actual, year-1, month)),
+        'expenditure-this-month': _currency(_expenditure_for_month_v2(project.actual, year-1, month)),
         'expenditure-this-year': _currency(project.expenditure_in_year),
         'extensions': '%.0f months' % (_safe_float(project.extensions)) if _safe_float(project.extensions) else 'None',
         'implementation-handover-date': _date(project.implementation_handover),
@@ -489,18 +502,18 @@ def project_json(request, project_id, year=None, month=None):
         'planning-completion-date-actual': _date(project.planning_completion),
         'planning-phase': project.planning_phase if project.phase == 'planning' else 'none',
         'planning-start-date-actual': _date(project.planning_start),
-        'progress-gauge': build_gauge(_progress_for_month(project.planning, year-1, month)*100, _progress_for_month(project.actual, year-1, month)*100),
+        'progress-gauge': build_gauge(_progress_for_month_v2(project.planning, year-1, month)*100, _progress_for_month_v2(project.actual, year-1, month)*100),
         'progress-slider': build_slider(
             _safe_float(project.expenditure_to_date),
             _safe_float(project.total_anticipated_cost)
         ),
-        'progress-to-date': _percent(_progress_for_month(project.actual, year-1, month)),
+        'progress-to-date': _percent(_progress_for_month_v2(project.actual, year-1, month)),
         'scope': project.scope,
-        'stage': [project.phase, _progress_for_month(project.actual, year-1, month)*100 if project.phase == 'implementation' else None],
-        'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
-                                                                             _progress_for_month(project.planning, year-1, month))[0],
-        'status-color': 'green' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
-                                                                                  _progress_for_month(project.planning, year-1, month))[1],
+        'stage': [project.phase, _progress_for_month_v2(project.actual, year-1, month)*100 if project.phase == 'implementation' else None],
+        'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month_v2(project.actual, year-1, month),
+                                                                             _progress_for_month_v2(project.planning, year-1, month))[0],
+        'status-color': 'green' if project.phase == 'closed' else _project_status(_progress_for_month_v2(project.actual, year-1, month),
+                                                                                  _progress_for_month_v2(project.planning, year-1, month))[1],
         'start-date-actual': _date(project.actual_start),
         'start-date-planned': _date(project.planned_start),
         #'year': '%d/%d' % (_safe_int(project.fyear, -1), _safe_int(project.fyear)) if _safe_int(project.fyear) else 'Unknown'
@@ -758,7 +771,7 @@ districtSummaryGroups = {
     'final-completion': lambda p, year, month: p.implementation_phase == 'final-completion',
 }
 
-def generate_districts_v2(district_projects, year, month, month0):
+def generate_districts_v2(district_projects, year, month):
     districts = {}
 
     for k, projects in district_projects:
@@ -776,16 +789,16 @@ def generate_districts_v2(district_projects, year, month, month0):
             ),
             "completeness": {
                 "projects-0-50": (implementation_projects
-                    .where(lambda p: _safe_float(_progress_for_month(p.planning, month0)) <= 0.5)
+                    .where(lambda p: _safe_float(_progress_for_month_v2(p.planning, year, month)) <= 0.5)
                     .count()),
                 "projects-51-75": (implementation_projects
-                    .where(lambda p: 0.5 < _safe_float(_progress_for_month(p.planning, month0)) <= 0.75)
+                    .where(lambda p: 0.5 < _safe_float(_progress_for_month_v2(p.planning, year, month)) <= 0.75)
                     .count()),
                 "projects-76-99": (implementation_projects
-                    .where(lambda p: 0.75 < _safe_float(_progress_for_month(p.planning, month0)) < 1)
+                    .where(lambda p: 0.75 < _safe_float(_progress_for_month_v2(p.planning, year, month)) < 1)
                     .count()),
                 "projects-100": (implementation_projects
-                    .where(lambda p: _safe_float(_progress_for_month(p.planning, month0)) >= 1.0)
+                    .where(lambda p: _safe_float(_progress_for_month_v2(p.planning, year, month)) >= 1.0)
                     .count()),
             }
         }
@@ -802,7 +815,6 @@ def generate_districts_v2(district_projects, year, month, month0):
 
 def select_projects(year, month):
     projects = (Enumerable(Project.list())
-        .where(lambda p: p)
         .select(lambda p: Project.get(p, year, month))
         .where(lambda p: p))
     return projects
@@ -821,34 +833,6 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         .order_by(lambda p: p)
         .distinct())
 
-    if not year and not month:
-        now = datetime.now()
-        year = now.year
-        month = '%02d' % now.month
-
-    if not year or not month:
-        try:
-            timestamp = (projects
-                .select(lambda p: p.timestamp)
-                .max())
-        except ValueError:
-            return HttpResponse(json.dumps({ 'error': 'No projects in cluster.' }), mimetype='application/json')
-        year = timestamp.year
-        month = '%02d' % (timestamp.month)
-    else:
-        year = int(year)
-        month = month
-        
-    # Convert month number to 0 indexed month.
-    MONTHS0 = {
-        4: (0, 1),  5: (1, 1),  6: (2, 1),
-        7: (3, 1),  8: (4, 1),  9: (5, 1),
-        10: (6, 1),  11: (7, 1),  12: (8, 1),
-        1: (9, 0),  2: (10, 0), 3: (11, 0)
-    }
-    month0, year_add = MONTHS0[month]
-    fyear = year + year_add
-    
     projectPhases = {
         'planning': 'Planning',
         'implementation': 'Implementation',
@@ -887,28 +871,42 @@ def generate_cluster_dashboard_v2(cluster, year, month):
     try:
         total_progress = _percent(projects
             .where(lambda p: p.phase == 'implementation')
-            .select(lambda p: _safe_float(_progress_for_month(p.actual, month0)) or 0)
+            .select(lambda p: _safe_float(_progress_for_month_v2(p.actual, year, month)) or 0)
             .avg())
     except NoElementsError:
         total_progress = None
 
     context = {
         "client": cluster,
-        "year": '%d/%d' % (fyear-1, fyear) if fyear else 'Unknown',
 
         ### Summary section
         "total-expenditure": (projects
             .select(lambda p: _safe_float(p.expenditure_in_year) or 0)
             .sum()),
+        "total-expenditure-to-date": (projects
+            .select(lambda p: _safe_float(p.expenditure_to_date) or 0)
+            .sum()),
         "total-budget": (projects
             .where(lambda p: _active(p.phase))
             .select(lambda p: _safe_float(p.allocated_budget_for_year) or 0)
+            .sum()),
+        "total-anticipated-cost": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.total_anticipated_cost) or 0)
+            .sum()),
+        "total-planning-budget": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.budget_planning) or 0)
+            .sum()),
+        "total-implementation-budget": (projects
+            .where(lambda p: _active(p.phase))
+            .select(lambda p: _safe_float(p.budget_implementation) or 0)
             .sum()),
         "total-progress": total_progress,
         "total-projects": projects.count(),
         "total-programmes": programmes.count(),
 
-        "districts": generate_districts_v2(district_projects, year, month, month0),
+        "districts": generate_districts_v2(district_projects, year, month),
     }
 
     for phase, _ in projectPhases.iteritems():
@@ -917,6 +915,8 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         context['%s-projects-total' % phase] = len(phaseProjects)
         context['%s-budget' % phase] = sum([_safe_float(p.allocated_budget_for_year) or 0 for p in phaseProjects])
         context['%s-expenditure' % phase] = sum([_safe_float(p.expenditure_in_year) or 0 for p in phaseProjects])
+        context['%s-expenditure-to-date' % phase] = sum([_safe_float(p.expenditure_to_date) or 0 for p in phaseProjects])
+        context['%s-anticipated-cost' % phase] = sum([_safe_float(p.total_anticipated_cost) or 0 for p in phaseProjects])
         
         context['%s-slider' % phase] = build_slider_v2(
             context['%s-expenditure' % phase],
@@ -928,9 +928,12 @@ def generate_cluster_dashboard_v2(cluster, year, month):
         context['total-budget']
     )
 
+    if cluster == 'department-of-community-safety-security-and-liaison':
+        print context
+
     context["total-progress-gauge"] = build_gauge(
-        _avg([_safe_float(_progress_for_month(p.planning, month0))*100 or 0 for p in projects if p.phase == 'implementation']),
-        _avg([_safe_float(_progress_for_month(p.actual, month0))*100 or 0 for p in projects if p.phase == 'implementation'])
+        _avg([_safe_float(_progress_for_month_v2(p.planning, year, month))*100 or 0 for p in projects if p.phase == 'implementation']),
+        _avg([_safe_float(_progress_for_month_v2(p.actual, year, month))*100 or 0 for p in projects if p.phase == 'implementation'])
     )
 
     context['unknown-projects-total'] = len([p for p in projects if p.phase not in projectPhases])
@@ -972,7 +975,7 @@ def generate_cluster_dashboard_v2(cluster, year, month):
             obj['budget']
         )
 
-        obj['progress'] = _percent(_avg([_safe_float(_progress_for_month(p.actual, month0)) or 0 for p in programme_projects if p.phase == 'implementation']))
+        obj['progress'] = _percent(_avg([_safe_float(_progress_for_month_v2(p.actual, year, month)) or 0 for p in programme_projects if p.phase == 'implementation']))
 
         for phase, _ in projectPhases.iteritems():
             obj['projects'][phase] = len([p for p in programme_projects if p.phase == phase])
@@ -1028,7 +1031,7 @@ def latest_project(request, year=None):
     # Input is financial year, so it's for the period ending March of the next year
     year += 1
     month = 3
-        
+
     try:
         timestamp = select_projects(year, month).max(lambda p: p.timestamp)
     except NoElementsError:
@@ -1043,7 +1046,10 @@ def latest_project(request, year=None):
         return file_timestamp
 
 def normalize(value):
-    return value.strip().title()
+    if value is None:
+        return value
+    else:
+        return value.strip().title()
 
 #@cache_page(settings.API_CACHE)
 @condition(last_modified_func=latest_project)
@@ -1054,32 +1060,6 @@ def projects_v2(request, year=None):
     year += 1
     month = 3
         
-    def normalize_district(str):
-        str = re.sub(r'(?i)\s*district$', '', str)
-        return normalize(str)
-
-    def _progress_for_month(data, year, month):
-        clean_data = []
-        for item in data:
-            try:
-                dt = iso8601.parse_date(item['date'])
-            except iso8601.ParseError:
-                continue
-            clean_data.append({
-                'month': (dt.year*100)+dt.month,
-                'progress': _safe_float(item['progress'])
-            })
-        
-        month = (int(year)*100)+int(month)
-        latest = None
-        for item in clean_data:
-            if item['month']<=month and item['progress'] != None:
-                if not latest or latest['month'] < item['month']:
-                    latest = item
-        if latest:
-            return latest['progress']/100
-        return 0
-    
     def _project_status(actual, planned):
         if (planned - actual) > 0.2:
             return ('In danger', 'red')
@@ -1088,7 +1068,10 @@ def projects_v2(request, year=None):
         else:
             return ('On Target', 'green')
     
-    projects = select_projects(year, month)
+    if request.GET.get('cluster'):
+        projects = select_projects_by_cluster(request.GET.get('cluster'), year, month)
+    else:
+        projects = select_projects(year, month)
 
     base_url = os.getenv('BASE_URL', settings.BASE_URL)
 
@@ -1102,12 +1085,13 @@ def projects_v2(request, year=None):
             'programme': normalize(project.programme),
             'name': project.description,
             'url': '%s/reports/project/%s/latest/' % (base_url, project._uuid),
-            'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month(project.actual, year-1, month),
-                                    _progress_for_month(project.planning, year-1, month))[0],
+            'status': 'Closed' if project.phase == 'closed' else _project_status(_progress_for_month_v2(project.actual, year-1, month),
+                                    _progress_for_month_v2(project.planning, year-1, month))[0],
             'location': '%s, %s' % (project.location, project.municipality) if project.location else project.municipality,
             'phase': project.phase,
             'implementing_agent': project.implementing_agent,
-            'last_comment': project.comments.strip()
+            'last_comment': project.comments.strip(),
+            'progress': _percent(_safe_float(_progress_for_month_v2(project.actual, year, month))),
         })
 
     context['data'] = sorted(context['data'], key=operator.itemgetter('status'))

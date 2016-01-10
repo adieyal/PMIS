@@ -1,42 +1,76 @@
 {% extends "base.html" %}
+{% load humanize %}
 
 {% block page_title %}
-Project Entry
-<a class="btn pull-right" href="{% url 'entry:new' %}">Add project</a>
+Projects
 {% endblock page_title %}
 
 {% block content %}
-<ul class="nav nav-tabs">
-  {% for name, cluster in projects.items %}
-  <li{% if forloop.first %} class="active"{% endif %}><a href="#{{ name|slugify }}" data-toggle="tab">{{ name }}</a></li>
-  {% endfor %}
-</ul>
 
-<div class="tab-content">
-  {% for name, cluster in projects.items %}
-  <div class="tab-pane{% if forloop.first %} active{% endif %}" id="{{ name|slugify }}">
-    <table data-toggle="table">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Description</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for project in cluster %}
-        {% if project.uuid %}
-        <tr class="{{ project.valid_status }}">
-            <td>
-                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a>
-            </td>
-            <td>{{ project.description }}</td>
-        </tr>
-        {% endif %}
-        {% endfor %}
-        </tbody>
-    </table>
-  </div>
-  {% endfor %}
+<div class="toolbar">
+    {% if form.cluster.value %}
+    <a class="btn btn-default pull-right" href="{% url 'entry:new' %}?cluster={{ form.cluster.value }}">Add project</a>
+    {% endif %}
+
+    <form class="form-inline">
+        {{ form }}
+        <button class="btn btn-primary" type="submit">Go</button>
+    </form>
 </div>
 
+<table id="projects" class="table table-striped table-bordered" cellspacing="0" width="100%">
+    <thead>
+        <tr>
+            <th class="cluster">Cluster</th>
+            <th class="programme">
+                <div class="pull-right">Contract</div>
+                Programme &gt; Name &gt; Description
+            </th>
+            <th class="budget">Budget</th>
+            <th class="expenditure">Expenditure</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for project in projects %}
+        <tr class="{{ project.valid_status }}">
+            <td class="cluster">{{ project.cluster }}</td>
+            <td class="programme">
+                <div class="contract pull-right">
+                    {{ project.contract | default:"None" }}<br/>
+                    <a href="{% url 'reports:project' project.uuid %}">Report</a>
+                </div>
+                <strong>{{ project.programme | default:"None" }}<br />
+                <a href="{% url 'entry:edit' project.uuid %}">{{ project.name | default:"None" }}</a></strong><br />
+                {{ project.description | linebreaks }}
+            </td>
+            <td class="budget">{{ project.total_anticipated_cost | default_if_none:'' | intcomma }}</td>
+            <td class="expenditure">{{ project.expenditure_to_date | default_if_none:'' | intcomma }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ STATIC_URL }}bower_components/datatables/media/js/jquery.dataTables.js"></script>
+<script src="{{ STATIC_URL }}/js/dataTables.bootstrap.js"></script>
+<script>
+$(function() {
+    $('#cluster').change(function() {
+        this.form.submit();
+    });
+    $('#projects').dataTable();
+});
+</script>
+{% endblock %}
+
+{% block extra_css %}
+<link href="{{ STATIC_URL }}/css/dataTables.bootstrap.css" rel="stylesheet" />
+<style>
+.toolbar { margin-bottom: 16px; }
+label[for="id_cluster"] { margin-right: 12px; }
+th, td { vertical-align: top; }
+.budget, .expenditure { text-align: right; }
+#projects { width: 100%; }
+</style>
 {% endblock %}

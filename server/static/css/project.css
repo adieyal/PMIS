@@ -9,11 +9,11 @@
     cursor: pointer;
 }
 
-#control-group-fixed-spacer {
+#form-group-fixed-spacer {
     height: 50px;
 }
 
-#control-group-fixed {
+#form-group-fixed {
     position: fixed;
     bottom: 0;
     left: 0;
@@ -23,42 +23,38 @@
     margin-bottom: 0;
 }
 
-#control-group-fixed .controls {
+#form-group-fixed .form-group {
     width: 1000px;
     margin-left: auto;
     margin-right: auto;
 }
 
-.date-block {
-    display: inline-block;
-    margin: 0 5px;
+.years input {
+    width: 120%;
 }
 
-fieldset.can-minimize > legend {
-    cursor: pointer;
+table#projects th, table#projects td {
+    vertical-align: top;
 }
 
-fieldset.can-minimize > legend:before {
-    content: '';
-    display: inline-block;
-    width: 14px;
-    height: 14px;
-    margin-top: 1px;
-    line-height: 14px;
-    vertical-align: text-top;
-    background-image: url("../img/glyphicons-halflings.png");
-    background-repeat: no-repeat;
-    background-position: -288px -120px;
-    left: -20px;
-    top: 3px;
-    margin-left: -14px;
-    position: relative;
+table#projects .cluster {
+    width: 5%;
 }
 
-fieldset.can-minimize.minimized > legend:before {
-    background-position: -313px -119px;
+table#projects .programme {
+    width: 75%;
 }
 
-fieldset.can-minimize.minimized > div {
-    display: none;
+table#projects .budget {
+    text-align: right;
+    width: 10%;
+}
+
+table#projects .expenditure {
+    text-align: right;
+    width: 10%;
+}
+
+table#projects .contract {
+    text-align: right;
 }

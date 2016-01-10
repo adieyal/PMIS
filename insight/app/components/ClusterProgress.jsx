@@ -39,12 +39,12 @@ module.exports = component('ClusterProgress', methods, function({ clusters }) {
             });
 
             return {
-                id: p.id,
-                title: p.title,
+                id: p.get('id'),
+                title: p.get('title'),
                 numbers: numbers,
                 planning: planning,
                 implementation: implementation,
-                performance: p.performance
+                performance: p.get('performance')
             };
         }.bind(this));
         return data;
@@ -164,10 +164,14 @@ module.exports = component('ClusterProgress', methods, function({ clusters }) {
                                 <div className="extra content">
                                     <div className="ui three column grid">
                                         <div className="column">
-                                            <Donut data={p.planning} height="206" />
+                                            <Donut
+                                                count={p.numbers.planning}
+                                                data={p.planning} height="206" />
                                         </div>
                                         <div className="column">
-                                            <Donut data={p.implementation} height="206" />
+                                            <Donut
+                                                count={p.numbers.implementation}
+                                                data={p.implementation} height="206" />
                                         </div>
                                         <div className="column">
                                             <Slider data={p.performance} height="200" />

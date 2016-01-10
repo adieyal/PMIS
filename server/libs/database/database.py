@@ -108,18 +108,34 @@ class Project(object):
     def revisions(self):
         revisions = connection.smembers('/project/%s' % (self._uuid))
         return revisions
+
+    @classmethod
+    def save_revision(cls, revision):
+        uuid = revision['_uuid']
+        timestamp = revision['_timestamp']
+        data = dump_to_json(revision)
+        connection.set('/project/%s/%s' % (uuid, timestamp), data)
         
-    def save(self):
+    def save(self, update_timestamp=True):
         uuid = self._uuid
-        timestamp = str(uuid1())
         self._details['_uuid'] = uuid
-        self._details['_timestamp'] = timestamp
+
+        if update_timestamp:
+            timestamp = str(uuid1())
+            self._details['_timestamp'] = timestamp
+        else:
+            timestamp = self._details['_timestamp']
+
         data = dump_to_json(self._details)
+
         if self.edit:
             connection.set('/project/%s/edit' % (uuid), data)
         else:
             connection.sadd('/project', uuid)
-            connection.sadd('/project/%s' % (uuid), timestamp)
+
+            if update_timestamp:
+                connection.sadd('/project/%s' % (uuid), timestamp)
+
             connection.set('/project/%s/%s' % (uuid, timestamp), data)
             
     def clear(self):
@@ -129,10 +145,32 @@ class Project(object):
         else:
             timestamps = connection.smembers('/project/%s' % (uuid))
             for timestamp in timestamps:
+                connection.sadd('/deletes', dump_to_json([ uuid, timestamp ]))
                 connection.delete('/project/%s/%s' % (uuid, timestamp))
                 connection.srem('/project/%s' % uuid, timestamp)
             connection.srem('/project', uuid)
     
+    @classmethod
+    def get_all(cls, uuid):
+        revisions = connection.smembers('/project/%s' % (uuid))
+
+        if not revisions:
+            raise DoesNotExistException('There is no data for project %s.' % (uuid))
+
+        revisions = (Enumerable(revisions)
+            .select(lambda r: {
+                'key': '/project/%s/%s' % (uuid, r)
+            }))
+
+        results = []
+
+        for revision in revisions.to_list():
+            data = connection.get(revision['key'])
+            details = json.loads(data)
+            results.append(details)
+
+        return results
+
     @classmethod
     def get(cls, uuid, year=None, month=None, as_json=False):
         revisions = connection.smembers('/project/%s' % (uuid))

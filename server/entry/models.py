@@ -7,6 +7,12 @@ class Cluster(models.Model):
     def __unicode__(self):
         return u'%s' % (self.name)
 
+    @property
+    def code(self):
+        name = self.name
+        initials = ''.join(filter(lambda c: c.isupper(), name))
+        return u'%s' % initials
+
     class Meta:
         ordering = ('name',)
 
@@ -28,6 +34,17 @@ class ImplementingAgent(models.Model):
         
     class Meta:
         ordering = ('name',)
+
+class Municipality(models.Model):
+    code = models.CharField(max_length=5)
+    name = models.CharField(max_length=128)
+    
+    def __unicode__(self):
+        return u'%s' % (self.name)
+        
+    class Meta:
+        ordering = ('name',)
+        verbose_name_plural = 'municipalities'
 
 class Project(models.Model):
     programme = models.ForeignKey(Programme)
