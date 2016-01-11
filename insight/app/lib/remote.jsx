@@ -47,8 +47,9 @@ Remote = {
             });
     },
     fetchClusters: function (clusters, authToken, query) {
-        utils.walkAsync(clusters, function(cluster) {
+        utils.walkAsync(clusters, function(cluster, next) {
             Remote.fetchCluster(cluster.slug, authToken, query);
+            next();
         });
     },
     login: function (username, password) {
