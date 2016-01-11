@@ -24,7 +24,7 @@ deploy-demo:
 	cd ../insight && \
 	make demo-build && \
 	sudo chgrp -R webapp . && \
-	sudo /etc/init.d/apache2 restart \
+	sudo /etc/init.d/nginx restart \
 	sudo supervisorctl restart demo"
 
 deploy-production:
@@ -41,7 +41,7 @@ deploy-production:
 	cd ../insight && \
 	make production-build && \
 	sudo chgrp -R webapp . && \
-	sudo /etc/init.d/apache2 restart \
+	sudo /etc/init.d/nginx restart \
 	sudo supervisorctl restart production"
 
 .PHONY: serve production-reindex development-reindex deploy
