@@ -18,7 +18,7 @@ fuzzywuzzy
 iso8601
 redis
 slugify
-djoser
+djoser==0.3.1
 elasticsearch
 elasticsearch-dsl
 py-linq

@@ -22,6 +22,7 @@ install:
 	# sudo gem install bundler
 	bundle install
 	npm install
+	cd node_modules/webpack-dev-server/node_modules/sockjs-client/node_modules/debug && make
 	bower install
 
 development-build:

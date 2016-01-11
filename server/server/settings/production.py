@@ -82,6 +82,8 @@ CACHES = {
 }
 
 API_CACHE = 60 * 60
+
+CACHE_MIDDLEWARE_KEY_PREFIX = 'production'
 ########## END CACHE CONFIGURATION
 
 

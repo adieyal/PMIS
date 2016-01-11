@@ -1,0 +1,768 @@
+{% extends "base.html" %}
+
+{% block page_title %}Edit Project{% endblock page_title %}
+
+{% block content %}
+<a href="#" id="__project_url" class="btn disabled pull-right" target="_blank">View report</a>
+<div class="clearfix"></div>
+
+<form class="form-horizontal" method="post">
+  {% csrf_token %}
+  
+  <fieldset class="can-minimize minimized">
+    <legend>General</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="_uuid">Id</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="_uuid" name="_uuid" readonly="readonly"/>
+      </div>
+    </div>
+    
+    <div class="control-group">
+      <label class="control-label" for="name">Name</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="name" name="name"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="description">Description</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="description" name="description"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="phase">Phase</label>
+      <div class="controls">
+	<select class="span4" id="phase" name="phase">
+	  <option selected="selected">--------</option>
+	  <option value="categorization">Categorization</option>
+	  <option value="planning">Planning</option>
+	  <option value="implementation">Implementation</option>
+	  <option value="completed">Completed</option>
+	  <option value="final-accounts">Final Accounts</option>
+	  <option value="closed">Closed</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planning_phase">Planning Phase</label>
+      <div class="controls">
+	<select class="span4" id="planning_phase" name="planning_phase">
+	  <option selected="selected">--------</option>
+	  <option value="consultant-appointment">Consultant Appointment</option>
+	  <option value="design-costing">Design + Costing</option>
+	  <option value="documentation">Documentation</option>
+	  <option value="tender">Tender</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="cluster">Cluster</label>
+      <div class="controls">
+	<select class="span5" id="cluster" name="cluster">
+	  <option selected="selected">--------</option>
+	  {% for cluster in clusters %}
+	  <option value="{{ cluster.name }}">{{ cluster.name }}</option>
+	  {% endfor %}
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="programme">Programme</label>
+      <div class="controls">
+	<select class="span5" id="programme" name="programme">
+	  <option selected="selected">--------</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="contract">Contract Number</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="contract" name="contract"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="scope">Scope</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="scope" name="scope"></textarea>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="jobs">Jobs Created</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="jobs" name="jobs"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Location</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="district">District</label>
+      <div class="controls">
+	<select class="span4" id="district" name="district">
+	  <option selected="selected">--------</option>
+	  <option value="Ehlanzeni">Ehlanzeni</option>
+	  <option value="Gert Sibande">Gert Sibande</option>
+	  <option value="Nkangala">Nkangala</option>
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="municipality">Municipality</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="municipality" name="municipality"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="location">Location / Village</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="location" name="location"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Parties</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="implementing_agent">Implementing Agent</label>
+      <div class="controls">
+	<select class="span4" id="implementing_agent" name="implementing_agent">
+	  <option selected="selected">--------</option>
+	  {% for agent in implementing_agents %}
+	  <option value="{{ agent.name }}">{{ agent.name }}</option>
+	  {% endfor %}
+	</select>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="principal_agent">Consultant</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="principal_agent" name="principal_agent"/>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="contractor">Contractor</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="contractor" name="contractor" autocomplete="off"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="coordinator">Coordinator</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="manager" name="manager" autocomplete="off"/>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Dates</legend>
+
+    <div class="control-group hide-for-phase hide-for-implementation">
+      <label class="control-label" for="planning_start">Planning Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planning_start" name="planning_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-implementation">
+      <label class="control-label" for="planning_completion">Planning Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planning_completion" name="planning_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="implementation_handover">Implementation Handover</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="implementation_handover" name="implementation_handover"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planned_start">Planned Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planned_start" name="planned_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="actual_start">Actual Start</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="actual_start" name="actual_start"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="planned_completion">Planned Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="planned_completion" name="planned_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="revised_completion">Revised Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="revised_completion" name="revised_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="actual_completion">Actual Completion</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control input-datepicker" type="text" id="actual_completion" name="actual_completion"/>
+	  <span class="input-group-addon"><i class="icon icon-th"></i></span>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="extensions">Time Extensions</label>
+      <div class="controls">
+	<div class="input-group">
+	  <input class="form-control" type="text" id="extensions" name="extensions"/>
+	  <span class="input-group-addon">months</span>
+	</div>
+      </div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Budget</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="source">Source</label>
+      <div class="controls">
+	<input class="input-xxlarge" type="text" id="source" name="source"/>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="total_anticipated_cost">Overall</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="total_anticipated_cost" name="total_anticipated_cost"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="allocated_budget_for_year">Current Financial Year</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="allocated_budget_for_year" name="allocated_budget_for_year"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="budget_implementation">Implementation</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_implementation" name="budget_implementation"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="budget_planning">Planning</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_planning" name="budget_planning"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group hide-for-phase hide-for-planning">
+      <label class="control-label" for="budget_variation_orders">Variation Orders</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="budget_variation_orders" name="budget_variation_orders"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Planned Expenditure</label>
+      <div id="planning-expenditure" class="controls"></div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Expenditure</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="total_previous_expenses">Previous Years</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="total_previous_expenses" name="total_previous_expenses"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="expenditure_in_year">This Year</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="expenditure_in_year" name="expenditure_in_year"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="expenditure_to_date">Total to Date</label>
+      <div class="controls">
+	<div class="input-group">
+	  <span class="input-group-addon">R</span>
+	  <input class="form-control" type="text" id="expenditure_to_date" name="expenditure_to_date"/>
+	</div>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Actual Expenditure</label>
+      <div id="actual-expenditure" class="controls"></div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized hide-for-phase hide-for-planning">
+    <legend>Progress</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Planned Progress</label>
+      <div id="planning-progress" class="controls"></div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="actual">Actual Progress</label>
+      <div id="actual-progress" class="controls"></div>
+    </div>
+
+  </fieldset>
+
+  <fieldset class="can-minimize minimized">
+    <legend>Comments</legend>
+
+    <div class="control-group">
+      <label class="control-label" for="comments">Comments</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="comments" name="comments"></textarea>
+      </div>
+    </div>
+
+    <div class="control-group">
+      <label class="control-label" for="remedial_action">Mitigation</label>
+      <div class="controls">
+	<textarea class="input-xxlarge" rows="5" type="text" id="remedial_action" name="remedial_action"></textarea>
+      </div>
+    </div>
+    
+  </fieldset>
+
+  <div id="control-group-fixed-spacer"></div>
+  
+  <div class="control-group" id="control-group-fixed">
+    <div class="controls">
+      <input class="btn btn-primary" type="button" id="save" name="__save" value="Save"/>
+      <input class="btn btn-danger" type="button" id="reset" name="__reset" value="Reset"/>
+    </div>
+  </div>
+  
+</form>
+
+<div class="modal fade" id="savingModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">Saving</h4>
+      </div>
+      <div class="modal-body">
+	<p>Your changes are being saved. Please wait.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+  var data = {{ data|safe }};
+  var MONTHS = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+		 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
+  var changes = [];
+
+  function updateValue(key, value) {
+      value = value || data[key];
+      if ($.isArray(value)) {
+	  for (i=0; i<value.length; i++) {
+	      var newkey = key + '.' + i;
+	      var newvalue = value[i];
+	      updateValue(newkey, newvalue)
+	  }
+      } else if ($.isPlainObject(value)) {
+	  for (subkey in value) {
+	      var newkey = key + '.' + subkey;
+	      var newvalue = value[subkey];
+	      updateValue(newkey, newvalue)
+	  }
+      } else {
+          if (key.substring(0,2) != '__') {
+	      var input = $('[name="'+key+'"]');
+	      input.val(value);
+	      input.closest('.control-group').removeClass('warning');
+	  } else if (key == '__project_url') {
+	      var link = $('a#__project_url');
+	      link.attr('href', value);
+	      link.removeClass('disabled');
+	  }
+      }
+  }
+
+  function updateDates(key, values) {
+      var expenditure = $('#'+key+'-expenditure')
+      var progress = $('#'+key+'-progress')
+      var template;
+      var block;
+      var date;
+      
+      for (i=0; i<values.length; i++) {
+	  value = values[i];
+	  date = new Date(value['date']);
+	  
+	  block = $('#'+key+'-'+i+'-expenditure');
+	  if (block.length) {
+	      block.find('date-label').text(MONTHS[date.getMonth()]+' '+date.getFullYear());
+	      block.find('input').val(value['expenditure']).attr({
+		  type: 'text',
+		  id: key+'.'+i+'.expenditure',
+		  name: key+'.'+i+'.expenditure'
+	      });
+	  } else {
+	      block = $('<div/>', {
+		  addClass: 'date-block',
+		  attr: { id: key+'-'+i+'-expenditure'}
+	      });
+	      block.append(
+		  $('<div/>', {
+		      addClass: 'date-label', 
+		      text: MONTHS[date.getMonth()]+' '+date.getFullYear()
+		  })
+	      )
+	      block.append(
+		  $('<input/>', {
+		      addClass: 'span1',
+		      val: value['expenditure'],
+		      attr: {
+			  type: 'text',
+			  id: key+'.'+i+'.expenditure',
+			  name: key+'.'+i+'.expenditure'
+		      }
+		  })
+	      )
+	      $('#'+key+'-expenditure').append(block);
+	  }
+	  
+	  block = $('#'+key+'-'+i+'-progress');
+	  if (block.length) {
+	      block.find('date-label').text(MONTHS[date.getMonth()]+' '+date.getFullYear());
+	      block.find('input').val(value['progress']).attr({
+		  type: 'text',
+		  id: key+'.'+i+'.progress',
+		  name: key+'.'+i+'.progress'
+	      });
+	  } else {
+	      block = $('<div/>', {
+		  addClass: 'date-block',
+		  attr: { id: key+'-'+i+'-progress'}
+	      });
+	      block.append(
+		  $('<div/>', {
+		      addClass: 'date-label', 
+		      text: MONTHS[date.getMonth()]+' '+date.getFullYear()
+		  })
+	      )
+	      block.append(
+		  $('<input/>', {
+		      addClass: 'span1',
+		      val: value['progress'],
+		      attr: {
+			  type: 'text',
+			  id: key+'.'+i+'.progress',
+			  name: key+'.'+i+'.progress'
+		      }
+		  })
+	      )
+	      $('#'+key+'-progress').append(block);
+	  }
+      }
+
+      
+      $('#'+key+'-expenditure').closest('.control-group').removeClass('warning');
+      $('#'+key+'-progress').closest('.control-group').removeClass('warning');
+  }
+  
+  function updateForm(d) {
+      if (d) {
+	  data = d;
+      }
+      var values = data;
+      for (key in values) {
+	  var value = d[key];
+	  if ((key == 'actual') || (key == 'planning')) {
+	      updateDates(key, value);
+	  } else {
+	      updateValue(key, value);
+	  }
+      }
+  }
+  updateForm(data);
+
+  $('input').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  })
+
+  $('textarea').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  })
+
+  $('select').on('change', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      element.closest('.control-group').addClass('warning');
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+      }).error(function() {
+	  changes.push({ name: name, value: val });
+      });
+  });
+				  
+  $('fieldset.can-minimize > legend').on('click', function() {
+      $(this).closest('fieldset.can-minimize').toggleClass('minimized');
+  });
+
+  $('input[type="button"]').on('click', function() {
+      var element = $(this);
+      var name = element.attr('name');
+      var val = element.val();
+      var data = { csrfmiddlewaretoken: "{{ csrf_token }}" }
+
+      if (name == '__save') {
+	  var modal = $('#savingModal');
+	  modal.find('p').text('Your changes are being saved. Please wait.');
+	  modal.modal('show');
+      }
+
+      data[name] = val;
+      for (i=0; i<changes.length; i++) {
+	  var c = changes[i];
+	  data[c['name']] = c['value'];
+      }
+      $.ajax({
+	  url: 'edit',
+	  method: 'POST',
+	  data: data
+      }).success(function(data) {
+	  updateForm(data);
+	  var modal = $('#savingModal');
+	  modal.find('p').text('The project data has been succesfully saved.');
+	  setTimeout(function() {
+	      modal.modal('hide')
+	  }, 2000);
+      }).error(function() {
+	  var modal = $('#savingModal');
+	  modal.find('p').text('Failed.');
+	  modal.modal('hide');
+	  alert('Your request has failed. Please try again.');
+      });
+  })
+
+  $('#manager').typeahead({
+      source: function( query, process ) {
+	  $.post(
+	      "{% url 'entry:coordinator' %}",
+	      {
+		  query: query
+	      },
+	      function(data) {
+		  process(data);
+	      }
+	  );
+      },
+  });
+
+  $('#contractor').typeahead({
+      source: function( query, process ) {
+	  $.post(
+	      "{% url 'entry:contractor' %}",
+	      {
+		  query: query
+	      },
+	      function(data) {
+		  process(data);
+	      }
+	  );
+      },
+  });
+				  
+  function updatePlanningPhase() {
+      var value = $(this).val()
+      
+      if (value == 'planning') {
+	  $('#planning_phase').closest('.control-group').css('display', '');
+      } else {
+	  $('#planning_phase').closest('.control-group').css('display', 'none');
+      }
+      
+      $('.hide-for-phase').css('display', '');
+      $('.hide-for-'+value).css('display', 'none');
+  };
+  $('select[name="phase"]').on('change', updatePlanningPhase);
+  updatePlanningPhase.call($('select[name="phase"]')[0]);
+				  
+  function updateProgramme() {
+      var data = { 'cluster': $(this).val() };
+      $.ajax({
+	  url: "{% url 'entry:programme' %}",
+	  method: 'GET',
+	  data: data
+      }).success(function(data) {
+	  var programme = $('#programme');
+	  var selected = programme.val();
+	  programme.find('option').each(function() {
+	      var option = $(this);
+	      if (option.attr('value')) {
+		  option.remove()
+	      }
+	  });
+	  $(data).each(function() {
+	      var option = $('<option/>');
+	      option.attr('value', this);
+	      option.text(this);
+	      if (this === selected) {
+		  option.attr('selected', 'selected');
+	      }
+	      programme.append(option);
+	  });
+	  updateValue('programme');
+      }).error(function() {
+	  alert('Unable to retrieve programmes for this cluster.');
+      });
+  };
+  $('select[name="cluster"]').on('change', updateProgramme);
+  updateProgramme.call($('select[name="cluster"]')[0]);
+				  
+  $(document).ready(function() {
+      $('.input-datepicker').datepicker({
+	  format: "yyyy-mm-dd",
+	  autoclose: true
+      });
+  });
+  
+</script>
+{% endblock %}

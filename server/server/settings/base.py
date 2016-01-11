@@ -150,6 +150,9 @@ TEMPLATE_DIRS = (
 ########## MIDDLEWARE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#middleware-classes
 MIDDLEWARE_CLASSES = (
+    # Must be first
+    'django.middleware.cache.UpdateCacheMiddleware',
+
     # Default Django middleware.
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -159,6 +162,9 @@ MIDDLEWARE_CLASSES = (
     'reversion.middleware.RevisionMiddleware',
     # 'server.middleware.LoginRequiredMiddleware',
     'server.middleware.XsSharing',
+
+    # Must be last
+    'django.middleware.cache.FetchFromCacheMiddleware',
 )
 ########## END MIDDLEWARE CONFIGURATION
 
