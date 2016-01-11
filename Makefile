@@ -10,7 +10,7 @@ development-reindex:
 clean-server:
 	cd server && find . -name '*.pyc' -delete
 
-deploy:
+deploy-demo:
 	ssh -t pmis " \
 	export PATH=~/.virtualenvs/pmis/bin:~/.rbenv/shims:/opt/node/bin:/usr/local/bin:/usr/bin:/bin; \
 	cd /var/www/demo && \
@@ -24,7 +24,12 @@ deploy:
 	cd ../insight && \
 	make demo-build && \
 	sudo chgrp -R webapp . && \
-	sudo supervisorctl restart demo:* && \
+	sudo /etc/init.d/apache2 restart \
+	sudo supervisorctl restart demo"
+
+deploy-production:
+	ssh -t pmis " \
+	export PATH=~/.virtualenvs/pmis/bin:~/.rbenv/shims:/opt/node/bin:/usr/local/bin:/usr/bin:/bin; \
 	cd /var/www/production && \
 	git pull && \
 	cd server && \
@@ -36,6 +41,7 @@ deploy:
 	cd ../insight && \
 	make production-build && \
 	sudo chgrp -R webapp . && \
-	sudo supervisorctl restart production:*"
+	sudo /etc/init.d/apache2 restart \
+	sudo supervisorctl restart production"
 
 .PHONY: serve production-reindex development-reindex deploy
