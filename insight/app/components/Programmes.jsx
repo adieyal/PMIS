@@ -21,8 +21,20 @@ module.exports = React.createClass({
         }
     },
     setView: function(programme) {
-        return function() {
-            window.location.href = '/#/projects/' + this.props.clusterId + '/' + programme;
+        return function(phase, status) {
+            var href = '/#/projects/' + this.props.clusterId + '/' + programme;
+
+            if (typeof phase != 'undefined') {
+                href += '/' + phase;
+            }
+
+            if (typeof status != 'undefined') {
+                href += '/' + status;
+            }
+
+            console.log(href);
+
+            window.location.href = href;
         }.bind(this);
     },
     render: function() {
@@ -54,6 +66,7 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="column">
                                     <Donut height="125"
+                                        onClick={this.setView(p.title)}
                                         count={p.numbers.projects}
                                         title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
                                 </div>

@@ -73,6 +73,14 @@ var AddressState = {
                 state.programme = parts[2];
             }
 
+            if (parts.length > 3) {
+                state.phase = parts[3];
+            }
+
+            if (parts.length > 4) {
+                state.status = parts[4];
+            }
+
             this.setState(state);
         }
     }
@@ -99,6 +107,8 @@ module.exports = component('App', AddressState,
                 content = <ClusterProjects
                     clusterId={this.state.clusterId}
                     programme={this.state.programme}
+                    phase={this.state.phase}
+                    status={this.state.status}
                     projects={projects} />;
                 break;
         }
