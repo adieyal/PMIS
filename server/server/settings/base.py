@@ -206,7 +206,7 @@ THIRD_PARTY_APPS = (
     'rest_framework',
     'reversion',
     'rest_framework.authtoken',
-    'djoser',
+    #'djoser',
     'gunicorn',
 )
 

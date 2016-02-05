@@ -54,7 +54,7 @@ Remote = {
     },
     login: function (username, password) {
         return request
-            .post(url('auth/login'))
+            .post(url('authtoken'))
             .send({ username: username, password: password })
             .set('Accept', 'application/json')
             .end(function (error, res) {
@@ -70,7 +70,7 @@ Remote = {
                     return NotificationActions.notify(res.text);
                 }
 
-                AuthActions.login(res.body.auth_token);
+                AuthActions.login(res.body.token);
             });
     },
     logout: function () {

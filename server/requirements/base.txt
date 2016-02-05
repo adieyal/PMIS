@@ -1,11 +1,11 @@
-Django==1.5.1
+Django==1.5.7
 bpython==0.12
 django-braces==0.2.1
 django-model-utils==1.1.0
 logutils==0.3.3
 South==0.7.6
 yolk==0.4.3
-djangorestframework==2.3.2
+djangorestframework==3.1.3
 markdown==2.3.1
 django-filter==0.6
 django-reversion==1.7
@@ -18,7 +18,6 @@ fuzzywuzzy
 iso8601
 redis
 slugify
-djoser==0.3.1
 elasticsearch
 elasticsearch-dsl
 py-linq

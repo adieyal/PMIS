@@ -5,12 +5,12 @@ from django.views.generic import TemplateView
 from django.contrib import admin
 admin.autodiscover()
 
+from rest_framework.authtoken import views
+
 urlpatterns = patterns('',
     url(r'^$', TemplateView.as_view(template_name='main.html'), name='main'),
-    #url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^auth/', include('djoser.urls')),
+    url(r'^authtoken$', views.obtain_auth_token),
     url(r'^admin/', include(admin.site.urls)),
-    #url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'next_page': '/'}, 'logout'),
     url(r'^accounts/', include('registration.backends.simple.urls', namespace='accounts')),
     url(r'^api-token-auth/', 'rest_framework.authtoken.views.obtain_auth_token'),
     url(r'^account/', include('account.urls', namespace='account')),
