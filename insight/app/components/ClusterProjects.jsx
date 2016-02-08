@@ -15,11 +15,11 @@ var methods = {
         return {
             clusterId: this.props.clusterId || lists.clusters[0].slug,
             programme: this.props.programme || '',
-            phase: '',
-            status: '',
-            district: '',
-            municipality: '',
-            implementing_agent: '',
+            phase: this.props.phase || '',
+            status: this.props.status || '',
+            district: this.props.district || '',
+            municipality: this.props.municipality || '',
+            implementing_agent: this.props.implementing_agent || '',
             sort: 'status',
             direction: 'ascending'
         };
@@ -27,7 +27,11 @@ var methods = {
     componentWillReceiveProps: function(props) {
         this.setState({
             clusterId: props.clusterId,
-            programme: props.programme
+            programme: props.programme,
+            phase: props.phase,
+            status: props.status,
+            municipality: props.municipality,
+            implementing_agent: props.implementing_agent
         });
     }
 };

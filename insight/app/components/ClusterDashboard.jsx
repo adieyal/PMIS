@@ -191,7 +191,12 @@ module.exports = component('ClusterDashboard', methods,
                         <div key="districts" title="Districts">
                             <div className="ui two column grid">
                                 <div className="column">
-                                    <DistrictMap clusterId={cluster.get('slug')} districts={districts} domain={domain} height="200" />
+                                    <DistrictMap
+                                        clusterId={cluster.get('slug')}
+                                        districts={districts}
+                                        domain={domain}
+                                        height="200"
+                                    />
                                 </div>
                                 <div className="column scrollable district-rows">
                                 {generateDistricts().map(function(d) {

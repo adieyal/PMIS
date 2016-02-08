@@ -1,4 +1,4 @@
-// var component = require('../lib/component');
+var component = require('../lib/component');
 var React = require("react");
 var Legend = require('./Legend');
 var lists = require('../lib/lists');
@@ -41,72 +41,69 @@ function arc(innerRadius, outerRadius, startAngle, endAngle) {
         " Z");
 }
 
-var Donut = React.createClass({
-    render: function() {
-        if (this.props.count == 0) {
-            return <div className="donut">
-                <svg width="100%" height={this.props.height} version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
-                    <text x="100" y="-10" style={{ fontSize: 40 }}
-                    textAnchor="middle">No Projects</text>
-                </svg>
-            </div>;
-        }
-
-        var total = this.props.data.reduce(function (acc, datum) {
-            return acc + datum[1];
-        }, 0);
-
-        var endAngle = 0;
-
-        var length = this.props.data.length;
-        var colours = this.props.colours || 'colours';
-
-        var phases = this.props.data.map(function (datum, index) {
-            var value = datum[1];
-
-            var percentage = total > 0 ? parseInt(value / total * 100) + '%' : '';
-
-            var startAngle = endAngle;
-            var delta = value / total * 2 * Math.PI;
-            endAngle = startAngle + delta;
-
-            var thisMargin = length > 1 ? margin : 0;
-
-            var phase = datum[0];
-            var colour = lists[colours][index];
-
-            var path;
-            if (total > 0) {
-                path = <path d={arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin)} fill={colour} />;
-            } else {
-                path = '';
-            }
-
-            var textAngle = (startAngle + endAngle) / 2 + arcOffset;
-            var textRadius = outerRadius + 25 + ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 5 : 0);
-
-            var textX = Math.cos(textAngle) * textRadius - ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 15 : 0);
-            var textY = Math.sin(textAngle) * textRadius;
-
-            return <g key={phase}>
-                <text x={textX} y={textY}>{percentage}</text>
-                {path}
-            </g>;
-        }.bind(this));
-
+module.exports = component('Donut', function ({ data, count, height, colours }) {
+    if (count == 0) {
         return <div className="donut">
-            <div className="ui grid">
-                <div className="eight wide column">
-                    <svg width="100%" height={this.props.height} version="1.1" viewBox="-105 -145 215 290" preserveAspectRatio="xMidYMid meet">
-                        {phases}
-                    </svg>
-                </div>
-                <div className="eight wide column">
-                    <Legend height={this.props.height} withBlocks={true} data={this.props.data} colours={colours} />
-                </div>
-            </div>
+            <svg width="100%" height={height} version="1.1" viewBox="-130 -110 450 220" preserveAspectRatio="xMidYMid meet">
+                <text x="100" y="-10" style={{ fontSize: 40 }}
+                textAnchor="middle">No Projects</text>
+            </svg>
         </div>;
     }
-});
 
-module.exports = Donut;
+    var total = data.reduce(function (acc, datum) {
+        return acc + datum[1];
+    }, 0);
+
+    var endAngle = 0;
+
+    var length = data.length;
+
+    colours = colours || 'colours';
+
+    var phases = data.map(function (datum, index) {
+        var value = datum[1];
+
+        var percentage = total > 0 ? parseInt(value / total * 100) + '%' : '';
+
+        var startAngle = endAngle;
+        var delta = value / total * 2 * Math.PI;
+        endAngle = startAngle + delta;
+
+        var thisMargin = length > 1 ? margin : 0;
+
+        var phase = datum[0];
+        var colour = lists[colours][index];
+
+        var path;
+        if (total > 0) {
+            path = <path d={arc(innerRadius, outerRadius, startAngle, endAngle - thisMargin)} fill={colour} />;
+        } else {
+            path = '';
+        }
+
+        var textAngle = (startAngle + endAngle) / 2 + arcOffset;
+        var textRadius = outerRadius + 25 + ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 5 : 0);
+
+        var textX = Math.cos(textAngle) * textRadius - ((textAngle > (Math.PI / 2) && textAngle < (Math.PI * 1.5)) ? 15 : 0);
+        var textY = Math.sin(textAngle) * textRadius;
+
+        return <g key={phase} onclick={this.clickDonut}>
+            <text x={textX} y={textY}>{percentage}</text>
+            {path}
+        </g>;
+    }.bind(this));
+
+    return <div className="donut">
+        <div className="ui grid">
+            <div className="eight wide column">
+                <svg width="100%" height={height} version="1.1" viewBox="-105 -145 215 290" preserveAspectRatio="xMidYMid meet">
+                    {phases}
+                </svg>
+            </div>
+            <div className="eight wide column">
+                <Legend height={height} withBlocks={true} data={data} colours={colours} />
+            </div>
+        </div>
+    </div>;
+});

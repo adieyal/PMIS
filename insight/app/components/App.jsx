@@ -1,15 +1,14 @@
-var component = require('../lib/component');
-var React = require('react/addons');
-var lists = require('../lib/lists');
-var Dashboard = require("./Dashboard");
-var LoginForm = require("./LoginForm");
-var Template = require("./Template");
+import React from 'react/addons';
+import lists from '../lib/lists';
+import Dashboard from './Dashboard';
+import LoginForm from './LoginForm';
+import Template from './Template';
 
-var PreferenceActions = require('../actions/PreferenceActions');
+import { setPreference } from '../actions';
 
-var ClusterProgress = require("./ClusterProgress");
-var ClusterPerformance = require("./ClusterPerformance");
-var ClusterProjects = require("./ClusterProjects");
+import ClusterProgress from './ClusterProgress';
+import ClusterPerformance from './ClusterPerformance';
+import ClusterProjects from './ClusterProjects';
 
 if (typeof window != 'undefined') {
     /** This can only be done in the browser */
@@ -49,17 +48,17 @@ var AddressState = {
     componentDidMount: function() {
         if(typeof window != 'undefined') {
             jQuery.address.change(function (evt) {
-                this.changeAddress(evt.path);
+                this.changeAddress(evt);
             }.bind(this));
         }
     },
-    changeAddress: function(path) {
+    changeAddress: function(evt) {
         if (this.isMounted()) {
             var state = {
                 clusterId: lists.clusters[0].slug
             };
 
-            var parts = path.split('/').slice(1);
+            var parts = evt.path.split('/').slice(1);
 
             if (parts.length > 0) {
                 PreferenceActions.setPreference('view', parts[0] || 'dashboard');
@@ -68,6 +67,8 @@ var AddressState = {
             if (parts.length > 1) {
                 state.clusterId = parts[1] || lists.clusters[0].slug;
             }
+
+            console.log(evt);
 
             if (parts.length > 2) {
                 state.programme = parts[2];
@@ -86,37 +87,37 @@ var AddressState = {
     }
 };
 
-module.exports = component('App', AddressState,
-    function({ view, auth, preference, clusters, districts, projects }) {
-        var content;
+const App = ({ view, auth, preference, clusters, districts, projects }) => {
+    var content;
 
-        switch(view) {
-            case 'login':
-                content = <LoginForm auth={auth} />;
-                break;
-            case 'dashboard':
-                content = <Dashboard preference={preference} clusters={clusters} districts={districts} />;
-                break;
-            case 'progress':
-                content = <ClusterProgress clusters={clusters} />;
-                break;
-            case 'performance':
-                content = <ClusterPerformance clusters={clusters} />;
-                break;
-            case 'projects':
-                content = <ClusterProjects
-                    clusterId={this.state.clusterId}
-                    programme={this.state.programme}
-                    phase={this.state.phase}
-                    status={this.state.status}
-                    projects={projects} />;
-                break;
-        }
-
-        return <Template
-            auth={auth}
-            preference={preference}>
-            {content}
-        </Template>;
+    switch(view) {
+        case 'login':
+            content = <LoginForm auth={auth} />;
+            break;
+        case 'dashboard':
+            content = <Dashboard preference={preference} clusters={clusters} districts={districts} />;
+            break;
+        case 'progress':
+            content = <ClusterProgress clusters={clusters} />;
+            break;
+        case 'performance':
+            content = <ClusterPerformance clusters={clusters} />;
+            break;
+        case 'projects':
+            content = <ClusterProjects
+                clusterId={this.state.clusterId}
+                programme={this.state.programme}
+                phase={this.state.phase}
+                status={this.state.status}
+                projects={projects} />;
+            break;
     }
-);
+
+    return <Template
+        auth={auth}
+        preference={preference}>
+        {content}
+    </Template>;
+};
+
+export default App;

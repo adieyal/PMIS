@@ -20,21 +20,10 @@ module.exports = React.createClass({
             return this.props.programmes;
         }
     },
-    setView: function(programme) {
-        return function(phase, status) {
-            var href = '/#/projects/' + this.props.clusterId + '/' + programme;
-
-            if (typeof phase != 'undefined') {
-                href += '/' + phase;
-            }
-
-            if (typeof status != 'undefined') {
-                href += '/' + status;
-            }
-
-            console.log(href);
-
-            window.location.href = href;
+    clickProgramme: function(programme) {
+        return function(e) {
+            window.location.hash = '#/projects/' + this.props.clusterId;
+            window.location.search = 'programme=' + programme;
         }.bind(this);
     },
     render: function() {
@@ -57,7 +46,7 @@ module.exports = React.createClass({
             </div>
             <div className="scrollable programme-rows">
                 {programmes.map(function(p) {
-                    return <div className="programme-row" onClick={this.setView(p.title)}>
+                    return <div className="programme-row" onClick={this.clickProgramme(p.title)}>
                         <h4 className="ui header">{p.title}</h4>
                         <div className="extra content">
                             <div className="ui two column grid">
@@ -66,9 +55,9 @@ module.exports = React.createClass({
                                 </div>
                                 <div className="column">
                                     <Donut height="125"
-                                        onClick={this.setView(p.title)}
                                         count={p.numbers.projects}
-                                        title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"} data={p.projects} />
+                                        title={p.numbers.implementation + "/" + p.numbers.projects + " Projects"}
+                                        data={p.projects} />
                                 </div>
                             </div>
                         </div>

@@ -7,7 +7,7 @@ var colours = lists.colours.slice(0, 4);
 
 var scale = utils.scale(colours);
 
-module.exports = component('DistrictMap', function({ clusterId, districts }) {
+module.exports = component('DistrictMap', function({ clusterId, districts, onClick }) {
     var maxProjects = districts.get('maxProjects');
 
     var domain = [ 0, maxProjects ];
@@ -37,7 +37,7 @@ module.exports = component('DistrictMap', function({ clusterId, districts }) {
 
     var style = this.props.height ? { height: this.props.height } : {};
 
-    return <div className="map" style={style} onClick={this.props.onClick} >
+    return <div className="map" style={style} onClick={onClick} >
         <svg
             ref="svg"
             version="1.1"
