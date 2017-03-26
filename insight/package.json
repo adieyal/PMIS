@@ -10,7 +10,7 @@
     "dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-dev-server.config.js --progress --colors --port $PORT",
     "hot-dev-server": "webpack-dev-server --content-base config/dev-server-public --config webpack-hot-dev-server.config.js --hot --progress --colors --port $PORT",
     "build": "webpack --config webpack-production.config.js --progress --profile --colors",
-    "development-build": "webpack --config webpack.config.js --progress --profile --colors",
+    "development-build": "bundle exec compass compile && webpack --config webpack.config.js --progress --profile --colors",
     "start": "node lib/server"
   },
   "keywords": [],
