@@ -27,6 +27,7 @@ build
 *.box
 /.vagrant
 /assets
+vendor/bundle
 
 #IDE
 .idea/
@@ -41,3 +42,6 @@ server/data/*.db
 
 # Django assets
 server/assets/*
+
+# Gems and bundles
+.bundle/
