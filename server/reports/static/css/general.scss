@@ -1,8 +1,8 @@
-@import "widget_bar";
-@import "widget_donut";
-@import "widget_line";
+@import "widget_bar.scss";
+@import "widget_donut.scss";
+@import "widget_line.scss";
 
-@import "project";
+@import "project.scss";
 
 $lightgrey: #E9E9E9;
 $mediumgrey: #BCBCBC;
